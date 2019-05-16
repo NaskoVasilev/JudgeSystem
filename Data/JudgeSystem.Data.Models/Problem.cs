@@ -1,6 +1,25 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System.Collections.Generic;
+
+namespace JudgeSystem.Data.Models
 {
     public class Problem
     {
+		public Problem()
+		{
+			this.Tests = new List<Test>();
+		}
+
+		public int Id { get; set; }
+
+		public string Name { get; set; }
+
+		public bool IsMandatory { get; set; }
+
+		public int MaxPoints { get; set; }
+
+		public int LessonId { get; set; }
+		public Lesson Lesson { get; set; }
+
+		public ICollection<Test> Tests { get; set; }
 	}
 }
