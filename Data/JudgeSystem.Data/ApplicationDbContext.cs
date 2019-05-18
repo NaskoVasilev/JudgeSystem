@@ -25,8 +25,13 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+		public DbSet<Course> Courses { get; set; }
+		public DbSet<Lesson> Lessons { get; set; }
+		public DbSet<Problem> Problems { get; set; }
+		public DbSet<Resource> Resources { get; set; }
+		public DbSet<Test> Tests { get; set; }
 
-        public override int SaveChanges() => this.SaveChanges(true);
+		public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {

@@ -13,7 +13,7 @@ namespace JudgeSystem.Data.Models
 
 		public string Name { get; set; }
 
-		public bool IsMandatory { get; set; }
+		public bool IsExtraTask { get; set; }
 
 		public int MaxPoints { get; set; }
 

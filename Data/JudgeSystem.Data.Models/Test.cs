@@ -3,9 +3,9 @@
 	public class Test
 	{
 		public int Id { get; set; }
+		public Problem Problem { get; set; }
 
 		public int ProblemId { get; set; }
-		public Problem Problem { get; set; }
 
 		public string InputData { get; set; }
 
