@@ -54,3 +54,21 @@ body {
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
 }
+
+/*My custom css*/
+.dropdown > a#dropdownMenuLink {
+    background: none;
+    color: black;
+    border: none;
+    outline: none !important;
+    vertical-align: bottom;
+    padding-top: 10px;
+}
+
+.dropdown > a#dropdownMenuLink:hover{
+    border: none;
+}
+
+.center{
+    margin: 0 auto;
+}

@@ -3,8 +3,8 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-
-    using AutoMapper.QueryableExtensions;
+	using AutoMapper;
+	using AutoMapper.QueryableExtensions;
 
     public static class QueryableMappingExtensions
     {
@@ -31,5 +31,11 @@
 
             return source.ProjectTo<TDestination>(parameters);
         }
-    }
+
+		public static Destination To<Source, Destination>(this Source source)
+		{
+			var destination = Mapper.Map<Source, Destination>(source);
+			return destination;
+		}
+	}
 }
