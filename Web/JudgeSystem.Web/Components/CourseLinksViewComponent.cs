@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JudgeSystem.Web.Areas.Administration.Components
+namespace JudgeSystem.Web.Components
 {
 	[ViewComponent(Name = "CourseLinks")]
 	public class CourseLinksViewComponent : ViewComponent
@@ -22,7 +22,7 @@ namespace JudgeSystem.Web.Areas.Administration.Components
 		public async Task<IViewComponentResult> InvokeAsync(string className)
 		{
 			IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
-			var courses = courseService.All();
+			var courses = await Task.Run(() => courseService.All());
 			ViewData["class"] = className;
 			ViewData["lessonTypes"] = lessonTypes; 
 			return View(courses);

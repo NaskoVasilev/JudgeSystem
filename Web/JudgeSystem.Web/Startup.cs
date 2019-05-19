@@ -98,6 +98,7 @@
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<ILessonService, LessonService>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

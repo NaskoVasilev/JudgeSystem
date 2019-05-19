@@ -1,6 +1,10 @@
-﻿using JudgeSystem.Services.Data;
+﻿using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.ViewModels.Course;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
@@ -39,9 +43,36 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return Content(courseId.ToString());
 		}
 
-		public IActionResult Lessons(int courseId, string type)
+		public async Task<IActionResult> Edit(int id)
 		{
-			return Content(courseId.ToString());
+			Course course = await courseService.GetById(id);
+			if(course == null)
+			{
+				TempData["error"] = string.Format(GlobalConstants.NotFoundEntityMessage, "course");
+				return RedirectToAction("All", "Course");
+			}
+
+			CourseEditModel model = course.To<Course, CourseEditModel>();
+			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(CourseEditModel model)
+		{
+			if(!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				await courseService.Updade(model);
+			}
+			catch (ArgumentException ex)
+			{
+				ViewData["error"] = ex.Message;
+			}
+			return RedirectToAction("All", "Course");
 		}
     }
 }

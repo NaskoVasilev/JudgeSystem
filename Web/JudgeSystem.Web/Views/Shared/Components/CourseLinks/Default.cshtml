@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<CourseViewModel>
 
-@{ 
+@{
 	IEnumerable<string> lessonTypes = ViewData["lessonTypes"] as IEnumerable<string>;
 }
 
+
 @foreach (var course in Model)
 {
-	<button class=@ViewData["class"]>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="dropdownMenuLink" aria-haspopup="true" aria-expanded="false">
-				@course.Name
-			</a>
-
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				@foreach (var lessonType in lessonTypes)
-				{
+	<li class="dropdown-submenu">
+		<a class="dropdown-item" tabindex="-1" href="#">@course.Name</a>
+		<ul class="dropdown-menu">
+			@foreach (var lessonType in lessonTypes)
+			{
+				<li class="dropdown-item">
 					<a class="dropdown-item"
 					   asp-area=""
 					   asp-controller="Course"
@@ -23,8 +21,11 @@
 					   asp-route-lessonType="@lessonType">
 						@($"{course.Name} - {lessonType}s")
 					</a>
-				}
-			</div>
-		</div>
-	</button>
+				</li>
+			}
+		</ul>
+	</li>
 }
+<li class="dropdown-item">
+	<a asp-area="" asp-controller="Course" asp-action="All" class="dropdown-item">All</a>
+</li>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CourseViewModel>
+
+@{
+	this.ViewData["Title"] = "All courses";
+	IEnumerable<string> lessonTypes = ViewData["lessonTypes"] as IEnumerable<string>;
+}
+
+<div class="row all-courses">
+	<h2>All courses</h2>
+	<table class="table table-borderless">
+		<tbody>
+			@foreach (var course in Model)
+			{
+				<tr>
+					<td>
+						<i class="fas fa-chevron-left rotate"></i>
+						@course.Name
+						<ul class="list-group hidden-element borderless">
+							@foreach (var lessonType in lessonTypes)
+							{
+								<li class="list-group-item">
+									<a class="dropdown-item"
+									   asp-area=""
+									   asp-controller="Course"
+									   asp-action="Lessons"
+									   asp-route-courseId="@course.Id"
+									   asp-route-lessonType="@lessonType">
+										@($"{course.Name} - {lessonType}s")
+									</a>
+								</li>
+							}
+						</ul>
+					</td>
+					<td>
+						<div class="admin-buttons-holder">
+							<a class="btn btn-success"
+							   asp-area="Administration" asp-controller="Lesson"
+							   asp-action="Add" asp-route-courseId="@course.Id">
+								Add Lesson
+							</a>
+							<a class="btn btn-secondary"
+							   asp-area="Administration" asp-controller="Course"
+							   asp-action="Edit" asp-route-id="@course.Id">
+								Edit
+							</a>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.ViewModels.Course;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +31,29 @@ namespace JudgeSystem.Services.Data
 		public IEnumerable<CourseViewModel> All()
 		{
 			return this.repository.All().To<CourseViewModel>().ToList();
+		}
+
+		public string GetName(int courseId)
+		{
+			return repository.All().FirstOrDefault(r => r.Id == courseId)?.Name;
+		}
+
+		public async Task<Course> GetById(int courseId)
+		{
+			return await this.repository.All()
+			.FirstOrDefaultAsync(c => c.Id == courseId);
+		}
+
+		public async Task Updade(CourseEditModel model)
+		{
+			Course course = await GetById(model.Id);
+			if(course == null)
+			{
+				throw new ArgumentException(string.Format(GlobalConstants.NotFoundEntityMessage, "course"));
+			}
+			course.Name = model.Name;
+			repository.Update(course);
+			await repository.SaveChangesAsync();
 		}
 	}
 }
