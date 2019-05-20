@@ -8,11 +8,17 @@
 	using Services.Mapping;
 	using Data.Models;
 	using AutoMapper;
+	using JudgeSystem.Common;
 
 	public class LessonInputModel : IMapTo<Lesson>, IHaveCustomMappings
 	{
+		public LessonInputModel()
+		{
+			this.Resources = new List<IFormFile>();
+		}
+
 		[Required]
-		[MinLength(3)]
+		[MinLength(GlobalConstants.NameMinLength)]
 		public string Name { get; set; }
 
 		public int CourseId { get; set; }

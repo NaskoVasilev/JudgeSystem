@@ -5,22 +5,26 @@
 	this.ViewData["Title"] = courseName;
 }
 
-	<div class="row">
-		<h2>@courseName</h2>
-		<table class="table table-borderless">
-			<tbody>
-				@foreach (var lesson in Model)
-				{
-					<tr>
-						<td>
-							<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
-						</td>
-						<td>
-							<i class="fas fa-file"></i>
-							@lesson.ProblemsCount
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+<div class="row">
+	<h2>@courseName</h2>
+	<table class="table table-borderless">
+		<tbody>
+			@foreach (var lesson in Model)
+			{
+				<tr>
+					<td>
+						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
+					</td>
+					<td>
+						<i class="fas fa-file"></i>
+						@lesson.ProblemsCount
+					</td>
+					<td>
+						<a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson" asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
+						<button class="btn btn-danger" data-id="@lesson.Id">Delete</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

@@ -36,11 +36,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return RedirectToAction("All", "Course");
 		}
 
-		public IActionResult AddLesson(int courseId)
-		{
-			return Content(courseId.ToString());
-		}
-
 		public async Task<IActionResult> Edit(int id)
 		{
 			Course course = await courseService.GetById(id);

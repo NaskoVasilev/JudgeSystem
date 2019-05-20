@@ -1,5 +1,4 @@
-﻿using JudgeSystem.Data.Models.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace JudgeSystem.Web.Infrastructure.Extensions

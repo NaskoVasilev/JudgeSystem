@@ -12,5 +12,7 @@ namespace JudgeSystem.Services.Data
 		Task<Lesson> CreateLesson(LessonInputModel model, IEnumerable<Resource> resources);
 
 		Task<LessonViewModel> GetLessonInfo(int id);
+
+		Task<Lesson> GetById(int id);
 	}
 }

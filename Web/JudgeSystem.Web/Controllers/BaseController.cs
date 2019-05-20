@@ -6,13 +6,13 @@
     {
 		public IActionResult ShowError(string errorMessage, string action, string conrtoller)
 		{
-			ViewData["error"] = errorMessage;
+			TempData["error"] = errorMessage;
 			return RedirectToAction(action, conrtoller);
 		}
 
 		public IActionResult ShowError(string errorMessage, string action, string conrtoller, string area)
 		{
-			ViewData["error"] = errorMessage;
+			TempData["error"] = errorMessage;
 			return RedirectToAction(action, conrtoller, new { area });
 		}
 	}

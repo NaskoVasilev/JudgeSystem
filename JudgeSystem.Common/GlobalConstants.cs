@@ -25,5 +25,9 @@
 		public const int ProblemMaxPoints = 100;
 
 		public const string SuccessfullyDeletedMessage = "The {0} was successfully deleted.";
+
+		public const string DiffrentLessonPasswords = "Old password is different";
+
+		public const string TooShorPasswordMessage = "The lesson password must be at least five symbols."
 	}
 }

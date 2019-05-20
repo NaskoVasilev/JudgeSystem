@@ -44,6 +44,12 @@ namespace JudgeSystem.Services.Data
 			return lesson;
 		}
 
+		public async Task<Lesson> GetById(int id)
+		{
+			return await repository.All()
+				.FirstOrDefaultAsync(l => l.Id == id);
+		}
+
 		public async Task<LessonViewModel> GetLessonInfo(int id)
 		{
 			var lesson =  await this.repository.All()
