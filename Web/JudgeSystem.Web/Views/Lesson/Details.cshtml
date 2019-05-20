@@ -1,0 +1,30 @@
+﻿@model LessonViewModel
+
+@{
+	this.ViewData["Title"] = Model.Name;
+	int problemNumber = 0;
+}
+
+<h2>@Model.Name</h2>
+<ul class="list-group">
+	@foreach (var problem in Model.Problems)
+	{
+		<li class="list-group-item">@($"{(++problemNumber).ToString("D2")} {problem.Name}")</li>
+	}
+	<li class="list-group-item">
+		<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="Add">Add Task</a>
+	</li>
+</ul>
+
+<ul class="list-group">
+	@foreach (var resource in Model.Resources)
+	{
+		<li class="list-group-item">
+			<a asp-area="" asp-controller="Resource" asp-action="Download" asp-route-id="@resource.Id">@resource.Name</a>
+		</li>
+	}
+	<li class="list-group-item">
+		<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Resource" asp-action="Add">Add Resource</a>
+	</li>
+</ul>
+

@@ -99,6 +99,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
+            services.AddTransient<IResourceService, ResourceService>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

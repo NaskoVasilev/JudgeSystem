@@ -7,5 +7,15 @@
 		public const string AdministrationArea = "Administration";
 
 		public const string NotFoundEntityMessage = "The required {0} was not found!";
-    }
+
+		public const string FileStorePath = "F:\\JudgeSystemStore\\";
+
+		public const string WordFileExtension = ".docx";
+
+		public const string PowerPointFileExtension = ".pptx";
+
+		public const string VideoFileExtension = ".mp4";
+
+		public const string ZipFileExtension = ".zip";
+	}
 }

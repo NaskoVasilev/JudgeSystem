@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	//TODO: Only for admins
-	[Area("Administration")]
-	public class CourseController : Controller
+	public class CourseController : AdministrationBaseController
     {
 		private readonly ICourseService courseService;
 
