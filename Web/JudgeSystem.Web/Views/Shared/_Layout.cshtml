@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@{
+	string error = string.Empty;
+	string info = string.Empty;
+
+	if (this.TempData["error"] != null)
+	{
+		error = this.TempData["error"].ToString();
+	}
+
+	if (this.TempData["info"] != null)
+	{
+		info = this.TempData["info"].ToString();
+	}
+}
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -69,12 +84,14 @@
 	<div class="container">
 		<partial name="_CookieConsentPartial" />
 		<main role="main" class="pb-3">
-			@if (this.TempData["error"] != null)
-			{
-			<div class="alert alert-success" role="alert">
-				@this.TempData["error"].ToString()
+
+			<div id="infoBox" class="notification">
+				<span>@info</span>
 			</div>
-			}
+			<div id="errorBox" class="notification">
+				<span>@error</span>
+			</div>
+
 			@this.RenderBody()
 		</main>
 	</div>

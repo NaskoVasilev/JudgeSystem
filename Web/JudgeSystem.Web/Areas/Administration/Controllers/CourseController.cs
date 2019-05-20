@@ -32,8 +32,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
 			await courseService.Add(model);
-			//TODO: Redirect to all courses
-			return Json(model);
+
+			return RedirectToAction("All", "Course");
 		}
 
 		public IActionResult AddLesson(int courseId)
@@ -71,6 +71,19 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				ViewData["error"] = ex.Message;
 			}
 			return RedirectToAction("All", "Course");
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
+		{
+			 Course course = await courseService.GetById(id);
+			if(course == null)
+			{
+				return BadRequest(string.Format(GlobalConstants.NotFoundEntityMessage, "course"));
+			}
+
+			await courseService.Delete(course);
+			return Content(string.Format(GlobalConstants.SuccessfullyDeletedMessage, course.Name));
 		}
     }
 }

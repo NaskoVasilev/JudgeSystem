@@ -43,6 +43,7 @@
 							   asp-action="Edit" asp-route-id="@course.Id">
 								Edit
 							</a>
+							<button class="btn btn-danger courseDeleteBtn" data-id="@course.Id">Delete</button>
 						</div>
 					</td>
 				</tr>
@@ -50,3 +51,8 @@
 		</tbody>
 	</table>
 </div>
+
+@section Scripts{
+	<script src="~/js/notification.js"></script>
+	<script src="~/js/controllers/courseController.js"></script>
+}

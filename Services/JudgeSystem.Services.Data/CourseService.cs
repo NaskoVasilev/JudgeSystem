@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JudgeSystem.Common;
+﻿using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
@@ -53,6 +52,12 @@ namespace JudgeSystem.Services.Data
 			}
 			course.Name = model.Name;
 			repository.Update(course);
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task Delete(Course course)
+		{
+			repository.Delete(course);
 			await repository.SaveChangesAsync();
 		}
 	}

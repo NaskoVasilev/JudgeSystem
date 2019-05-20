@@ -16,5 +16,7 @@ namespace JudgeSystem.Services.Data
 		Task<Course> GetById(int courseId);
 
 		Task Updade(CourseEditModel model);
+
+		Task Delete(Course course);
 	}
 }

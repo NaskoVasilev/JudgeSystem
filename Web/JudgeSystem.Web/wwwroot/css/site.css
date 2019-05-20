@@ -167,3 +167,31 @@ body {
     .ul-holder ul li {
         padding: 7px 15px;
     }
+
+/*Notifications styling*/
+.notification {
+    font-size: 20px;
+    color: #ffffff;
+    text-align: right;
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 5px;
+}
+
+    .notification > span {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        display: block;
+        text-align: center;
+    }
+
+
+#infoBox > span {
+    background: #393;
+}
+
+#errorBox > span {
+    background: #F50;
+}

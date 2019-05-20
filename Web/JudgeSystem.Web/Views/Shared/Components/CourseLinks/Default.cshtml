@@ -7,7 +7,7 @@
 
 @foreach (var course in Model)
 {
-	<li class="dropdown-submenu">
+	<li class="dropdown-submenu"  id="course-@course.Id">
 		<a class="dropdown-item" tabindex="-1" href="#">@course.Name</a>
 		<ul class="dropdown-menu">
 			@foreach (var lessonType in lessonTypes)

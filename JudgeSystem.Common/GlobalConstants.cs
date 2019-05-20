@@ -23,5 +23,7 @@
 		public const int ProblemMinPoints = 1;
 
 		public const int ProblemMaxPoints = 100;
+
+		public const string SuccessfullyDeletedMessage = "The {0} was successfully deleted.";
 	}
 }
