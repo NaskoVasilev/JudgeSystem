@@ -25,7 +25,7 @@ namespace JudgeSystem.Web.Controllers
 
 		public IActionResult Lessons(int courseId, string lessonType)
 		{
-			var lessons = lessonService.LessonsByType(lessonType);
+			var lessons = lessonService.CourseLessonsByType(lessonType, courseId);
 			string courseName = courseService.GetName(courseId);
 			ViewData["course"] = courseName + " - " + lessonType;
 			return View(lessons);

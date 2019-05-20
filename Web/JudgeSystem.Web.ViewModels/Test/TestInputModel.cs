@@ -1,17 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JudgeSystem.Data.Models
+namespace JudgeSystem.Web.ViewModels.Test
 {
-	public class Test
+	public class TestInputModel
 	{
-		public Test()
-		{
-			IsTrialTest = false;
-		}
-
 		public int Id { get; set; }
-
-		public Problem Problem { get; set; }
+		
 		public int ProblemId { get; set; }
 
 		[Required]

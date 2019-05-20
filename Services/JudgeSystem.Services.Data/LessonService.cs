@@ -21,12 +21,27 @@ namespace JudgeSystem.Services.Data
 			this.repository = repository;
 		}
 
-		public async Task CreateLesson(LessonInputModel model, IEnumerable<Resource> resources)
+		public IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId)
+		{
+			bool isValidLessonType = Enum.TryParse(lessonType, out LessonType type);
+			if (!isValidLessonType)
+			{
+				return Enumerable.Empty<LessonLinkViewModel>();
+			}
+
+			return repository.All()
+				.Where(l => l.Type == type && l.CourseId == courseId)
+				.To<LessonLinkViewModel>()
+				.ToList();
+		}
+
+		public async Task<Lesson> CreateLesson(LessonInputModel model, IEnumerable<Resource> resources)
 		{
 			Lesson lesson = model.To<LessonInputModel, Lesson>();
 			lesson.Resources = resources.ToList();
 			await repository.AddAsync(lesson);
 			await repository.SaveChangesAsync();
+			return lesson;
 		}
 
 		public async Task<LessonViewModel> GetLessonInfo(int id)
@@ -36,20 +51,6 @@ namespace JudgeSystem.Services.Data
 				.Include(l => l.Resources)
 				.FirstOrDefaultAsync(l => l.Id == id);
 			return lesson.To<Lesson, LessonViewModel>();
-		}
-
-		public IEnumerable<LessonLinkViewModel> LessonsByType(string lessonType)
-		{
-			bool isValidLessonType = Enum.TryParse(lessonType, out LessonType type);
-			if (!isValidLessonType)
-			{
-				return Enumerable.Empty<LessonLinkViewModel>();
-			}
-
-			return repository.All()
-				.Where(l => l.Type == type)
-				.To<LessonLinkViewModel>()
-				.ToList();
 		}
 	}
 }

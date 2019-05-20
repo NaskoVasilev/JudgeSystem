@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using JudgeSystem.Common;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JudgeSystem.Data.Models
 {
@@ -11,6 +13,8 @@ namespace JudgeSystem.Data.Models
 
 		public int Id { get; set; }
 
+		[Required]
+		[MinLength(GlobalConstants.NameMinLength)]
 		public string Name { get; set; }
 
 		public bool IsExtraTask { get; set; }

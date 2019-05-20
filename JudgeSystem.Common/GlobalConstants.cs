@@ -17,5 +17,11 @@
 		public const string VideoFileExtension = ".mp4";
 
 		public const string ZipFileExtension = ".zip";
+
+		public const int NameMinLength = 3;
+
+		public const int ProblemMinPoints = 1;
+
+		public const int ProblemMaxPoints = 100;
 	}
 }

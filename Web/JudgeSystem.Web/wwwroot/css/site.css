@@ -155,3 +155,15 @@ body {
 .admin-buttons-holder > a {
     margin: 0px 10px;
 }
+
+.a-holder > a {
+    color: black;
+}
+
+.ul-holder {
+    margin: 20px 0;
+}
+
+    .ul-holder ul li {
+        padding: 7px 15px;
+    }

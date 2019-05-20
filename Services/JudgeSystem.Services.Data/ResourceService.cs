@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Web.ViewModels.Resource;
 using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Services.Data
@@ -29,6 +31,21 @@ namespace JudgeSystem.Services.Data
 			return resource;
 		}
 
+		public async Task CreateResource(ResourceInputModel model, string fileName)
+		{
+			string nameWithExtension = AddExtensionToFileName(model.Name, fileName);
+			Resource resource = new Resource
+			{
+				Name = nameWithExtension,
+				Link = fileName,
+				LessonId = model.LessonId,
+				ResourceType = model.ResourceType
+			};
+
+			await repository.AddAsync(resource);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task<Resource> GetById(int id)
 		{
 			return await this.repository.All().FirstOrDefaultAsync(r => r.Id == id);
@@ -36,11 +53,11 @@ namespace JudgeSystem.Services.Data
 
 		private ResourceType GetResourseType(string filePath)
 		{
-			ResourceType resourceType = ResourceType.PreblemsDescription;
+			ResourceType resourceType = ResourceType.ProblemsDescription;
 
 			if (filePath.EndsWith(GlobalConstants.WordFileExtension))
 			{
-				resourceType = ResourceType.PreblemsDescription;
+				resourceType = ResourceType.ProblemsDescription;
 			}
 			else if (filePath.EndsWith(GlobalConstants.PowerPointFileExtension))
 			{
@@ -56,6 +73,18 @@ namespace JudgeSystem.Services.Data
 			}
 
 			return resourceType;
+		}
+
+		private string AddExtensionToFileName(string name, string fileName)
+		{
+			string[] fileNameParts = fileName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+			if(fileNameParts.Length > 0)
+			{
+				string fileExtension = fileNameParts[fileNameParts.Length - 1];
+				return name + '.' + fileExtension;
+			}
+
+			return name + ".txt";
 		}
 	}
 }

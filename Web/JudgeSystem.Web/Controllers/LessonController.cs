@@ -15,6 +15,7 @@ namespace JudgeSystem.Web.Controllers
 
 		public async Task<IActionResult> Details(int id)
 		{
+			//TODO: Check if the contest is locked
 			var lesson = await lessonService.GetLessonInfo(id);
 
 			return View(lesson);

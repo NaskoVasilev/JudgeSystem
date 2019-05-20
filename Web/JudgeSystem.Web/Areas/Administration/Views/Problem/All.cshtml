@@ -1,0 +1,39 @@
+﻿@model IEnumerable<LessonProblemViewModel>
+
+@{
+	ViewData["Title"] = "All";
+	string administrationArea = GlobalConstants.AdministrationArea;
+}
+
+<h1>All Problems</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var task in Model)
+		{
+			<tr>
+				<td>
+					@task.Name
+				</td>
+				<td>
+					<a class="btn btn-primary" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">Add Test</a>
+					<a class="btn btn-primary" asp-area="@administrationArea"
+					   asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">All Tests</a>
+					<a class="btn btn-warning" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+					<a class="btn btn-danger" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
