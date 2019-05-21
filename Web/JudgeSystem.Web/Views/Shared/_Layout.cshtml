@@ -2,14 +2,14 @@
 	string error = string.Empty;
 	string info = string.Empty;
 
-	if (this.TempData["error"] != null)
+	if (this.TempData[GlobalConstants.ErrorKey] != null)
 	{
-		error = this.TempData["error"].ToString();
+		error = this.TempData[GlobalConstants.ErrorKey].ToString();
 	}
 
-	if (this.TempData["info"] != null)
+	if (this.TempData[GlobalConstants.InfoKey] != null)
 	{
-		info = this.TempData["info"].ToString();
+		info = this.TempData[GlobalConstants.InfoKey].ToString();
 	}
 }
 

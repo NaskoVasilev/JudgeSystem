@@ -58,5 +58,11 @@ namespace JudgeSystem.Services.Data
 				.FirstOrDefaultAsync(l => l.Id == id);
 			return lesson.To<Lesson, LessonViewModel>();
 		}
+
+		public async Task Update(Lesson lesson)
+		{
+			repository.Update(lesson);
+			await repository.SaveChangesAsync();
+		}
 	}
 }

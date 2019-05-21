@@ -66,19 +66,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return RedirectToAction("Details", "Lesson", new { id = newLesson.Id });
 		}
 
-		public async Task<IActionResult> Edit(int id)
+		public async Task<IActionResult> Edit(int id, string lessonType, int courseId)
 		{
 			Lesson lesson = await lessonService.GetById(id);
 			if(lesson == null)
 			{
-				string errorMessage = string.Format(GlobalConstants.NotFoundEntityMessage, "lesson");
-				return ShowError(errorMessage, "All", "Course");
+				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "lesson");
+				return ShowError(errorMessage, "All", "Course", new { lessonType, courseId});
 			}
 			var model = lesson.To<Lesson, LessonEditInputModel>();
 			ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
 			return View(model);
 		}
 
+		[HttpPost]
 		public async Task<IActionResult> Edit(LessonEditInputModel model)
 		{
 			if (!ModelState.IsValid)
@@ -89,38 +90,63 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			Lesson lesson = await lessonService.GetById(model.Id);
 			if(lesson == null)
 			{
-				string message = string.Format(GlobalConstants.NotFoundEntityMessage, "lesson");
-				return ShowError(message, "All", "Course");
+				string message = string.Format(ErrorMessages.NotFoundEntityMessage, "lesson");
+				return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
 			}
 
 			lesson.Name = model.Name;
 			lesson.Type = model.Type;
-			string errorMessage = string.Empty;
+			await lessonService.Update(lesson);
 
-			if (!string.IsNullOrEmpty(model.OldPassword) && 
-				model.OldPassword == lesson.LessonPassword && 
-				model.LessonPassword.Length > 5 )
-			{
-				lesson.LessonPassword = model.LessonPassword;
+			return RedirectToAction("Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+		}
 
-			}
-			else if (!string.IsNullOrEmpty(model.OldPassword))
+		public IActionResult AddPassword()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult AddPassword(LessonAddPasswordInputModel model)
+		{
+			if (!ModelState.IsValid)
 			{
-				if(model.OldPassword != lesson.LessonPassword)
-				{
-					errorMessage = GlobalConstants.DiffrentLessonPasswords;
-				}
-				else if(model.LessonPassword.Length < 5)
-				{
-					errorMessage = GlobalConstants.TooShorPasswordMessage;
-				}
+				return View(model);
 			}
 
-			if (!string.IsNullOrEmpty(errorMessage))
+			return Json(model);
+		}
+
+		public IActionResult ChangePassword()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ChangePassword(LessonChangePasswordInputModel model)
+		{
+			if (!ModelState.IsValid)
 			{
-				ModelState.AddModelError(string.Empty, errorMessage);
+				return View(model);
+			}
+
+			Lesson lesson = await lessonService.GetById(model.Id);
+
+			if(lesson.IsLocked && lesson.LessonPassword == model.OldPassword)
+			{
+				lesson.LessonPassword = model.NewPassword;
+				await lessonService.Update(lesson);
+				string infoMessage = string.Format(InfoMessages.ChangePasswordSuccessfully, lesson.Name);
+				return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+
+			}
+			else
+			{
+				string errorMessage = ErrorMessages.DiffrentLessonPasswords;
+				this.ModelState.AddModelError(string.Empty, errorMessage);
 				return View(model);
 			}
 		}
+
 	}
 }

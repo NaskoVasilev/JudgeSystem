@@ -14,5 +14,7 @@ namespace JudgeSystem.Services.Data
 		Task<LessonViewModel> GetLessonInfo(int id);
 
 		Task<Lesson> GetById(int id);
+
+		Task Update(Lesson lesson);
 	}
 }

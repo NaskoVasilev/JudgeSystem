@@ -4,7 +4,8 @@ using System.Text;
 
 namespace JudgeSystem.Services
 {
-	class FileService
+	public interface ILessonPasswordService
 	{
+
 	}
 }

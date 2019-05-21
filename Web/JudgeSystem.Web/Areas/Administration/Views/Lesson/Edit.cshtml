@@ -1,13 +1,13 @@
 ﻿@model LessonEditInputModel
 
 @{
-    ViewData["Title"] = "Lesson Edit";
+	ViewData["Title"] = "Lesson Edit";
 	var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
 }
 
 <h1>@ViewData["Title"]</h1>
 <div class="row">
-	<div class="col-md-4" >
+	<div class="col-md-4">
 		<section>
 			<form method="post" enctype="multipart/form-data">
 				<div asp-validation-summary="All" class="text-danger"></div>
@@ -15,16 +15,6 @@
 					<label asp-for="Name"></label>
 					<input asp-for="Name" class="form-control" />
 					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="LessonPassword"></label>
-					<input asp-for="LessonPassword" class="form-control" />
-					<span asp-validation-for="LessonPassword" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="OldPassword"></label>
-					<input asp-for="OldPassword" class="form-control" />
-					<span asp-validation-for="OldPassword" class="text-danger"></span>
 				</div>
 				<div class="form-group">
 					<label asp-for="Type"></label>
@@ -35,6 +25,12 @@
 					<button type="submit" class="btn btn-primary">Edit</button>
 				</div>
 			</form>
+
+			<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+			   asp-action="ChangePassword" asp-route-id="@Model.Id">Change lesson password</a>
+
+			<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+			   asp-action="AddPassword" asp-route-id="@Model.Id">Add password to the lesson</a>
 		</section>
 	</div>
 </div>

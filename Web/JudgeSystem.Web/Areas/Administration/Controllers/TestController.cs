@@ -29,7 +29,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			if(test == null)
 			{
 				//TODO: need to pass problemId
-				string errorMessage = string.Format(GlobalConstants.NotFoundEntityMessage, "test");
+				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "test");
 				this.ShowError(errorMessage, nameof(ProblemTasks), "Test");
 			}
 

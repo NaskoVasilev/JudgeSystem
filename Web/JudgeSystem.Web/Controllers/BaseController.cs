@@ -1,19 +1,38 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
+	using JudgeSystem.Common;
+	using Microsoft.AspNetCore.Mvc;
 
     public class BaseController : Controller
     {
 		public IActionResult ShowError(string errorMessage, string action, string conrtoller)
 		{
-			TempData["error"] = errorMessage;
+			TempData[GlobalConstants.ErrorKey] = errorMessage;
 			return RedirectToAction(action, conrtoller);
 		}
 
 		public IActionResult ShowError(string errorMessage, string action, string conrtoller, string area)
 		{
-			TempData["error"] = errorMessage;
+			TempData[GlobalConstants.ErrorKey] = errorMessage;
 			return RedirectToAction(action, conrtoller, new { area });
+		}
+
+		public IActionResult ShowError(string errorMessage, string action, string conrtoller, object routeValues)
+		{
+			TempData[GlobalConstants.ErrorKey] = errorMessage;
+			return RedirectToAction(action, conrtoller, routeValues);
+		}
+
+		public IActionResult ShowInfo(string infoMessage, string action, string conrtoller)
+		{
+			TempData[GlobalConstants.InfoKey] = infoMessage;
+			return RedirectToAction(action, conrtoller);
+		}
+
+		public IActionResult ShowInfo(string infoMessage, string action, string conrtoller, object routeValues)
+		{
+			TempData[GlobalConstants.InfoKey] = infoMessage;
+			return RedirectToAction(action, conrtoller, routeValues);
 		}
 	}
 }

@@ -48,7 +48,7 @@ namespace JudgeSystem.Services.Data
 			Course course = await GetById(model.Id);
 			if(course == null)
 			{
-				throw new ArgumentException(string.Format(GlobalConstants.NotFoundEntityMessage, "course"));
+				throw new ArgumentException(string.Format(ErrorMessages.NotFoundEntityMessage, "course"));
 			}
 			course.Name = model.Name;
 			repository.Update(course);

@@ -49,7 +49,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			Problem problem = await problemService.GetById(id);
 			if(problem == null)
 			{
-				string errorMessage = string.Format(GlobalConstants.NotFoundEntityMessage, "problem");
+				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "problem");
 				return this.ShowError(errorMessage, "All", "Problem", GlobalConstants.AdministrationArea);
 			}
 
@@ -73,7 +73,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			Problem problem = await problemService.GetById(id);
 			if (problem == null)
 			{
-				string errorMessage = string.Format(GlobalConstants.NotFoundEntityMessage, "problem");
+				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "problem");
 				return this.ShowError(errorMessage, "All", "Problem", GlobalConstants.AdministrationArea);
 			}
 

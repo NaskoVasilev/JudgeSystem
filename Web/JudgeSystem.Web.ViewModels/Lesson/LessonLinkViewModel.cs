@@ -3,6 +3,7 @@
 	using Services.Mapping;
 	using Data.Models;
 	using AutoMapper;
+	using JudgeSystem.Data.Models.Enums;
 
 	public class LessonLinkViewModel : IMapFrom<Lesson>, IHaveCustomMappings
 	{
@@ -11,6 +12,10 @@
 		public string Name { get; set; }
 
 		public int ProblemsCount { get; set; }
+
+		public int CourseId { get; set; }
+
+		public LessonType Type { get; set; }
 
 		public void CreateMappings(IMapperConfigurationExpression configuration)
 		{

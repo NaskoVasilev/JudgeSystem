@@ -41,7 +41,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			Course course = await courseService.GetById(id);
 			if(course == null)
 			{
-				TempData["error"] = string.Format(GlobalConstants.NotFoundEntityMessage, "course");
+				TempData[GlobalConstants.ErrorKey] = string.Format(ErrorMessages.NotFoundEntityMessage, "course");
 				return RedirectToAction("All", "Course");
 			}
 
@@ -63,7 +63,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 			catch (ArgumentException ex)
 			{
-				ViewData["error"] = ex.Message;
+				ViewData[GlobalConstants.ErrorKey] = ex.Message;
 			}
 			return RedirectToAction("All", "Course");
 		}
@@ -74,11 +74,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			 Course course = await courseService.GetById(id);
 			if(course == null)
 			{
-				return BadRequest(string.Format(GlobalConstants.NotFoundEntityMessage, "course"));
+				return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, "course"));
 			}
 
 			await courseService.Delete(course);
-			return Content(string.Format(GlobalConstants.SuccessfullyDeletedMessage, course.Name));
+			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, course.Name));
 		}
     }
 }

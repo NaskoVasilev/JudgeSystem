@@ -6,7 +6,9 @@
 
 		public const string AdministrationArea = "Administration";
 
-		public const string NotFoundEntityMessage = "The required {0} was not found!";
+		public const string InfoKey = "info";
+
+		public const string ErrorKey = "error";
 
 		public const string FileStorePath = "F:\\JudgeSystemStore\\";
 
@@ -24,10 +26,6 @@
 
 		public const int ProblemMaxPoints = 100;
 
-		public const string SuccessfullyDeletedMessage = "The {0} was successfully deleted.";
-
-		public const string DiffrentLessonPasswords = "Old password is different";
-
-		public const string TooShorPasswordMessage = "The lesson password must be at least five symbols."
+		public const int PasswordMinLength = 5;
 	}
 }
