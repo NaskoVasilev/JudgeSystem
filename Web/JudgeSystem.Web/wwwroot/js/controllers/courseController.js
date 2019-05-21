@@ -11,13 +11,12 @@ for (let i = 0; i < toggler.length; i++) {
 //Delete course
 $(".courseDeleteBtn").on('click', (e) => {
 	let button = $(e.target)[0];
-	let courseId = button.dataset.id;
-	console.log(courseId);
+	let lessonId = button.dataset.id;
 
-	$.post('/Administration/Course/Delete', { id: courseId })
+	$.post('/Administration/Course/Delete', { id: lessonId })
 		.done((response) => {
 			$(button.parentElement.parentElement.parentElement).hide();
-			$('#course-' + courseId).hide();
+			$('#course-' + lessonId).hide();
 			showInfo(response);
 		})
 		.fail((error) => {

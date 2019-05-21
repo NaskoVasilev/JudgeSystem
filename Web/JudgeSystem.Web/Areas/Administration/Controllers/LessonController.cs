@@ -107,14 +107,31 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult AddPassword(LessonAddPasswordInputModel model)
+		public async Task<IActionResult> AddPassword(LessonAddPasswordInputModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			return Json(model);
+			Lesson lesson = await lessonService.GetById(model.Id);
+			if(lesson == null)
+			{
+				this.ThrowEntityNullException(nameof(lesson));
+			}
+
+			if (lesson.IsLocked)
+			{
+				string message = string.Format(ErrorMessages.LockedLesson);
+				return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+			}
+
+			//TODO hash password
+			lesson.LessonPassword = model.LessonPassword;
+			await lessonService.Update(lesson);
+
+			string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
+			return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
 		}
 
 		public IActionResult ChangePassword()
@@ -131,7 +148,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
 			Lesson lesson = await lessonService.GetById(model.Id);
-
+			//TODO: hash password and use ILessonPasswordService
 			if(lesson.IsLocked && lesson.LessonPassword == model.OldPassword)
 			{
 				lesson.LessonPassword = model.NewPassword;
@@ -146,6 +163,22 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				this.ModelState.AddModelError(string.Empty, errorMessage);
 				return View(model);
 			}
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
+		{
+			Lesson lesson = await this.lessonService.GetById(id);
+
+			if(lesson == null)
+			{
+				return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, nameof(lesson)));
+			}
+
+			string lessonName = lesson.Name;
+			await lessonService.Delete(lesson);
+
+			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
 		}
 
 	}

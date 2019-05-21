@@ -22,10 +22,16 @@
 					<td>
 						<a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson" 
 						   asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
-						<button class="btn btn-danger" data-id="@lesson.Id">Delete</button>
+						<button class="btn btn-danger lessonDeleteBtn" data-id="@lesson.Id">Delete</button>
 					</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 </div>
+
+
+@section Scripts{ 
+	<script src="~/js/notification.js"></script>
+	<script src="~/js/controllers/lessonController.js"></script>
+}

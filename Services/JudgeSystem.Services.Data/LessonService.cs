@@ -44,6 +44,12 @@ namespace JudgeSystem.Services.Data
 			return lesson;
 		}
 
+		public async Task Delete(Lesson lesson)
+		{
+			this.repository.Delete(lesson);
+			await this.repository.SaveChangesAsync();
+		}
+
 		public async Task<Lesson> GetById(int id)
 		{
 			return await repository.All()

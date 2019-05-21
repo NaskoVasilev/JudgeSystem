@@ -1,6 +1,7 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
 	using JudgeSystem.Common;
+	using JudgeSystem.Web.Infrastructure.Exceptions;
 	using Microsoft.AspNetCore.Mvc;
 
     public class BaseController : Controller
@@ -33,6 +34,12 @@
 		{
 			TempData[GlobalConstants.InfoKey] = infoMessage;
 			return RedirectToAction(action, conrtoller, routeValues);
+		}
+
+
+		public void ThrowEntityNullException(string entityName)
+		{
+			throw new EntityNullException(entityName);
 		}
 	}
 }
