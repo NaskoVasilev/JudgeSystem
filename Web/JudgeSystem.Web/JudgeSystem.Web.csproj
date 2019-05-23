@@ -28,4 +28,8 @@
     <ProjectReference Include="..\JudgeSystem.Web.Infrastructure\JudgeSystem.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.ViewModels\JudgeSystem.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\Partials\" />
+  </ItemGroup>
 </Project>

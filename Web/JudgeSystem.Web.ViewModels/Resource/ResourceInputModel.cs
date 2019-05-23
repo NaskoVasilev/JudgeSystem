@@ -16,6 +16,7 @@
 
 		public int LessonId { get; set; }
 
+		[Required]
 		public IFormFile File { get; set; }
 	}
 }

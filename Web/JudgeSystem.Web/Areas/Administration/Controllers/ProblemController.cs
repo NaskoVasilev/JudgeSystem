@@ -34,8 +34,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
 			Problem problem = await problemService.Create(model);
-			//TODO: redurect to add test for this problem
-			return Json(problem);
+			return RedirectToAction(nameof(AddTest), "Problem", 
+				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id});
 		}
 
 		public IActionResult All(int lessonId)
@@ -58,14 +58,16 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Edit(ProblemEditInputModel model)
+		public async Task<IActionResult> Edit(ProblemEditInputModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			return Json(model);
+			Problem problem = await problemService.Update(model);
+			return RedirectToAction(nameof(All), "Problem", 
+				new { area = GlobalConstants.AdministrationArea, problem.LessonId });
 		}
 
 		public async Task<IActionResult> Delete(int id)
@@ -82,9 +84,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Delete(ProblemViewModel model)
+		public async Task<IActionResult> Delete(ProblemViewModel model)
 		{
-			return Json(model.Id);
+			Problem problem = await problemService.GetById(model.Id);
+			if(problem == null)
+			{
+				this.ThrowEntityNullException(nameof(problem));
+			}
+
+			await problemService.Delete(problem);
+
+			return RedirectToAction(nameof(All), "Problem",
+				new { area = GlobalConstants.AdministrationArea, problem.LessonId });
 		}
 
 		public IActionResult AddTest()
@@ -93,15 +104,15 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult AddTest(TestInputModel model)
+		public async Task<IActionResult> AddTest(TestInputModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			testService.Add(model);
-			return RedirectToAction(nameof(AddTest));
+			await testService.Add(model);
+			return RedirectToAction(nameof(AddTest), new { problemId = model.ProblemId });
 		}
 	}
 }

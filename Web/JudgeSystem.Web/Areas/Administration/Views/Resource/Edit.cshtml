@@ -14,17 +14,15 @@
 				<div class="form-group">
 					<label asp-for="Name"></label>
 					<input asp-for="Name" class="form-control" />
-					<span asp-validation-for="Name" class="text-danger"></span>
 				</div>
 				<div class="form-group">
 					<label asp-for="ResourceType"></label>
 					<select class="form-control" asp-for="ResourceType" asp-items="resourceTypes"></select>
-					<span asp-validation-for="ResourceType" class="text-danger"></span>
 				</div>
 
 				<div class="form-group">
-					<label asp-for="File"></label>
 					<input asp-for="File" type="file">
+					<label>Choose File</label>
 				</div>
 
 				<div class="form-group">

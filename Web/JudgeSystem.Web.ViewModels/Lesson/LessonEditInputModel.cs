@@ -15,5 +15,7 @@
 		public string Name { get; set; }
 
 		public LessonType Type { get; set; }
+
+		public bool IsLocked { get; set; }
 	}
 }

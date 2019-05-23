@@ -62,7 +62,14 @@
         "webfonts/fa-solid-900.woff",
         "webfonts/fa-solid-900.woff2"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "codemirror@5.47.0",
+      "destination": "wwwroot/lib/codemirror/",
+      "files": [
+        "mode/clike/clike.min.js"
+      ]
     }
-  
-]
+  ]
 }

@@ -12,5 +12,8 @@ namespace JudgeSystem.Services.Data
 		IEnumerable<LessonProblemViewModel> LesosnProblems(int lessonId);
 
 		Task<Problem> GetById(int id);
+		Task<Problem> Update(ProblemEditInputModel model);
+
+		Task Delete(Problem problem);
 	}
 }

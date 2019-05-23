@@ -12,5 +12,9 @@ namespace JudgeSystem.Services.Data
 		IEnumerable<TestViewModel> TestsByProblem(int problemId);
 
 		Task<Test> GetById(int id);
+
+		Task Delete(Test test);
+
+		Task Update(Test test);
 	}
 }

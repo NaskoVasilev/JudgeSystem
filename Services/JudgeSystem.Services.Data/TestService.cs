@@ -26,6 +26,12 @@ namespace JudgeSystem.Services.Data
 			return test;
 		}
 
+		public async Task Delete(Test test)
+		{
+			repository.Delete(test);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task<Test> GetById(int id)
 		{
 			return await repository.All()
@@ -36,8 +42,15 @@ namespace JudgeSystem.Services.Data
 		{
 			return this.repository.All()
 				.Where(t => t.ProblemId == problemId)
+				.OrderByDescending(t => t.IsTrialTest)
 				.To<TestViewModel>()
 				.ToList();
+		}
+
+		public async Task Update(Test test)
+		{
+			repository.Update(test);
+			await repository.SaveChangesAsync();
 		}
 	}
 }

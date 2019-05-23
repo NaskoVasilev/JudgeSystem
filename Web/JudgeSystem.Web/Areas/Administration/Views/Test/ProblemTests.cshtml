@@ -1,0 +1,40 @@
+﻿@model IEnumerable<TestViewModel>
+
+@{
+	ViewData["Title"] = "Problem Tests";
+	int testNumber = 1;
+}
+
+<h1>Problem Tests</h1>
+@foreach (TestViewModel test in Model)
+{
+	<div class="test-holder">
+		@if (test.IsTrialTest)
+		{
+			<h4>Zero Test</h4>
+		}
+		else
+		{
+			<h4>Test - @(testNumber++)</h4>
+		}
+
+		<div>
+			<p>Input Data</p>
+			<textarea class="text-left" id="input-data-@test.Id">@test.InputData.Trim()</textarea>
+		</div>
+		<div>
+			<p>Output data</p>
+			<textarea class="text-left" id="output-data-@test.Id">@test.OutputData.Trim()</textarea>
+		</div>
+		<div class="admin-buttons-holder">
+			<button class="btn btn-warning testEditBtn" data-id="@test.Id">Edit</button>
+			<button class="btn btn-danger testDeleteBtn" data-id="@test.Id">Delete</button>
+		</div>
+		<hr />
+	</div>
+}
+
+@section Scripts{
+	<script src="~/js/notification.js"></script>
+	<script src="~/js/controllers/testController.js"></script>
+}

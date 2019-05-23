@@ -7,5 +7,7 @@
 		public const string ChangePasswordSuccessfully = "The password of the lesson {0} was change successfully.";
 
 		public const string AddPasswordSuccessfully = "The password was added to lesson - {0}";
+
+		public const string SuccessfullyEditMessage = "The {0} was successfully edited.";
 	}
 }

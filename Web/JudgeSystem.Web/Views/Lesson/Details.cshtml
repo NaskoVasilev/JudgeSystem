@@ -41,4 +41,20 @@
 		</li>
 	</ul>
 </div>
+<div class="code-wrapper">
+	<textarea id="code-holder"></textarea>
+</div>
 
+@section Scripts{
+	<script src="~/lib/codemirror/codemirror.js"></script>
+	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
+	<script>
+		let codeTextarea = document.getElementById('code-holder');
+		var myCodeMirror = CodeMirror.fromTextArea(codeTextarea,
+			{
+				lineNumbers: true,
+				matchBrackets: true,
+				mode: "text/x-c++src"
+			});
+	</script>
+}

@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Web.ViewModels.Test
+﻿namespace JudgeSystem.Web.ViewModels.Test
 {
-	public class TestInputModel
+	using JudgeSystem.Services.Mapping;
+	using System.ComponentModel.DataAnnotations;
+	using Data.Models;
+
+	public class TestInputModel : IMapTo<Test>
 	{
 		public int Id { get; set; }
 		

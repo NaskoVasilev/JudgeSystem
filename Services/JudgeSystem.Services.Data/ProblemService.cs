@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.ViewModels.Problem;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,12 @@ namespace JudgeSystem.Services.Data
 			return problem;
 		}
 
+		public async Task Delete(Problem problem)
+		{
+			repository.Delete(problem);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task<Problem> GetById(int id)
 		{
 			return await repository.All().FirstOrDefaultAsync(p => p.Id == id);
@@ -38,6 +45,23 @@ namespace JudgeSystem.Services.Data
 				.Where(p => p.LessonId == lessonId)
 				.To<LessonProblemViewModel>()
 				.ToList();
+		}
+
+		public async Task<Problem> Update(ProblemEditInputModel model)
+		{
+			Problem problem = await GetById(model.Id);
+			if(problem == null)
+			{
+				throw new EntityNullException(nameof(problem));
+			}
+
+			problem.Name = model.Name;
+			problem.MaxPoints = model.MaxPoints;
+			problem.IsExtraTask = model.IsExtraTask;
+
+			repository.Update(problem);
+			await repository.SaveChangesAsync();
+			return problem;
 		}
 	}
 }

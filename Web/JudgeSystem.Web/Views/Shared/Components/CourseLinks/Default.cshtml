@@ -6,26 +6,27 @@
 
 
 @foreach (var course in Model)
-{
-	<li class="dropdown-submenu"  id="course-@course.Id">
-		<a class="dropdown-item" tabindex="-1" href="#">@course.Name</a>
-		<ul class="dropdown-menu">
-			@foreach (var lessonType in lessonTypes)
-			{
-				<li class="dropdown-item">
-					<a class="dropdown-item"
-					   asp-area=""
-					   asp-controller="Course"
-					   asp-action="Lessons"
-					   asp-route-courseId="@course.Id"
-					   asp-route-lessonType="@lessonType">
-						@($"{course.Name} - {lessonType}s")
-					</a>
-				</li>
-			}
-		</ul>
-	</li>
-}
+	{
+		<li class="dropdown-submenu"  id="course-@course.Id">
+			<a class="dropdown-item" tabindex="-1" href="#">@course.Name</a>
+			<ul class="dropdown-menu">
+				@foreach (var lessonType in lessonTypes)
+				{
+					<li class="dropdown-item">
+						<a class="dropdown-item"
+						   asp-area=""
+						   asp-controller="Course"
+						   asp-action="Lessons"
+						   asp-route-courseId="@course.Id"
+						   asp-route-lessonType="@lessonType">
+							@($"{course.Name} - {lessonType}s")
+						</a>
+					</li>
+				}
+			</ul>
+		</li>
+	}
+
 <li class="dropdown-item">
 	<a asp-area="" asp-controller="Course" asp-action="All" class="dropdown-item">All</a>
 </li>

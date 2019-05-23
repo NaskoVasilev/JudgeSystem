@@ -8,12 +8,8 @@
 	{
 		public int Id { get; set; }
 
-		[Required]
 		public string InputData { get; set; }
 
-		[Required]
 		public string OutputData { get; set; }
-
-		public bool IsTrialTest { get; set; }
 	}
 }

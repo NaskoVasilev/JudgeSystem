@@ -7,12 +7,12 @@
 
 <div class="row">
 	<h2>@courseName</h2>
-	<table class="table table-borderless">
+	<table class="table table">
 		<tbody>
 			@foreach (var lesson in Model)
 			{
 				<tr>
-					<td>
+					<td class="a-holder">
 						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
 					</td>
 					<td>
