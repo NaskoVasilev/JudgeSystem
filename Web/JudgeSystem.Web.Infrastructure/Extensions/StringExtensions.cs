@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace JudgeSystem.Web.Infrastructure.Extensions
+﻿namespace JudgeSystem.Web.Infrastructure.Extensions
 {
+	using System;
+
 	public static class StringExtensions
 	{
 		public static string NormalizeFileName(this string name)

@@ -2,6 +2,7 @@
 {
 	using JudgeSystem.Common;
 	using JudgeSystem.Web.Infrastructure.Exceptions;
+
 	using Microsoft.AspNetCore.Mvc;
 
     public class BaseController : Controller

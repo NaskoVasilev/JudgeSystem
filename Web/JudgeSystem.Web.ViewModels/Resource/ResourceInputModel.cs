@@ -1,8 +1,10 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Resource
 {
-	using Data.Models.Enums;
-	using Microsoft.AspNetCore.Http;
 	using System.ComponentModel.DataAnnotations;
+
+	using Data.Models.Enums;
+
+	using Microsoft.AspNetCore.Http;
 
 	public class ResourceInputModel
 	{

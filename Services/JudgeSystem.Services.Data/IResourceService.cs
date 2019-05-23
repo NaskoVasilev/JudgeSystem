@@ -1,10 +1,11 @@
-﻿using JudgeSystem.Data.Models;
-using JudgeSystem.Web.ViewModels.Resource;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.ViewModels.Resource;
+
 	public interface IResourceService
 	{
 		Resource CreateResource(string filePath, string fileName);

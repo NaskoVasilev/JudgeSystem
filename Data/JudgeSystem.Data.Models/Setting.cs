@@ -1,6 +1,6 @@
 ﻿namespace JudgeSystem.Data.Models
 {
-    using JudgeSystem.Data.Common.Models;
+    using Data.Common.Models;
 
     public class Setting : BaseDeletableModel<int>
     {

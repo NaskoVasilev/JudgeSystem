@@ -1,11 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using JudgeSystem.Common;
-using Microsoft.AspNetCore.Http;
-
-namespace JudgeSystem.Web.Utilites
+﻿namespace JudgeSystem.Web.Utilites
 {
+	using System.IO;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+
+	using Microsoft.AspNetCore.Http;
+
 	public class FileManager : IFileManager
 	{
 		public void DeleteFile(string fileName)

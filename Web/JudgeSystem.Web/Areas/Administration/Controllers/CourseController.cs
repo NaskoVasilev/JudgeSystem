@@ -1,14 +1,16 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.ViewModels.Course;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
+	using System;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.ViewModels.Course;
+	
+	using Microsoft.AspNetCore.Mvc;
+
 	public class CourseController : AdministrationBaseController
     {
 		private readonly ICourseService courseService;

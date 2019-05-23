@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JudgeSystem.Data.Common.Repositories;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.ViewModels.Lesson;
-using Microsoft.EntityFrameworkCore;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Common.Repositories;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Data.Models.Enums;
+	using Services.Mapping;
+	using JudgeSystem.Web.ViewModels.Lesson;
+
+	using Microsoft.EntityFrameworkCore;
+
 	public class LessonService : ILessonService
 	{
 		private readonly IDeletableEntityRepository<Lesson> repository;

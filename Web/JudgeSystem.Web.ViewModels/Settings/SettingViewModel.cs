@@ -1,7 +1,7 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Settings
 {
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Mapping;
+    using Data.Models;
+    using Services.Mapping;
 
     public class SettingViewModel : IMapFrom<Setting>
     {

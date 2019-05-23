@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JudgeSystem.Data.Common.Repositories;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Infrastructure.Exceptions;
-using JudgeSystem.Web.ViewModels.Problem;
-using Microsoft.EntityFrameworkCore;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Common.Repositories;
+	using JudgeSystem.Data.Models;
+	using Services.Mapping;
+	using JudgeSystem.Web.Infrastructure.Exceptions;
+	using JudgeSystem.Web.ViewModels.Problem;
+
+	using Microsoft.EntityFrameworkCore;
+
 	public class ProblemService : IProblemService
 	{
 		private readonly IRepository<Problem> repository;

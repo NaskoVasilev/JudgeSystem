@@ -1,9 +1,10 @@
-﻿using JudgeSystem.Web.ViewModels.Problem;
-using JudgeSystem.Web.ViewModels.Resource;
-using System.Collections.Generic;
-
-namespace JudgeSystem.Web.ViewModels.Lesson
+﻿namespace JudgeSystem.Web.ViewModels.Lesson
 {
+	using System.Collections.Generic;
+
+	using Web.ViewModels.Problem;
+	using Web.ViewModels.Resource;
+
 	public class LessonViewModel
 	{
 		public int Id { get; set; }

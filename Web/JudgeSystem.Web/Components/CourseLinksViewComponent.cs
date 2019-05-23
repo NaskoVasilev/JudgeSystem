@@ -1,14 +1,14 @@
-﻿using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Web.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Components
+﻿namespace JudgeSystem.Web.Components
 {
+	using System.Threading.Tasks;
+	using System.Collections.Generic;
+
+	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Web.Infrastructure.Extensions;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	[ViewComponent(Name = "CourseLinks")]
 	public class CourseLinksViewComponent : ViewComponent
 	{

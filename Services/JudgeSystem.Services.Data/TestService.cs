@@ -1,14 +1,16 @@
-﻿using JudgeSystem.Data.Common.Repositories;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.ViewModels.Test;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Common.Repositories;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.ViewModels.Test;
+
+	using Microsoft.EntityFrameworkCore;
+
 	public class TestService : ITestService
 	{
 		private readonly IRepository<Test> repository;

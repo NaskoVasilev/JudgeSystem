@@ -1,6 +1,7 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Course
 {
 	using System.ComponentModel.DataAnnotations;
+
 	using Services.Mapping;
 	using Data.Models;
 

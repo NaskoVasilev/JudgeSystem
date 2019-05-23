@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using JudgeSystem.Data.Common.Models;
-using JudgeSystem.Data.Models.Enums;
-
-namespace JudgeSystem.Data.Models
+﻿namespace JudgeSystem.Data.Models
 {
+	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations.Schema;
+
+	using Data.Common.Models;
+	using Data.Models.Enums;
+
 	public class Lesson : BaseDeletableModel<int>
 	{
 		public Lesson()
@@ -13,6 +15,7 @@ namespace JudgeSystem.Data.Models
 			this.Problems = new List<Problem>();
 		}
 
+		[Required]
 		public string Name { get; set; }
 
 		public int CourseId { get; set; }

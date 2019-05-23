@@ -1,10 +1,11 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Lesson
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using Common;
 	using Data.Models.Enums;
 	using Services.Mapping;
 	using Data.Models;
-	using System.ComponentModel.DataAnnotations;
 
 	public class LessonEditInputModel : IMapTo<Lesson>, IMapFrom<Lesson>
 	{

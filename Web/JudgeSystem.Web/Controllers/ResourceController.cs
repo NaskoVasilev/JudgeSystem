@@ -1,12 +1,14 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Data;
+
+	using Microsoft.Extensions.FileProviders;
+	using Microsoft.AspNetCore.Mvc;
+
 	public class ResourceController : BaseController
 	{
 		private readonly IResourceService resourceService;

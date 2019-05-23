@@ -1,8 +1,9 @@
-﻿using JudgeSystem.Data.Models.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Data.Models
+﻿namespace JudgeSystem.Data.Models
 {
+	using System.ComponentModel.DataAnnotations;
+
+	using Data.Models.Enums;
+
 	public class Resource
 	{
 		public int Id { get; set; }

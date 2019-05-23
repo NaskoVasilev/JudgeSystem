@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JudgeSystem.Services
+﻿namespace JudgeSystem.Services
 {
 	public interface ILessonPasswordService
 	{

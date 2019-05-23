@@ -1,10 +1,8 @@
-﻿using JudgeSystem.Data.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace JudgeSystem.Web.Infrastructure.Extensions
+﻿namespace JudgeSystem.Web.Infrastructure.Extensions
 {
+	using System;
+	using System.Collections.Generic;
+
 	public static class EnumExtensions
 	{
 		public static IEnumerable<string> GetEnumValuesAsString<T>()

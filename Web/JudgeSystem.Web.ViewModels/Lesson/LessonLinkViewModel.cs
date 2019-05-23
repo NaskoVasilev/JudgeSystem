@@ -2,8 +2,9 @@
 {
 	using Services.Mapping;
 	using Data.Models;
+	using Data.Models.Enums;
+
 	using AutoMapper;
-	using JudgeSystem.Data.Models.Enums;
 
 	public class LessonLinkViewModel : IMapFrom<Lesson>, IHaveCustomMappings
 	{

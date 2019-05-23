@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Data.Models
+﻿namespace JudgeSystem.Data.Models
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public class Test
 	{
 		public Test()
@@ -14,7 +14,6 @@ namespace JudgeSystem.Data.Models
 		public Problem Problem { get; set; }
 		public int ProblemId { get; set; }
 
-		[Required]
 		public string InputData { get; set; }
 
 		[Required]

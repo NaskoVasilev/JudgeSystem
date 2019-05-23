@@ -1,10 +1,11 @@
-﻿using JudgeSystem.Data.Models;
-using JudgeSystem.Web.ViewModels.Test;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.ViewModels.Test;
+
 	public interface ITestService
 	{
 		Task<Test> Add(TestInputModel model);

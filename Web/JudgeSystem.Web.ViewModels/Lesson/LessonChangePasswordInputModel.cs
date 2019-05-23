@@ -1,8 +1,9 @@
-﻿using JudgeSystem.Common;
-using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Web.ViewModels.Lesson
+﻿namespace JudgeSystem.Web.ViewModels.Lesson
 {
+	using System.ComponentModel.DataAnnotations;
+
+	using Common;
+
 	public class LessonChangePasswordInputModel
 	{
 		public int Id { get; set; }

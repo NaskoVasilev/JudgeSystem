@@ -1,10 +1,11 @@
-﻿using JudgeSystem.Data.Models;
-using JudgeSystem.Web.ViewModels.Lesson;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.ViewModels.Lesson;
+
 	public interface ILessonService
 	{
 		IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId);

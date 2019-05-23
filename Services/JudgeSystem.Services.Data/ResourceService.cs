@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JudgeSystem.Common;
-using JudgeSystem.Data.Common.Repositories;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Infrastructure.Exceptions;
-using JudgeSystem.Web.ViewModels.Resource;
-using Microsoft.EntityFrameworkCore;
-
-namespace JudgeSystem.Services.Data
+﻿namespace JudgeSystem.Services.Data
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Common.Repositories;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.Infrastructure.Exceptions;
+	using JudgeSystem.Web.ViewModels.Resource;
+
+	using Microsoft.EntityFrameworkCore;
+
 	public class ResourceService : IResourceService
 	{
 		private readonly IRepository<Resource> repository;

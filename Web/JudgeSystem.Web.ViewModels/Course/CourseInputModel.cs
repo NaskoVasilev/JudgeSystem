@@ -1,8 +1,9 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Course
 {
-	using JudgeSystem.Services.Mapping;
 	using System.ComponentModel.DataAnnotations;
-	using JudgeSystem.Data.Models;
+
+	using Services.Mapping;
+	using Data.Models;
 
 	public class CourseInputModel : IMapTo<Course>
 	{

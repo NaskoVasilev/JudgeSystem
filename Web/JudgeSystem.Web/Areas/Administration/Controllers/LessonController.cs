@@ -1,20 +1,21 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Infrastructure.Extensions;
-using JudgeSystem.Web.Utilites;
-using JudgeSystem.Web.ViewModels.Lesson;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.Infrastructure.Extensions;
+	using JudgeSystem.Web.Utilites;
+	using JudgeSystem.Web.ViewModels.Lesson;
+
+	using Microsoft.AspNetCore.Mvc.Rendering;
+	using Microsoft.AspNetCore.Mvc;
+
 	public class LessonController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;

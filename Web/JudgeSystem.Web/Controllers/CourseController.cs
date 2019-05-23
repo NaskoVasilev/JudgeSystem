@@ -1,10 +1,11 @@
-﻿using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Web.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Web.Infrastructure.Extensions;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	public class CourseController : BaseController
 	{
 		private readonly ILessonService lessonService;

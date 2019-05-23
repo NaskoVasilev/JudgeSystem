@@ -1,10 +1,11 @@
-﻿using JudgeSystem.Common;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Data.Models
+﻿namespace JudgeSystem.Data.Models
 {
-    public class Problem
+	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
+
+	using JudgeSystem.Common;
+
+	public class Problem
     {
 		public Problem()
 		{

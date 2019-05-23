@@ -1,12 +1,14 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Web.ViewModels.Test;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Web.ViewModels.Test;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	public class TestController : AdministrationBaseController
 	{
 		private readonly ITestService testService;

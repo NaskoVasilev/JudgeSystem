@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Utilites
+﻿namespace JudgeSystem.Web.Utilites
 {
+	using System.Threading.Tasks;
+
+	using Microsoft.AspNetCore.Http;
+
 	public interface IFileManager
 	{
 		string GenerateFileName(IFormFile file);

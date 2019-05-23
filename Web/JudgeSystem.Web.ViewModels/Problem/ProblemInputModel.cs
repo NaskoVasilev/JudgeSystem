@@ -1,9 +1,10 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Problem
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using Common;
 	using Data.Models;
-	using JudgeSystem.Services.Mapping;
-	using System.ComponentModel.DataAnnotations;
+	using Services.Mapping;
 
 	public class ProblemInputModel : IMapTo<Problem>
 	{

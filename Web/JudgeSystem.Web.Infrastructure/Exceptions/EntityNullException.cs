@@ -1,8 +1,9 @@
-﻿using JudgeSystem.Common;
-using System;
-
-namespace JudgeSystem.Web.Infrastructure.Exceptions
+﻿namespace JudgeSystem.Web.Infrastructure.Exceptions
 {
+	using System;
+
+	using JudgeSystem.Common;
+
 	public class EntityNullException : ArgumentException
 	{
 		private const string DefaultMessage = "Invalid entity id.";

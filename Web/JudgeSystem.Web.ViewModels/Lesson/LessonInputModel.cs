@@ -2,13 +2,14 @@
 {
 	using System.ComponentModel.DataAnnotations;
 	using System.Collections.Generic;
-	using Microsoft.AspNetCore.Http;
 
 	using Data.Models.Enums;
 	using Services.Mapping;
 	using Data.Models;
+	using Common;
+
 	using AutoMapper;
-	using JudgeSystem.Common;
+	using Microsoft.AspNetCore.Http;
 
 	public class LessonInputModel : IMapTo<Lesson>, IHaveCustomMappings
 	{

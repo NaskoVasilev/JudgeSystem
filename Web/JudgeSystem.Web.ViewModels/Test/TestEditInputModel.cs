@@ -1,7 +1,6 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Test
 {
-	using JudgeSystem.Services.Mapping;
-	using System.ComponentModel.DataAnnotations;
+	using Services.Mapping;
 	using Data.Models;
 
 	public class TestEditInputModel : IMapTo<Test>, IMapFrom<Test>

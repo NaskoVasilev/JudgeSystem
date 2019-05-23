@@ -1,7 +1,7 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Course
 {
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
+	using Services.Mapping;
+	using Data.Models;
 
 	public class CourseViewModel : IMapFrom<Course>
 	{

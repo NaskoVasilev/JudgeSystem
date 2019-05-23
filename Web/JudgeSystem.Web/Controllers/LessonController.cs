@@ -1,9 +1,11 @@
-﻿using JudgeSystem.Services.Data;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Services.Data;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	public class LessonController : BaseController
 	{
 		private readonly ILessonService lessonService;

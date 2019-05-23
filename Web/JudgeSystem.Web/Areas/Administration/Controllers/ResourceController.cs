@@ -1,18 +1,18 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Utilites;
-using JudgeSystem.Web.ViewModels.Resource;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using JudgeSystem.Web.Infrastructure.Extensions;
-
-namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.Utilites;
+	using JudgeSystem.Web.ViewModels.Resource;
+	using JudgeSystem.Web.Infrastructure.Extensions;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	public class ResourceController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;
