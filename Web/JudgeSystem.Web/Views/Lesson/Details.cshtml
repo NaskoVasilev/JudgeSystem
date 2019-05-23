@@ -29,7 +29,14 @@
 	<ul class="list-group d-flex flex-xl-row">
 		@foreach (var problem in Model.Problems)
 		{
-			<li class="list-group-item">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
+			if (problemNumber == 0)
+			{
+				<li class="list-group-item active-problem problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
+			}
+			else
+			{
+				<li class="list-group-item problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
+			}
 		}
 		<li class="list-group-item a-holder">
 			<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem"
@@ -42,19 +49,51 @@
 	</ul>
 </div>
 <div class="code-wrapper">
-	<textarea id="code-holder"></textarea>
+	<textarea name="code" id="code-holder"></textarea>
 </div>
+<div class="button-holder">
+	<button class="btn btn-secondary" id="submit-btn">Submit</button>
+</div>
+<div id="submissions-holder">
+	<table id="table_id" class="display">
+		<thead>
+			<tr>
+				<th>Column 1</th>
+				<th>Column 2</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Row 1 Data 1</td>
+				<td>Row 1 Data 2</td>
+			</tr>
+			<tr>
+				<td>Row 2 Data 1</td>
+				<td>Row 2 Data 2</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 
 @section Scripts{
 	<script src="~/lib/codemirror/codemirror.js"></script>
 	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
 	<script>
 		let codeTextarea = document.getElementById('code-holder');
-		var myCodeMirror = CodeMirror.fromTextArea(codeTextarea,
+		var editor = CodeMirror.fromTextArea(codeTextarea,
 			{
 				lineNumbers: true,
 				matchBrackets: true,
 				mode: "text/x-c++src"
 			});
 	</script>
+	<script src="~/lib/datatables/js/dataTables.bootstrap4.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#table_id').DataTable();
+		});
+	</script>
+	<script src="~/js/notification.js"></script>
+	<script src="~/js/controllers/submissionController.js"></script>
 }

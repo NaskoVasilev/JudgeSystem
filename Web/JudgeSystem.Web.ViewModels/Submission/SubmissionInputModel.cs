@@ -2,6 +2,8 @@
 {
 	public class SubmissionInputModel
 	{
+		public string Code { get; set; }
 
+		public int ProblemId { get; set; }
 	}
 }

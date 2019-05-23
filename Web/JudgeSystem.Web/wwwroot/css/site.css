@@ -243,3 +243,15 @@ input[type=file] {
 .code-wrapper .CodeMirror-gutters {
     background-color: #deeadb
 }
+
+.active-problem {
+    background-color: #ecdcdc;
+}
+
+.problem-name{
+    cursor: pointer;
+}
+
+.button-holder {
+    margin-top: 20px;
+}
