@@ -19,11 +19,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	{
 		private readonly IResourceService resourceService;
 		private readonly ILessonService lessonService;
+		private readonly IFileManager fileManager;
 
-		public LessonController(IResourceService resourseService, ILessonService lessonService)
+		public LessonController(IResourceService resourseService, ILessonService lessonService, IFileManager fileManager)
 		{
 			this.resourceService = resourseService;
 			this.lessonService = lessonService;
+			this.fileManager = fileManager;
 		}
 
 		public IActionResult Create()
@@ -48,16 +50,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 			foreach (var formFile in model.Resources.Where(f => f.Length > 0))
 			{
-				string fileOriginalName = formFile.FileName;
-				var fileName = Path.GetRandomFileName() + fileOriginalName;
-				var filePath = GlobalConstants.FileStorePath + fileName;
-
-				Resource resource = resourceService.CreateResource(fileName, fileOriginalName);
+				string fileName = fileManager.GenerateFileName(formFile);
+				Resource resource = resourceService.CreateResource(fileName, formFile.FileName);
 				resources.Add(resource);
-				using (var stream = new FileStream(filePath, FileMode.Create))
-				{
-					await formFile.CopyToAsync(stream);
-				}
+				await fileManager.UploadFile(formFile, fileName);
 			}
 
 			//TODO: hash lesson password for more security
@@ -180,6 +176,5 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
 		}
-
 	}
 }

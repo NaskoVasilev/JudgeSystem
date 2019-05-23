@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ResourceViewModel>
+
+@{
+	ViewData["Title"] = "All Resources";
+	string administrationArea = GlobalConstants.AdministrationArea;
+}
+
+<h1>All Resources</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var resource in Model)
+		{
+			<tr>
+				<td>
+					@resource.Name
+				</td>
+				<td>
+					<a class="btn btn-warning" asp-area="@administrationArea"
+					   asp-controller="Resource" asp-action="Edit" asp-route-id="@resource.Id">Edit</a>
+					<button class="btn btn-danger resourceDeleteBtn" data-id="@resource.Id">Delete</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@section Scripts{
+	<script src="~/js/notification.js"></script>
+	<script src="~/js/controllers/resourceController.js"></script>
+}

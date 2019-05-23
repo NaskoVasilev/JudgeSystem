@@ -1,57 +1,114 @@
 ﻿using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
-using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
-using JudgeSystem.Web.Infrastructure.Extensions;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Resource;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using JudgeSystem.Web.Infrastructure.Extensions;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
 	public class ResourceController : AdministrationBaseController
-    {
+	{
 		private readonly IResourceService resourceService;
+		private readonly IFileManager fileManager;
 
-		public ResourceController(IResourceService resourceService)
+		public ResourceController(IResourceService resourceService, IFileManager fileManager)
 		{
 			this.resourceService = resourceService;
+			this.fileManager = fileManager;
 		}
 
 		public IActionResult Create()
-        {
-			ViewData["resourceTypes"] = EnumExtensions.GetEnumValuesAsString<ResourceType>()
-				.Select(r => new SelectListItem { Value = r, Text = r.FormatResourceType()});
-
-            return View();
-        }
+		{
+			ViewData[GlobalConstants.ResourceTypesKey] = Utility.GetResourceTypesSelectList();
+			return View();
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> Create(ResourceInputModel model)
 		{
 			if (!ModelState.IsValid)
 			{
-				ViewData["resourceTypes"] = EnumExtensions.GetEnumValuesAsString<ResourceType>()
-				.Select(r => new SelectListItem { Value = r, Text = r.FormatResourceType() });
+				ViewData[GlobalConstants.ResourceTypesKey] = Utility.GetResourceTypesSelectList();
 
 				return View(model);
 			}
 
-			string fileOriginalName = model.File.FileName;
-			var fileName = Path.GetRandomFileName() + fileOriginalName;
-			var filePath = GlobalConstants.FileStorePath + fileName;
-
+			string fileName = fileManager.GenerateFileName(model.File);
 			await resourceService.CreateResource(model, fileName);
-
-			using (var stream = new FileStream(filePath, FileMode.Create))
-			{
-				await model.File.CopyToAsync(stream);
-			}
+			await fileManager.UploadFile(model.File, fileName);
 
 			return RedirectToAction("Details", "Lesson", new { id = model.LessonId });
 		}
-    }
+
+
+		public IActionResult LessonResources(int lessonId)
+		{
+			IEnumerable<ResourceViewModel> resources = resourceService.LessonResources(lessonId);
+
+			return View(resources);
+		}
+
+		public async Task<IActionResult> Edit(int id)
+		{
+			Resource resource = await resourceService.GetById(id);
+
+			if(resource == null)
+			{
+				this.ThrowEntityNullException(nameof(resource));
+			}
+
+			ViewData[GlobalConstants.ResourceTypesKey] = Utility.GetResourceTypesSelectList();
+			ResourceEditInputModel model = resource.To<Resource, ResourceEditInputModel>();
+			model.Name = model.Name.NormalizeFileName();
+			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(ResourceEditInputModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				ViewData[GlobalConstants.ResourceTypesKey] = Utility.GetResourceTypesSelectList();
+				return View(model);
+			}
+
+			Resource resource = await resourceService.GetById(model.Id);
+			if(resource == null)
+			{
+				this.ThrowEntityNullException(nameof(resource));
+			}
+
+			string fileName = string.Empty;
+			if(model.File != null)
+			{
+				fileName = fileManager.GenerateFileName(model.File);
+				await fileManager.UploadFile(model.File, fileName);
+			}
+
+			await resourceService.Update(model, fileName);
+			return RedirectToAction(nameof(LessonResources), "Resource", new { resource.LessonId });
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
+		{
+			Resource resource = await resourceService.GetById(id);
+			if(resource == null)
+			{
+				return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, nameof(resource)));
+			}
+
+			fileManager.DeleteFile(resource.Link);
+			await resourceService.Delete(resource);
+
+			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, resource.Name));
+		}
+	}
 }

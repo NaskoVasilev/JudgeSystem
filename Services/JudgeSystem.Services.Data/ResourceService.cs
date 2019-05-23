@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.ViewModels.Resource;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,16 +79,51 @@ namespace JudgeSystem.Services.Data
 			return resourceType;
 		}
 
+		public IEnumerable<ResourceViewModel> LessonResources(int lessonId)
+		{
+			return repository.All()
+				.Where(r => r.LessonId == lessonId)
+				.To<ResourceViewModel>()
+				.ToList();
+		}
+
 		private string AddExtensionToFileName(string name, string fileName)
 		{
 			string[] fileNameParts = fileName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-			if(fileNameParts.Length > 0)
+			if (fileNameParts.Length > 0)
 			{
 				string fileExtension = fileNameParts[fileNameParts.Length - 1];
 				return name + '.' + fileExtension;
 			}
 
 			return name + ".txt";
+		}
+
+		public async Task Delete(Resource resource)
+		{
+			repository.Delete(resource);
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task Update(ResourceEditInputModel model, string fileName)
+		{
+			Resource resource = await GetById(model.Id);
+
+			if (resource == null)
+			{
+				throw new EntityNullException(nameof(resource));
+			}
+
+			if (!string.IsNullOrEmpty(fileName))
+			{
+				resource.Link = fileName;
+			}
+
+			resource.ResourceType = model.ResourceType;
+			resource.Name = AddExtensionToFileName(model.Name, resource.Link);
+			repository.Update(resource);
+
+			await repository.SaveChangesAsync();
 		}
 	}
 }
