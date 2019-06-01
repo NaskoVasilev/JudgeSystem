@@ -14,35 +14,54 @@
 
 	public class ProblemService : IProblemService
 	{
-		private readonly IRepository<Problem> repository;
+		private readonly IRepository<Problem> problemRepository;
+		private readonly IRepository<Test> testRepository;
 
-		public ProblemService(IRepository<Problem> repository)
+		public ProblemService(IRepository<Problem> problemRepository, IRepository<Test> testRepository)
 		{
-			this.repository = repository;
+			this.problemRepository = problemRepository;
+			this.testRepository = testRepository;
 		}
 
 		public async Task<Problem> Create(ProblemInputModel model)
 		{
 			Problem problem = model.To<ProblemInputModel, Problem>();
-			await repository.AddAsync(problem);
-			await repository.SaveChangesAsync();
+			await problemRepository.AddAsync(problem);
+			await problemRepository.SaveChangesAsync();
 			return problem;
 		}
 
 		public async Task Delete(Problem problem)
 		{
-			repository.Delete(problem);
-			await repository.SaveChangesAsync();
+			IEnumerable<Test> problemTests = testRepository
+				.All()
+				.Where(t => t.ProblemId == problem.Id)
+				.ToList();
+
+			foreach (var test in problemTests)
+			{
+				testRepository.Delete(test);
+			}
+
+			problemRepository.Delete(problem);
+			await problemRepository.SaveChangesAsync();
 		}
 
 		public async Task<Problem> GetById(int id)
 		{
-			return await repository.All().FirstOrDefaultAsync(p => p.Id == id);
+			return await problemRepository.All().FirstOrDefaultAsync(p => p.Id == id);
+		}
+
+		public async Task<Problem> GetByIdWithTests(int id)
+		{
+			return await problemRepository.All()
+				.Include(p => p.Tests)
+				.FirstOrDefaultAsync(p => p.Id == id);
 		}
 
 		public IEnumerable<LessonProblemViewModel> LesosnProblems(int lessonId)
 		{
-			return repository.All()
+			return problemRepository.All()
 				.Where(p => p.LessonId == lessonId)
 				.To<LessonProblemViewModel>()
 				.ToList();
@@ -60,8 +79,8 @@
 			problem.MaxPoints = model.MaxPoints;
 			problem.IsExtraTask = model.IsExtraTask;
 
-			repository.Update(problem);
-			await repository.SaveChangesAsync();
+			problemRepository.Update(problem);
+			await problemRepository.SaveChangesAsync();
 			return problem;
 		}
 	}

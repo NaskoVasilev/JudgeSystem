@@ -74,7 +74,7 @@
 
 		public async Task<IActionResult> Delete(int id)
 		{
-			Problem problem = await problemService.GetById(id);
+			Problem problem = await problemService.GetByIdWithTests(id);
 			if (problem == null)
 			{
 				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "problem");
@@ -89,6 +89,8 @@
 		public async Task<IActionResult> Delete(ProblemViewModel model)
 		{
 			Problem problem = await problemService.GetById(model.Id);
+			int lessonId = problem.LessonId;
+
 			if(problem == null)
 			{
 				this.ThrowEntityNullException(nameof(problem));
@@ -96,8 +98,8 @@
 
 			await problemService.Delete(problem);
 
-			return RedirectToAction(nameof(All), "Problem",
-				new { area = GlobalConstants.AdministrationArea, problem.LessonId });
+			return RedirectToAction("Details", "Lesson",
+				new { id = lessonId });
 		}
 
 		public IActionResult AddTest()
