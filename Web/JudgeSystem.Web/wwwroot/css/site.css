@@ -255,3 +255,7 @@ input[type=file] {
 .button-holder {
     margin-top: 20px;
 }
+
+.navbar {
+    background-color: #442b6b;
+}

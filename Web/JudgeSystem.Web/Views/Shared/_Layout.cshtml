@@ -35,39 +35,40 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark border-bottom box-shadow mb-3">
 			<div class="container">
 				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">JudgeSystem</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+				<div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row-reverse">
 					<partial name="_LoginPartial" />
 					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<div class="dropdown">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Courses
-								</a>
-								<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-									<vc:course-links class-name="dropdown-item"></vc:course-links>
-								</ul>
-							</div>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Courses
+							</a>
+							<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+								<vc:course-links class-name="dropdown-item"></vc:course-links>
+							</ul>
 						</li>
-						<li class="nav-item">
-							<div class="dropdown">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Administration
-								</a>
 
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-									<a class="dropdown-item" asp-area="Administration" asp-controller="Course" asp-action="Create">Create Course</a>
-									<a class="dropdown-item" href="#">Another action</a>
-									<a class="dropdown-item" href="#">Something else here</a>
-								</div>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Administration
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" asp-area="Administration" asp-controller="Course" asp-action="Create">Create Course</a>
+								<a class="dropdown-item" href="#">Another action</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Something else here</a>
 							</div>
 						</li>
+						<form class="form-inline ml-lg-3 my-lg-0">
+							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-secondary text-white te my-2 my-sm-0" type="submit">Search</button>
+						</form>
 					</ul>
 				</div>
 			</div>
