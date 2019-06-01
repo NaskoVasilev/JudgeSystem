@@ -27,6 +27,8 @@
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
 	let code = editor.getValue();
+	console.log(problemId);
+	console.log(code);
 	editor.setValue("");
 
 	$.post('/Submission/Create', { problemId, code })

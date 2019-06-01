@@ -17,6 +17,7 @@
 		Task<Lesson> GetById(int id);
 
 		Task Update(Lesson lesson);
+
 		Task Delete(Lesson lesson);
 	}
 }

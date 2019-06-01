@@ -8,7 +8,8 @@
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Repositories;
     using JudgeSystem.Data.Seeding;
-    using JudgeSystem.Services.Data;
+	using JudgeSystem.Services;
+	using JudgeSystem.Services.Data;
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Services.Messaging;
 	using JudgeSystem.Web.Utilites;
@@ -104,6 +105,7 @@
             services.AddTransient<IProblemService, ProblemService>();
             services.AddTransient<ITestService, TestService>();
             services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<IPasswordHashService, PasswordHashService>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,18 +15,22 @@
 
 	using Microsoft.AspNetCore.Mvc.Rendering;
 	using Microsoft.AspNetCore.Mvc;
+	using JudgeSystem.Services;
 
 	public class LessonController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;
 		private readonly ILessonService lessonService;
 		private readonly IFileManager fileManager;
+		private readonly IPasswordHashService passwordHashService;
 
-		public LessonController(IResourceService resourseService, ILessonService lessonService, IFileManager fileManager)
+		public LessonController(IResourceService resourseService, ILessonService lessonService, 
+			IFileManager fileManager, IPasswordHashService passwordHashService)
 		{
 			this.resourceService = resourseService;
 			this.lessonService = lessonService;
 			this.fileManager = fileManager;
+			this.passwordHashService = passwordHashService;
 		}
 
 		public IActionResult Create()
@@ -57,7 +61,11 @@
 				await fileManager.UploadFile(formFile, fileName);
 			}
 
-			//TODO: hash lesson password for more security
+			if(model.LessonPassword != null)
+			{
+				model.LessonPassword = passwordHashService.HashPassword(model.LessonPassword);
+			}
+
 			Lesson newLesson = await lessonService.CreateLesson(model, resources);
 
 			return RedirectToAction("Details", "Lesson", new { id = newLesson.Id });
@@ -123,8 +131,7 @@
 				return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
 			}
 
-			//TODO hash password
-			lesson.LessonPassword = model.LessonPassword;
+			lesson.LessonPassword = passwordHashService.HashPassword(model.LessonPassword);
 			await lessonService.Update(lesson);
 
 			string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
@@ -145,10 +152,9 @@
 			}
 
 			Lesson lesson = await lessonService.GetById(model.Id);
-			//TODO: hash password and use ILessonPasswordService
-			if(lesson.IsLocked && lesson.LessonPassword == model.OldPassword)
+			if(lesson.IsLocked && lesson.LessonPassword == passwordHashService.HashPassword(model.OldPassword))
 			{
-				lesson.LessonPassword = model.NewPassword;
+				lesson.LessonPassword = passwordHashService.HashPassword(model.NewPassword);
 				await lessonService.Update(lesson);
 				string infoMessage = string.Format(InfoMessages.ChangePasswordSuccessfully, lesson.Name);
 				return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
@@ -176,6 +182,33 @@
 			await lessonService.Delete(lesson);
 
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
+		}
+
+		public IActionResult RemovePassword()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> RemovePassword(LessonRemovePasswordInputModel model)
+		{
+			Lesson lesson = await lessonService.GetById(model.Id);
+			if(lesson == null)
+			{
+				this.ThrowEntityNullException(nameof(lesson));
+			}
+
+			if(lesson.LessonPassword == passwordHashService.HashPassword(model.OldPassword))
+			{
+				lesson.LessonPassword = null;
+				await lessonService.Update(lesson);
+
+				string infoMessage = string.Format(InfoMessages.PasswordRemoved, lesson.Name);
+				return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+			}
+
+			this.ModelState.AddModelError(string.Empty, ErrorMessages.DiffrentLessonPasswords);
+			return View();
 		}
 	}
 }

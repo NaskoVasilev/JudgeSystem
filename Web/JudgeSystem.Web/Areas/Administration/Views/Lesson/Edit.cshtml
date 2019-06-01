@@ -28,12 +28,15 @@
 
 			@if (Model.IsLocked)
 			{
-				<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+				<a class="text-success font-weight-bold d-block" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
 				   asp-action="ChangePassword" asp-route-id="@Model.Id">Change lesson password</a>
+				<a class="text-danger font-weight-bold d-block mt-2" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+				   asp-action="RemovePassword" asp-route-id="@Model.Id">Remove lesson password</a>
+
 			}
 			else
 			{
-				<a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+				<a class="font-weight-bold text-success" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
 				   asp-action="AddPassword" asp-route-id="@Model.Id">Add password to the lesson</a>
 			}
 		</section>
