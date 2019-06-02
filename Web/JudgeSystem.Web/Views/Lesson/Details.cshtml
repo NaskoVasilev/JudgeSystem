@@ -8,9 +8,9 @@
 }
 
 <h2 class="text-secondary">@Model.Name</h2>
-<div class="ul-holder border text-secondary px-3 pb-3 pt-2">
+<div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
 	<h4 class="mb-3 mt-0">Downlaod resources</h4>
-	<ul class="list-group d-flex flex-xl-row flex-wrap">
+	<ul class="list-group d-flex flex-md-row flex-wrap">
 		@foreach (var resource in Model.Resources)
 		{
 			<li class="list-group-item a-holder">
@@ -27,9 +27,9 @@
 		</li>
 	</ul>
 </div>
-<div class="border p-3">
+<div class="border p-3 bg-light">
 	<div class="ul-holder mt-0">
-		<ul class="list-group d-flex flex-xl-row">
+		<ul class="list-group d-flex flex-md-row">
 			@foreach (var problem in Model.Problems)
 			{
 				if (problemNumber == 0)

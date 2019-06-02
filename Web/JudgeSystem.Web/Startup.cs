@@ -1,8 +1,9 @@
 ﻿namespace JudgeSystem.Web
 {
-    using System.Reflection;
-
-    using JudgeSystem.Data;
+	using System;
+	using System.Reflection;
+	using JudgeSystem.Common;
+	using JudgeSystem.Data;
     using JudgeSystem.Data.Common;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
@@ -56,6 +57,13 @@
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4);
+
+			services.AddDistributedMemoryCache();
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromHours(GlobalConstants.SessionIdleTimeout);
+				options.Cookie.HttpOnly = true;
+			});
 
             services
                 .AddMvc()
@@ -141,6 +149,7 @@
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+			app.UseSession();
 
             app.UseMvc(routes =>
             {

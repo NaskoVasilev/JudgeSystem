@@ -7,25 +7,36 @@
 	using JudgeSystem.Web.ViewModels.Lesson;
 
 	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Http;
 
 	public class LessonController : BaseController
 	{
 		private readonly ILessonService lessonService;
 		private readonly IPasswordHashService passwordHashService;
 
-		public LessonController(ILessonService lessonService , IPasswordHashService passwordHashService)
+		public LessonController(ILessonService lessonService, IPasswordHashService passwordHashService)
 		{
 			this.lessonService = lessonService;
 			this.passwordHashService = passwordHashService;
 		}
 
+		[Authorize]
 		public async Task<IActionResult> Details(int id)
 		{
 			var lesson = await lessonService.GetLessonInfo(id);
+			string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 
 			if (lesson.IsLocked)
 			{
-				return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id });
+				if (sessionValue != null && sessionValue == this.User.Identity.Name)
+				{
+					return View(lesson);
+				}
+				else
+				{
+					return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id });
+				}
 			}
 
 			return View(lesson);
@@ -36,6 +47,7 @@
 			return View();
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
 		{
@@ -45,10 +57,10 @@
 				this.ThrowEntityNullException(nameof(lesson));
 			}
 
-			if(lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
+			if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
 			{
-				var lessonInfo = await lessonService.GetLessonInfo(lesson.Id);
-				return View("Details", lessonInfo);
+				this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
+				return RedirectToAction(nameof(Details), new { id = lesson.Id });
 			}
 
 			ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLessonPassword);

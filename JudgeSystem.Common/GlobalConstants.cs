@@ -29,5 +29,7 @@
 		public const int PasswordMinLength = 5;
 
 		public const string ResourceTypesKey = "resourceTypes";
+
+		public const int SessionIdleTimeout = 2;
 	}
 }
