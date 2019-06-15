@@ -11,6 +11,11 @@
 	{
 		private readonly IRepository<Submission> repository;
 
+		public SubmissionService(IRepository<Submission> repository)
+		{
+			this.repository = repository;
+		}
+
 		public async Task<Submission> Create(SubmissionInputModel model, string userId)
 		{
 			Submission submission = new Submission

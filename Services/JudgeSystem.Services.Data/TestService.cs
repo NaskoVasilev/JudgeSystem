@@ -40,6 +40,15 @@
 				.FirstOrDefaultAsync(t => t.Id == id);
 		}
 
+		public IEnumerable<TestDataDto> GetTestsByProblemId(int problemId)
+		{
+			var tests = repository.All()
+				.Where(t => t.ProblemId == problemId)
+				.To<TestDataDto>()
+				.ToList();
+			return tests;
+		}
+
 		public IEnumerable<TestViewModel> TestsByProblem(int problemId)
 		{
 			return this.repository.All()

@@ -15,6 +15,8 @@
 		[Required]
 		public byte[] Code { get; set; }
 
+		public byte[] CompilationErrors { get; set; }
+
 		public int ProblemId { get; set; }
 		public Problem Problem { get; set; }
 

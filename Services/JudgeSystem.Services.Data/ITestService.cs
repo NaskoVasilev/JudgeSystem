@@ -17,5 +17,7 @@
 		Task Delete(Test test);
 
 		Task Update(Test test);
+
+		IEnumerable<TestDataDto> GetTestsByProblemId(int problemId);
 	}
 }

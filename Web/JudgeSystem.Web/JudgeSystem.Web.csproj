@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Messaging\JudgeSystem.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services\JudgeSystem.Services.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.Infrastructure\JudgeSystem.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.ViewModels\JudgeSystem.Web.ViewModels.csproj" />
   </ItemGroup>
