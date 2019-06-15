@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.Dtos.Test;
 	using JudgeSystem.Web.ViewModels.Test;
 
 	public interface ITestService

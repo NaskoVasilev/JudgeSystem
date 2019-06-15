@@ -7,6 +7,7 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.Dtos.Test;
 	using JudgeSystem.Web.ViewModels.Test;
 
 	using Microsoft.EntityFrameworkCore;
