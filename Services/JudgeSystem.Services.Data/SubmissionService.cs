@@ -29,5 +29,11 @@
 			await repository.SaveChangesAsync();
 			return submission;
 		}
+
+		public async Task Update(Submission submission)
+		{
+			repository.Update(submission);
+			await repository.SaveChangesAsync();
+		}
 	}
 }

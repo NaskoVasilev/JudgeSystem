@@ -27,16 +27,13 @@
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
 	let code = editor.getValue();
-	console.log(problemId);
-	console.log(code);
+	
 	editor.setValue("");
 
 	$.post('/Submission/Create', { problemId, code })
 		.done((response) => {
-			$('#submissions-holder').DataTable({
-				data: response
-			});
-			showInfo(response);
+			console.log(response);
+			//showInfo(response);
 		})
 		.fail((error) => {
 			showError(error.responseText);

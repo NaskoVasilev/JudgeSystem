@@ -31,6 +31,8 @@
 		public DbSet<Resource> Resources { get; set; }
 		public DbSet<Test> Tests { get; set; }
 
+		public DbSet<ExecutedTest> ExecutedTests { get; set; }
+
 		public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

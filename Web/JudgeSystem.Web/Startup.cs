@@ -111,8 +111,10 @@
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<IProblemService, ProblemService>();
-            services.AddTransient<ITestService, TestService>();
-            services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<ISubmissionService, SubmissionService>();
+			services.AddTransient<ITestService, TestService>();
+            services.AddTransient<IExecutedTestService, ExecutedTestService>();
+			services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IPasswordHashService, PasswordHashService>();
 		}
 

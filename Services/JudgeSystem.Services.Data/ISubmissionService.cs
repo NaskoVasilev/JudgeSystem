@@ -8,5 +8,7 @@
 	public interface ISubmissionService
 	{
 		Task<Submission> Create(SubmissionInputModel model, string userId);
+
+		Task Update(Submission submission);
 	}
 }
