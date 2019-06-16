@@ -10,6 +10,7 @@
 	using JudgeSystem.Data.Models.Enums;
 	using Services.Mapping;
 	using JudgeSystem.Web.ViewModels.Lesson;
+	using JudgeSystem.Web.InputModels.Lesson;
 
 	using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿namespace JudgeSystem.Web.ViewModels.Problem
+﻿namespace JudgeSystem.Web.InputModels.Problem
 {
 	using System.ComponentModel.DataAnnotations;
 
@@ -6,8 +6,10 @@
 	using Data.Models;
 	using Services.Mapping;
 
-	public class ProblemInputModel : IMapTo<Problem>
+	public class ProblemEditInputModel : IMapTo<Problem>
 	{
+		public int Id { get; set; }
+
 		[Required]
 		[MinLength(GlobalConstants.NameMinLength)]
 		public string Name { get; set; }
@@ -16,7 +18,5 @@
 		
 		[Range(GlobalConstants.ProblemMinPoints, GlobalConstants.ProblemMaxPoints)]
 		public int MaxPoints { get; set; }
-
-		public int LessonId { get; set; }
 	}
 }

@@ -13,6 +13,7 @@
 	using JudgeSystem.Services.Data;
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Services.Messaging;
+	using JudgeSystem.Web.InputModels.Course;
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels;
 
@@ -106,7 +107,6 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IResourceService, ResourceService>();
@@ -121,7 +121,7 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly, typeof(CourseInputModel).GetTypeInfo().Assembly);
 
 			// Seed data on application startup
 			using (var serviceScope = app.ApplicationServices.CreateScope())

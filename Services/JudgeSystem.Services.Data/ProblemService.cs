@@ -9,6 +9,7 @@
 	using Services.Mapping;
 	using JudgeSystem.Web.Infrastructure.Exceptions;
 	using JudgeSystem.Web.ViewModels.Problem;
+	using JudgeSystem.Web.InputModels.Problem;
 
 	using Microsoft.EntityFrameworkCore;
 

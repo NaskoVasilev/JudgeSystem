@@ -9,6 +9,7 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.Dtos.Test;
 	using JudgeSystem.Web.ViewModels.Test;
+	using JudgeSystem.Web.InputModels.Test;
 
 	using Microsoft.EntityFrameworkCore;
 

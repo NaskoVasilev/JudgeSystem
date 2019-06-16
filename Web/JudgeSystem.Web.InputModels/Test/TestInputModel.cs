@@ -1,4 +1,4 @@
-﻿namespace JudgeSystem.Web.ViewModels.Test
+﻿namespace JudgeSystem.Web.InputModels.Test
 {
 	using System.ComponentModel.DataAnnotations;
 

@@ -1,4 +1,4 @@
-﻿namespace JudgeSystem.Web.ViewModels.Lesson
+﻿namespace JudgeSystem.Web.InputModels.Lesson
 {
 	using System.ComponentModel.DataAnnotations;
 	using System.Collections.Generic;

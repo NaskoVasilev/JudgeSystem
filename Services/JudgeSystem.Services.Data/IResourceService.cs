@@ -5,6 +5,7 @@
 
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.ViewModels.Resource;
+	using JudgeSystem.Web.InputModels.Resource;
 
 	public interface IResourceService
 	{

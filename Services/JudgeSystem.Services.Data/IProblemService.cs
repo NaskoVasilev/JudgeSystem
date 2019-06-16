@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.InputModels.Problem;
 	using JudgeSystem.Web.ViewModels.Problem;
 
 	public  interface IProblemService

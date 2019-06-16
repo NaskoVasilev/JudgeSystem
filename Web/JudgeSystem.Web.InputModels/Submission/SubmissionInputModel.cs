@@ -1,4 +1,4 @@
-﻿namespace JudgeSystem.Web.ViewModels.Submission
+﻿namespace JudgeSystem.Web.InputModels.Submission
 {
 	public class SubmissionInputModel
 	{

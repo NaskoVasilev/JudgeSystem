@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.InputModels.Lesson;
 	using JudgeSystem.Web.ViewModels.Lesson;
 
 	public interface ILessonService

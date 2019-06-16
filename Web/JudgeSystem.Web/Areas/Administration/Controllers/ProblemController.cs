@@ -8,8 +8,10 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.ViewModels.Problem;
 	using JudgeSystem.Web.ViewModels.Test;
+	using JudgeSystem.Web.InputModels.Test;
 
 	using Microsoft.AspNetCore.Mvc;
+	using JudgeSystem.Web.InputModels.Problem;
 
 	public class ProblemController : AdministrationBaseController
 	{

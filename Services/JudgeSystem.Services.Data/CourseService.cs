@@ -9,6 +9,7 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.InputModels.Course;
 	using JudgeSystem.Web.ViewModels.Course;
 
 	using Microsoft.EntityFrameworkCore;

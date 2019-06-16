@@ -7,8 +7,8 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Data;
 	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.ViewModels.Course;
-	
+	using JudgeSystem.Web.InputModels.Course;
+
 	using Microsoft.AspNetCore.Mvc;
 
 	public class CourseController : AdministrationBaseController

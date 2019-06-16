@@ -11,6 +11,7 @@
 	using JudgeSystem.Web.Dtos.Test;
 	using JudgeSystem.Web.ViewModels.ExecutedTest;
 	using JudgeSystem.Web.ViewModels.Submission;
+	using JudgeSystem.Web.InputModels.Submission;
 	using JudgeSystem.Workers.Common;
 
 	using Microsoft.AspNetCore.Authorization;

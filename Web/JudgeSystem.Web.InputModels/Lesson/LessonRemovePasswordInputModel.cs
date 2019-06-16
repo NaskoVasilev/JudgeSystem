@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace JudgeSystem.Web.ViewModels.Lesson
+﻿namespace JudgeSystem.Web.InputModels.Lesson
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public class LessonRemovePasswordInputModel
 	{
 		public int Id { get; set; }

@@ -6,6 +6,7 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.ViewModels.Submission;
+	using JudgeSystem.Web.InputModels.Submission;
 
 	public class SubmissionService : ISubmissionService
 	{

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JudgeSystem.Web.ViewModels.Lesson
+namespace JudgeSystem.Web.InputModels.Lesson
 {
 	public class LessonPasswordInputModel
 	{

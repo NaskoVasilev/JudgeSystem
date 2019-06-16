@@ -5,6 +5,7 @@
 	using JudgeSystem.Services;
 	using JudgeSystem.Services.Data;
 	using JudgeSystem.Web.ViewModels.Lesson;
+	using JudgeSystem.Web.InputModels.Lesson;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;

@@ -9,6 +9,7 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels.Resource;
+	using JudgeSystem.Web.InputModels.Resource;
 	using JudgeSystem.Web.Infrastructure.Extensions;
 
 	using Microsoft.AspNetCore.Mvc;

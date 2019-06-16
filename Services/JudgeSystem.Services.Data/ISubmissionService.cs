@@ -3,6 +3,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Web.ViewModels.Submission;
+	using JudgeSystem.Web.InputModels.Submission;
 	using JudgeSystem.Data.Models;
 
 	public interface ISubmissionService

@@ -1,14 +1,12 @@
-﻿namespace JudgeSystem.Web.ViewModels.Resource
+﻿namespace JudgeSystem.Web.InputModels.Resource
 {
 	using System.ComponentModel.DataAnnotations;
 
 	using Data.Models.Enums;
-	using Services.Mapping;
-	using Data.Models;
 
 	using Microsoft.AspNetCore.Http;
 
-	public class ResourceEditInputModel : IMapTo<Resource>, IMapFrom<Resource>
+	public class ResourceInputModel
 	{
 		public int Id { get; set; }
 
@@ -18,6 +16,9 @@
 
 		public ResourceType ResourceType { get; set; }
 
+		public int LessonId { get; set; }
+
+		[Required]
 		public IFormFile File { get; set; }
 	}
 }

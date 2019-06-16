@@ -12,6 +12,7 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.Infrastructure.Exceptions;
 	using JudgeSystem.Web.ViewModels.Resource;
+	using JudgeSystem.Web.InputModels.Resource;
 
 	using Microsoft.EntityFrameworkCore;
 

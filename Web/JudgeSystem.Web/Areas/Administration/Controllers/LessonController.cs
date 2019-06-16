@@ -12,6 +12,7 @@
 	using JudgeSystem.Web.Infrastructure.Extensions;
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels.Lesson;
+	using JudgeSystem.Web.InputModels.Lesson;
 
 	using Microsoft.AspNetCore.Mvc.Rendering;
 	using Microsoft.AspNetCore.Mvc;

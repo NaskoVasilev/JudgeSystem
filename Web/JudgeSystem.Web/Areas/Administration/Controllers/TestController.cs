@@ -6,6 +6,7 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Data;
 	using JudgeSystem.Web.ViewModels.Test;
+	using JudgeSystem.Web.InputModels.Test;
 
 	using Microsoft.AspNetCore.Mvc;
 
