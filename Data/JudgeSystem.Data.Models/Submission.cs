@@ -4,14 +4,15 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 
-	public class Submission
+	using JudgeSystem.Data.Common.Models;
+
+	public class Submission : BaseModel<int>
 	{
 		public Submission()
 		{
 			this.SubmisionDate = DateTime.Now;
+			this.ExecutedTests = new HashSet<ExecutedTest>();
 		}
-
-		public int Id { get; set; }
 
 		[Required]
 		public byte[] Code { get; set; }
@@ -25,5 +26,7 @@
 
 		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }
+
+		public ICollection<ExecutedTest> ExecutedTests { get; set; }
 	}
 }

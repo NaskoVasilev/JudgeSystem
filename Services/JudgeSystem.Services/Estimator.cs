@@ -2,10 +2,10 @@
 {
 	public class Estimator : IEstimator
 	{
-		public int CalculteProblemPoints(int testsCount, int maxPoints)
+		public int CalculteProblemPoints(int testsCount, int passedTests, int maxPoints)
 		{
 			double pointsPerTest = (double)maxPoints / testsCount;
-			double actualPoints = testsCount * pointsPerTest;
+			double actualPoints = passedTests * pointsPerTest;
 			return (int)actualPoints;
 		}
 	}

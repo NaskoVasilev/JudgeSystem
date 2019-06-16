@@ -2,6 +2,6 @@
 {
 	public interface IEstimator
 	{
-		int CalculteProblemPoints(int testsCount, int maxPoints);
+		int CalculteProblemPoints(int testsCount, int passedTests, int maxPoints);
 	}
 }

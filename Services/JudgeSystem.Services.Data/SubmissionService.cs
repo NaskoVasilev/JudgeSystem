@@ -37,6 +37,21 @@
 			return submission;
 		}
 
+		public SubmissionResult GetSubmissionResult(int id)
+		{
+			var submissioResult = repository.All()
+				.Where(s => s.Id == id)
+				.Select(s => new SubmissionResult
+				{
+					MaxPoints = s.Problem.MaxPoints,
+					SubmissionDate = s.SubmisionDate.ToString(SubmissionDateFormat, CultureInfo.InvariantCulture),
+					Id = s.Id
+				})
+				.FirstOrDefault(); ;
+
+			return submissioResult;
+		}
+
 		public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage)
 		{
 			var submissions = repository.All()
@@ -47,10 +62,10 @@
 				.Select(s => new SubmissionResult
 				{
 					MaxPoints = s.Problem.MaxPoints,
-					ExecutedTests = s.Problem.Tests.Select(t => new ExecutedTestResult
+					ExecutedTests = s.ExecutedTests.Select(t => new ExecutedTestResult
 					{
-						ExecutedSuccessfully = t.ExecutedTest.ExecutedSuccessfully,
-						IsCorrect = t.ExecutedTest.IsCorrect
+						ExecutedSuccessfully = t.ExecutedSuccessfully,
+						IsCorrect = t.IsCorrect
 					})
 					.ToList(),
 					IsCompiledSuccessfully = s.CompilationErrors == null || s.CompilationErrors.Length == 0,
@@ -61,7 +76,8 @@
 
 			foreach (var submission in submissions)
 			{
-				submission.ActualPoints = estimator.CalculteProblemPoints(submission.ExecutedTests.Count, submission.MaxPoints);
+				int passedTests = submission.ExecutedTests.Count(t => t.IsCorrect);
+				submission.ActualPoints = estimator.CalculteProblemPoints(submission.ExecutedTests.Count, passedTests, submission.MaxPoints);
 			}
 
 			return submissions;

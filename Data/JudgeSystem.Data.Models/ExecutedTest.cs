@@ -17,6 +17,9 @@
 		public int TestId { get; set; }
 		public Test Test { get; set; }
 
+		public int SubmissionId { get; set; }
+		public Submission Submission { get; set; }
+
 		public bool ExecutedSuccessfully { get; set; }
 	}
 }

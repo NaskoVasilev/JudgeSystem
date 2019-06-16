@@ -17,6 +17,8 @@
 	using Microsoft.AspNetCore.Mvc;
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Web.Dtos.ExecutedTest;
+	using JudgeSystem.Services;
+	using System.Linq;
 
 	public class SubmissionController : BaseController
 	{
@@ -25,14 +27,16 @@
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly ITestService testService;
 		private readonly IExecutedTestService executedTestService;
+		private readonly IEstimator estimator;
 
 		public SubmissionController(ISubmissionService submissionService, UserManager<ApplicationUser> userManager,
-			ITestService testService, IExecutedTestService executedTestService)
+			ITestService testService, IExecutedTestService executedTestService, IEstimator estimator)
 		{
 			this.submissionService = submissionService;
 			this.userManager = userManager;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
+			this.estimator = estimator;
 		}
 
 		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage)
@@ -50,14 +54,20 @@
 		{
 			string userId = userManager.GetUserId(this.User);
 			Submission submission = await submissionService.Create(model, userId);
+			SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);
 
 			//TODO make submission compiling and code excution asynchronous
-			SubmissionResult submissionResult = await RunTests(submission, submission.ProblemId);
+			await RunTests(submissionResult, submission, submission.ProblemId);
+
+			int passedTests = submissionResult.ExecutedTests.Count(t => t.IsCorrect);
+			submissionResult.ActualPoints = estimator.CalculteProblemPoints(submissionResult.ExecutedTests.Count,
+				passedTests, submissionResult.MaxPoints);
+
 			return Json(submissionResult);
 		}
 
 		[NonAction]
-		private async Task<SubmissionResult> RunTests(Submission submission, int problemId)
+		private async Task RunTests(SubmissionResult submissionResult, Submission submission, int problemId)
 		{
 			CSharpCompiler compiler = new CSharpCompiler();
 			CompileResult compileResult = compiler.CreateAssembly(Encoding.UTF8.GetString(submission.Code));
@@ -65,12 +75,12 @@
 			{
 				submission.CompilationErrors = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, compileResult.Errors));
 				await submissionService.Update(submission);
-				return new SubmissionResult { IsCompiledSuccessfully = false };
+				submissionResult.IsCompiledSuccessfully = false;
+				return;
 			}
 
 			IEnumerable<TestDataDto> tests = testService.GetTestsByProblemId(problemId);
 			CSharpChecker checker = new CSharpChecker();
-			SubmissionResult submissionResult = new SubmissionResult();
 
 			foreach (var test in tests)
 			{
@@ -78,6 +88,7 @@
 
 				ExecutedTest executedTest = new ExecutedTest();
 				executedTest.TestId = test.Id;
+				executedTest.SubmissionId = submission.Id;
 				ExecutedTestResult executedTestResult = new ExecutedTestResult();
 
 				if (checkerResult.HasRuntimeError)
@@ -96,8 +107,6 @@
 				await executedTestService.Create(executedTest);
 				submissionResult.ExecutedTests.Add(executedTestResult);
 			}
-
-			return submissionResult;
 		}
 	}
 }

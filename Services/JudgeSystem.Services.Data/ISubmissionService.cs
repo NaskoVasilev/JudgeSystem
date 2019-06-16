@@ -13,5 +13,7 @@
 		Task Update(Submission submission);
 
 		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage);
+
+		SubmissionResult GetSubmissionResult(int id);
 	}
 }

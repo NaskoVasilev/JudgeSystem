@@ -1,6 +1,7 @@
 ﻿namespace JudgeSystem.Web.Dtos.Submission
 {
 	using JudgeSystem.Web.Dtos.ExecutedTest;
+
 	using System.Collections.Generic;
 
 	public class SubmissionResult

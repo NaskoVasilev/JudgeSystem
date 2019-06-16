@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190616132147_SubmissionExecuedTestRelation.cs" />
+    <Compile Remove="Migrations\20190616132147_SubmissionExecuedTestRelation.Designer.cs" />
+    <Compile Remove="Migrations\20190616132913_SubmissionExecuedTestRelation.cs" />
+    <Compile Remove="Migrations\20190616132913_SubmissionExecuedTestRelation.Designer.cs" />
+    <Compile Remove="Migrations\20190616134242_SubmissionExecuedTestRelation.cs" />
+    <Compile Remove="Migrations\20190616134242_SubmissionExecuedTestRelation.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

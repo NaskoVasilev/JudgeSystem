@@ -9,7 +9,8 @@
     {
 		public Problem()
 		{
-			this.Tests = new List<Test>();
+			this.Tests = new HashSet<Test>();
+			this.Submissions = new HashSet<Submission>();
 		}
 
 		public int Id { get; set; }
@@ -26,5 +27,7 @@
 		public Lesson Lesson { get; set; }
 
 		public ICollection<Test> Tests { get; set; }
+
+		public ICollection<Submission> Submissions { get; set; }
 	}
 }
