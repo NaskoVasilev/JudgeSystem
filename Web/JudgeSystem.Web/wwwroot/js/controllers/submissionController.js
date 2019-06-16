@@ -1,10 +1,40 @@
-﻿window.onload = () => {
-	console.log($(".active-problem"))
+﻿let submissiosPerPage = 5;
+let currentPageClass = 'current-page';
+
+window.onload = () => {
 	$(".active-problem").click();
+
+	let problemId = $('.active-problem')[0].dataset.id;
+	$.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
+		.done(submissionCount => {
+			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
+
+			$('.pagination .page-number').remove();
+			let nextButton = $('.pagination li:last-of-type');
+			for (var i = 1; i <= pagesCount; i++) {
+				let li = $(`<li class="page-item page-number"><a class="page-link" href="#">${i}</a></li>`);
+
+				li.insertBefore(nextButton);
+			}
+
+			$($('ul li.page-number > a')[0]).addClass(currentPageClass);
+
+			$('.page-number > a').on('click', (e) => {
+				$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+				let page = e.target.innerText;
+				let problemId = $('.active-problem')[0].dataset.id;
+				$('.page-number > a').removeClass(currentPageClass);
+				e.target.classList.add(currentPageClass);
+				getSubmissions(problemId, page);
+			});
+		})
+		.fail((error) => {
+			console.log(error);
+		});
 };
 
 $(".problem-name").on("click", (e) => {
-	
+
 	let oldId = $(".active-problem")[0].dataset.id;
 	$(".active-problem").removeClass("active-problem");
 	$(e.target).addClass("active-problem");
@@ -28,20 +58,8 @@ $(".problem-name").on("click", (e) => {
 	allTestsBtnHrefAttribute = allTestsBtnHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
 	$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
 
-	$.get(`/Submission/GetProblemSubmissions?problemId=${id}`)
-		.done(response => {
-			console.log(response);
-			let tbody = $('#submissions-holder tbody');
-			$('#submissions-holder tbody tr').remove();
-
-			for (let submission of response) {
-				let tr = generateTr(submission);
-				tbody.append(tr);
-			}
-		})
-		.fail(error => {
-			console.log(error);
-		});
+	let page = 1;
+	getSubmissions(id, page);
 
 });
 
@@ -62,35 +80,96 @@ $('#submit-btn').on('click', () => {
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
 			tbody.prepend(tr);
+
+			let subbmissions = $('#submissions-holder > table > tbody > tr');
+			if (subbmissions.length > submissiosPerPage) {
+				for (let i = submissiosPerPage; i < subbmissions.length; i++) {
+					subbmissions[i].remove();
+				}
+			}
 		})
 		.fail((error) => {
 			showError(error.responseText);
 		});
 });
 
+function getSubmissions(id, page) {
+	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}`)
+		.done(response => {
+			let tbody = $('#submissions-holder tbody');
+			$('#submissions-holder tbody tr').remove();
+			for (let submission of response) {
+				let tr = generateTr(submission);
+				tbody.append(tr);
+			}
+
+		})
+		.fail(error => {
+			console.log(error);
+		});
+}
+
 function generateTr(submission) {
-    let tr = $('<tr></tr>');
-    let pointsTd = $('<td></td>');
-    let submissionDateTd = $(`<td>${submission.submissionDate}</td>`);
-    if (!submission.isCompiledSuccessfully) {
-        pointsTd.text("Compile time error");
-    }
-    else {
-        for (let test of submission.executedTests) {
-            if (test.isCorrect) {
-                pointsTd.append('<i class="fas fa-check text-success ml-1"></i>');
-            }
-            else if (test.executedSuccessfully) {
-				pointsTd.append('<i class="fas fa-times text-danger ml-1"></i>');
-            }
-            else {
-				pointsTd.append('<i class="fas fa-bomb text-danger ml-1"></i>');
-            }
+	let tr = $('<tr></tr>');
+	let pointsTd = $('<td class="pt-4"></td>');
+	let executionInfo = $('<td></td>');
+	executionInfo.append(`<span class="d-block">Memory: ${submission.totalMemoryUsed.toFixed(3)} MB</span>`);
+	executionInfo.append(`<span class="d-block">Time: ${submission.totalTimeUsed.toFixed(3)} s</span>`);
+	let submissionDateTd = $(`<td class="pt-4">${submission.submissionDate}</td>`);
+	let detailsBtn = $(`<a href="/Submission/Details?id=${submission.id}" class="btn btn-success">Details</a>`);
+	if (!submission.isCompiledSuccessfully) {
+		pointsTd.text("Compile time error");
+	}
+	else {
+		for (let test of submission.executedTests) {
+			if (test.isCorrect && test.executionResultType === "Success") {
+				pointsTd.append('<i class="fas fa-check text-success"></i>');
+			}
+			else if (test.executionResultType === "RunTimeError") {
+				pointsTd.append('<i class="fas fa-bomb text-danger"></i>');
+			}
+			else if (test.executionResultType === "MemoryLimit") {
+				pointsTd.append('<i class="fas fa-memory text-danger"></i>');
+			}
+			else if (test.executionResultType === "TimeLimit") {
+				pointsTd.append('<i class="far fa-clock text-primary"></i>');
+			}
+			else {
+				pointsTd.append('<i class="fas fa-times text-danger"></i>');
+			}
 		}
 
 		pointsTd.append($(`<span class="ml-3">${submission.actualPoints}/${submission.maxPoints}</span>`));
-    }
-    tr.append(pointsTd);
-    tr.append(submissionDateTd);
-    return tr;
+	}
+	tr.append(pointsTd);
+	tr.append(executionInfo);
+	tr.append(submissionDateTd);
+	tr.append($('<td class="pt-3	">').append(detailsBtn));
+	return tr;
 }
+
+$("#previous").on('click', () => {
+	let currentPageNumber = $(`.${currentPageClass}`)[0].innerText;
+	let lastPage = $(".page-number").length;
+	let problemId = $('.active-problem')[0].dataset.id;
+
+	if (currentPageNumber == 1) {
+		getSubmissions(problemId, lastPage);
+	}
+	else {
+		getSubmissions(problemId, --currentPageNumber);
+	}
+});
+
+$("#next").on('click', () => {
+	let currentPageNumber = $(`.${currentPageClass}`)[0].innerText;
+	let lastPage = $(".page-number").length;
+	let problemId = $('.active-problem')[0].dataset.id;
+
+	if (currentPageNumber == lastPage) {
+		getSubmissions(problemId, 1);
+	}
+	else {
+		getSubmissions(problemId, ++currentPageNumber);
+	}
+});

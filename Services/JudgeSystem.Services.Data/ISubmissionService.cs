@@ -15,5 +15,7 @@
 		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage);
 
 		SubmissionResult GetSubmissionResult(int id);
+
+		int GetProblemSubmissionsCount(int problemId, string userId);
 	}
 }

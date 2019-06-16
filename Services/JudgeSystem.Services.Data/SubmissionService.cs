@@ -5,6 +5,7 @@
 	using JudgeSystem.Web.Dtos.ExecutedTest;
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Web.InputModels.Submission;
+	using Microsoft.EntityFrameworkCore;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
@@ -41,13 +42,13 @@
 		{
 			var submissioResult = repository.All()
 				.Where(s => s.Id == id)
-				.Select(s => new SubmissionResult
-				{
-					MaxPoints = s.Problem.MaxPoints,
-					SubmissionDate = s.SubmisionDate.ToString(SubmissionDateFormat, CultureInfo.InvariantCulture),
-					Id = s.Id
-				})
-				.FirstOrDefault(); ;
+				.Include(s => s.ExecutedTests)
+				.Include(s => s.Problem)
+				.Select(MapSubmissionToSubmissionResult)
+				.FirstOrDefault();
+
+			int passedTests = submissioResult.ExecutedTests.Count(t => t.IsCorrect);
+			submissioResult.ActualPoints = estimator.CalculteProblemPoints(submissioResult.ExecutedTests.Count, passedTests, submissioResult.MaxPoints);
 
 			return submissioResult;
 		}
@@ -56,22 +57,12 @@
 		{
 			var submissions = repository.All()
 				.Where(s => s.ProblemId == problemId && s.UserId == userId)
+				.Include(s => s.ExecutedTests)
+				.Include(s => s.Problem)
 				.OrderByDescending(s => s.SubmisionDate)
 				.Skip((page - 1) * submissionsPerPage)
 				.Take(submissionsPerPage)
-				.Select(s => new SubmissionResult
-				{
-					MaxPoints = s.Problem.MaxPoints,
-					ExecutedTests = s.ExecutedTests.Select(t => new ExecutedTestResult
-					{
-						ExecutedSuccessfully = t.ExecutedSuccessfully,
-						IsCorrect = t.IsCorrect
-					})
-					.ToList(),
-					IsCompiledSuccessfully = s.CompilationErrors == null || s.CompilationErrors.Length == 0,
-					SubmissionDate = s.SubmisionDate.ToString(SubmissionDateFormat, CultureInfo.InvariantCulture),
-					Id = s.Id
-				})
+				.Select(MapSubmissionToSubmissionResult)
 				.ToList();
 
 			foreach (var submission in submissions)
@@ -87,6 +78,32 @@
 		{
 			repository.Update(submission);
 			await repository.SaveChangesAsync();
+		}
+
+		public SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
+		{
+			SubmissionResult submissionResult = new SubmissionResult
+			{
+				MaxPoints = submission.Problem.MaxPoints,
+				ExecutedTests = submission.ExecutedTests.Select(t => new ExecutedTestResult
+				{
+					IsCorrect = t.IsCorrect,
+					ExecutionResultType = t.ExecutionResultType.ToString()
+				})
+					.ToList(),
+				IsCompiledSuccessfully = submission.CompilationErrors == null || submission.CompilationErrors.Length == 0,
+				SubmissionDate = submission.SubmisionDate.ToString(SubmissionDateFormat, CultureInfo.InvariantCulture),
+				Id = submission.Id,
+				TotalMemoryUsed = submission.ExecutedTests.Sum(t => t.MemoryUsed),
+				TotalTimeUsed = submission.ExecutedTests.Sum(t => t.TimeUsed)
+			};
+
+			return submissionResult;
+		}
+
+		public int GetProblemSubmissionsCount(int problemId, string userId)
+		{
+			return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
 		}
 	}
 }

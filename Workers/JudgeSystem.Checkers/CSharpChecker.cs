@@ -1,5 +1,6 @@
 ﻿using JudgeSystem.Executors;
 using JudgeSystem.Workers.Common;
+using System.Threading.Tasks;
 
 namespace JudgeSystem.Checkers
 {
@@ -12,15 +13,16 @@ namespace JudgeSystem.Checkers
 			this.cSharpExecutor = new CSharpExecutor();
 		}
 
-		public CheckerResult Check(string dllFilePath, string input, string expectedOutput)
+		public async Task<CheckerResult> Check(string dllFilePath, string input, string expectedOutput)
 		{
-			ExecutionResult executionResult = cSharpExecutor.ProcessExecutionResult(dllFilePath, input);
+			ExecutionResult executionResult = await cSharpExecutor.ProcessExecutionResult(dllFilePath, input);
+			CheckerResult checkerResult = new CheckerResult(executionResult);
 			if (!executionResult.IsSuccesfull)
 			{
-				return new CheckerResult { IsCorrect = false, ErrorMessage = executionResult.Error, HasRuntimeError = true };
+				checkerResult.IsCorrect = false;
+				return checkerResult;
 			}
 
-			CheckerResult checkerResult = new CheckerResult() { Output = executionResult.Output };
 			if(executionResult.Output.Trim() == expectedOutput.Trim())
 			{
 				checkerResult.IsCorrect = true;

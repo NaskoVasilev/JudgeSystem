@@ -259,3 +259,12 @@ input[type=file] {
 .navbar {
     background-color: #442b6b;
 }
+
+#submissions-holder i{
+    font-size: 18px;
+    margin-left: 3px;
+}
+
+.current-page {
+    background-color: #d4ec0a5c;
+}

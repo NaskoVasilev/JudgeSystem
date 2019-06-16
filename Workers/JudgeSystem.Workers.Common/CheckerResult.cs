@@ -1,13 +1,19 @@
 ﻿namespace JudgeSystem.Workers.Common
 {
-	public class CheckerResult
+	public class CheckerResult : ExecutionResult
 	{
-		public string Output { get; set; }
+		public CheckerResult(ExecutionResult executionResult)
+		{
+			this.Error = executionResult.Error;
+			this.Output = executionResult.Output;
+			this.ExitCode = executionResult.ExitCode;
+			this.MemoryUsed = executionResult.MemoryUsed;
+			this.PrivilegedProcessorTime = executionResult.PrivilegedProcessorTime;
+			this.TimeWorked = executionResult.TimeWorked;
+			this.Type = executionResult.Type;
+			this.UserProcessorTime = executionResult.UserProcessorTime;
+		}
 
 		public bool IsCorrect { get; set; }
-
-		public bool HasRuntimeError { get; set; }
-
-		public string ErrorMessage { get; set; }
 	}
 }

@@ -74,13 +74,6 @@
 
 	<div class="button-holder">
 		<button class="btn btn-secondary" id="submit-btn">Submit</button>
-
-		@*<a class="btn btn-secondary" id="submit-btn" asp-action="Create" asp-controller="Submission" asp-area="">Submit</a>
-		<form method="post" asp-controller="Submission" asp-area="" asp-action="Create">
-			<input type="hidden" id="problemId" name="problemId" value="14" />
-			<input type="hidden" id="code" name="code" value="" />
-			<button type="submit">Submit</button>
-		</form>*@
 	</div>
 
 	<div id="submissions-holder" class="text-center border mt-3">
@@ -88,12 +81,30 @@
 			<thead>
 				<tr>
 					<th scope="col">Points</th>
+					<th scope="col">Time and memory used</th>
 					<th scope="col">Submission Date</th>
+					<th scope="col">More info</th>
 				</tr>
 			</thead>
-			<tbody>
-			</tbody>
+			<tbody></tbody>
 		</table>
+		<nav aria-label="Page navigation example" class="ml-3">
+			<ul class="pagination">
+				<li class="page-item">
+					<a class="page-link" id="previous" href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+						<span class="sr-only">Previous</span>
+					</a>
+				</li>
+				<li class="page-item page-number"><a class="page-link" href="#">1</a></li>
+				<li class="page-item">
+					<a class="page-link" id="next" href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+						<span class="sr-only">Next</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
 </div>
 

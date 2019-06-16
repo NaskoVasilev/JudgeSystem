@@ -23,5 +23,9 @@
 		public int ActualPoints { get; set; }
 
 		public string SubmissionDate { get; set; }
+
+		public double TotalMemoryUsed { get; set; }
+
+		public double TotalTimeUsed { get; set; }
 	}
 }

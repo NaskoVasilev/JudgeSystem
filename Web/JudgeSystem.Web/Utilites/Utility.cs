@@ -27,5 +27,11 @@
 			return EnumExtensions.GetEnumValuesAsString<ResourceType>()
 				.Select(r => new SelectListItem { Value = r, Text = r.FormatResourceType() });
 		}
+
+		public static double ConvertBytesToMegaBytes(long bytes)
+		{
+			double megabyteInBytes = 1000000;
+			return bytes / megabyteInBytes;
+		}
 	}
 }
