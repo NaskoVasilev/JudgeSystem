@@ -14,6 +14,8 @@
 		public Problem Problem { get; set; }
 		public int ProblemId { get; set; }
 
+		public ExecutedTest ExecutedTest { get; set; }
+
 		public string InputData { get; set; }
 
 		[Required]

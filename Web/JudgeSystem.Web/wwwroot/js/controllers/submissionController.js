@@ -1,4 +1,9 @@
-﻿$(".problem-name").on("click", (e) => {
+﻿window.onload = () => {
+	console.log($(".active-problem"))
+	$(".active-problem").click();
+};
+
+$(".problem-name").on("click", (e) => {
 	
 	let oldId = $(".active-problem")[0].dataset.id;
 	$(".active-problem").removeClass("active-problem");
@@ -22,6 +27,22 @@
 	let allTestsBtnHrefAttribute = $('#allTestsBtn').attr('href');
 	allTestsBtnHrefAttribute = allTestsBtnHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
 	$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
+
+	$.get(`/Submission/GetProblemSubmissions?problemId=${id}`)
+		.done(response => {
+			console.log(response);
+			let tbody = $('#submissions-holder tbody');
+			$('#submissions-holder tbody tr').remove();
+
+			for (let submission of response) {
+				let tr = generateTr(submission);
+				tbody.append(tr);
+			}
+		})
+		.fail(error => {
+			console.log(error);
+		});
+
 });
 
 $('#submit-btn').on('click', () => {
@@ -38,31 +59,38 @@ $('#submit-btn').on('click', () => {
 
 	$.post('/Submission/Create', { problemId, code })
 		.done((response) => {
-			tr = $('<tr></tr>');
-			pointsTd = $('<td></td>');
 			$('#submissions-holder tbody tr:first-of-type').remove();
-
-			if (!response.isCompiledSuccessfully) {
-				pointsTd.text("Compile time error");
-			}
-			else {
-				for (let test of response.executedTests) {
-					if (test.isCorrect) {
-						pointsTd.append('<i class="fas fa-check text-success"></i>');
-					}
-					else if (test.ExecutedSuccessfully) {
-						pointsTd.append('<i class="fas fa-times text-danger"></i>');
-					}
-					else {
-						pointsTd.append('<i class="fas fa-bomb text-danger"></i>');
-					}
-				}
-			}
-
-			tr.append(pointsTd);
-			tbody.append(tr);
+			let tr = generateTr(response);
+			tbody.prepend(tr);
 		})
 		.fail((error) => {
 			showError(error.responseText);
 		});
 });
+
+function generateTr(submission) {
+    let tr = $('<tr></tr>');
+    let pointsTd = $('<td></td>');
+    let submissionDateTd = $(`<td>${submission.submissionDate}</td>`);
+    if (!submission.isCompiledSuccessfully) {
+        pointsTd.text("Compile time error");
+    }
+    else {
+        for (let test of submission.executedTests) {
+            if (test.isCorrect) {
+                pointsTd.append('<i class="fas fa-check text-success ml-1"></i>');
+            }
+            else if (test.executedSuccessfully) {
+				pointsTd.append('<i class="fas fa-times text-danger ml-1"></i>');
+            }
+            else {
+				pointsTd.append('<i class="fas fa-bomb text-danger ml-1"></i>');
+            }
+		}
+
+		pointsTd.append($(`<span class="ml-3">${submission.actualPoints}/${submission.maxPoints}</span>`));
+    }
+    tr.append(pointsTd);
+    tr.append(submissionDateTd);
+    return tr;
+}

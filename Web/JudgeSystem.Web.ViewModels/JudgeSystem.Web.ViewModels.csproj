@@ -11,4 +11,8 @@
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Submission\" />
+  </ItemGroup>
+
 </Project>

@@ -9,17 +9,18 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Data;
 	using JudgeSystem.Web.Dtos.Test;
-	using JudgeSystem.Web.ViewModels.ExecutedTest;
-	using JudgeSystem.Web.ViewModels.Submission;
 	using JudgeSystem.Web.InputModels.Submission;
 	using JudgeSystem.Workers.Common;
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
+	using JudgeSystem.Web.Dtos.Submission;
+	using JudgeSystem.Web.Dtos.ExecutedTest;
 
 	public class SubmissionController : BaseController
 	{
+		private const int SubmissionPerPage = 5;
 		private readonly ISubmissionService submissionService;
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly ITestService testService;
@@ -32,6 +33,15 @@
 			this.userManager = userManager;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
+		}
+
+		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage)
+		{
+			string userId = userManager.GetUserId(this.User);
+			IEnumerable<SubmissionResult> submissionResults = submissionService
+				.GetUserSubmissionsByProblemId(problemId, userId, page, submissionsPerPage);
+
+			return Json(submissionResults);
 		}
 
 		[Authorize]

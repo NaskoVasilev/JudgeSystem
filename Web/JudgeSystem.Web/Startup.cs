@@ -115,7 +115,8 @@
 			services.AddTransient<ITestService, TestService>();
             services.AddTransient<IExecutedTestService, ExecutedTestService>();
 			services.AddTransient<IFileManager, FileManager>();
-            services.AddTransient<IPasswordHashService, PasswordHashService>();
+			services.AddTransient<IEstimator, Estimator>();
+			services.AddTransient<IPasswordHashService, PasswordHashService>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

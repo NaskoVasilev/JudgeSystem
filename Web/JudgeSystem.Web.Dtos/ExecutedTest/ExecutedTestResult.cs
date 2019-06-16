@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Web.ViewModels.ExecutedTest
+﻿namespace JudgeSystem.Web.Dtos.ExecutedTest
 {
 	public class ExecutedTestResult
 	{
 		public ExecutedTestResult()
 		{
-			this.ExecutedSuccessfully = true;
-			this.IsCorrect = false;
+			ExecutedSuccessfully = true;
+			IsCorrect = false;
 		}
 
 		public bool IsCorrect { get; set; }
