@@ -27,13 +27,40 @@
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
 	let code = editor.getValue();
-	
+	let tr = $('<tr></tr>');
+	let pointsTd = $('<td></td>');
+	let spinner = $('<div class="spinner-border text-success" role="status"></div>');
+	pointsTd.append(spinner);
+	tr.append(pointsTd);
+	let tbody = $('#submissions-holder tbody');
+	tbody.prepend(tr);
 	editor.setValue("");
 
 	$.post('/Submission/Create', { problemId, code })
 		.done((response) => {
-			console.log(response);
-			//showInfo(response);
+			tr = $('<tr></tr>');
+			pointsTd = $('<td></td>');
+			$('#submissions-holder tbody tr:first-of-type').remove();
+
+			if (!response.isCompiledSuccessfully) {
+				pointsTd.text("Compile time error");
+			}
+			else {
+				for (let test of response.executedTests) {
+					if (test.isCorrect) {
+						pointsTd.append('<i class="fas fa-check text-success"></i>');
+					}
+					else if (test.ExecutedSuccessfully) {
+						pointsTd.append('<i class="fas fa-times text-danger"></i>');
+					}
+					else {
+						pointsTd.append('<i class="fas fa-bomb text-danger"></i>');
+					}
+				}
+			}
+
+			tr.append(pointsTd);
+			tbody.append(tr);
 		})
 		.fail((error) => {
 			showError(error.responseText);
