@@ -4,16 +4,15 @@
 	using System.ComponentModel.DataAnnotations;
 
 	using JudgeSystem.Common;
+	using JudgeSystem.Data.Common.Models;
 
-	public class Problem
+	public class Problem : BaseDeletableModel<int>
     {
 		public Problem()
 		{
 			this.Tests = new HashSet<Test>();
 			this.Submissions = new HashSet<Submission>();
 		}
-
-		public int Id { get; set; }
 
 		[Required]
 		[MinLength(GlobalConstants.NameMinLength)]

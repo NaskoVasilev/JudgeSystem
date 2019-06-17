@@ -16,10 +16,12 @@
 	public class TestService : ITestService
 	{
 		private readonly IRepository<Test> repository;
+		private readonly IExecutedTestService executedTestService;
 
-		public TestService(IRepository<Test> repository)
+		public TestService(IRepository<Test> repository, IExecutedTestService executedTestService)
 		{
 			this.repository = repository;
+			this.executedTestService = executedTestService;
 		}
 
 		public async Task<Test> Add(TestInputModel model)
@@ -32,6 +34,8 @@
 
 		public async Task Delete(Test test)
 		{
+			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
+
 			repository.Delete(test);
 			await repository.SaveChangesAsync();
 		}

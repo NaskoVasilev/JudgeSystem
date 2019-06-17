@@ -15,13 +15,11 @@
 
 	public class ProblemService : IProblemService
 	{
-		private readonly IRepository<Problem> problemRepository;
-		private readonly IRepository<Test> testRepository;
+		private readonly IDeletableEntityRepository<Problem> problemRepository;
 
-		public ProblemService(IRepository<Problem> problemRepository, IRepository<Test> testRepository)
+		public ProblemService(IDeletableEntityRepository<Problem> problemRepository)
 		{
 			this.problemRepository = problemRepository;
-			this.testRepository = testRepository;
 		}
 
 		public async Task<Problem> Create(ProblemInputModel model)
@@ -34,16 +32,6 @@
 
 		public async Task Delete(Problem problem)
 		{
-			IEnumerable<Test> problemTests = testRepository
-				.All()
-				.Where(t => t.ProblemId == problem.Id)
-				.ToList();
-
-			foreach (var test in problemTests)
-			{
-				testRepository.Delete(test);
-			}
-
 			problemRepository.Delete(problem);
 			await problemRepository.SaveChangesAsync();
 		}
