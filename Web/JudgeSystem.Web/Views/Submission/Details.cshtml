@@ -11,11 +11,11 @@
 
 @if (!Model.CompiledSucessfully)
 {
-	<div class="alert alert-danger mt-3 text-center font-weight-bold" role="alert">
-		A compile time error occurred. Ensure your solution compile successfully before submitting it again!
-	</div>
-	<h4 class="font-weight-normal">Compilation result:</h4>
-	<div class="container-fluid bg-light border px-3 py-2">@Model.CompilationErrors</div>
+<div class="alert alert-danger mt-3 text-center font-weight-bold" role="alert">
+	A compile time error occurred. Ensure your solution compile successfully before submitting it again!
+</div>
+<h4 class="font-weight-normal">Compilation result:</h4>
+<div class="container-fluid bg-light border px-3 py-2">@Model.CompilationErrors</div>
 }
 else
 {
@@ -25,40 +25,40 @@ else
 		string className = test.ExecutionResultType == TestExecutionResultType.Success && test.IsCorrect ? "text-secondary" : "text-danger";
 		@if (test.TestIsTrialTest)
 		{
-			<h4 class="@className mt-4">Trial test #@(zeroTestNumber++) (@test.ExecutionResult)</h4>
-			<p>Trial tests are not included in the final score!</p>
+<h4 class="@className mt-4">Trial test #@(zeroTestNumber++) (@test.ExecutionResult)</h4>
+<p>Trial tests are not included in the final score!</p>
 		}
 		else
 		{
-			<h4 class="@className mt-4">Test #@(testNumber++) (@test.ExecutionResult)</h4>
+<h4 class="@className mt-4">Test #@(testNumber++) (@test.ExecutionResult)</h4>
 		}
 
-		<button class="btn btn-dark btn-sm test-input-button" data-id="@test.Id">
-			Show Input
-		</button>
-		<div id="test-input-div-@test.Id" class="mt-2">
-			<textarea class="d-none" id="test-input-@test.Id">@test.TestInputData</textarea>
-		</div>
+<button class="btn btn-dark btn-sm test-input-button" data-id="@test.Id">
+	Show Input
+</button>
+<div id="test-input-div-@test.Id" class="mt-2">
+	<textarea class="d-none" id="test-input-@test.Id">@test.TestInputData</textarea>
+</div>
 
 		@if (test.ExecutionResultType == TestExecutionResultType.RunTimeError)
 		{
-			<div class="container-fluid bg-light border px-3 py-2 mt-2">@test.Error</div>
+<div class="container-fluid bg-light border px-3 py-2 mt-2">@test.Error</div>
 		}
 		else if (!test.IsCorrect && test.ExecutionResultType == TestExecutionResultType.Success)
 		{
-			<div>
-				<div class="container-fluid bg-light border d-flex justify-content-center">
-					Expected output
-					<div>@test.TestOutputData</div>
-				</div>
-				<div class="container-fluid bg-light border">
-					Your output
-					<div>@test.Output</div>
-				</div>
-			</div>
+<div class="d-flex justify-content-between">
+	<div class="col-md-6 ml-0 pl-0">
+		<p class="my-2">Expected output</p>
+		<textarea class="expected-output d-none">@test.TestOutputData</textarea>
+	</div>
+	<div class="col-md-6">
+		<p class="my-2">Your output</p>
+		<textarea class="user-output d-none">@test.Output</textarea>
+	</div>
+</div>
 		}
-		<p class="pt-1 m-0">Time used: @test.TimeUsed</p>
-		<p class="pb-2 m-0">Memory used: @test.MemoryUsed</p>
+<p class="pt-1 m-0">Time used: @test.TimeUsed</p>
+<p class="pb-2 m-0">Memory used: @test.MemoryUsed</p>
 	}
 }
 
@@ -70,27 +70,27 @@ else
 <p>Submission date: @Model.SubmissionDate</p>
 
 @section Scripts{
-	<script src="~/lib/codemirror/codemirror.js"></script>
-	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
-	<script>
-		let codeTextarea = document.getElementById('source-code');
-		var editor = CodeMirror.fromTextArea(codeTextarea,
-			{
-				lineNumbers: true,
-				matchBrackets: true,
-				mode: "text/x-c++src"
-			});
-		editor.setValue(codeTextarea.innerText);
+<script src="~/lib/codemirror/codemirror.js"></script>
+<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
+<script>
+	let codeTextarea = document.getElementById('source-code');
+	var editor = CodeMirror.fromTextArea(codeTextarea,
+		{
+			lineNumbers: true,
+			matchBrackets: true,
+			mode: "text/x-c++src"
+		});
+	editor.setValue(codeTextarea.innerText);
 
-		let editors = [];
-		let elements = [];
-		let currentElement;
-		let currentEditor;
-	</script>
+	let editors = [];
+	let elements = [];
+	let currentElement;
+	let currentEditor;
+</script>
 
 	@foreach (var test in Model.ExecutedTests)
 	{
-		<script>
+<script>
 			currentElement = document.getElementById("test-input-@test.Id");
 			currentElement.dataset.editorIndex = editors.length;
 			elements.push(currentElement);
@@ -100,7 +100,7 @@ else
 				readOnly: 'cursor'
 				});
 			editors.push(currentEditor);
-		</script>
+</script>
 	}
 
 <script>
@@ -129,5 +129,23 @@ else
 </script>
 
 <script>
+	setOutputEditors(".expected-output");
+	setOutputEditors(".user-output");
+
+	function setOutputEditors(selector) {
+		let textareas = $(selector);
+		let textEditor;
+
+		for (let textarea of textareas) {
+			textEditor = CodeMirror.fromTextArea(textarea,
+				{
+					lineNumbers: true,
+					readOnly: 'cursor'
+				});
+			textEditor.setValue(textarea.textContent);
+			textEditor.setSize("100%", "150px");
+		}
+	}
+
 </script>
 }
