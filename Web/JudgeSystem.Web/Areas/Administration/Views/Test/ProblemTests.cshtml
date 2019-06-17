@@ -8,7 +8,7 @@
 <h1>Problem Tests</h1>
 @foreach (TestViewModel test in Model)
 {
-	<div class="test-holder">
+	<div>
 		@if (test.IsTrialTest)
 		{
 			<h4>Zero Test</h4>
@@ -18,13 +18,15 @@
 			<h4>Test - @(testNumber++)</h4>
 		}
 
-		<div>
-			<p>Input Data</p>
-			<textarea class="text-left" id="input-data-@test.Id">@test.InputData.Trim()</textarea>
-		</div>
-		<div>
-			<p>Output data</p>
-			<textarea class="text-left" id="output-data-@test.Id">@test.OutputData.Trim()</textarea>
+		<div class="d-flex justify-content-between mb-3">
+			<div class="col-md-6 pl-0">
+				<p class="mb-1">Input Data</p>
+				<textarea class="text-left test-data d-none" id="input-data-@test.Id">@test.InputData.Trim()</textarea>
+			</div>
+			<div class="col-md-6">
+				<p class="mb-1">Output data</p>
+				<textarea class="text-left test-data d-none" id="output-data-@test.Id">@test.OutputData.Trim()</textarea>
+			</div>
 		</div>
 		<div class="admin-buttons-holder">
 			<button class="btn btn-warning testEditBtn" data-id="@test.Id">Edit</button>
@@ -35,6 +37,8 @@
 }
 
 @section Scripts{
+	<script src="~/lib/codemirror/codemirror.js"></script>
+
 	<script src="~/js/notification.js"></script>
 	<script src="~/js/controllers/testController.js"></script>
 }
