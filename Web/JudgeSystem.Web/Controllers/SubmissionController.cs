@@ -18,6 +18,7 @@
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Web.Utilites;
+	using JudgeSystem.Web.ViewModels.Submission;
 
 	public class SubmissionController : BaseController
 	{
@@ -34,6 +35,12 @@
 			this.userManager = userManager;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
+		}
+
+		public IActionResult Details(int id)
+		{
+			SubmissionViewModel submission = submissionService.GetSubmissionDetails(id);
+			return View(submission);
 		}
 
 		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage)

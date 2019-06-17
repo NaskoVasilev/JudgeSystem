@@ -5,6 +5,7 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.Dtos.Submission;
 	using System.Collections.Generic;
+	using JudgeSystem.Web.ViewModels.Submission;
 
 	public interface ISubmissionService
 	{
@@ -17,5 +18,7 @@
 		SubmissionResult GetSubmissionResult(int id);
 
 		int GetProblemSubmissionsCount(int problemId, string userId);
+
+		SubmissionViewModel GetSubmissionDetails(int id);
 	}
 }

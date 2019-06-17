@@ -1,0 +1,83 @@
+﻿@model SubmissionViewModel
+
+@{
+	this.ViewData["Title"] = "Submission Details";
+	int zeroTestNumber = 1;
+	int testNumber = 1;
+}
+
+<h3 class="text-center">Submission by @Model.UserUsername for problem <span class="text-secondary">"@Model.ProblemName"	</span></h3>
+
+@if (!Model.CompiledSucessfully)
+{
+	<div class="alert alert-danger mt-3 text-center font-weight-bold" role="alert">
+		A compile time error occurred. Ensure your solution compile successfully before submitting it again!
+	</div>
+	<h4 class="font-weight-normal">Compilation result:</h4>
+	<div class="container-fluid bg-light border px-3 py-2">@Model.CompilationErrors</div>
+}
+else
+{
+
+	@foreach (var test in Model.ExecutedTests)
+	{
+		@if (test.TestIsTrialTest)
+		{
+			<h4>Trial test #@{zeroTestNumber++;} (@test.ExecutionResultType.ToString())</h4>
+			<p>Trial tests are not included in the final score!</p>
+		}
+		else
+		{
+			<h4>Test #@{testNumber++;} (@test.ExecutionResultType.ToString())</h4>
+		}
+
+		<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#input" aria-expanded="false" aria-controls="input">
+			Show Input
+		</button>
+		<div class="collapse" id="input">
+			<div class="card card-body border">@test.TestInputData</div>
+		</div>
+
+		@if (test.ExecutionResultType == TestExecutionResultType.RunTimeError)
+		{
+			<div class="container-fluid bg-light border">@test.Error</div>
+		}
+		else if (!test.IsCorrect)
+		{
+			<div>
+				<div class="container-fluid bg-light border">
+					Expected output
+					<div>@test.TestOutputData</div>
+				</div>
+				<div class="container-fluid bg-light border">
+					Your output
+					<div>@test.Output</div>
+				</div>
+			</div>
+		}
+		<p>Time used: @test.TimeUsed</p>
+		<p>Memory used: @test.MemoryUsed</p>
+	}
+}
+
+<div>
+	<textarea id="source-code" class="d-none">@Model.Code</textarea>
+</div>
+
+<p>Submission date: @Model.SubmissionDate</p>
+
+@section Scripts{
+	<script src="~/lib/codemirror/codemirror.js"></script>
+	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
+	<script>
+		let codeTextarea = document.getElementById('source-code');
+		console.log(codeTextarea.innerText)
+		var editor = CodeMirror.fromTextArea(codeTextarea,
+			{
+				lineNumbers: true,
+				matchBrackets: true,
+				mode: "text/x-c++src"
+			});
+		editor.setValue(codeTextarea.innerText);
+	</script>
+}

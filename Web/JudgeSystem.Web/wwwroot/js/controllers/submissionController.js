@@ -5,32 +5,7 @@ window.onload = () => {
 	$(".active-problem").click();
 
 	let problemId = $('.active-problem')[0].dataset.id;
-	$.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
-		.done(submissionCount => {
-			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
-
-			$('.pagination .page-number').remove();
-			let nextButton = $('.pagination li:last-of-type');
-			for (var i = 1; i <= pagesCount; i++) {
-				let li = $(`<li class="page-item page-number"><a class="page-link" href="#">${i}</a></li>`);
-
-				li.insertBefore(nextButton);
-			}
-
-			$($('ul li.page-number > a')[0]).addClass(currentPageClass);
-
-			$('.page-number > a').on('click', (e) => {
-				$("html, body").animate({ scrollTop: $(document).height() }, "slow");
-				let page = e.target.innerText;
-				let problemId = $('.active-problem')[0].dataset.id;
-				$('.page-number > a').removeClass(currentPageClass);
-				e.target.classList.add(currentPageClass);
-				getSubmissions(problemId, page);
-			});
-		})
-		.fail((error) => {
-			console.log(error);
-		});
+	genratePaginationPages(problemId);
 };
 
 $(".problem-name").on("click", (e) => {
@@ -87,11 +62,59 @@ $('#submit-btn').on('click', () => {
 					subbmissions[i].remove();
 				}
 			}
+
+			let currentPagesCount = $('.page-number').length;
+			let problemId = $('.active-problem')[0].dataset.id;
+
+			$.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
+				.done(submissionCount => {
+					let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
+					if (pagesCount > currentPagesCount) {
+						let nextButton = $('.pagination li:last-of-type');
+						let newLi = $(`<li class="page-item page-number"><a class="page-link" href="#">${currentPagesCount + 1}</a></li>`);
+						newLi.insertBefore(nextButton);
+
+						$(newLi.children()[0]).on('click', (e) => {
+							$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+							let page = e.target.innerText;
+							let problemId = $('.active-problem')[0].dataset.id;
+							getSubmissions(problemId, page);
+						});
+					}
+				})
+				.fail((error) => {
+					console.log(error);
+				});
 		})
 		.fail((error) => {
 			showError(error.responseText);
 		});
 });
+
+function genratePaginationPages(problemId) {
+    $.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
+        .done(submissionCount => {
+            let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
+            $('.pagination .page-number').remove();
+            let nextButton = $('.pagination li:last-of-type');
+            for (var i = 1; i <= pagesCount; i++) {
+                let li = $(`<li class="page-item page-number"><a class="page-link" href="#">${i}</a></li>`);
+                li.insertBefore(nextButton);
+            }
+            $($('ul li.page-number > a')[0]).addClass(currentPageClass);
+            $('.page-number > a').on('click', (e) => {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                let page = e.target.innerText;
+                let problemId = $('.active-problem')[0].dataset.id;
+                //$('.page-number > a').removeClass(currentPageClass);
+                //e.target.classList.add(currentPageClass);
+                getSubmissions(problemId, page);
+            });
+        })
+        .fail((error) => {
+            console.log(error);
+        });
+}
 
 function getSubmissions(id, page) {
 	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}`)
@@ -102,6 +125,9 @@ function getSubmissions(id, page) {
 				let tr = generateTr(submission);
 				tbody.append(tr);
 			}
+
+			$('.page-number > a').removeClass(currentPageClass);
+			$($('.page-number > a')[page - 1]).addClass(currentPageClass);
 
 		})
 		.fail(error => {
@@ -144,11 +170,12 @@ function generateTr(submission) {
 	tr.append(pointsTd);
 	tr.append(executionInfo);
 	tr.append(submissionDateTd);
-	tr.append($('<td class="pt-3	">').append(detailsBtn));
+	tr.append($('<td class="pt-3">').append(detailsBtn));
 	return tr;
 }
 
 $("#previous").on('click', () => {
+	$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 	let currentPageNumber = $(`.${currentPageClass}`)[0].innerText;
 	let lastPage = $(".page-number").length;
 	let problemId = $('.active-problem')[0].dataset.id;
@@ -162,6 +189,7 @@ $("#previous").on('click', () => {
 });
 
 $("#next").on('click', () => {
+	$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 	let currentPageNumber = $(`.${currentPageClass}`)[0].innerText;
 	let lastPage = $(".page-number").length;
 	let problemId = $('.active-problem')[0].dataset.id;

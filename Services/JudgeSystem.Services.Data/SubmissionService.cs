@@ -1,10 +1,13 @@
 ﻿namespace JudgeSystem.Services.Data
 {
+	using JudgeSystem.Common;
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.Dtos.ExecutedTest;
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Web.InputModels.Submission;
+	using JudgeSystem.Web.ViewModels.Submission;
 	using Microsoft.EntityFrameworkCore;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -14,7 +17,6 @@
 
 	public class SubmissionService : ISubmissionService
 	{
-		private const string SubmissionDateFormat = "dd/MM/yyyy HH:mm";
 		private readonly IRepository<Submission> repository;
 		private readonly IEstimator estimator;
 
@@ -92,7 +94,7 @@
 				})
 					.ToList(),
 				IsCompiledSuccessfully = submission.CompilationErrors == null || submission.CompilationErrors.Length == 0,
-				SubmissionDate = submission.SubmisionDate.ToString(SubmissionDateFormat, CultureInfo.InvariantCulture),
+				SubmissionDate = submission.SubmisionDate.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture),
 				Id = submission.Id,
 				TotalMemoryUsed = submission.ExecutedTests.Sum(t => t.MemoryUsed),
 				TotalTimeUsed = submission.ExecutedTests.Sum(t => t.TimeUsed)
@@ -104,6 +106,17 @@
 		public int GetProblemSubmissionsCount(int problemId, string userId)
 		{
 			return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
+		}
+
+		public SubmissionViewModel GetSubmissionDetails(int id)
+		{
+			var submission = this.repository.All()
+				.Where(s => s.Id == id)
+				.To<SubmissionViewModel>()
+				.FirstOrDefault();
+
+			submission.ExecutedTests = submission.ExecutedTests.OrderByDescending(t => t.TestIsTrialTest).ToList();
+			return submission;
 		}
 	}
 }
