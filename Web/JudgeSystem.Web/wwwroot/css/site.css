@@ -268,3 +268,8 @@ input[type=file] {
 .current-page {
     background-color: #d4ec0a5c;
 }
+
+.no-width-height{
+    width: 0;
+    height: 0;
+}

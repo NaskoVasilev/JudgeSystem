@@ -4,6 +4,7 @@
 	this.ViewData["Title"] = "Submission Details";
 	int zeroTestNumber = 1;
 	int testNumber = 1;
+	string testIds = string.Join(", ", Model.ExecutedTests.Select(t => t.Id));
 }
 
 <h3 class="text-center">Submission by @Model.UserUsername for problem <span class="text-secondary">"@Model.ProblemName"	</span></h3>
@@ -21,31 +22,32 @@ else
 
 	@foreach (var test in Model.ExecutedTests)
 	{
+		string className = test.ExecutionResultType == TestExecutionResultType.Success && test.IsCorrect ? "text-secondary" : "text-danger";
 		@if (test.TestIsTrialTest)
 		{
-			<h4>Trial test #@{zeroTestNumber++;} (@test.ExecutionResultType.ToString())</h4>
+			<h4 class="@className mt-4">Trial test #@(zeroTestNumber++) (@test.ExecutionResult)</h4>
 			<p>Trial tests are not included in the final score!</p>
 		}
 		else
 		{
-			<h4>Test #@{testNumber++;} (@test.ExecutionResultType.ToString())</h4>
+			<h4 class="@className mt-4">Test #@(testNumber++) (@test.ExecutionResult)</h4>
 		}
 
-		<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#input" aria-expanded="false" aria-controls="input">
+		<button class="btn btn-dark btn-sm test-input-button" data-id="@test.Id">
 			Show Input
 		</button>
-		<div class="collapse" id="input">
-			<div class="card card-body border">@test.TestInputData</div>
+		<div id="test-input-div-@test.Id" class="mt-2">
+			<textarea class="d-none" id="test-input-@test.Id">@test.TestInputData</textarea>
 		</div>
 
 		@if (test.ExecutionResultType == TestExecutionResultType.RunTimeError)
 		{
-			<div class="container-fluid bg-light border">@test.Error</div>
+			<div class="container-fluid bg-light border px-3 py-2 mt-2">@test.Error</div>
 		}
-		else if (!test.IsCorrect)
+		else if (!test.IsCorrect && test.ExecutionResultType == TestExecutionResultType.Success)
 		{
 			<div>
-				<div class="container-fluid bg-light border">
+				<div class="container-fluid bg-light border d-flex justify-content-center">
 					Expected output
 					<div>@test.TestOutputData</div>
 				</div>
@@ -55,12 +57,13 @@ else
 				</div>
 			</div>
 		}
-		<p>Time used: @test.TimeUsed</p>
-		<p>Memory used: @test.MemoryUsed</p>
+		<p class="pt-1 m-0">Time used: @test.TimeUsed</p>
+		<p class="pb-2 m-0">Memory used: @test.MemoryUsed</p>
 	}
 }
 
-<div>
+<div class="mt-5">
+	<h4 class="font-weight-normal">Source code</h4>
 	<textarea id="source-code" class="d-none">@Model.Code</textarea>
 </div>
 
@@ -71,7 +74,6 @@ else
 	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
 	<script>
 		let codeTextarea = document.getElementById('source-code');
-		console.log(codeTextarea.innerText)
 		var editor = CodeMirror.fromTextArea(codeTextarea,
 			{
 				lineNumbers: true,
@@ -79,5 +81,53 @@ else
 				mode: "text/x-c++src"
 			});
 		editor.setValue(codeTextarea.innerText);
+
+		let editors = [];
+		let elements = [];
+		let currentElement;
+		let currentEditor;
 	</script>
+
+	@foreach (var test in Model.ExecutedTests)
+	{
+		<script>
+			currentElement = document.getElementById("test-input-@test.Id");
+			currentElement.dataset.editorIndex = editors.length;
+			elements.push(currentElement);
+			currentEditor = CodeMirror.fromTextArea(currentElement,
+			{
+				lineNumbers: true,
+				readOnly: 'cursor'
+				});
+			editors.push(currentEditor);
+		</script>
+	}
+
+<script>
+	for (let i = 0; i < editors.length; i++) {
+		editors[i].setValue(elements[i].innerText);
+		editors[i].setSize("0%", "0px");
+	}
+</script>
+
+<script>
+	$('.test-input-button').on('click', (e) => {
+		let testId = e.target.dataset.id;
+		let editorIndex = document.getElementById('test-input-' + testId).dataset.editorIndex;
+		let buttonText = e.target.textContent;
+
+		if (buttonText == "Show Input") {
+			e.target.textContent = "Hide Input";
+			editors[editorIndex].setSize("100%", "150px")
+		}
+		else {
+			e.target.textContent = "Show Input";
+			editors[editorIndex].setSize("0%", "0px")
+		}
+
+	});
+</script>
+
+<script>
+</script>
 }

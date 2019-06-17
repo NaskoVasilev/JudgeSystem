@@ -103,7 +103,7 @@
 					Output = checkerResult.Output,
 					Error = checkerResult.Error,
 					MemoryUsed = Utility.ConvertBytesToMegaBytes(checkerResult.MemoryUsed),
-					IsCorrect = checkerResult.Type == ProcessExecutionResultType.Success
+					IsCorrect = checkerResult.Type == ProcessExecutionResultType.Success && checkerResult.IsCorrect
 				};
 
 				await executedTestService.Create(executedTest);

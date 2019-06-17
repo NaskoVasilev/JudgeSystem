@@ -34,6 +34,7 @@ $(".problem-name").on("click", (e) => {
 	$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
 
 	let page = 1;
+	genratePaginationPages(id);
 	getSubmissions(id, page);
 
 });
@@ -94,7 +95,10 @@ $('#submit-btn').on('click', () => {
 function genratePaginationPages(problemId) {
     $.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
         .done(submissionCount => {
-            let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
+			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
+			if (pagesCount < 1) {
+				pagesCount = 1;
+			}
             $('.pagination .page-number').remove();
             let nextButton = $('.pagination li:last-of-type');
             for (var i = 1; i <= pagesCount; i++) {
@@ -106,8 +110,7 @@ function genratePaginationPages(problemId) {
                 $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                 let page = e.target.innerText;
                 let problemId = $('.active-problem')[0].dataset.id;
-                //$('.page-number > a').removeClass(currentPageClass);
-                //e.target.classList.add(currentPageClass);
+               
                 getSubmissions(problemId, page);
             });
         })
