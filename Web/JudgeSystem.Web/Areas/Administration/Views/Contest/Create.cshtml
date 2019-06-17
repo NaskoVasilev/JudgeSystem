@@ -1,0 +1,51 @@
+﻿@model ContestCreateInputModel
+
+@{
+    ViewData["Title"] = "Lesson Create";
+	var courses = ViewData["courses"] as IEnumerable<SelectListItem>;
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+	<div class="col-md-4" >
+		<section>
+			<form method="post">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="StartTime"></label>
+					<input asp-for="StartTime" class="form-control" />
+					<span asp-validation-for="StartTime" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="EndTime"></label>
+					<input asp-for="EndTime" class="form-control" />
+					<span asp-validation-for="EndTime" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label>Course</label>
+					<select id="course" class="form-control">
+						<option value="" disabled selected>Choose course</option>
+						@foreach (var course in courses)
+						{
+							<option value="@course.Value">@course.Text</option>
+						}
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Lesson</label>
+					<select id="lessonId" asp-for="LessonId" class="form-control">
+						<option value="" disabled selected>Choose lesson</option>
+					</select>
+					<span asp-validation-for="EndTime" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" id="add-contest" class="btn btn-primary" disabled>Add Contest</button>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
+
+@section Scripts{
+	<script src="~/js/controllers/contestController.js"></script>
+}

@@ -113,7 +113,8 @@
             services.AddTransient<IProblemService, ProblemService>();
             services.AddTransient<ISubmissionService, SubmissionService>();
 			services.AddTransient<ITestService, TestService>();
-            services.AddTransient<IExecutedTestService, ExecutedTestService>();
+			services.AddTransient<IContestService, ContestService>();
+			services.AddTransient<IExecutedTestService, ExecutedTestService>();
 			services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();

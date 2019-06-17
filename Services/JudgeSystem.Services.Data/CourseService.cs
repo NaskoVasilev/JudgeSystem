@@ -9,6 +9,7 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.Dtos.Course;
 	using JudgeSystem.Web.InputModels.Course;
 	using JudgeSystem.Web.ViewModels.Course;
 
@@ -62,6 +63,12 @@
 		{
 			repository.Delete(course);
 			await repository.SaveChangesAsync();
+		}
+
+		public IEnumerable<ContestCourseDto> GetAllCourses()
+		{
+			var courses = repository.All().To<ContestCourseDto>().ToList();
+			return courses;
 		}
 	}
 }

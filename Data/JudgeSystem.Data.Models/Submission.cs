@@ -22,6 +22,9 @@
 		public int ProblemId { get; set; }
 		public Problem Problem { get; set; }
 
+		public int? ContestId { get; set; }
+		public Contest Contest { get; set; }
+
 		public DateTime SubmisionDate { get; set; }
 
 		public string UserId { get; set; }

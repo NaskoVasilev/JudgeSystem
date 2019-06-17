@@ -13,6 +13,7 @@
 	using JudgeSystem.Web.InputModels.Lesson;
 
 	using Microsoft.EntityFrameworkCore;
+	using JudgeSystem.Web.Dtos.Lesson;
 
 	public class LessonService : ILessonService
 	{
@@ -52,10 +53,20 @@
 			await this.repository.SaveChangesAsync();
 		}
 
+
 		public async Task<Lesson> GetById(int id)
 		{
 			return await repository.All()
 				.FirstOrDefaultAsync(l => l.Id == id);
+		}
+
+		public IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId)
+		{
+			var lessons = repository.All().Where(l => l.CourseId == courseId)
+				.To<ContestLessonDto>()
+				.ToList();
+
+			return lessons;
 		}
 
 		public async Task<LessonViewModel> GetLessonInfo(int id)

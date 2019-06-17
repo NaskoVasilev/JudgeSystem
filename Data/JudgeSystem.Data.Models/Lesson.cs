@@ -13,6 +13,7 @@
 		{
 			this.Resources = new List<Resource>();
 			this.Problems = new List<Problem>();
+			this.Contests = new HashSet<Contest>();
 		}
 
 		[Required]
@@ -31,5 +32,7 @@
 		public ICollection<Resource> Resources { get; set; }
 
 		public ICollection<Problem> Problems { get; set; }
+
+		public ICollection<Contest> Contests { get; set; }
 	}
 }

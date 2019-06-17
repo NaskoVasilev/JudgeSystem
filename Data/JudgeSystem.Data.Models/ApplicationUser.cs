@@ -16,6 +16,7 @@
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
 			this.Submissions = new List<Submission>();
+			this.UserContests = new HashSet<UserContest>();
         }
 
         // Audit info
@@ -35,5 +36,7 @@
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
 		public virtual ICollection<Submission> Submissions { get; set; }
+
+		public virtual ICollection<UserContest> UserContests { get; set; }
 	}
 }

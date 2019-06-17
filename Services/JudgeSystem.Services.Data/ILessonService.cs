@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.Dtos.Lesson;
 	using JudgeSystem.Web.InputModels.Lesson;
 	using JudgeSystem.Web.ViewModels.Lesson;
 
@@ -20,5 +21,7 @@
 		Task Update(Lesson lesson);
 
 		Task Delete(Lesson lesson);
+
+		IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId);
 	}
 }

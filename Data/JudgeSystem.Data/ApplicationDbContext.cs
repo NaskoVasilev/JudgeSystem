@@ -116,6 +116,28 @@
 				.HasForeignKey(et => et.TestId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<Contest>()
+				.HasMany(c => c.UserContests)
+				.WithOne(uc => uc.Contest)
+				.HasForeignKey(uc => uc.ContestId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<ApplicationUser>()
+				.HasMany(u => u.UserContests)
+				.WithOne(uc => uc.User)
+				.HasForeignKey(uc => uc.UserId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<UserContest>().HasKey(uc => new { uc.UserId, uc.ContestId });
+
+			builder.Entity<Submission>().HasOne(s => s.Contest)
+				.WithMany(c => c.Submissions)
+				.HasForeignKey(s => s.ContestId)
+				.IsRequired(false)
+				.OnDelete(DeleteBehavior.Restrict);
 		}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
