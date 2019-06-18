@@ -32,7 +32,8 @@
 			{
 				Code = Encoding.UTF8.GetBytes(model.Code),
 				ProblemId = model.ProblemId,
-				UserId = userId
+				UserId = userId,
+				ContestId = model.ContestId
 			};
 
 			await repository.AddAsync(submission);
@@ -57,22 +58,10 @@
 
 		public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage)
 		{
-			var submissions = repository.All()
-				.Where(s => s.ProblemId == problemId && s.UserId == userId)
-				.Include(s => s.ExecutedTests)
-				.Include(s => s.Problem)
-				.OrderByDescending(s => s.SubmisionDate)
-				.Skip((page - 1) * submissionsPerPage)
-				.Take(submissionsPerPage)
-				.Select(MapSubmissionToSubmissionResult)
-				.ToList();
+			var submissionsFromDb = repository.All()
+				.Where(s => s.ProblemId == problemId && s.UserId == userId);
 
-			foreach (var submission in submissions)
-			{
-				int passedTests = submission.ExecutedTests.Count(t => t.IsCorrect);
-				submission.ActualPoints = estimator.CalculteProblemPoints(submission.ExecutedTests.Count, passedTests, submission.MaxPoints);
-			}
-
+			var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
 			return submissions;
 		}
 
@@ -108,6 +97,11 @@
 			return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
 		}
 
+		public int GetSubmissionsCountByProblemIdAndContestId(int problemId, int contestId, string userId)
+		{
+			return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.ContestId == contestId);
+		}
+
 		public SubmissionViewModel GetSubmissionDetails(int id)
 		{
 			var submission = this.repository.All()
@@ -117,6 +111,35 @@
 
 			submission.ExecutedTests = submission.ExecutedTests.OrderByDescending(t => t.TestIsTrialTest).ToList();
 			return submission;
+		}
+
+		public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage)
+		{
+			var submissionsFromDb = repository.All()
+				.Where(s => s.ContestId == contestId && s.UserId == userId && problemId == problemId);
+
+			var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
+			return submissions;
+		}
+
+		private IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
+		{
+			var submissions = submissionsFromDb
+				.Include(s => s.ExecutedTests)
+				.Include(s => s.Problem)
+				.OrderByDescending(s => s.SubmisionDate)
+				.Skip((page - 1) * submissionsPerPage)
+				.Take(submissionsPerPage)
+				.Select(MapSubmissionToSubmissionResult)
+				.ToList();
+
+			foreach (var submission in submissions)
+			{
+				int passedTests = submission.ExecutedTests.Count(t => t.IsCorrect);
+				submission.ActualPoints = estimator.CalculteProblemPoints(submission.ExecutedTests.Count, passedTests, submission.MaxPoints);
+			}
+
+			return submissions;
 		}
 	}
 }

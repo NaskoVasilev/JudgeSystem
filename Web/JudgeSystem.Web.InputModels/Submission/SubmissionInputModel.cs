@@ -9,5 +9,7 @@ namespace JudgeSystem.Web.InputModels.Submission
 		public string Code { get; set; }
 
 		public int ProblemId { get; set; }
+
+		public int? ContestId { get; set; }
 	}
 }

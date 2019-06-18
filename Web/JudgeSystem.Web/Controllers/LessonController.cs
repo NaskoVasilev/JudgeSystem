@@ -23,9 +23,10 @@
 		}
 
 		[Authorize]
-		public async Task<IActionResult> Details(int id)
+		public async Task<IActionResult> Details(int id, int? contestId)
 		{
 			var lesson = await lessonService.GetLessonInfo(id);
+			lesson.ContestId = contestId;
 			string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 
 			if (lesson.IsLocked)

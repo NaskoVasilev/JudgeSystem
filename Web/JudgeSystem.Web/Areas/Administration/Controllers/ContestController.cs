@@ -1,7 +1,9 @@
 ﻿using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.InputModels.Contest;
+using JudgeSystem.Web.Utilites;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
@@ -26,6 +28,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		{
 			var courses = courseService.GetAllCourses().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
 			ViewData["courses"] = courses;
+			ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
 			return View();
 		}
 
@@ -36,6 +39,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			{
 				var courses = courseService.GetAllCourses().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
 				ViewData["courses"] = courses;
+				ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
 				return View(model);
 			}
 
@@ -44,9 +48,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return Redirect("/");
 		}
 
-		public IActionResult GetLessons(int courseId)
+		public IActionResult GetLessons(int courseId, LessonType lessonType)
 		{
-			var lessons = lessonService.GetCourseLesosns(courseId);
+			var lessons = lessonService.GetCourseLesosns(courseId, lessonType);
 			return Json(lessons);
 		}
 	}

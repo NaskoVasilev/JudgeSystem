@@ -73,7 +73,14 @@
 
 
 	<div class="button-holder">
-		<button class="btn btn-secondary" id="submit-btn">Submit</button>
+		@if (Model.ContestId.HasValue)
+		{
+			<button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
+		}
+		else
+		{
+			<button class="btn btn-secondary" id="submit-btn">Submit</button>
+		}
 	</div>
 
 	<div id="submissions-holder" class="text-center border mt-3">

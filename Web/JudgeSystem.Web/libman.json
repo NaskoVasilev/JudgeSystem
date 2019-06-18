@@ -1,91 +1,99 @@
 {
   "version": "1.0",
   "defaultProvider": "unpkg",
-  "libraries": [
-    {
-      "library": "jquery@3.3.1",
-      "destination": "wwwroot/lib/jquery/",
-      "files": [
-        "dist/jquery.min.js",
-        "dist/jquery.js"
-      ]
-    },
-    {
-      "library": "bootstrap@4.3.1",
-      "destination": "wwwroot/lib/bootstrap/",
-      "files": [
-        "dist/css/bootstrap.css",
-        "dist/css/bootstrap.min.css",
-        "dist/js/bootstrap.js",
-        "dist/js/bootstrap.min.js"
-      ]
-    },
-    {
-      "library": "jquery-validation@1.19.0",
-      "destination": "wwwroot/lib/jquery-validation/",
-      "files": [
-        "dist/jquery.validate.js",
-        "dist/jquery.validate.min.js"
-      ]
-    },
-    {
-      "library": "jquery-validation-unobtrusive@3.2.11",
-      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
-      "files": [
-        "dist/jquery.validate.unobtrusive.js",
-        "dist/jquery.validate.unobtrusive.min.js"
-      ]
-    },
-    {
-      "provider": "cdnjs",
-      "library": "font-awesome@5.8.2",
-      "destination": "wwwroot/lib/font-awesome/",
-      "files": [
-        "css/all.min.css",
-        "css/all.css",
-        "sprites/brands.svg",
-        "sprites/regular.svg",
-        "sprites/solid.svg",
-        "webfonts/fa-brands-400.eot",
-        "webfonts/fa-brands-400.svg",
-        "webfonts/fa-brands-400.ttf",
-        "webfonts/fa-brands-400.woff",
-        "webfonts/fa-brands-400.woff2",
-        "webfonts/fa-regular-400.eot",
-        "webfonts/fa-regular-400.svg",
-        "webfonts/fa-regular-400.ttf",
-        "webfonts/fa-regular-400.woff",
-        "webfonts/fa-regular-400.woff2",
-        "webfonts/fa-solid-900.eot",
-        "webfonts/fa-solid-900.svg",
-        "webfonts/fa-solid-900.ttf",
-        "webfonts/fa-solid-900.woff",
-        "webfonts/fa-solid-900.woff2"
-      ]
-    },
-    {
-      "provider": "cdnjs",
-      "library": "codemirror@5.47.0",
-      "destination": "wwwroot/lib/codemirror/",
-      "files": [
-        "mode/clike/clike.min.js"
-      ]
-    },
-    {
-      "provider": "cdnjs",
-      "library": "datatables@1.10.19",
-      "destination": "wwwroot/lib/datatables/",
-      "files": [
-        "js/dataTables.bootstrap4.min.js",
-        "css/dataTables.bootstrap4.css",
-        "images/sort_asc.png",
-        "images/sort_asc_disabled.png",
-        "images/sort_both.png",
-        "images/sort_desc.png",
-        "images/sort_desc_disabled.png",
-        "js/dataTables.bootstrap4.js",
-        "css/dataTables.bootstrap4.min.css"
-      ]
-    }
-  ]
+	"libraries": [
+		{
+			"library": "jquery@3.3.1",
+			"destination": "wwwroot/lib/jquery/",
+			"files": [
+				"dist/jquery.min.js",
+				"dist/jquery.js"
+			]
+		},
+		{
+			"library": "bootstrap@4.3.1",
+			"destination": "wwwroot/lib/bootstrap/",
+			"files": [
+				"dist/css/bootstrap.css",
+				"dist/css/bootstrap.min.css",
+				"dist/js/bootstrap.js",
+				"dist/js/bootstrap.min.js"
+			]
+		},
+		{
+			"library": "jquery-validation@1.19.0",
+			"destination": "wwwroot/lib/jquery-validation/",
+			"files": [
+				"dist/jquery.validate.js",
+				"dist/jquery.validate.min.js"
+			]
+		},
+		{
+			"library": "jquery-validation-unobtrusive@3.2.11",
+			"destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+			"files": [
+				"dist/jquery.validate.unobtrusive.js",
+				"dist/jquery.validate.unobtrusive.min.js"
+			]
+		},
+		{
+			"provider": "cdnjs",
+			"library": "font-awesome@5.8.2",
+			"destination": "wwwroot/lib/font-awesome/",
+			"files": [
+				"css/all.min.css",
+				"css/all.css",
+				"sprites/brands.svg",
+				"sprites/regular.svg",
+				"sprites/solid.svg",
+				"webfonts/fa-brands-400.eot",
+				"webfonts/fa-brands-400.svg",
+				"webfonts/fa-brands-400.ttf",
+				"webfonts/fa-brands-400.woff",
+				"webfonts/fa-brands-400.woff2",
+				"webfonts/fa-regular-400.eot",
+				"webfonts/fa-regular-400.svg",
+				"webfonts/fa-regular-400.ttf",
+				"webfonts/fa-regular-400.woff",
+				"webfonts/fa-regular-400.woff2",
+				"webfonts/fa-solid-900.eot",
+				"webfonts/fa-solid-900.svg",
+				"webfonts/fa-solid-900.ttf",
+				"webfonts/fa-solid-900.woff",
+				"webfonts/fa-solid-900.woff2"
+			]
+		},
+		{
+			"provider": "cdnjs",
+			"library": "codemirror@5.47.0",
+			"destination": "wwwroot/lib/codemirror/",
+			"files": [
+				"mode/clike/clike.min.js"
+			]
+		},
+		{
+			"provider": "cdnjs",
+			"library": "datatables@1.10.19",
+			"destination": "wwwroot/lib/datatables/",
+			"files": [
+				"js/dataTables.bootstrap4.min.js",
+				"css/dataTables.bootstrap4.css",
+				"images/sort_asc.png",
+				"images/sort_asc_disabled.png",
+				"images/sort_both.png",
+				"images/sort_desc.png",
+				"images/sort_desc_disabled.png",
+				"js/dataTables.bootstrap4.js",
+				"css/dataTables.bootstrap4.min.css"
+			]
+		},
+		{
+			"provider": "cdnjs",
+			"library": "popper.js@1.15.0",
+			"destination": "wwwroot/lib/popper.js/",
+			"files": [
+				"umd/popper.min.js"
+			]
+		}
+	]
 }

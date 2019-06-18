@@ -5,6 +5,9 @@
 	using Data.Models.Enums;
 
 	using AutoMapper;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System;
 
 	public class LessonLinkViewModel : IMapFrom<Lesson>, IHaveCustomMappings
 	{
@@ -18,10 +21,14 @@
 
 		public LessonType Type { get; set; }
 
+		public List<LessonContestViewModel> Contests { get; set; }
+
 		public void CreateMappings(IMapperConfigurationExpression configuration)
 		{
 			configuration.CreateMap<Lesson, LessonLinkViewModel>()
-				.ForMember(x => x.ProblemsCount, y => y.MapFrom(s => s.Problems.Count));
+				.ForMember(x => x.ProblemsCount, y => y.MapFrom(s => s.Problems.Count))
+				.ForMember(x => x.Contests, y => y.MapFrom(s => s.Contests
+				.Where(c => c.StartTime < DateTime.Now && c.EndTime > DateTime.Now)));
 		}
 	}
 }

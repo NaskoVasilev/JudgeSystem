@@ -5,6 +5,7 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.Infrastructure.Attributes.Validation;
+	using System.ComponentModel.DataAnnotations;
 
 	public class ContestCreateInputModel : IMapTo<Contest>
 	{
@@ -18,5 +19,9 @@
 		public DateTime EndTime { get; set; }
 
 		public int LessonId { get; set; }
+
+		[Required]
+		[StringLength(100, MinimumLength = 5)]
+		public string Name { get; set; }
 	}
 }

@@ -60,9 +60,9 @@
 				.FirstOrDefaultAsync(l => l.Id == id);
 		}
 
-		public IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId)
+		public IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType)
 		{
-			var lessons = repository.All().Where(l => l.CourseId == courseId)
+			var lessons = repository.All().Where(l => l.CourseId == courseId && l.Type == lesosnType)
 				.To<ContestLessonDto>()
 				.ToList();
 
@@ -71,7 +71,7 @@
 
 		public async Task<LessonViewModel> GetLessonInfo(int id)
 		{
-			var lesson =  await this.repository.All()
+			var lesson = await this.repository.All()
 				.Include(l => l.Problems)
 				.Include(l => l.Resources)
 				.FirstOrDefaultAsync(l => l.Id == id);

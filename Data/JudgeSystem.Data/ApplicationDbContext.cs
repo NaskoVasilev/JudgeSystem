@@ -29,8 +29,11 @@
 		public DbSet<Problem> Problems { get; set; }
 		public DbSet<Resource> Resources { get; set; }
 		public DbSet<Test> Tests { get; set; }
-
 		public DbSet<ExecutedTest> ExecutedTests { get; set; }
+		public DbSet<Contest> Contests { get; set; }
+		public DbSet<UserContest> UserContests { get; set; }
+		public DbSet<Submission> Submissions { get; set; }
+
 
 		public override int SaveChanges() => this.SaveChanges(true);
 

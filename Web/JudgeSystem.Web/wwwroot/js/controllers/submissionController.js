@@ -41,6 +41,7 @@ $(".problem-name").on("click", (e) => {
 
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
+	let contestId = $('#submit-btn')[0].dataset.contestid;
 	let code = editor.getValue();
 	let tr = $('<tr></tr>');
 	let pointsTd = $('<td></td>');
@@ -51,7 +52,12 @@ $('#submit-btn').on('click', () => {
 	tbody.prepend(tr);
 	editor.setValue("");
 
-	$.post('/Submission/Create', { problemId, code })
+	let actionData = { problemId, code };
+	if (contestId) {
+		actionData.contestId = contestId;
+	}
+
+	$.post('/Submission/Create', actionData)
 		.done((response) => {
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
@@ -67,7 +73,7 @@ $('#submit-btn').on('click', () => {
 			let currentPagesCount = $('.page-number').length;
 			let problemId = $('.active-problem')[0].dataset.id;
 
-			$.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
+			$.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
 				.done(submissionCount => {
 					let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 					if (pagesCount > currentPagesCount) {
@@ -93,7 +99,9 @@ $('#submit-btn').on('click', () => {
 });
 
 function genratePaginationPages(problemId) {
-    $.get('/Submission/GetSubmissionsCount?problemId=' + problemId)
+	let contestId = $('#submit-btn')[0].dataset.contestid;
+	
+    $.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
         .done(submissionCount => {
 			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 			if (pagesCount < 1) {
@@ -120,7 +128,8 @@ function genratePaginationPages(problemId) {
 }
 
 function getSubmissions(id, page) {
-	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}`)
+	let contestId = $('#submit-btn')[0].dataset.contestid;
+	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}&contestId=${contestId}`)
 		.done(response => {
 			let tbody = $('#submissions-holder tbody');
 			$('#submissions-holder tbody tr').remove();

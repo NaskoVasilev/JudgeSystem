@@ -16,6 +16,23 @@
 						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
 					</td>
 					<td>
+						@if (lesson.Contests.Any())
+						{
+							<div class="dropdown">
+								<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Compete
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									@foreach (var contest in lesson.Contests)
+									{
+										<a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
+										   asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
+									}
+								</div>
+							</div>
+						}
+					</td>
+					<td>
 						<i class="fas fa-file"></i>
 						@lesson.ProblemsCount
 					</td>

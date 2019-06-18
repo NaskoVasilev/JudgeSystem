@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Threading.Tasks;
+
 	using JudgeSystem.Checkers;
 	using JudgeSystem.Compilers;
 	using JudgeSystem.Data.Models;
@@ -11,14 +12,14 @@
 	using JudgeSystem.Web.Dtos.Test;
 	using JudgeSystem.Web.InputModels.Submission;
 	using JudgeSystem.Workers.Common;
-
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Mvc;
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels.Submission;
+
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Mvc;
 
 	public class SubmissionController : BaseController
 	{
@@ -43,19 +44,36 @@
 			return View(submission);
 		}
 
-		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage)
+		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage, int? contestId = null)
 		{
 			string userId = userManager.GetUserId(this.User);
-			IEnumerable<SubmissionResult> submissionResults = submissionService
+			IEnumerable<SubmissionResult> submissionResults = new List<SubmissionResult>();
+			if (contestId.HasValue)
+			{
+				submissionResults = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId.Value, problemId, userId, page, submissionsPerPage);
+			}
+			else
+			{
+				submissionResults = submissionService
 				.GetUserSubmissionsByProblemId(problemId, userId, page, submissionsPerPage);
+			}
 
 			return Json(submissionResults);
 		}
 
-		public IActionResult GetSubmissionsCount(int problemId)
+		public IActionResult GetSubmissionsCount(int problemId, int? contestId = null)
 		{
 			string userId = userManager.GetUserId(User);
-			int submissionsCount = submissionService.GetProblemSubmissionsCount(problemId, userId);
+			int submissionsCount = 0;
+
+			if(contestId.HasValue)
+			{
+				submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(problemId, contestId.Value, userId);
+			}
+			else
+			{
+				submissionsCount = submissionService.GetProblemSubmissionsCount(problemId, userId);
+			}
 			return Json(submissionsCount);
 		}
 

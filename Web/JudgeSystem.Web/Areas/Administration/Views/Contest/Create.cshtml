@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Lesson Create";
 	var courses = ViewData["courses"] as IEnumerable<SelectListItem>;
+	var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -11,6 +12,11 @@
 		<section>
 			<form method="post">
 				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="Name"></label>
+					<input asp-for="Name" class="form-control" />
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
 				<div class="form-group">
 					<label asp-for="StartTime"></label>
 					<input asp-for="StartTime" class="form-control" />
@@ -28,6 +34,15 @@
 						@foreach (var course in courses)
 						{
 							<option value="@course.Value">@course.Text</option>
+						}
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Lesson Type</label>
+					<select id="lessonType" class="form-control">
+						@foreach (var lessonType in lessonTypes)
+						{
+							<option value="@lessonType.Value">@lessonType.Text</option>
 						}
 					</select>
 				</div>

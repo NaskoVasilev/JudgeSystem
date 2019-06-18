@@ -19,6 +19,10 @@
 
 		int GetProblemSubmissionsCount(int problemId, string userId);
 
+		int GetSubmissionsCountByProblemIdAndContestId(int problemId, int contestId, string userId);
+
 		SubmissionViewModel GetSubmissionDetails(int id);
+
+		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage);
 	}
 }
