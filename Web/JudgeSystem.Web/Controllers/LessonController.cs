@@ -10,16 +10,23 @@
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Http;
+	using Microsoft.AspNetCore.Identity;
+	using JudgeSystem.Data.Models;
 
 	public class LessonController : BaseController
 	{
 		private readonly ILessonService lessonService;
+		private readonly IContestService contestService;
 		private readonly IPasswordHashService passwordHashService;
+		private readonly UserManager<ApplicationUser> userManager;
 
-		public LessonController(ILessonService lessonService, IPasswordHashService passwordHashService)
+		public LessonController(ILessonService lessonService, IContestService contestService, 
+			IPasswordHashService passwordHashService, UserManager<ApplicationUser> userManager)
 		{
 			this.lessonService = lessonService;
+			this.contestService = contestService;
 			this.passwordHashService = passwordHashService;
+			this.userManager = userManager;
 		}
 
 		[Authorize]
@@ -27,6 +34,12 @@
 		{
 			var lesson = await lessonService.GetLessonInfo(id);
 			lesson.ContestId = contestId;
+			if(contestId.HasValue)
+			{
+				string userId = userManager.GetUserId(this.User);
+				await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
+			}
+
 			string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 
 			if (lesson.IsLocked)
