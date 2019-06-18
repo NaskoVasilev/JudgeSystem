@@ -59,6 +59,8 @@ $('#submit-btn').on('click', () => {
 
 	$.post('/Submission/Create', actionData)
 		.done((response) => {
+			console.log('Created submission -> ' + response);
+
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
 			tbody.prepend(tr);
@@ -75,6 +77,8 @@ $('#submit-btn').on('click', () => {
 
 			$.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
 				.done(submissionCount => {
+					console.log('Submissions count -> ' + submissionCount);
+
 					let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 					if (pagesCount > currentPagesCount) {
 						let nextButton = $('.pagination li:last-of-type');
@@ -102,7 +106,9 @@ function genratePaginationPages(problemId) {
 	let contestId = $('#submit-btn')[0].dataset.contestid;
 	
     $.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
-        .done(submissionCount => {
+		.done(submissionCount => {
+			console.log('Submissions count -> ' + submissionCount);
+
 			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 			if (pagesCount < 1) {
 				pagesCount = 1;
@@ -131,6 +137,8 @@ function getSubmissions(id, page) {
 	let contestId = $('#submit-btn')[0].dataset.contestid;
 	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}&contestId=${contestId}`)
 		.done(response => {
+			console.log('submissions -> ' + response);
+
 			let tbody = $('#submissions-holder tbody');
 			$('#submissions-holder tbody tr').remove();
 			for (let submission of response) {

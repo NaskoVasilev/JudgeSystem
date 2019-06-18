@@ -116,7 +116,7 @@
 		public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage)
 		{
 			var submissionsFromDb = repository.All()
-				.Where(s => s.ContestId == contestId && s.UserId == userId && problemId == problemId);
+				.Where(s => s.ContestId == contestId && s.UserId == userId && s.ProblemId == problemId);
 
 			var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
 			return submissions;
