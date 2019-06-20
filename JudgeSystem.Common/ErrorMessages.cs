@@ -1,4 +1,6 @@
-﻿namespace JudgeSystem.Common
+﻿using System;
+
+namespace JudgeSystem.Common
 {
 	public static class ErrorMessages
 	{
@@ -13,5 +15,9 @@
 		public const string LockedLesson = "The lesson already has password!";
 
 		public const string NotValidEmail = "The provided email is not valid";
+
+		public const string InvalidActivationKey = "Your activation key is invalid.";
+
+		public const string ActivatedStudentProfile = "Student profile with this activation key is already activated.";
 	}
 }
