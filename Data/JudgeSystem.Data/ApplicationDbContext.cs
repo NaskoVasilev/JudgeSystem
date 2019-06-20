@@ -33,6 +33,8 @@
 		public DbSet<Contest> Contests { get; set; }
 		public DbSet<UserContest> UserContests { get; set; }
 		public DbSet<Submission> Submissions { get; set; }
+		public DbSet<Student> Students { get; set; }
+		public DbSet<SchoolClass> SchoolClasses { get; set; }
 
 
 		public override int SaveChanges() => this.SaveChanges(true);
@@ -141,6 +143,12 @@
 				.HasForeignKey(s => s.ContestId)
 				.IsRequired(false)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<ApplicationUser>()
+				.HasOne(u => u.Student)
+				.WithOne(s => s.User)
+				.IsRequired(false)
+				.OnDelete(DeleteBehavior.SetNull);
 		}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

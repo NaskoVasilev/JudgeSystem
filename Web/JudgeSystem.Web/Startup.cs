@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Reflection;
+
 	using JudgeSystem.Common;
 	using JudgeSystem.Data;
     using JudgeSystem.Data.Common;
@@ -115,6 +116,8 @@
 			services.AddTransient<ITestService, TestService>();
 			services.AddTransient<IContestService, ContestService>();
 			services.AddTransient<IExecutedTestService, ExecutedTestService>();
+			services.AddTransient<IStudentService, StudentService>();
+			services.AddTransient<ISchoolClassService, SchoolClassService>();
 			services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();

@@ -26,6 +26,7 @@
             var seeders = new List<ISeeder>
                           {
                               new RolesSeeder(),
+							  new SchoolClassesSeeder()
                           };
 
             foreach (var seeder in seeders)

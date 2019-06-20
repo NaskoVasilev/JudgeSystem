@@ -4,6 +4,8 @@
     {
         public const string AdministratorRoleName = "Administrator";
 
+        public const string StudentRoleName = "Student";
+
 		public const string AdministrationArea = "Administration";
 
 		public const string InfoKey = "info";
