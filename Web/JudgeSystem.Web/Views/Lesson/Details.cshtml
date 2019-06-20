@@ -32,14 +32,7 @@
 		<ul class="list-group d-flex flex-md-row">
 			@foreach (var problem in Model.Problems)
 			{
-				if (problemNumber == 0)
-				{
-					<li class="list-group-item active-problem problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
-				}
-				else
-				{
-					<li class="list-group-item problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
-				}
+				<li class="list-group-item problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
 			}
 			<li class="list-group-item a-holder">
 				<a asp-area="@administrationArea" asp-controller="Problem"

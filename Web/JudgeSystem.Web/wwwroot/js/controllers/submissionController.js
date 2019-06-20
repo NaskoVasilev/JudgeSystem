@@ -2,6 +2,19 @@
 let currentPageClass = 'current-page';
 
 window.onload = () => {
+	let hash = window.location.hash;
+
+	console.log(hash);
+
+	let currentElement = $(`li.problem-name:contains(${decodeURI(hash).substr(1)})`)[0];
+	if (currentElement) {
+		$(".problem-name").removeClass("active-problem");
+		$(currentElement).addClass("active-problem");
+	}
+	else {
+		$('li.problemName')[0].classList.add('active-problem');
+	}
+
 	$(".active-problem").click();
 
 	let problemId = $('.active-problem')[0].dataset.id;
@@ -13,6 +26,9 @@ $(".problem-name").on("click", (e) => {
 	let oldId = $(".active-problem")[0].dataset.id;
 	$(".active-problem").removeClass("active-problem");
 	$(e.target).addClass("active-problem");
+
+	window.location.hash = e.target.textContent;
+
 	let id = $(e.target)[0].dataset.id;
 
 	$('#problemName')[0].innerText = e.target.textContent;
@@ -59,8 +75,6 @@ $('#submit-btn').on('click', () => {
 
 	$.post('/Submission/Create', actionData)
 		.done((response) => {
-			console.log('Created submission -> ' + response);
-
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
 			tbody.prepend(tr);
@@ -77,8 +91,6 @@ $('#submit-btn').on('click', () => {
 
 			$.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
 				.done(submissionCount => {
-					console.log('Submissions count -> ' + submissionCount);
-
 					let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 					if (pagesCount > currentPagesCount) {
 						let nextButton = $('.pagination li:last-of-type');
@@ -107,8 +119,6 @@ function genratePaginationPages(problemId) {
 	
     $.get(`/Submission/GetSubmissionsCount?problemId=${problemId}&contestId=${contestId}`)
 		.done(submissionCount => {
-			console.log('Submissions count -> ' + submissionCount);
-
 			let pagesCount = Math.ceil(submissionCount / submissiosPerPage);
 			if (pagesCount < 1) {
 				pagesCount = 1;
@@ -137,8 +147,6 @@ function getSubmissions(id, page) {
 	let contestId = $('#submit-btn')[0].dataset.contestid;
 	$.get(`/Submission/GetProblemSubmissions?problemId=${id}&page=${page}&contestId=${contestId}`)
 		.done(response => {
-			console.log('submissions -> ' + response);
-
 			let tbody = $('#submissions-holder tbody');
 			$('#submissions-holder tbody tr').remove();
 			for (let submission of response) {

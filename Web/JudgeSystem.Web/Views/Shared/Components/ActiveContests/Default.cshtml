@@ -5,7 +5,7 @@
 	string remainingDaysText = contest.RemainingDays <= 0 ? "" : $"{contest.RemainingDays} days, ";
 	string remainingHoursText = contest.RemainingHours <= 0 ? "" : $"{contest.RemainingHours} hours and ";
 
-	<div class="border-top border-bottom overflow-auto height-500">
+	<div class="border-top border-bottom overflow-auto pt-3">
 		<a class="h3 text-secondary text-decoration-none" asp-area="" asp-controller="Lesson" asp-action="Details"
 		   asp-route-contestId="@contest.Id" asp-route-id="@contest.LessonId">@contest.Name</a>
 		<p class="mt-2">Time remaining: @remainingDaysText@remainingHoursText@contest.RemainingMinutes minutes.</p>

@@ -2,7 +2,7 @@
 
 @foreach (var contest in Model)
 {
-	<div class="border-top border-bottom overflow-auto height-500">
+	<div class="border-top border-bottom overflow-auto pt-3">
 		<div>
 			<a asp-area="" asp-action="Details" asp-controller="Lesson" asp-route-id="@contest.LessonId" 
 			   class="h3 text-decoration-none text-secondary">@contest.Name</a>
