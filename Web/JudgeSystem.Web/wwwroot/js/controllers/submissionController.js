@@ -4,8 +4,6 @@ let currentPageClass = 'current-page';
 window.onload = () => {
 	let hash = window.location.hash;
 
-	console.log(hash);
-
 	let currentElement = $(`li.problem-name:contains(${decodeURI(hash).substr(1)})`)[0];
 	if (currentElement) {
 		$(".problem-name").removeClass("active-problem");
@@ -30,6 +28,12 @@ $(".problem-name").on("click", (e) => {
 	window.location.hash = e.target.textContent;
 
 	let id = $(e.target)[0].dataset.id;
+
+	//If we refresh the id and oldId will be get from the same elemnt and in this case the oldId 
+	//must be set to the id of the first li with class problem- name
+	if (id === oldId) {
+		oldId = $('li.problem-name')[0].dataset.id;
+	}
 
 	$('#problemName')[0].innerText = e.target.textContent;
 
