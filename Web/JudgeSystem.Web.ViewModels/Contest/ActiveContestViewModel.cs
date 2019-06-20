@@ -4,15 +4,15 @@
 
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Data.Models;
-	using AutoMapper;
+    using AutoMapper;
 
-	public class ActiveContestViewModel : IMapFrom<Contest>
+    public class ActiveContestViewModel : IMapFrom<Contest>
 	{
 		public string Name { get; set; }
 
 		public int Id { get; set; }
 
-		public string LessonId { get; set; }
+		public int LessonId { get; set; }
 
 		public DateTime EndTime { get; set; }
 

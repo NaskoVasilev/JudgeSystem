@@ -1,8 +1,17 @@
 ﻿@{
-    this.ViewData["Title"] = "Home Page";
+	this.ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to JudgeSystem!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron">
+	<h1 class="display-4">Welcome to our automated Judge System!</h1>
+	<hr class="my-4">
+
+	<div class="d-flex justify-content-between">
+		<div class="col-md-7 border border">
+			<vc:active-contests></vc:active-contests>
+		</div>
+		<div class="col-md-5">
+			<vc:previous-contests></vc:previous-contests>
+		</div>
+	</div>
 </div>

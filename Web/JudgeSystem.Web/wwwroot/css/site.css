@@ -266,10 +266,14 @@ input[type=file] {
 }
 
 .current-page {
-    background-color: #d4ec0a5c;
+    background-color: #c4e4d1;
 }
 
 .no-width-height{
     width: 0;
     height: 0;
+}
+
+.height-500{
+    height: 500px;
 }

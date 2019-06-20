@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Components
 {
-	[ViewComponent(Name = "PreviousContest")]
+	[ViewComponent(Name = "PreviousContests")]
 	public class PreviousContestsComponent : ViewComponent
 	{
 		private const int PassedDaysFromContestEndTime = 3;

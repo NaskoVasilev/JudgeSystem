@@ -6,7 +6,7 @@
 	using JudgeSystem.Web.ViewModels.Contest;
 	using Microsoft.AspNetCore.Mvc;
 
-	[ViewComponent(Name = "ActiveContest")]
+	[ViewComponent(Name = "ActiveContests")]
 	public class ActiveContestsComponent : ViewComponent
 	{
 		private readonly IContestService contestService;

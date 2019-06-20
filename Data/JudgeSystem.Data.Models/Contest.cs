@@ -24,7 +24,7 @@
 		public DateTime EndTime { get; set; }
 
 		[NotMapped]
-		public bool IsActive => StartTime <= DateTime.Now && EndTime >= DateTime.Now;
+		public bool IsActive => StartTime < DateTime.Now && EndTime > DateTime.Now;
 
 		public int LessonId { get; set; }
 		public Lesson Lesson { get; set; }

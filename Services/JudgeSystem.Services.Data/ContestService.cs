@@ -41,7 +41,10 @@
 
 		public IEnumerable<ActiveContestViewModel> GetActiveContests()
 		{
-			var contests = repository.All().Select(c => c.IsActive).To<ActiveContestViewModel>().ToList();
+			var contests = repository.All()
+				.Where(c => c.IsActive)
+				.To<ActiveContestViewModel>()
+				.ToList();
 			return contests;
 		}
 
