@@ -5,7 +5,7 @@
 
     public class Student : BaseModel<string>
 	{
-		public int FullName { get; set; }
+		public string FullName { get; set; }
 
 		[Required]
 		public string ActivationKeyHash { get; set; }
@@ -14,6 +14,8 @@
 		public string Email { get; set; }
 
 		public int NumberInCalss { get; set; }
+
+		public bool IsActivated { get; set; } = false;
 
 		public int SchoolClassId { get; set; }
 		public SchoolClass SchoolClass { get; set; }

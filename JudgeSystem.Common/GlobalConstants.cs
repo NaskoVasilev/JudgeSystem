@@ -35,5 +35,11 @@
 		public const int SessionIdleTimeout = 2;
 
 		public const string StandardDateFormat = "dd/MM/yyyy HH:mm:ss";
+
+		public const string StudentProfileActivationEmailSubject = "Student profile activation";
+
+		public const string TemplatesFolder = "Templates";
+
+		public const string EmailTemplatesFolder = "EmailTemplates";
 	}
 }

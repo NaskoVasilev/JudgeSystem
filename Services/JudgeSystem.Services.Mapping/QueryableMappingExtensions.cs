@@ -38,5 +38,11 @@
 			var destination = Mapper.Map<Source, Destination>(source);
 			return destination;
 		}
+
+		public static Destination To<Destination>(this object source)
+		{
+			var destination = Mapper.Map(source, source.GetType(), typeof(Destination));
+			return (Destination)destination;
+		}
 	}
 }

@@ -11,5 +11,7 @@
 		public const string TooShorPasswordMessage = "The lesson password must be at least five symbols.";
 
 		public const string LockedLesson = "The lesson already has password!";
+
+		public const string NotValidEmail = "The provided email is not valid";
 	}
 }
