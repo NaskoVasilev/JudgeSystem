@@ -277,3 +277,18 @@ input[type=file] {
 .height-500{
     height: 500px;
 }
+
+#profile-dropdown {
+    left: auto !important;
+    right: 0px;
+}
+
+#profile-icon{
+    color: orange;
+    font-size: 30px;
+}
+
+#student-profile {
+    font-size: 50px;
+    color: orange;
+}

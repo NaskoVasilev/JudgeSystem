@@ -19,5 +19,7 @@ namespace JudgeSystem.Common
 		public const string InvalidActivationKey = "Your activation key is invalid.";
 
 		public const string ActivatedStudentProfile = "Student profile with this activation key is already activated.";
+
+		public const string InvalidStudentProfile = "Your student profile is not activated! Connect to administrators for more info!";
 	}
 }

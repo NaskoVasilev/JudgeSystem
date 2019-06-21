@@ -2,13 +2,16 @@
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Student;
+using JudgeSystem.Web.ViewModels.Student;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Controllers
 {
-	public class StudentController : Controller
+	public class StudentController : BaseController
 	{
 		private readonly IStudentService studentService;
 		private readonly UserManager<ApplicationUser> userManager;
@@ -52,6 +55,20 @@ namespace JudgeSystem.Web.Controllers
 			await userManager.AddToRoleAsync(user, GlobalConstants.StudentRoleName);
 
 			return Redirect("/Identity/Account/Manage");
+		}
+
+		[Authorize]
+		public async Task<IActionResult> Profile()
+		{
+			ApplicationUser user = await userManager.GetUserAsync(this.User);
+			if(user.StudentId == null)
+			{
+				this.ShowError(ErrorMessages.InvalidStudentProfile, "Home", "Controller");
+				return Redirect("/");
+			}
+
+			StudentProfileViewModel model = await studentService.GetStudentInfo(user.StudentId);
+			return View(model);
 		}
 	}
 }

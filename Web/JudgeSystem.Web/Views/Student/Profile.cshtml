@@ -1,0 +1,72 @@
+﻿@model StudentProfileViewModel
+
+@{
+	ViewData["Title"] = "Student Profile";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="text-secondary">Student Profile</h2>
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title mb-4">
+						<div class="d-flex justify-content-start">
+							<div class="image-container">
+								<i class="fas fa-user-tag" id="student-profile"></i>
+							</div>
+							<div class="userData ml-5 mt-3">
+								<h3 class="d-block font-weight-normal text-secondary">@Model.FullName (@Model.SchoolClassName class)</h3>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<ul class="nav nav-tabs mb-4">
+								<li class="nav-item">
+									<a class="nav-link active">Basic Info</a>
+								</li>
+							</ul>
+							<div class="tab-content ml-1">
+								<div class="tab-pane fade show active">
+									<div class="row">
+										<div class="col-sm-3 col-md-2 col-5">
+											<label class="font-weight-bold">Full Name</label>
+										</div>
+										<div class="col-md-8 col-6">@Model.FullName</div>
+									</div>
+									<hr />
+
+									<div class="row">
+										<div class="col-sm-3 col-md-2 col-5">
+											<label class="font-weight-bold">Studnet email</label>
+										</div>
+										<div class="col-md-8 col-6">@Model.Email</div>
+									</div>
+									<hr />
+
+									<div class="row">
+										<div class="col-sm-3 col-md-2 col-5">
+											<label class="font-weight-bold">Class</label>
+										</div>
+										<div class="col-md-8 col-6">@Model.SchoolClassName</div>
+									</div>
+									<hr />
+
+									<div class="row">
+										<div class="col-sm-3 col-md-2 col-5">
+											<label class="font-weight-bold">Number in class</label>
+										</div>
+										<div class="col-md-8 col-6">@Model.NumberInCalss</div>
+									</div>
+									<hr />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -4,9 +4,12 @@
 
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
-    using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.ViewModels.Student;
 
-    public class StudentService : IStudentService
+	using Microsoft.EntityFrameworkCore;
+
+	public class StudentService : IStudentService
 	{
 		private readonly IPasswordHashService passwordHashService;
 		private readonly IRepository<Student> repository;
@@ -23,6 +26,12 @@
 			await repository.AddAsync(student);
 			await repository.SaveChangesAsync();
 			return student;
+		}
+
+		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
+		{
+			var student = await this.repository.All().Include(s => s.SchoolClass).FirstOrDefaultAsync(s => s.Id == studentId);
+			return student.To<StudentProfileViewModel>();
 		}
 
 		public Task<Student> GetStudentProfileByActivationKey(string activationKey)
