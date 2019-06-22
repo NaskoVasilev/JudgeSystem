@@ -8,11 +8,13 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.InputModels.Contest;
 	using JudgeSystem.Web.ViewModels.Contest;
-    using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore;
 
-    public class ContestService : IContestService
+	public class ContestService : IContestService
 	{
+		private const int ContestsPerPage = 2;
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
 
@@ -71,6 +73,41 @@
 				.Where(c => c.EndTime < DateTime.Now && (DateTime.Now - c.EndTime).Days <= passedDays)
 				.To<PreviousContestViewModel>().ToList();
 			return contests;
+		}
+
+		public async Task UpdateContest(ContestEditInputModel model)
+		{
+			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == model.Id);
+			contest.Name = model.Name;
+			contest.StartTime = model.StartTime;
+			contest.EndTime = model.EndTime;
+			repository.Update(contest);
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task DeleteContestById(int id)
+		{
+			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == id);
+			repository.Delete(contest);
+			await repository.SaveChangesAsync();
+		}
+
+		public IEnumerable<ContestViewModel> GetAllConests(int page)
+		{
+			var contests = repository.All()
+				.OrderByDescending(c => c.StartTime)
+				.Skip((page - 1) * ContestsPerPage)
+				.Take(ContestsPerPage)
+				.To<ContestViewModel>()
+				.ToList();
+
+			return contests;
+		}
+
+		public int GetNumberOfPages()
+		{
+			int numberOfContests = repository.All().Count();
+			return (int)Math.Ceiling((double)numberOfContests / ContestsPerPage);
 		}
 	}
 }

@@ -41,5 +41,7 @@
 		public const string TemplatesFolder = "Templates";
 
 		public const string EmailTemplatesFolder = "EmailTemplates";
+
+		public const int PaginationOffset = 5;
 	}
 }

@@ -1,0 +1,51 @@
+﻿@model PaginationData
+@{
+	int previousPageNumber = Model.CurrentPage--;
+	if(previousPageNumber <= 0)
+	{
+		previousPageNumber = Model.NumberOfPages;
+	}
+
+	int nextPageNumber = Model.CurrentPage++;
+	if(nextPageNumber > Model.NumberOfPages)
+	{
+		nextPageNumber = 1;
+	}
+
+	string previousPageUrl = string.Format(Model.Url, previousPageNumber);
+	string nextPageUrl = string.Format(Model.Url, nextPageNumber);
+
+	int startPageIndex = Math.Max(1, Model.CurrentPage - GlobalConstants.PaginationOffset);
+	int endPageIndex = Math.Min(Model.NumberOfPages, Model.CurrentPage + GlobalConstants.PaginationOffset);
+}
+
+<nav>
+	<ul class="pagination">
+		<li class="page-item">
+			<a id="previous" class="page-link" href="@previousPageUrl" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				<span class="sr-only">Previous</span>
+			</a>
+		</li>
+
+		@for (int i = startPageIndex; i <= endPageIndex; i++)
+		{
+			string url = string.Format(Model.Url, i);
+			if (i == Model.CurrentPage)
+			{
+			<li class="page-item"><a class="page-link page-number current-page" href="@url">@i</a></li>
+			}
+			else
+			{
+			<li class="page-item"><a class="page-link page-number" href="@url">@i</a></li>
+			}
+		}
+
+		<li class="page-item">
+			<a id="next" class="page-link" href="@nextPageUrl" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+				<span class="sr-only">Next</span>
+			</a>
+		</li>
+	</ul>
+</nav>

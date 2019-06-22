@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 
 	using JudgeSystem.Data.Models;
+	using JudgeSystem.Web.InputModels.Contest;
 	using JudgeSystem.Web.ViewModels.Contest;
 
 	public interface IContestService
@@ -19,5 +20,13 @@
 		Task<T> GetById<T>(int contestId);
 
 		IEnumerable<ContestBreifInfoViewModel> GetActiveAndFollowingContests();
+
+		Task UpdateContest(ContestEditInputModel model);
+
+		Task DeleteContestById(int id);
+
+		IEnumerable<ContestViewModel> GetAllConests(int page);
+
+		int GetNumberOfPages();
 	}
 }

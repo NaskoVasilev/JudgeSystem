@@ -1,0 +1,42 @@
+﻿@model ContestAllViewModel
+
+@{
+	ViewData["Title"] = "All contests";
+	string administrationArea = GlobalConstants.AdministrationArea;
+	PaginationData paginationData = new PaginationData() { NumberOfPages = Model.NumberOfPages };
+}
+
+<h2 class="text-center mb-4">All active contests</h2>
+
+<table class="table table-hover">
+	<thead>
+		<tr class="row">
+			<th class="col-md-7">Name</th>
+			<th class="col-md-5">Duration</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var contest in Model.Contests)
+		{
+			<tr class="row">
+				<td class="col-md-7">
+					<a class="text-decoration-none text-secondary" asp-area="@administrationArea"
+					   asp-controller="Contest" asp-action="Results" asp-route-id="@contest.Id">@contest.Name</a>
+				</td>
+				<td class="col-md-5">
+					From @contest.FormatedStartTime to @contest.FormatedEndTime
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<partial name="_ClientSidePaginationPartial" model="paginationData"/>
+
+@section Scripts{ 
+	<script src="~/js/pagination.js"></script>
+	<script>
+		let url = "/Administration/Contest/All?page={pageNumber}";
+		InitializePaginationList(url)
+	</script>
+}

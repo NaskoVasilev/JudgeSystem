@@ -11,7 +11,7 @@
 
 	public static class Utility
 	{
-		public static IEnumerable<SelectListItem> GetSelectListItems<T>() where T : Enum
+		public static IEnumerable<SelectListItem> GetSelectListItems<T>()
 		{
 			return EnumExtensions.GetEnumValuesAsString<T>()
 				.Select(t => new SelectListItem
