@@ -4,8 +4,10 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.Utilites;
+using JudgeSystem.Web.ViewModels.Contest;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -52,6 +54,42 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		{
 			var lessons = lessonService.GetCourseLesosns(courseId, lessonType);
 			return Json(lessons);
+		}
+
+		public IActionResult ActiveContest()
+		{
+			IEnumerable<ContestBreifInfoViewModel> activeContests = contestService.GetActiveAndFollowingContests();
+			return View(activeContests);
+		}
+
+		public async Task<IActionResult> Details(int id)
+		{
+			ContestViewModel contest = await contestService.GetById<ContestViewModel>(id);
+			return View(contest);
+		}
+
+		public async Task<IActionResult> Edit(int id)
+		{
+			ContestViewModel contest = await contestService.GetById<ContestViewModel>(id);
+			return View(contest);
+		}
+																																																											
+		[HttpPost]	
+		public async Task<IActionResult> Edit()
+		{
+			return Redirect(nameof(ActiveContest));
+		}
+
+		public async Task<IActionResult> Delete (int id)
+		{
+			ContestViewModel contest = await contestService.GetById<ContestViewModel>(id);
+			return View(contest);
+		}
+
+		[HttpPost(nameof(Delete))]
+		public IActionResult DeletePost(int id)
+		{ 
+			return Redirect(nameof(ActiveContest));
 		}
 	}
 }

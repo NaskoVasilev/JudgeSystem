@@ -55,6 +55,16 @@
 			return contest.To<T>();
 		}
 
+		public IEnumerable<ContestBreifInfoViewModel> GetActiveAndFollowingContests()
+		{
+			var followingContests = this.repository.All()
+				.Where(c => c.EndTime > DateTime.Now)
+				.To<ContestBreifInfoViewModel>()
+				.ToList();
+
+			return followingContests;
+		}
+
 		public IEnumerable<PreviousContestViewModel> GetPreviousContests(int passedDays)
 		{
 			var contests = repository.All()

@@ -5,25 +5,21 @@
 	string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h1>All Problems</h1>
+<h2 class="text-center mb-4">All Problems</h2>
 
-<table class="table">
+<table class="table table-hover">
 	<thead>
-		<tr>
-			<th>
-				Name
-			</th>
-			<th>Actions</th>
+		<tr class="row">
+			<th class="col-md-7">Name</th>
+			<th class="col-md-5">Actions</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach (var task in Model)
 		{
-			<tr>
-				<td>
-					@task.Name
-				</td>
-				<td>
+			<tr class="row">
+				<td class="col-md-7">@task.Name</td>
+				<td class="col-md-5">
 					<a class="btn btn-primary" asp-area="@administrationArea"
 					   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">Add Test</a>
 					<a class="btn btn-primary" asp-area="@administrationArea"
