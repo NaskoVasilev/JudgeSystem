@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using JudgeSystem.Data.Common.Models;
 
     using Microsoft.AspNetCore.Identity;
@@ -19,8 +19,19 @@
 			this.UserContests = new HashSet<UserContest>();
         }
 
-        // Audit info
-        public DateTime CreatedOn { get; set; }
+		[MaxLength(30)]
+		[Required]
+		public string Name { get; set; }
+
+		[MaxLength(30)]
+		[Required]
+		public string Surname { get; set; }
+
+		public string StudentId { get; set; }
+		public Student Student { get; set; }
+
+		// Audit info
+		public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
 
@@ -28,9 +39,6 @@
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
-
-		public string StudentId { get; set; }
-		public Student Student { get; set; }
 
 		public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

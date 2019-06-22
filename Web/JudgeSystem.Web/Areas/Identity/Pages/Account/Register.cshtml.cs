@@ -14,9 +14,7 @@
     using Microsoft.Extensions.Logging;
 
     [AllowAnonymous]
-#pragma warning disable SA1649 // File name should match first type name
     public class RegisterModel : PageModel
-#pragma warning restore SA1649 // File name should match first type name
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
@@ -50,7 +48,14 @@
             returnUrl = returnUrl ?? this.Url.Content("~/");
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new ApplicationUser
+				{
+					UserName = this.Input.Username,
+					Email = this.Input.Email,
+					Name = this.Input.Name,
+					Surname = this.Input.Surname,
+				};
+
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
@@ -84,7 +89,19 @@
 
         public class InputModel
         {
-            [Required]
+			[MinLength(3), MaxLength(30)]
+			[Required]
+			public string Name { get; set; }
+
+			[MinLength(3), MaxLength(30)]
+			[Required]
+			public string Surname { get; set; }
+
+			[Required]
+			[MinLength(5), MaxLength(30)]
+			public string Username { get; set; }
+
+			[Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }

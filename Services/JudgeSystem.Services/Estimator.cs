@@ -5,8 +5,6 @@ namespace JudgeSystem.Services
 {
 	public class Estimator : IEstimator
 	{
-		private const int HoursInDay = 24;
-
 		public TimeRemainingDto CalculateRemainingTime(DateTime endTime)
 		{
 			TimeSpan difference = endTime - DateTime.Now;
