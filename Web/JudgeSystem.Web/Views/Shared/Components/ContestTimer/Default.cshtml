@@ -1,0 +1,16 @@
+﻿@model TimeRemainingDto
+
+<div class="counter">
+	<h5 class="font-weight-normal mt-4 mb-2">
+		Contest: <span class="font-italic">Intro to programming</span>
+	</h5>
+	<h5 class="font-weight-normal">
+		Remaining time:
+		<span class="font-italic">
+			<span id="days">@Model.Days</span> d,
+			<span id="hours">@Model.Hours</span> h,
+			<span id="minutes">@Model.Minutes</span> m and
+			<span id="seconds">@Model.Seconds</span> s
+		</span>
+	</h5>
+</div>

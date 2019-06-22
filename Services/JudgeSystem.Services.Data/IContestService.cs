@@ -15,5 +15,7 @@
 		IEnumerable<ActiveContestViewModel> GetActiveContests();
 
 		IEnumerable<PreviousContestViewModel> GetPreviousContests(int passedDays);
+
+		Task<T> GetById<T>(int contestId);
 	}
 }

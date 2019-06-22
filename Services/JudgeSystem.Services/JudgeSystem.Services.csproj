@@ -5,4 +5,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Web\JudgeSystem.Web.Dtos\JudgeSystem.Web.Dtos.csproj" />
+  </ItemGroup>
+
 </Project>

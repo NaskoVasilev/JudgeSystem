@@ -8,6 +8,10 @@
 }
 
 <h2 class="text-secondary">@Model.Name</h2>
+@if (Model.ContestId.HasValue)
+{
+	<vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
+}
 <div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
 	<h4 class="mb-3 mt-0">Downlaod resources</h4>
 	<ul class="list-group d-flex flex-md-row flex-wrap">
@@ -58,7 +62,6 @@
 				   asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
 			</div>
 		}
-
 	</div>
 	<div class="code-wrapper">
 		<textarea class="d-none" name="code" id="code-holder"></textarea>
@@ -123,4 +126,8 @@
 	</script>
 	<script src="~/js/notification.js"></script>
 	<script src="~/js/controllers/submissionController.js"></script>
+	<script src="~/js/countdown.js"></script>
+	<script>
+		initializeClock();
+	</script>
 }

@@ -9,8 +9,9 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.ViewModels.Contest;
+    using Microsoft.EntityFrameworkCore;
 
-	public class ContestService : IContestService
+    public class ContestService : IContestService
 	{
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
@@ -46,6 +47,12 @@
 				.To<ActiveContestViewModel>()
 				.ToList();
 			return contests;
+		}
+
+		public async Task<T> GetById<T>(int contestId)
+		{
+			var contest = await repository.All().FirstOrDefaultAsync(c => c.Id == contestId);
+			return contest.To<T>();
 		}
 
 		public IEnumerable<PreviousContestViewModel> GetPreviousContests(int passedDays)
