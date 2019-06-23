@@ -1,0 +1,56 @@
+﻿@model ContestAllResultsViewModel
+
+@{
+	ViewData["Title"] = "All contests";
+	string administrationArea = GlobalConstants.AdministrationArea;
+	int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
+	//string url = "/Administration/Contest/All?page={0}";
+	//PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
+}
+
+<h2 class="text-center mb-4">Results for @Model.Name</h2>
+
+	<table class="table table-striped table-responsive-lg table-bordered text-center mx-auto">
+		<thead>
+			<tr class="w-100">
+				<th class="text-center">&#8470;</th>
+				<th class="text-center">Class</th>
+				<th class="text-center">Full name</th>
+				@foreach (var problem in Model.Problems)
+				{
+					<th class="text-center">@problem.Name</th>
+				}
+				<th class="text-center">Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			@{int index = 0; }
+			@foreach (var contestResult in Model.ContestResults)
+			{
+				<tr class="w-100">
+					<td class="text-center">@contestResult.Student.NumberInCalss</td>
+					<td class="text-center">@contestResult.Student.SchoolClassName</td>
+					<td class="text-center">@contestResult.Student.FullName</td>
+					@foreach (var problemId in problemIds)
+					{
+						<td class="text-center">@contestResult.PointsByProblem[problemId]</td>
+					}
+					<td class="text-center">@contestResult.Total</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+@*<partial name="_ServerSidePaginationPartial" model="paginationData" />*@
+
+@*client side pagination example*@
+@*<partial name="_ClientSidePaginationPartial" model="paginationData" />*@
+@*@section Scripts{
+			<script src="~/js/pagination.js"></script>
+			<script>
+				let url = "/Administration/Contest/All?page={pageNumber}";
+				let numberOfPagesUrl = "/Contest/GetNumberOfPages";
+				InitializePaginationList(url, numberOfPagesUrl)
+			</script>
+	}*@

@@ -1,12 +1,12 @@
 ﻿@model PaginationData
 @{
-	int previousPageNumber = Model.CurrentPage--;
+	int previousPageNumber = Model.CurrentPage - 1;
 	if(previousPageNumber <= 0)
 	{
 		previousPageNumber = Model.NumberOfPages;
 	}
-
-	int nextPageNumber = Model.CurrentPage++;
+	
+	int nextPageNumber = Model.CurrentPage + 1;
 	if(nextPageNumber > Model.NumberOfPages)
 	{
 		nextPageNumber = 1;

@@ -10,17 +10,22 @@
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.InputModels.Contest;
 	using JudgeSystem.Web.ViewModels.Contest;
-	using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Web.ViewModels.Problem;
+    using JudgeSystem.Web.ViewModels.Student;
+    using Microsoft.EntityFrameworkCore;
 
 	public class ContestService : IContestService
 	{
-		private const int ContestsPerPage = 2;
+		private const int ContestsPerPage = 20;
 		private readonly IDeletableEntityRepository<Contest> repository;
+		private readonly IEstimator estimator;
 		private readonly IRepository<UserContest> userContestRepository;
 
-		public ContestService(IDeletableEntityRepository<Contest> repository, IRepository<UserContest> userContestRepository)
+		public ContestService(IDeletableEntityRepository<Contest> repository, IEstimator estimator, 
+			IRepository<UserContest> userContestRepository)
 		{
 			this.repository = repository;
+			this.estimator = estimator;
 			this.userContestRepository = userContestRepository;
 		}
 
@@ -108,6 +113,39 @@
 		{
 			int numberOfContests = repository.All().Count();
 			return (int)Math.Ceiling((double)numberOfContests / ContestsPerPage);
+		}
+
+		public ContestAllResultsViewModel GetContestReults(int contestId)
+		{
+			var contestResults = repository.All()
+				.Where(c => c.Id == contestId)
+				.Select(c => new ContestAllResultsViewModel()
+				{
+					Name = c.Name,
+					Problems = c.Lesson.Problems
+					.OrderBy(p => p.CreatedOn)
+					.Select(p => new ContestProblemViewModel
+					{
+						Id = p.Id,
+						Name = p.Name
+					})
+					.ToList(),
+					ContestResults = c.UserContests
+					.Select(uc => new ContestResultViewModel
+					{
+						Student = uc.User.Student.To<StudentBreifInfoViewModel>(),
+						PointsByProblem = uc.User.Submissions
+						.Where(s => s.ContestId == contestId)
+						.GroupBy(s => s.ProblemId)
+						.ToDictionary(s => s.Key, x => x.Max(s => estimator
+						.CalculteProblemPoints(s.Problem.Tests.Count(t => !t.IsTrialTest), s.ExecutedTests
+						.Count(t => t.IsCorrect), s.Problem.MaxPoints)))
+					})
+					.ToList(),
+				})
+				.FirstOrDefault();
+
+			return contestResults;
 		}
 	}
 }

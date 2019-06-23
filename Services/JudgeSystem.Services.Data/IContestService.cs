@@ -28,5 +28,7 @@
 		IEnumerable<ContestViewModel> GetAllConests(int page);
 
 		int GetNumberOfPages();
+
+		ContestAllResultsViewModel GetContestReults(int contestId);
 	}
 }

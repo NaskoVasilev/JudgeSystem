@@ -38,7 +38,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(ContestCreateInputModel model)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				var courses = courseService.GetAllCourses().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
 				ViewData["courses"] = courses;
@@ -74,11 +74,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			ContestEditInputModel contest = await contestService.GetById<ContestEditInputModel>(id);
 			return View(contest);
 		}
-																																																											
-		[HttpPost]	
+
+		[HttpPost]
 		public async Task<IActionResult> Edit(ContestEditInputModel model)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
@@ -87,7 +87,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return RedirectToAction(nameof(ActiveContests));
 		}
 
-		public async Task<IActionResult> Delete (int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			ContestViewModel contest = await contestService.GetById<ContestViewModel>(id);
 			return View(contest);
@@ -101,21 +101,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return RedirectToAction(nameof(ActiveContests));
 		}
 
-		public IActionResult All(int? page)
+		public IActionResult All(int page = DefaultPage)
 		{
 			int numberOfPages = contestService.GetNumberOfPages();
-			if (!page.HasValue)
-			{
-				IEnumerable<ContestViewModel> contests = contestService.GetAllConests(DefaultPage);
-				ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = DefaultPage };
-				return View(model);
-			}
-			else
-			{
-				IEnumerable<ContestViewModel> contests = contestService.GetAllConests(page.Value);
-				ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page.Value };
-				return PartialView(model);
-			}
+			IEnumerable<ContestViewModel> contests = contestService.GetAllConests(page);
+			ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page };
+			return View(model);
+		}
+
+		public IActionResult Results(int id)
+		{
+			var contestResults = contestService.GetContestReults(id);
+			return View(contestResults);
 		}
 	}
 }

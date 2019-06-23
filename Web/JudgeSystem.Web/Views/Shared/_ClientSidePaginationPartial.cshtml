@@ -5,6 +5,10 @@
 	int endPageIndex = Math.Min(Model.NumberOfPages, Model.CurrentPage + GlobalConstants.PaginationOffset);
 }
 
+@startPageIndex
+@endPageIndex
+@Model.CurrentPage
+
 <nav aria-label="Page navigation example">
 	<ul class="pagination">
 		<li class="page-item">
