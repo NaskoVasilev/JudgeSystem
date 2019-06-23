@@ -29,6 +29,8 @@
 
 		int GetNumberOfPages();
 
-		ContestAllResultsViewModel GetContestReults(int contestId);
+		ContestAllResultsViewModel GetContestReults(int contestId, int page);
+
+		int GetContestResultsPagesCount(int contestId);
 	}
 }

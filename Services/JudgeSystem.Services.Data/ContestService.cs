@@ -12,11 +12,13 @@
 	using JudgeSystem.Web.ViewModels.Contest;
     using JudgeSystem.Web.ViewModels.Problem;
     using JudgeSystem.Web.ViewModels.Student;
+
     using Microsoft.EntityFrameworkCore;
 
 	public class ContestService : IContestService
 	{
 		private const int ContestsPerPage = 20;
+		private const int ResultsPerPage = 15;
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IEstimator estimator;
 		private readonly IRepository<UserContest> userContestRepository;
@@ -115,12 +117,13 @@
 			return (int)Math.Ceiling((double)numberOfContests / ContestsPerPage);
 		}
 
-		public ContestAllResultsViewModel GetContestReults(int contestId)
+		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
 		{
 			var contestResults = repository.All()
 				.Where(c => c.Id == contestId)
 				.Select(c => new ContestAllResultsViewModel()
 				{
+					Id = c.Id,
 					Name = c.Name,
 					Problems = c.Lesson.Problems
 					.OrderBy(p => p.CreatedOn)
@@ -131,10 +134,11 @@
 					})
 					.ToList(),
 					ContestResults = c.UserContests
+					.Where(u => u.User.StudentId != null)
 					.Select(uc => new ContestResultViewModel
 					{
 						Student = new StudentBreifInfoViewModel
-						{	
+						{
 							ClassNumber = uc.User.Student.SchoolClass.ClassNumber,
 							ClassType = uc.User.Student.SchoolClass.ClassType.ToString(),
 							FullName = uc.User.Student.FullName,
@@ -143,16 +147,30 @@
 						PointsByProblem = uc.User.Submissions
 						.Where(s => s.ContestId == contestId)
 						.GroupBy(s => s.ProblemId)
-						.ToDictionary(s => s.Key, x => x.Max(s => s.ActualPoints ?? 0))
+						.ToDictionary(s => s.Key, x => x.Max(s => s.ActualPoints))
 					})
 					.OrderBy(cr => cr.Student.ClassNumber)
 					.ThenBy(cr => cr.Student.ClassType)
 					.ThenBy(cr => cr.Student.NumberInCalss)
+					.Skip((page - 1) * ResultsPerPage)
+					.Take(ResultsPerPage)
 					.ToList(),
 				})
 				.FirstOrDefault();
 
 			return contestResults;
+		}
+
+		public int GetContestResultsPagesCount(int contestId)
+		{
+			int count = repository.All()
+				.Include(c => c.UserContests)
+				.ThenInclude(uc => uc.User)
+				.FirstOrDefault(c => c.Id == contestId)
+				.UserContests
+				.Where(uc => uc.User.StudentId != null)
+				.Count();
+			return (int)Math.Ceiling(count / (double)ResultsPerPage);
 		}
 	}
 }

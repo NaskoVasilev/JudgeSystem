@@ -5,6 +5,8 @@ namespace JudgeSystem.Web.ViewModels.Contest
 {
 	public class ContestAllResultsViewModel
 	{
+		public int Id { get; set; }
+
 		public string Name { get; set; }
 
 		public List<ContestResultViewModel> ContestResults { get; set; }

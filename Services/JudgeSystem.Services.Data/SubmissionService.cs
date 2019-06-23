@@ -77,7 +77,7 @@
 			SubmissionResult submissionResult = new SubmissionResult
 			{
 				MaxPoints = submission.Problem.MaxPoints,
-				ActualPoints = submission.ActualPoints ?? 0,
+				ActualPoints = submission.ActualPoints,
 				ExecutedTests = submission.ExecutedTests.Select(t => new ExecutedTestResult
 				{
 					IsCorrect = t.IsCorrect,

@@ -4,51 +4,56 @@
 	ViewData["Title"] = "All contests";
 	string administrationArea = GlobalConstants.AdministrationArea;
 	int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
-	//string url = "/Administration/Contest/All?page={0}";
-	//PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
+	string url = $"/Administration/Contest/Results/{Model.Id}?page={0}";
+	int numberOfPages = (int)ViewData["numberOfPages"];
+	int currentPage = (int)ViewData["currentPage"];
+	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = numberOfPages, CurrentPage = currentPage };
 }
 
 <h2 class="text-center mb-4">Results for @Model.Name</h2>
 
-	<table class="table table-striped table-responsive-lg table-bordered text-center mx-auto">
-		<thead>
-			<tr class="w-100">
-				<th class="text-center">&#8470;</th>
-				<th class="text-center">Class</th>
-				<th class="text-center">Full name</th>
-				@foreach (var problem in Model.Problems)
-				{
-					<th class="text-center">@problem.Name</th>
-				}
-				<th class="text-center">Total</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var contestResult in Model.ContestResults)
+<table class="table table-striped table-responsive-lg table-bordered text-center mx-auto">
+	<thead>
+		<tr class="w-100">
+			<th class="text-center">&#8470;</th>
+			<th class="text-center">Class</th>
+			<th class="text-center">Full name</th>
+			@foreach (var problem in Model.Problems)
 			{
-				<tr class="w-100">
-					<td class="text-center">@contestResult.Student.NumberInCalss</td>
-					<td class="text-center">@contestResult.Student.ClassName</td>
-					<td class="text-center">@contestResult.Student.FullName</td>
-					@foreach (var problemId in problemIds)
-					{
-						<td class="text-center">@contestResult.PointsByProblem[problemId]</td>
-					}
-					<td class="text-center">@contestResult.Total</td>
-				</tr>
+				<th class="text-center">@problem.Name</th>
 			}
-		</tbody>
-	</table>
+			<th class="text-center">Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var contestResult in Model.ContestResults)
+		{
+			<tr class="w-100">
+				<td class="text-center">@contestResult.Student.NumberInCalss</td>
+				<td class="text-center">@contestResult.Student.ClassName</td>
+				<td class="text-center">@contestResult.Student.FullName</td>
+				@foreach (var problemId in problemIds)
+				{
+					int points = 0;
+					if (contestResult.PointsByProblem.ContainsKey(problemId))
+					{
+						points = contestResult.PointsByProblem[problemId];
+					}
+					<td class="text-center">@points</td>
+				}
+				<td class="text-center">@contestResult.Total</td>
+			</tr>
+		}
+	</tbody>
+</table>
 
-@*<partial name="_ServerSidePaginationPartial" model="paginationData" />*@
+<partial name="_ClientSidePaginationPartial" model="paginationData" />
+@section Scripts{
+	<script src="~/js/pagination.js"></script>
+	<script>
+		let url = "/Administration/Contest/Results/@Model.Id?page={pageNumber}";
+		let numberOfPagesUrl = "/Contest/Results/@Model.Id/PagesCount";
+		InitializePaginationList(url, numberOfPagesUrl)
+	</script>
+}
 
-@*client side pagination example*@
-@*<partial name="_ClientSidePaginationPartial" model="paginationData" />*@
-@*@section Scripts{
-			<script src="~/js/pagination.js"></script>
-			<script>
-				let url = "/Administration/Contest/All?page={pageNumber}";
-				let numberOfPagesUrl = "/Contest/GetNumberOfPages";
-				InitializePaginationList(url, numberOfPagesUrl)
-			</script>
-	}*@

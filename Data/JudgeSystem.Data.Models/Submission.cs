@@ -12,6 +12,7 @@
 		{
 			this.SubmisionDate = DateTime.Now;
 			this.ExecutedTests = new HashSet<ExecutedTest>();
+			this.ActualPoints = 0;
 		}
 
 		[Required]
@@ -19,7 +20,7 @@
 
 		public byte[] CompilationErrors { get; set; }
 
-		public int? ActualPoints { get; set; }
+		public int ActualPoints { get; set; }
 
 		public int ProblemId { get; set; }
 		public Problem Problem { get; set; }

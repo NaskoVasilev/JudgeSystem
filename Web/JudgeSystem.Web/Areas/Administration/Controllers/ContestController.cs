@@ -7,6 +7,7 @@ using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,10 +110,27 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-		public IActionResult Results(int id)
+		public IActionResult Results(int id, int? page)
 		{
-			var contestResults = contestService.GetContestReults(id);
-			return View(contestResults);
+			ViewData["numberOfPages"] = contestService.GetContestResultsPagesCount(id);
+			if (page.HasValue)
+			{
+				ViewData["currentPage"] = page;
+				var contestResults = contestService.GetContestReults(id, page.Value);
+				return PartialView(contestResults);
+			}
+			else
+			{
+				ViewData["currentPage"] = DefaultPage;
+				var contestResults = contestService.GetContestReults(id, DefaultPage);
+				return View(contestResults);
+			}
+		}
+
+		[HttpGet("/Contest/Results/{contestId}/PagesCount")]
+		public int GetContestResultPagesCount(int contestId)
+		{
+			return contestService.GetContestResultsPagesCount(contestId);
 		}
 	}
 }
