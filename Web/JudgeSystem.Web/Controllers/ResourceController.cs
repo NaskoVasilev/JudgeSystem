@@ -8,7 +8,9 @@
 
 	using Microsoft.Extensions.FileProviders;
 	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
 	public class ResourceController : BaseController
 	{
 		private readonly IResourceService resourceService;

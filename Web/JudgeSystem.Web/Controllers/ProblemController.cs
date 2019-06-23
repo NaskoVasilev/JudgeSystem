@@ -1,9 +1,9 @@
-﻿using JudgeSystem.Data.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using JudgeSystem.Data.Models;
+
+	using Microsoft.AspNetCore.Identity;
+
 	public class ProblemController : BaseController
 	{
 		private readonly UserManager<ApplicationUser> userManager;

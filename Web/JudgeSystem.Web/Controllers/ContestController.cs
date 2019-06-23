@@ -1,11 +1,9 @@
-﻿using JudgeSystem.Services.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using JudgeSystem.Services.Data;
+
+	using Microsoft.AspNetCore.Authorization;
+
 	public class ContestController : BaseController
 	{
 		private readonly IContestService contestService;
@@ -15,6 +13,7 @@ namespace JudgeSystem.Web.Controllers
 			this.contestService = contestService;
 		}
 
+		[Authorize]
 		public int GetNumberOfPages()
 		{
 			int pagesNumber = contestService.GetNumberOfPages();

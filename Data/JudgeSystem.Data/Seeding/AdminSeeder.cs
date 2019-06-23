@@ -14,6 +14,12 @@
 		public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
 		{
 			IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+			UserManager<ApplicationUser> userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+			ApplicationUser userFromDb = await userManager.FindByNameAsync(configuration["Admin:Name"]);
+			if (userFromDb != null)
+			{
+				return;
+			}
 
 			ApplicationUser user = new ApplicationUser
 			{
@@ -23,7 +29,6 @@
 				Surname = configuration["Admin:Surname"],
 			};
 
-			UserManager<ApplicationUser> userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 			await userManager.CreateAsync(user, configuration["Admin:Password"]);
 			await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
 		}

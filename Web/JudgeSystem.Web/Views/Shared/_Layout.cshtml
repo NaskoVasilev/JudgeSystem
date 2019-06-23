@@ -54,19 +54,22 @@
 							</ul>
 						</li>
 
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Administration
-							</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" asp-area="Administration" asp-controller="Course" asp-action="Create">Create Course</a>
-								<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Contest">Add Contest</a>
-								<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Student">Add Student</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
-								<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="All">All contests</a>
-							</div>
-						</li>
+						@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+						{
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Administration
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" asp-area="Administration" asp-controller="Course" asp-action="Create">Create Course</a>
+									<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Contest">Add Contest</a>
+									<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Student">Add Student</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
+									<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="All">All contests</a>
+								</div>
+							</li>
+						}
 						<form class="form-inline ml-lg-3 my-lg-0">
 							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 							<button class="btn btn-secondary text-white te my-2 my-sm-0" type="submit">Search</button>

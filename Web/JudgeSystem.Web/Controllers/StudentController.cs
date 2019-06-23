@@ -1,16 +1,18 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Web.InputModels.Student;
-using JudgeSystem.Web.ViewModels.Student;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-
-namespace JudgeSystem.Web.Controllers
+﻿namespace JudgeSystem.Web.Controllers
 {
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Common;
+	using JudgeSystem.Data.Models;
+	using JudgeSystem.Services.Data;
+	using JudgeSystem.Web.InputModels.Student;
+	using JudgeSystem.Web.ViewModels.Student;
+
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Mvc;
+
+	[Authorize]
 	public class StudentController : BaseController
 	{
 		private readonly IStudentService studentService;
@@ -57,7 +59,7 @@ namespace JudgeSystem.Web.Controllers
 			return Redirect("/Identity/Account/Manage");
 		}
 
-		[Authorize]
+		[Authorize(Roles = GlobalConstants.StudentRoleName)]
 		public async Task<IActionResult> Profile()
 		{
 			ApplicationUser user = await userManager.GetUserAsync(this.User);

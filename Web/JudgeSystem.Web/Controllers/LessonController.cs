@@ -1,18 +1,19 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
 	using System.Threading.Tasks;
+
 	using JudgeSystem.Common;
 	using JudgeSystem.Services;
 	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.ViewModels.Lesson;
 	using JudgeSystem.Web.InputModels.Lesson;
+	using JudgeSystem.Data.Models;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Identity;
-	using JudgeSystem.Data.Models;
 
+	[Authorize]
 	public class LessonController : BaseController
 	{
 		private readonly ILessonService lessonService;
@@ -20,7 +21,7 @@
 		private readonly IPasswordHashService passwordHashService;
 		private readonly UserManager<ApplicationUser> userManager;
 
-		public LessonController(ILessonService lessonService, IContestService contestService, 
+		public LessonController(ILessonService lessonService, IContestService contestService,
 			IPasswordHashService passwordHashService, UserManager<ApplicationUser> userManager)
 		{
 			this.lessonService = lessonService;
@@ -29,12 +30,11 @@
 			this.userManager = userManager;
 		}
 
-		[Authorize]
 		public async Task<IActionResult> Details(int id, int? contestId)
 		{
 			var lesson = await lessonService.GetLessonInfo(id);
 			lesson.ContestId = contestId;
-			if(contestId.HasValue)
+			if (contestId.HasValue)
 			{
 				string userId = userManager.GetUserId(this.User);
 				await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
@@ -62,7 +62,6 @@
 			return View();
 		}
 
-		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
 		{
