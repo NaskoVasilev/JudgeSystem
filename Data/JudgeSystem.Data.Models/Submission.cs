@@ -19,6 +19,8 @@
 
 		public byte[] CompilationErrors { get; set; }
 
+		public int? ActualPoints { get; set; }
+
 		public int ProblemId { get; set; }
 		public Problem Problem { get; set; }
 

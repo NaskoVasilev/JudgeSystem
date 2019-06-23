@@ -48,6 +48,12 @@
 				.FirstOrDefaultAsync(p => p.Id == id);
 		}
 
+		public int GetProblemMaxPoints(int id)
+		{
+			var problem = problemRepository.All().FirstOrDefault(p => p.Id == id);
+			return problem.MaxPoints;
+		}
+
 		public IEnumerable<LessonProblemViewModel> LesosnProblems(int lessonId)
 		{
 			return problemRepository.All()

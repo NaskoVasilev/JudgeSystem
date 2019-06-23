@@ -24,5 +24,7 @@
 		SubmissionViewModel GetSubmissionDetails(int id);
 
 		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage);
+
+		Task UpdateAndAddActualPoints(int submissionId);
 	}
 }

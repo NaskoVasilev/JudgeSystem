@@ -20,5 +20,7 @@
 		Task<Problem> Update(ProblemEditInputModel model);
 
 		Task Delete(Problem problem);
+
+		int GetProblemMaxPoints(int id);
 	}
 }

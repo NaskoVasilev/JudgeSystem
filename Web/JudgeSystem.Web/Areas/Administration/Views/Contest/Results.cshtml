@@ -24,12 +24,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@{int index = 0; }
 			@foreach (var contestResult in Model.ContestResults)
 			{
 				<tr class="w-100">
 					<td class="text-center">@contestResult.Student.NumberInCalss</td>
-					<td class="text-center">@contestResult.Student.SchoolClassName</td>
+					<td class="text-center">@contestResult.Student.ClassName</td>
 					<td class="text-center">@contestResult.Student.FullName</td>
 					@foreach (var problemId in problemIds)
 					{
@@ -40,7 +39,6 @@
 			}
 		</tbody>
 	</table>
-</div>
 
 @*<partial name="_ServerSidePaginationPartial" model="paginationData" />*@
 

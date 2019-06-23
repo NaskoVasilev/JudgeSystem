@@ -6,10 +6,14 @@
 
 	public class StudentBreifInfoViewModel : IMapFrom<Student>
 	{
-		public string SchoolClassName { get; set; }
+		public int ClassNumber { get; set; }
+
+		public string ClassType { get; set; }
 
 		public int NumberInCalss { get; set; }
 
 		public string FullName { get; set; }
+
+		public string ClassName => $"{ClassNumber} {ClassType}";
 	}
 }

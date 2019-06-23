@@ -1,5 +1,11 @@
 ﻿namespace JudgeSystem.Services.Data
 {
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	using JudgeSystem.Common;
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
@@ -8,22 +14,20 @@
 	using JudgeSystem.Web.Dtos.Submission;
 	using JudgeSystem.Web.InputModels.Submission;
 	using JudgeSystem.Web.ViewModels.Submission;
+
 	using Microsoft.EntityFrameworkCore;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
 	public class SubmissionService : ISubmissionService
 	{
 		private readonly IRepository<Submission> repository;
 		private readonly IEstimator estimator;
+		private readonly IProblemService problemService;
 
-		public SubmissionService(IRepository<Submission> repository, IEstimator estimator)
+		public SubmissionService(IRepository<Submission> repository, IEstimator estimator, IProblemService problemService)
 		{
 			this.repository = repository;
 			this.estimator = estimator;
+			this.problemService = problemService;
 		}
 
 		public async Task<Submission> Create(SubmissionInputModel model, string userId)
@@ -50,9 +54,6 @@
 				.Select(MapSubmissionToSubmissionResult)
 				.FirstOrDefault();
 
-			int passedTests = submissioResult.ExecutedTests.Count(t => t.IsCorrect);
-			submissioResult.ActualPoints = estimator.CalculteProblemPoints(submissioResult.ExecutedTests.Count, passedTests, submissioResult.MaxPoints);
-
 			return submissioResult;
 		}
 
@@ -76,6 +77,7 @@
 			SubmissionResult submissionResult = new SubmissionResult
 			{
 				MaxPoints = submission.Problem.MaxPoints,
+				ActualPoints = submission.ActualPoints ?? 0,
 				ExecutedTests = submission.ExecutedTests.Select(t => new ExecutedTestResult
 				{
 					IsCorrect = t.IsCorrect,
@@ -133,13 +135,38 @@
 				.Select(MapSubmissionToSubmissionResult)
 				.ToList();
 
-			foreach (var submission in submissions)
+			return submissions;
+		}
+
+		public async Task UpdateAndAddActualPoints(int submissionId)
+		{
+			Submission submission = this.repository.All()
+				.Where(s => s.Id == submissionId)
+				.Include(s => s.Problem)
+				.Include(s => s.ExecutedTests)
+				.ThenInclude(e => e.Test)
+				.FirstOrDefault();
+
+			if (submission.CompilationErrors != null && submission.CompilationErrors.Length > 0)
 			{
-				int passedTests = submission.ExecutedTests.Count(t => t.IsCorrect);
-				submission.ActualPoints = estimator.CalculteProblemPoints(submission.ExecutedTests.Count, passedTests, submission.MaxPoints);
+				return;
 			}
 
-			return submissions;
+			int passedTests = submission.ExecutedTests.Count(t => t.IsCorrect && !t.Test.IsTrialTest);
+			int executedTests = submission.ExecutedTests.Count(t => !t.Test.IsTrialTest);
+			int maxPoints = submission.Problem.MaxPoints;
+
+			if (passedTests == 0 || executedTests == 0)
+			{
+				submission.ActualPoints = 0;
+			}
+			else
+			{
+				submission.ActualPoints = estimator.CalculteProblemPoints(executedTests, passedTests, maxPoints);
+			}
+
+			repository.Update(submission);
+			await repository.SaveChangesAsync();
 		}
 	}
 }

@@ -86,9 +86,9 @@
 
 			//TODO make submission compiling and code excution asynchronous
 			await RunTests(submission, submission.ProblemId);
+			await submissionService.UpdateAndAddActualPoints(submission.Id);
 
 			SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);
-
 			return Json(submissionResult);
 		}
 

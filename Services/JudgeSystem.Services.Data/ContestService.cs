@@ -133,14 +133,21 @@
 					ContestResults = c.UserContests
 					.Select(uc => new ContestResultViewModel
 					{
-						Student = uc.User.Student.To<StudentBreifInfoViewModel>(),
+						Student = new StudentBreifInfoViewModel
+						{	
+							ClassNumber = uc.User.Student.SchoolClass.ClassNumber,
+							ClassType = uc.User.Student.SchoolClass.ClassType.ToString(),
+							FullName = uc.User.Student.FullName,
+							NumberInCalss = uc.User.Student.NumberInCalss
+						},
 						PointsByProblem = uc.User.Submissions
 						.Where(s => s.ContestId == contestId)
 						.GroupBy(s => s.ProblemId)
-						.ToDictionary(s => s.Key, x => x.Max(s => estimator
-						.CalculteProblemPoints(s.Problem.Tests.Count(t => !t.IsTrialTest), s.ExecutedTests
-						.Count(t => t.IsCorrect), s.Problem.MaxPoints)))
+						.ToDictionary(s => s.Key, x => x.Max(s => s.ActualPoints ?? 0))
 					})
+					.OrderBy(cr => cr.Student.ClassNumber)
+					.ThenBy(cr => cr.Student.ClassType)
+					.ThenBy(cr => cr.Student.NumberInCalss)
 					.ToList(),
 				})
 				.FirstOrDefault();
