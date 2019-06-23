@@ -17,10 +17,11 @@
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels.Submission;
 
-	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
 	public class SubmissionController : BaseController
 	{
 		private const int SubmissionPerPage = 5;
@@ -77,7 +78,6 @@
 			return Json(submissionsCount);
 		}
 
-		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> Create(SubmissionInputModel model)
 		{

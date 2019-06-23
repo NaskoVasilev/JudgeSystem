@@ -6,7 +6,10 @@
 		</a>
 		<div class="dropdown-menu" id="profile-dropdown" aria-labelledby="navbarDropdown">
 			<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
-			<a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Profile">Student Profile</a>
+			@if (User.IsInRole(GlobalConstants.StudentRoleName))
+			{
+				<a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Profile">Student Profile</a>
+			}
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
 				<button type="submit" class="dropdown-item">Logout</button>
 			</form>

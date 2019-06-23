@@ -7,6 +7,7 @@ namespace JudgeSystem.Web.InputModels.Lesson
 		public int Id { get; set; }
 
 		[DataType(DataType.Password)]
+		[Display(Name = "Lesson Password")]
 		public string LessonPassword { get; set; }
 	}
 }

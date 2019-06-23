@@ -7,30 +7,36 @@
 	string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h2 class="text-secondary">@Model.Name</h2>
+<h2 class="text-secondary text-center">@Model.Name</h2>
 @if (Model.ContestId.HasValue)
 {
 	<vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
 }
-<div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
-	<h4 class="mb-3 mt-0">Downlaod resources</h4>
-	<ul class="list-group d-flex flex-md-row flex-wrap">
-		@foreach (var resource in Model.Resources)
-		{
-			<li class="list-group-item a-holder">
-				<a asp-area="" asp-controller="Resource" asp-action="Download" asp-route-id="@resource.Id">@resource.Name</a>
-			</li>
-		}
-		<li class="list-group-item a-holder">
-			<a asp-area="@administrationArea" asp-controller="Resource"
-			   asp-action="Create" asp-route-lessonId="@Model.Id">Add Resource</a>
-		</li>
-		<li class="list-group-item a-holder">
-			<a asp-area="@administrationArea" asp-controller="Resource"
-			   asp-action="LessonResources" asp-route-lessonId="@Model.Id">All Resources</a>
-		</li>
-	</ul>
-</div>
+@if (Model.Resources.Count > 0 || User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+	<div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
+		<h4 class="mb-3 mt-0">Downlaod resources</h4>
+		<ul class="list-group d-flex flex-md-row flex-wrap">
+			@foreach (var resource in Model.Resources)
+			{
+				<li class="list-group-item a-holder">
+					<a asp-area="" asp-controller="Resource" asp-action="Download" asp-route-id="@resource.Id">@resource.Name</a>
+				</li>
+			}
+			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+			{
+				<li class="list-group-item a-holder">
+					<a asp-area="@administrationArea" asp-controller="Resource"
+					   asp-action="Create" asp-route-lessonId="@Model.Id">Add Resource</a>
+				</li>
+				<li class="list-group-item a-holder">
+					<a asp-area="@administrationArea" asp-controller="Resource"
+					   asp-action="LessonResources" asp-route-lessonId="@Model.Id">All Resources</a>
+				</li>
+			}
+		</ul>
+	</div>
+}
 <div class="border p-3 bg-light">
 	<div class="ul-holder mt-0">
 		<ul class="list-group d-flex flex-md-row">
@@ -38,29 +44,35 @@
 			{
 				<li class="list-group-item problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
 			}
-			<li class="list-group-item a-holder">
-				<a asp-area="@administrationArea" asp-controller="Problem"
-				   asp-action="Create" asp-route-lessonId="@Model.Id">Add Task</a>
-			</li>
-			<li class="list-group-item a-holder">
-				<a asp-area="@administrationArea" asp-controller="Problem"
-				   asp-action="All" asp-route-lessonId="@Model.Id">All Tasks</a>
-			</li>
+			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+			{
+				<li class="list-group-item a-holder">
+					<a asp-area="@administrationArea" asp-controller="Problem"
+					   asp-action="Create" asp-route-lessonId="@Model.Id">Add Task</a>
+				</li>
+				<li class="list-group-item a-holder">
+					<a asp-area="@administrationArea" asp-controller="Problem"
+					   asp-action="All" asp-route-lessonId="@Model.Id">All Tasks</a>
+				</li>
+			}
 		</ul>
 
 		@if (Model.Problems.Count > 0)
 		{
 			<h3 class="mt-3 text-secondary" id="problemName">01. @firstProblem.Name</h3>
-			<div class="mt-3">
-				<a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
-				   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
-				<a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
-				   asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
-				<a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
-				   asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
-				<a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
-				   asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
-			</div>
+			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+			{
+				<div class="mt-3" id="admin-buttons">
+					<a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
+					<a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
+					   asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
+					<a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
+					<a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
+					   asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
+				</div>
+			}
 		}
 	</div>
 	<div class="code-wrapper">
@@ -127,7 +139,11 @@
 	<script src="~/js/notification.js"></script>
 	<script src="~/js/controllers/submissionController.js"></script>
 	<script src="~/js/countdown.js"></script>
-	<script>
-		initializeClock();
-	</script>
+
+	@if (Model.ContestId.HasValue)
+	{
+		<script>
+			initializeClock();
+		</script>
+	}
 }

@@ -37,22 +37,25 @@ $(".problem-name").on("click", (e) => {
 
 	$('#problemName')[0].innerText = e.target.textContent;
 
-	let editProblemBtnHrefAttribute = $('#editProblemBtn').attr('href');
-	editProblemBtnHrefAttribute = editProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
-	$('#editProblemBtn').attr('href', editProblemBtnHrefAttribute);
+	if ($("#admin-buttons").length > 0) {
+		let editProblemBtnHrefAttribute = $('#editProblemBtn').attr('href');
+		editProblemBtnHrefAttribute = editProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
+		$('#editProblemBtn').attr('href', editProblemBtnHrefAttribute);
 
-	let deleteProblemBtnHrefAttribute = $('#deleteProblemBtn').attr('href');
-	deleteProblemBtnHrefAttribute = deleteProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
-	$('#deleteProblemBtn').attr('href', deleteProblemBtnHrefAttribute);
+		let deleteProblemBtnHrefAttribute = $('#deleteProblemBtn').attr('href');
+		deleteProblemBtnHrefAttribute = deleteProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
+		$('#deleteProblemBtn').attr('href', deleteProblemBtnHrefAttribute);
 
-	let addTestHrefAttribute = $('#addTestBtn').attr('href');
-	addTestHrefAttribute = addTestHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
-	$('#addTestBtn').attr('href', addTestHrefAttribute);
+		let addTestHrefAttribute = $('#addTestBtn').attr('href');
+		addTestHrefAttribute = addTestHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
+		$('#addTestBtn').attr('href', addTestHrefAttribute);
 
-	let allTestsBtnHrefAttribute = $('#allTestsBtn').attr('href');
-	allTestsBtnHrefAttribute = allTestsBtnHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
-	$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
+		let allTestsBtnHrefAttribute = $('#allTestsBtn').attr('href');
+		allTestsBtnHrefAttribute = allTestsBtnHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
+		$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
 
+	}
+	
 	let page = 1;
 	genratePaginationPages(id);
 	getSubmissions(id, page);

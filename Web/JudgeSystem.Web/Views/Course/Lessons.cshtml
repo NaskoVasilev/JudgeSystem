@@ -5,8 +5,8 @@
 	this.ViewData["Title"] = courseName;
 }
 
+<h2 class="text-center text-secondary mb-4">@courseName</h2>
 <div class="row">
-	<h2>@courseName</h2>
 	<table class="table table">
 		<tbody>
 			@foreach (var lesson in Model)
@@ -15,32 +15,38 @@
 					<td class="a-holder">
 						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
 					</td>
-					<td>
-						@if (lesson.Contests.Any())
-						{
-							<div class="dropdown">
-								<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Compete
-								</button>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-									@foreach (var contest in lesson.Contests)
-									{
-										<a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
-										   asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
-									}
+					@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+					{
+						<td>
+							@if (lesson.Contests.Any())
+							{
+								<div class="dropdown">
+									<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Compete
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										@foreach (var contest in lesson.Contests)
+										{
+											<a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
+											   asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
+										}
+									</div>
 								</div>
-							</div>
-						}
-					</td>
+							}
+						</td>
+					}
 					<td>
 						<i class="fas fa-file"></i>
 						@lesson.ProblemsCount
 					</td>
-					<td>
-						<a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson" 
-						   asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
-						<button class="btn btn-danger lessonDeleteBtn" data-id="@lesson.Id">Delete</button>
-					</td>
+					@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+					{
+						<td>
+							<a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+							   asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
+							<button class="btn btn-danger lessonDeleteBtn" data-id="@lesson.Id">Delete</button>
+						</td>
+					}
 				</tr>
 			}
 		</tbody>
@@ -48,7 +54,7 @@
 </div>
 
 
-@section Scripts{ 
+@section Scripts{
 	<script src="~/js/notification.js"></script>
 	<script src="~/js/controllers/lessonController.js"></script>
 }
