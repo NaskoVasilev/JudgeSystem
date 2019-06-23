@@ -6,11 +6,9 @@
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;
 
-	//TODO: Only for admin and teachers
-	//[Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+	[Authorize(Roles = GlobalConstants.AdministratorRoleName)]
 	[Area("Administration")]
 	public class AdministrationBaseController : BaseController
 	{
-		
 	}
 }
