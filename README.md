@@ -3,6 +3,7 @@
 
 ## Description
 This is a judge system, similar to SoftUni judge but a bit more simple.
+It can evaluate user' programming code automatically.
 Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
