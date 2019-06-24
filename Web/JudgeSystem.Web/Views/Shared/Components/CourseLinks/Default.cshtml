@@ -8,7 +8,8 @@
 @foreach (var course in Model)
 	{
 		<li class="dropdown-submenu"  id="course-@course.Id">
-			<a class="dropdown-item" tabindex="-1" href="#">@course.Name</a>
+			<a class="dropdown-item" tabindex="-1" asp-area="" asp-controller="Course" 
+			   asp-action="Details" asp-route-id="@course.Id">@course.Name</a>
 			<ul class="dropdown-menu">
 				@foreach (var lessonType in lessonTypes)
 				{

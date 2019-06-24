@@ -1,12 +1,15 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-	using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.Infrastructure.Extensions;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.Infrastructure.Extensions;
+    using JudgeSystem.Web.ViewModels.Course;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
-	using Microsoft.AspNetCore.Mvc;
-
-	public class CourseController : BaseController
+    public class CourseController : BaseController
 	{
 		private readonly ILessonService lessonService;
 		private readonly ICourseService courseService;
@@ -16,6 +19,15 @@
 			this.courseService = courseService;
 			this.lessonService = lessonService;
 		}
+
+		public async Task<IActionResult> Details(int id)
+		{
+			ViewData["lessonTypes"] = EnumExtensions.GetEnumValuesAsString<LessonType>();
+			Course course = await courseService.GetById(id);
+			CourseViewModel model = course.To<CourseViewModel>();
+			return this.View(model);
+		}
+
 
 		public IActionResult All()
 		{

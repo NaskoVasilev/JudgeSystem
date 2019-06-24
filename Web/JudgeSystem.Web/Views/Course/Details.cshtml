@@ -1,0 +1,33 @@
+﻿@model CourseViewModel
+
+@{
+	this.ViewData["Title"] = Model.Name;
+	string administrationArea = GlobalConstants.AdministrationArea;
+	IEnumerable<string> lessonTypes = ViewData["lessonTypes"] as IEnumerable<string>;
+}
+
+<div class="row">
+	<div class="all-courses">
+
+	</div>
+	<div>
+		<h2 class="text-secondary text-center">@Model.Name</h2>
+		<table class="table table-striped">
+			@foreach (var lessonType in lessonTypes)
+			{
+				<tr>
+					<td>
+						<a class="text-decoration-none text-dark font-weight-bold"
+						   asp-area=""
+						   asp-controller="Course"
+						   asp-action="Lessons"
+						   asp-route-courseId="@Model.Id"
+						   asp-route-lessonType="@lessonType">
+							@($"{Model.Name} - {lessonType}s")
+						</a>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>

@@ -15,7 +15,11 @@
 				<tr>
 					<td>
 						<i class="fas fa-chevron-left rotate"></i>
-						@course.Name
+						<a class="text-dark" tabindex="-1" asp-area="" asp-controller="Course"
+						   asp-action="Details" asp-route-id="@course.Id">
+							@course.Name
+						</a>
+							
 						<ul class="list-group hidden-element borderless">
 							@foreach (var lessonType in lessonTypes)
 							{
