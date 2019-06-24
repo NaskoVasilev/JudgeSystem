@@ -8,5 +8,7 @@ namespace JudgeSystem.Services.Data
 		List<UserCompeteResultViewModel> GetContestResults(string userId);
 
 		List<UserPracticeResultViewModel> GetPracticetResults(string userId);
+
+		IEnumerable<UserCompeteResultViewModel> GetUserExamResults(string userId);
 	}
 }

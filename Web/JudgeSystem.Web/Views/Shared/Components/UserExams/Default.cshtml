@@ -1,0 +1,28 @@
+﻿@model IEnumerable<UserCompeteResultViewModel>
+
+@if (Model.Any())
+{
+	<table class="table table-striped">
+		<thead>
+			<tr class="row">
+				<th class="col-sm-9">Exam name</th>
+				<th class="col-sm-3">Results</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var examResult in Model)
+			{
+				<tr class="row">
+					<td class="col-sm-9">
+						<a class="text-decoration-none" asp-action="Details" asp-area="" asp-controller="Lesson" asp-route-id="@examResult.LessonId">@examResult.ContestName</a>
+					</td>
+					<td class="col-sm-3">@examResult.ActualPoints / @examResult.MaxPoints</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<h5 class="text-info">You have not participated in exmas yet.</h5>
+}

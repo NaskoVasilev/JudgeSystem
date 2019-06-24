@@ -4,6 +4,7 @@
     using System.Linq;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
+    using JudgeSystem.Data.Models.Enums;
     using JudgeSystem.Web.ViewModels.User;
     using Microsoft.EntityFrameworkCore;
 
@@ -59,6 +60,26 @@
 				.ToList();
 
 			return result;
+		}
+
+		public IEnumerable<UserCompeteResultViewModel> GetUserExamResults(string userId)
+		{
+			var exams = repository.All()
+				.Where(u => u.Id == userId)
+				.SelectMany(u => u.UserContests)
+				.Select(uc => uc.Contest)
+				.Where(c => c.Lesson.Type == LessonType.Exam)
+				.Select(c => new UserCompeteResultViewModel
+				{
+					ContestName = c.Name,
+					LessonId = c.LessonId,
+					MaxPoints = c.Lesson.Problems.Where(p => !p.IsExtraTask).Sum(p => p.MaxPoints),
+					ActualPoints = c.Submissions.GroupBy(s => s.ProblemId)
+					.Sum(submissionGroup => submissionGroup.Max(submission => submission.ActualPoints))
+				})
+				.ToList();
+
+			return exams;
 		}
 	}
 }
