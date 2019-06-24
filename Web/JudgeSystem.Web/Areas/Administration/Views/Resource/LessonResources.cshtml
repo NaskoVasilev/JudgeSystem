@@ -5,7 +5,11 @@
 	string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h1>All Resources</h1>
+<h1 class="text-center mb-3">All Resources</h1>
+
+<div class="d-flex justify-content-center mb-3">
+	<a class="btn btn-outline-primary" asp-area="" asp-action="Details" asp-controller="Lesson" asp-route-id="@ViewData["lessonId"]">Back to lesson</a>
+</div>
 
 <table class="table">
 	<thead>

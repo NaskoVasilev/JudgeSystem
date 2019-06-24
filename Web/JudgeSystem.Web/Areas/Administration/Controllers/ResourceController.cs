@@ -51,6 +51,7 @@
 
 		public IActionResult LessonResources(int lessonId)
 		{
+			ViewData["lessonId"] = lessonId;
 			IEnumerable<ResourceViewModel> resources = resourceService.LessonResources(lessonId);
 
 			return View(resources);

@@ -1,26 +1,29 @@
-﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.ViewModels.Test;
+using JudgeSystem.Web.InputModels.Test;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.ViewModels.Test;
-	using JudgeSystem.Web.InputModels.Test;
-
-	using Microsoft.AspNetCore.Mvc;
-
 	public class TestController : AdministrationBaseController
 	{
 		private readonly ITestService testService;
+		private readonly IProblemService problemService;
 
-		public TestController(ITestService testService)
+		public TestController(ITestService testService, IProblemService problemService)
 		{
 			this.testService = testService;
+			this.problemService = problemService;
 		}
 
-		public IActionResult ProblemTests(int problemId)
+		public async Task<IActionResult> ProblemTests(int problemId)
 		{
+			ViewData["lessonId"] = await problemService.GetLessonId(problemId);
 			var tests = testService.TestsByProblem(problemId);
 			return View(tests);
 		}

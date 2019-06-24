@@ -49,6 +49,12 @@
 				.FirstOrDefaultAsync(p => p.Id == id);
 		}
 
+		public async Task<int> GetLessonId(int problemId)
+		{
+			Problem problem = await GetById(problemId);
+			return problem.LessonId;
+		}
+
 		public int GetProblemMaxPoints(int id)
 		{
 			var problem = problemRepository.All().FirstOrDefault(p => p.Id == id);

@@ -38,12 +38,13 @@
 			}
 
 			Problem problem = await problemService.Create(model);
-			return RedirectToAction(nameof(AddTest), "Problem", 
-				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id});
+			return RedirectToAction(nameof(AddTest), "Problem",
+				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id });
 		}
 
 		public IActionResult All(int lessonId)
 		{
+			ViewData["lessonId"] = lessonId;
 			var problems = problemService.LesosnProblems(lessonId);
 			return View(problems);
 		}
@@ -51,7 +52,7 @@
 		public async Task<IActionResult> Edit(int id)
 		{
 			Problem problem = await problemService.GetById(id);
-			if(problem == null)
+			if (problem == null)
 			{
 				string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "problem");
 				return this.ShowError(errorMessage, "All", "Problem", GlobalConstants.AdministrationArea);
@@ -70,7 +71,7 @@
 			}
 
 			Problem problem = await problemService.Update(model);
-			return RedirectToAction(nameof(All), "Problem", 
+			return RedirectToAction(nameof(All), "Problem",
 				new { area = GlobalConstants.AdministrationArea, problem.LessonId });
 		}
 
@@ -93,7 +94,7 @@
 			Problem problem = await problemService.GetById(model.Id);
 			int lessonId = problem.LessonId;
 
-			if(problem == null)
+			if (problem == null)
 			{
 				this.ThrowEntityNullException(nameof(problem));
 			}
@@ -104,8 +105,9 @@
 				new { id = lessonId });
 		}
 
-		public IActionResult AddTest()
+		public async Task<IActionResult> AddTest(int problemId)
 		{
+			ViewData["lessonId"] = await problemService.GetLessonId(problemId);
 			return View();
 		}
 
@@ -114,6 +116,7 @@
 		{
 			if (!ModelState.IsValid)
 			{
+				ViewData["lessonId"] = await problemService.GetLessonId(model.ProblemId);
 				return View(model);
 			}
 

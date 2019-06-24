@@ -24,6 +24,7 @@
 
 		public int CourseId { get; set; }
 
+		[Display(Name = "Lesson Password")]
 		[DataType(DataType.Password)]
 		public string LessonPassword { get; set; }
 

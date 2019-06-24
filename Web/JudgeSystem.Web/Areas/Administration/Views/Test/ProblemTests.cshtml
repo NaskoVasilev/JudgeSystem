@@ -5,7 +5,11 @@
 	int testNumber = 1;
 }
 
-<h1>Problem Tests</h1>
+<h2 class="text-center mb-3">Problem Tests</h2>
+<div class="d-flex justify-content-center mb-3">
+	<a class="btn btn-outline-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
+	   asp-route-lessonId="@ViewData["lessonId"]">Back to all problems</a>
+</div>
 @foreach (TestViewModel test in Model)
 {
 	<div>

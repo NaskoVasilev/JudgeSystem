@@ -25,5 +25,7 @@
 		IEnumerable<SearchProblemViewModel> SerchByName(string keyword);
 
 		int GetProblemMaxPoints(int id);
+
+		Task<int> GetLessonId(int problemId);
 	}
 }
