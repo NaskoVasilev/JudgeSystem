@@ -1,0 +1,66 @@
+﻿@using JudgeSystem.Web.Infrastructure.Extensions
+@using JudgeSystem.Data.Models.Enums
+@model IEnumerable<StudentProfileViewModel>
+
+@{
+	ViewData["Title"] = "Students";
+
+}
+<div class="d-flex justify-content-center border pt-3 pb-2 mb-4">
+	<form class="form-inline">
+		<div class="form-group mb-2">
+			<label class="font-weight-bold mr-3">Class number:</label>
+			<select class="form-control" name="classNumber" id="classNumber">
+				<option disabled selected>Class number</option>
+				@for (int i = GlobalConstants.MinClassNumber; i <= GlobalConstants.MaxClassNumber; i++)
+				{
+					<option value="@i">@i</option>
+				}
+			</select>
+		</div>
+		<div class="form-group mx-sm-3 mb-2">
+			<label class="font-weight-bold mr-3">Class type:</label>
+			<select class="form-control" name="classType" id="classType">
+				<option disabled selected>Class type</option>
+				@foreach (var classType in EnumExtensions.GetEnumValuesAsString<SchoolClassType>())
+				{
+					<option value="@classType">@classType</option>
+				}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-success mb-2">Search</button>
+	</form>
+</div>
+<div>
+	<table class="table table-striped">
+		<thead>
+			<tr class="row">
+				<th class="col-md-1">&#8470;</th>
+				<th class="col-md-1">Class</th>
+				<th class="col-md-4">Full name</th>
+				<th class="col-md-4">Email</th>
+				<th class="col-md-2">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var student in Model)
+			{
+				<tr class="row">
+					<td class="col-md-1">@student.NumberInCalss</td>
+					<td class="col-md-1">@student.SchoolClassName</td>
+					<td class="col-md-4">@student.FullName</td>
+					<td class="col-md-4">@student.Email</td>
+					<td class="col-md-2">
+						<a class="text-success mx-3" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id">
+							<i class="fas fa-user-edit font-size-20"></i>
+
+						</a>
+						<a class="text-danger" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="Delete" asp-route-id="@student.Id">
+							<i class="fas fa-user-slash font-size-20"></i>
+						</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

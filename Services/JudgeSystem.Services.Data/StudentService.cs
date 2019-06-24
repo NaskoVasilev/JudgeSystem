@@ -1,11 +1,14 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Common.Repositories;
+	using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.ViewModels.Student;
+	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.ViewModels.Student;
 
 	using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +41,38 @@
 		{
 			string activationKeyHash = passwordHashService.HashPassword(activationKey);
 			return repository.All().FirstOrDefaultAsync(s => s.ActivationKeyHash == activationKeyHash);
+		}
+
+		public IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType)
+		{
+			IQueryable<Student> students = null;
+
+			if (classNumber.HasValue && classType.HasValue)
+			{
+				students = repository.All()
+					.Where(s => s.SchoolClass.ClassNumber == classNumber.Value && s.SchoolClass.ClassType == classType.Value);
+			}
+			else if(classNumber.HasValue)
+			{
+				students = repository.All()
+					.Where(s => s.SchoolClass.ClassNumber == classNumber.Value);
+			}
+			else if(classType.HasValue)
+			{
+				SchoolClassType schoolClassType = (SchoolClassType)classType;
+				students = repository.All()
+					.Where(s => s.SchoolClass.ClassType == classType.Value);
+			}
+			else
+			{
+				return new List<StudentProfileViewModel>();
+			}
+			
+			return students
+				.OrderBy(s => s.SchoolClass.ClassNumber)
+				.ThenBy(s => s.SchoolClass.ClassType)
+				.ThenBy(s => s.SchoolClass)
+				.To<StudentProfileViewModel>().ToList();
 		}
 
 		public async Task SetStudentProfileAsActivated(Student student)

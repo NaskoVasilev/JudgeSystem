@@ -6,6 +6,7 @@
 		</a>
 		<div class="dropdown-menu" id="profile-dropdown" aria-labelledby="navbarDropdown">
 			<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
+			<a class="dropdown-item" asp-area="" asp-action="Results" asp-controller="User">Results</a>
 			@if (User.IsInRole(GlobalConstants.StudentRoleName))
 			{
 				<a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Profile">Student Profile</a>

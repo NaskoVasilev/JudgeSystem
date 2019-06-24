@@ -2,10 +2,12 @@
 {
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Data.Models;
-using AutoMapper;
+	using AutoMapper;
 
 	public class StudentProfileViewModel : IMapFrom<Student>, IHaveCustomMappings
 	{
+		public string Id { get; set; }
+
 		public string FullName { get; set; }
 
 		public string Email { get; set; }

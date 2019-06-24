@@ -292,3 +292,7 @@ input[type=file] {
     font-size: 50px;
     color: orange;
 }
+
+.font-size-20{
+    font-size: 20px;
+}

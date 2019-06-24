@@ -110,8 +110,9 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICourseService, CourseService>();
-            services.AddTransient<ILessonService, LessonService>();
+			services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<IProblemService, ProblemService>();
             services.AddTransient<ISubmissionService, SubmissionService>();

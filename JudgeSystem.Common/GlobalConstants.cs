@@ -45,5 +45,9 @@
 		public const int PaginationOffset = 5;
 
 		public const int SearchKeywordMinLength = 3;
+
+		public const int MinClassNumber = 8;
+
+		public const int MaxClassNumber = 12;
 	}
 }

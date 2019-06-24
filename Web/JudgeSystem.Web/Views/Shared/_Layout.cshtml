@@ -61,12 +61,13 @@
 									Administration
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" asp-area="Administration" asp-controller="Course" asp-action="Create">Create Course</a>
-									<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Contest">Add Contest</a>
-									<a class="dropdown-item" asp-area="Administration" asp-action="Create" asp-controller="Student">Add Student</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Course" asp-action="Create">Create Course</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Contest">Add Contest</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Student">Add Student</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
-									<a class="dropdown-item" asp-area="Administration" asp-controller="Contest" asp-action="All">All contests</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="All">All contests</a>
+									<a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass">Students</a>
 								</div>
 							</li>
 						}

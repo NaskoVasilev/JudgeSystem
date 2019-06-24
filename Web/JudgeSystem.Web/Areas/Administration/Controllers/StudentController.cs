@@ -8,12 +8,14 @@
 
 	using JudgeSystem.Common;
 	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
+    using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Services.Data;
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Services.Messaging;
 	using JudgeSystem.Web.InputModels.Student;
+    using JudgeSystem.Web.ViewModels.Student;
 
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.Rendering;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
@@ -64,6 +66,21 @@
 			return Redirect("/");
 		}
 
+		public IActionResult StudentsByClass(int? classNumber, SchoolClassType? classType)
+		{
+			//SchoolClassType? schoolClassType = null;
+			//if(classType != null)
+			//{
+			//	bool isValidClassType = Enum.TryParse(classType, out SchoolClassType parsedClassType);
+			//	if (isValidClassType)
+			//	{
+			//		schoolClassType = parsedClassType;
+			//	}
+			//}
+			IEnumerable<StudentProfileViewModel> students = studentService.SearchStudentsByClass(classNumber, classType);
+			return View(students);
+		}
+
 		[NonAction]
 		private async Task<bool> SendActivationEmail(string activationKey, string toAddress)
 		{
@@ -88,6 +105,7 @@
 			return true;
 		}
 
+		[NonAction]
 		private async Task<string> ReadEmailTemplateAsync()
 		{
 			string activationTemplateName = "StudentProfileActivation.html";
