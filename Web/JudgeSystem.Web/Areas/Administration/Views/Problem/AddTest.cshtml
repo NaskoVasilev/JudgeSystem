@@ -6,7 +6,7 @@
 
 <h2 class="text-center">@ViewData["Title"]</h2>
 <div class="row">
-	<div class="col-md-8" >
+	<div class="col-md-12">
 		<section>
 			<form method="post">
 				<div asp-validation-summary="All" class="text-danger"></div>
@@ -35,3 +35,25 @@
 		</section>
 	</div>
 </div>
+
+<script src="~/lib/codemirror/codemirror.js"></script>
+<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
+<script>
+	let inputDataTextarea = document.getElementById('InputData');
+	var inputDataTextEditor = CodeMirror.fromTextArea(inputDataTextarea,
+		{
+			lineNumbers: true,
+			matchBrackets: true,
+			mode: "text/x-c++src"
+		});
+	inputDataTextEditor.setSize("100%", "200px");
+
+	let outputDataTextarea = document.getElementById('OutputData');
+	var outputDataTextEditor = CodeMirror.fromTextArea(outputDataTextarea,
+		{
+			lineNumbers: true,
+			matchBrackets: true,
+			mode: "text/x-c++src"
+		});
+	outputDataTextEditor.setSize("100%", "200px");
+</script>
