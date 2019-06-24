@@ -27,7 +27,7 @@ passionate about programming and may become successfull developers one day.
  
  ## Users in role "Student"
   - All the functionalities of logged in user
-  - Take part of competitions(Send solutions in practice mode)
+  - Take part of competitions(Send solutions in compete mode)
   - Take part in exam and receive grade
   - Informtion about all passed exams is available in their profile
   - Participate in all contests available in the home page
