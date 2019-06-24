@@ -12,6 +12,7 @@
 	using JudgeSystem.Web.InputModels.Problem;
 
 	using Microsoft.EntityFrameworkCore;
+	using JudgeSystem.Web.ViewModels.Search;
 
 	public class ProblemService : IProblemService
 	{
@@ -60,6 +61,17 @@
 				.Where(p => p.LessonId == lessonId)
 				.To<LessonProblemViewModel>()
 				.ToList();
+		}
+
+		public IEnumerable<SearchProblemViewModel> SerchByName(string keyword)
+		{
+			keyword = keyword.ToLower();
+			var results = problemRepository.All()
+				.Where(p => p.Name.ToLower().Contains(keyword))
+				.To<SearchProblemViewModel>()
+				.ToList();
+
+			return results;
 		}
 
 		public async Task<Problem> Update(ProblemEditInputModel model)

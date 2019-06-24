@@ -6,6 +6,7 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.InputModels.Problem;
 	using JudgeSystem.Web.ViewModels.Problem;
+	using JudgeSystem.Web.ViewModels.Search;
 
 	public  interface IProblemService
 	{
@@ -20,6 +21,8 @@
 		Task<Problem> Update(ProblemEditInputModel model);
 
 		Task Delete(Problem problem);
+
+		IEnumerable<SearchProblemViewModel> SerchByName(string keyword);
 
 		int GetProblemMaxPoints(int id);
 	}

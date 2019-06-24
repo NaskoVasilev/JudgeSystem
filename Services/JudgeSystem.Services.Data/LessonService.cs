@@ -14,6 +14,7 @@
 
 	using Microsoft.EntityFrameworkCore;
 	using JudgeSystem.Web.Dtos.Lesson;
+	using JudgeSystem.Web.ViewModels.Search;
 
 	public class LessonService : ILessonService
 	{
@@ -76,6 +77,18 @@
 				.Include(l => l.Resources)
 				.FirstOrDefaultAsync(l => l.Id == id);
 			return lesson.To<Lesson, LessonViewModel>();
+		}
+
+		public IEnumerable<SearchLessonViewModel> SearchByName(string keyword)
+		{
+			keyword = keyword.ToLower();
+			var results = repository.All()
+				.Where(l => l.Name.ToLower().Contains(keyword))
+				.To<SearchLessonViewModel>()
+				.ToList();
+
+			return results;
+
 		}
 
 		public async Task Update(Lesson lesson)

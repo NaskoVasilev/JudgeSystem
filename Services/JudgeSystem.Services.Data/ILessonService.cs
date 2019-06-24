@@ -8,6 +8,7 @@
 	using JudgeSystem.Web.Dtos.Lesson;
 	using JudgeSystem.Web.InputModels.Lesson;
 	using JudgeSystem.Web.ViewModels.Lesson;
+	using JudgeSystem.Web.ViewModels.Search;
 
 	public interface ILessonService
 	{
@@ -24,5 +25,7 @@
 		Task Delete(Lesson lesson);
 
 		IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType);
+
+		IEnumerable<SearchLessonViewModel> SearchByName(string keyword);
 	}
 }
