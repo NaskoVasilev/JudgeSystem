@@ -1,13 +1,14 @@
 ﻿namespace JudgeSystem.Services.Data
 {
 	using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using JudgeSystem.Common;
-    using JudgeSystem.Data.Common.Repositories;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Web.InputModels.Student;
 	using JudgeSystem.Web.ViewModels.Student;
 
 	using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,33 @@
 			await repository.AddAsync(student);
 			await repository.SaveChangesAsync();
 			return student;
+		}
+
+		public async Task DeleteAsync(Student student)
+		{
+			this.repository.Delete(student);
+			await this.repository.SaveChangesAsync();
+		}
+
+		public async Task<T> GetById<T>(string id)
+		{
+			var student = await repository.All()
+				.Where(s => s.Id == id)
+				.To<T>()
+				.FirstOrDefaultAsync();
+
+			return student;
+		}
+
+		public async Task<Student> GetById(string id)
+		{
+			return await repository.All().FirstOrDefaultAsync(s => s.Id == id);
+		}
+
+		public async Task<SchoolClass> GetStudentClassAsync(string id)
+		{
+			Student student = await this.repository.All().Include(s => s.SchoolClass).FirstOrDefaultAsync(s => s.Id == id);
+			return student.SchoolClass;
 		}
 
 		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
@@ -80,6 +108,18 @@
 			student.IsActivated = true;
 			repository.Update(student);
 			await repository.SaveChangesAsync();
+		}
+
+		public async Task<Student> UpdateAsync(StudentEditInputModel model)
+		{
+			Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
+			student.FullName = model.FullName;
+			student.Email = model.Email;
+			student.NumberInCalss = model.NumberInCalss;
+			student.SchoolClassId = model.SchoolClassId;
+			repository.Update(student);
+			await repository.SaveChangesAsync();
+			return student;
 		}
 	}
 }

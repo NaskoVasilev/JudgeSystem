@@ -5,6 +5,7 @@
 
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Data.Models.Enums;
+	using JudgeSystem.Web.InputModels.Student;
 	using JudgeSystem.Web.ViewModels.Student;
 
 	public interface IStudentService
@@ -18,5 +19,15 @@
 		Task<StudentProfileViewModel> GetStudentInfo(string studentId);
 
 		IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType);
+
+		Task<T> GetById<T>(string id);
+
+		Task<Student> UpdateAsync(StudentEditInputModel model);
+
+		Task DeleteAsync(Student student);
+
+		Task<SchoolClass> GetStudentClassAsync(string id);
+
+		Task<Student> GetById(string id);
 	}
 }

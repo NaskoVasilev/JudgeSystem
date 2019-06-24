@@ -2,17 +2,20 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using JudgeSystem.Services.Mapping;
+	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Data.Models;
     using JudgeSystem.Common;
 
-    public class StudentCreateInputModel : IMapTo<Student>
+    public class StudentEditInputModel : IMapFrom<Student>, IMapTo<Student>
 	{
 		public const int FullnameMinLength = 5;
 		public const int FullnameMaxLength = 100;
 
 		[Required]
-		[MinLength(FullnameMinLength), MaxLength(FullnameMaxLength)]
+		public string Id { get; set; }
+
+		[Required]
+		[StringLength(FullnameMaxLength, MinimumLength = FullnameMinLength)]
 		public string FullName { get; set; }
 
 		[EmailAddress]

@@ -68,17 +68,47 @@
 
 		public IActionResult StudentsByClass(int? classNumber, SchoolClassType? classType)
 		{
-			//SchoolClassType? schoolClassType = null;
-			//if(classType != null)
-			//{
-			//	bool isValidClassType = Enum.TryParse(classType, out SchoolClassType parsedClassType);
-			//	if (isValidClassType)
-			//	{
-			//		schoolClassType = parsedClassType;
-			//	}
-			//}
 			IEnumerable<StudentProfileViewModel> students = studentService.SearchStudentsByClass(classNumber, classType);
 			return View(students);
+		}
+
+		public async Task<IActionResult> Edit(string id)
+		{
+			ViewData["classes"] = GetSchoolClassesAsSelectListItem();
+			var model = await studentService.GetById<StudentEditInputModel>(id);
+			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(StudentEditInputModel model)
+		{
+			if(!ModelState.IsValid)
+			{
+				ViewData["classes"] = GetSchoolClassesAsSelectListItem();
+				return View(model);
+			}
+
+			Student student = await studentService.UpdateAsync(model);
+			SchoolClass schoolClass = await studentService.GetStudentClassAsync(student.Id);
+			return RedirectToAction(nameof(StudentsByClass), 
+				new { classNumber = schoolClass.ClassNumber, classType = schoolClass.ClassType });
+		}
+
+		public async Task<IActionResult> Delete(string id)
+		{
+			var model = await studentService.GetById<StudentProfileViewModel>(id);
+			return View(model);
+		}
+
+		[HttpPost]
+		[ActionName(nameof(Delete))]
+		public async Task<IActionResult> DeletePost(string id)
+		{
+			Student student = await studentService.GetById(id);
+			SchoolClass schoolClass = await studentService.GetStudentClassAsync(student.Id);
+			await studentService.DeleteAsync(student);
+			return RedirectToAction(nameof(StudentsByClass),
+				new { classNumber = schoolClass.ClassNumber, classType = schoolClass.ClassType });
 		}
 
 		[NonAction]

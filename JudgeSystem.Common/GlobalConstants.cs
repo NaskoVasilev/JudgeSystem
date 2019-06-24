@@ -49,5 +49,9 @@
 		public const int MinClassNumber = 8;
 
 		public const int MaxClassNumber = 12;
+
+		public const int MinStudentsInClass = 1;
+
+		public const int MaxStudentsInClass = 26;
 	}
 }
