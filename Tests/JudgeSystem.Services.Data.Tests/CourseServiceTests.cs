@@ -15,7 +15,7 @@ using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
 {
-    public class CourseServiceTests : BaseServiceTests
+    public class CourseServiceTests : TransientDbContextProvider
     {
         [Fact]
         public async Task Add_WithValidData_ShouldWorkCorrect()

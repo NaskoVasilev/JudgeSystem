@@ -5,11 +5,11 @@ using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
 {
-    public class BaseServiceTests : IClassFixture<MappingsProvider>
+    public class TransientDbContextProvider : IClassFixture<MappingsProvider>
     {
         protected readonly ApplicationDbContext context;
 
-        public BaseServiceTests()
+        public TransientDbContextProvider()
         {
             this.context = ApplicationDbContextFactory.CreateInMemoryDatabase();
         }

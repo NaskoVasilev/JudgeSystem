@@ -6,7 +6,7 @@ using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
 {
-    public class ContestServiceTests : IClassFixture<MappingsProvider>
+    public class ContestServiceTests
     {
     }
 }
