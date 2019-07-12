@@ -1,10 +1,7 @@
 ﻿using JudgeSystem.Common;
-using JudgeSystem.Data;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
-using JudgeSystem.Services.Data.Tests.ClassFixtures;
-using JudgeSystem.Services.Data.Tests.Factories;
 using JudgeSystem.Web.InputModels.Course;
 using Moq;
 using System;
