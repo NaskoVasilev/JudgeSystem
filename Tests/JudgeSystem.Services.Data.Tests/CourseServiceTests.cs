@@ -1,17 +1,84 @@
 ﻿using JudgeSystem.Data;
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Repositories;
 using JudgeSystem.Services.Data.Tests.ClassFixtures;
 using JudgeSystem.Services.Data.Tests.Factories;
+using JudgeSystem.Web.InputModels.Course;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
 {
-    public class CourseServiceTests : IClassFixture<MappingsProvider>
+    public class CourseServiceTests : IClassFixture<MappingsProvider>, IClassFixture<InMemoryDatabaseFactory>
     {
         private readonly ApplicationDbContext context;
 
-        public CourseServiceTests()
+        public CourseServiceTests(InMemoryDatabaseFactory factory)
         {
             this.context = ApplicationDbContextFactory.CreateInMemoryDatabase();
+        }
+
+        [Fact]
+        public async Task Add_WithValidData_ShouldWorkCorrect()
+        {
+            var courseService = CreateCourseService();
+            string name = "Ef core and unit testing";
+            var course = new CourseInputModel { Name = name };
+            await courseService.Add(course);
+            Assert.Equal(context.Courses.First().Name, name);
+            Assert.True(context.Courses.First().Id != 0);
+        }
+
+
+        [Fact]
+        public void All_With2Course_ShouldReturn2Courses()
+        {
+            var testData = GetTestData();
+            var repositoryMock = new Mock<IDeletableEntityRepository<Course>>();
+            repositoryMock.Setup(r => r.All())
+                .Returns(testData.AsQueryable());
+
+            ICourseService courseService = new CourseService(repositoryMock.Object);
+            var actualData = courseService.All();
+            Assert.Equal(testData.Count, actualData.Count());
+
+            foreach (var data in actualData)
+            {
+                Assert.Contains(testData, d => d.Id == data.Id && d.Name == data.Name);
+            }
+        }
+
+        [Fact]
+        public void All_WithNoData_ShouldReturnEmptyCollection()
+        {
+            var repositoryMock = new Mock<IDeletableEntityRepository<Course>>();
+            repositoryMock.Setup(r => r.All())
+                .Returns(new List<Course>().AsQueryable());
+
+            ICourseService courseService = new CourseService(repositoryMock.Object);
+            var actualData = courseService.All();
+            Assert.Empty(actualData);
+        }
+
+        private ICourseService CreateCourseService()
+        {
+            IDeletableEntityRepository<Course> repository = new EfDeletableEntityRepository<Course>(this.context);
+            return new CourseService(repository);
+        }
+
+        private List<Course> GetTestData()
+        {
+            return new List<Course>()
+            {
+                new Course{ Name = "course1", Id = 1 },
+                new Course{ Name = "coirse3", Id = 3 },
+                new Course{ Name = "course2", Id = 2 }
+            };
         }
     }
 }
