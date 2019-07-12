@@ -15,15 +15,8 @@ using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
 {
-    public class CourseServiceTests : IClassFixture<MappingsProvider>, IClassFixture<InMemoryDatabaseFactory>
+    public class CourseServiceTests : BaseServiceTests
     {
-        private readonly ApplicationDbContext context;
-
-        public CourseServiceTests(InMemoryDatabaseFactory factory)
-        {
-            this.context = ApplicationDbContextFactory.CreateInMemoryDatabase();
-        }
-
         [Fact]
         public async Task Add_WithValidData_ShouldWorkCorrect()
         {
