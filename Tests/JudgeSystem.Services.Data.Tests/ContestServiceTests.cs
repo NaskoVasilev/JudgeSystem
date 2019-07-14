@@ -68,6 +68,8 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.False(context.Contests.Count() == 2);
         }
 
+
+
         private List<UserContest> GetUserContestsTestData()
         {
             return new List<UserContest>

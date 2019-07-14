@@ -23,7 +23,7 @@
 
 		public List<LessonContestViewModel> Contests { get; set; }
 
-		public void CreateMappings(IMapperConfigurationExpression configuration)
+		public void CreateMappings(IProfileExpression configuration)
 		{
 			configuration.CreateMap<Lesson, LessonLinkViewModel>()
 				.ForMember(x => x.ProblemsCount, y => y.MapFrom(s => s.Problems.Count))

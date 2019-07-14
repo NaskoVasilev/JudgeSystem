@@ -6,6 +6,7 @@
     using System.Reflection;
 
     using AutoMapper;
+    using AutoMapper.Configuration;
 
     public static class AutoMapperConfig
     {
@@ -22,7 +23,8 @@
 
             var types = assemblies.SelectMany(a => a.GetExportedTypes()).ToList();
 
-            Mapper.Initialize(configuration =>
+            var config = new MapperConfigurationExpression();
+            config.CreateProfile("ReflectionProfile", configuration =>
             {
                 // IMapFrom<>
                 foreach (var map in GetFromMaps(types))
@@ -42,6 +44,8 @@
                     map.CreateMappings(configuration);
                 }
             });
+
+            Mapper.Initialize(config);
         }
 
         private static IEnumerable<TypesMap> GetFromMaps(IEnumerable<Type> types)

@@ -33,7 +33,7 @@
 
 		public List<IFormFile> Resources { get; set; }
 
-		public void CreateMappings(IMapperConfigurationExpression configuration)
+		public void CreateMappings(IProfileExpression configuration)
 		{
 			configuration.CreateMap<LessonInputModel, Lesson>()
 				.ForMember(x => x.Resources, y => y.Ignore());

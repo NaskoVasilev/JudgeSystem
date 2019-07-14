@@ -1,13 +1,15 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Submission
 {
+	using System.Text;
+	using System.Collections.Generic;
+	using System.Globalization;
+
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Data.Models;
-	using System.Collections.Generic;
 	using JudgeSystem.Web.ViewModels.ExecutedTest;
-	using AutoMapper;
-	using System.Text;
-	using System.Globalization;
 	using JudgeSystem.Common;
+
+	using AutoMapper;
 
 	public class SubmissionViewModel : IMapFrom<Submission>, IHaveCustomMappings
 	{
@@ -26,7 +28,7 @@
 
 		public string SubmissionDate { get; set; }
 
-		public void CreateMappings(IMapperConfigurationExpression configuration)
+		public void CreateMappings(IProfileExpression configuration)
 		{
 			configuration.CreateMap<Submission, SubmissionViewModel>()
 				.ForMember(svm => svm.Code, y => y.MapFrom(s => s.Code == null ? "" : Encoding.UTF8.GetString(s.Code)))

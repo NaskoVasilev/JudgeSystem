@@ -14,7 +14,7 @@
 
 		public string EndTime { get; set; }
 
-		public void CreateMappings(IMapperConfigurationExpression configuration)
+		public void CreateMappings(IProfileExpression configuration)
 		{
 			configuration.CreateMap<Contest, PreviousContestViewModel>()
 				.ForMember(c => c.EndTime, y => y.MapFrom(s => s.EndTime.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture)));
