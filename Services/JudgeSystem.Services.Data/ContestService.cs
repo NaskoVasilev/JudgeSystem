@@ -17,8 +17,8 @@
 
 	public class ContestService : IContestService
 	{
-		private const int ContestsPerPage = 20;
-		private const int ResultsPerPage = 15;
+		public const int ContestsPerPage = 20;
+		public const int ResultsPerPage = 15;
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IEstimator estimator;
 		private readonly IRepository<UserContest> userContestRepository;
