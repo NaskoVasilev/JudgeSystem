@@ -29,7 +29,9 @@ namespace JudgeSystem.Services.Data.Tests
 
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
+
             await lessonService.CreateLesson(lessonInputModel, resources);
+
             Assert.True(context.Lessons.Any(l => l.Name == "test" && l.CourseId == 5));
             Assert.True(context.Resources.Count() == 3);
         }
@@ -39,6 +41,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var service = CreateLessonServiceWithMockedRepository(testData.AsQueryable());
+
             var actualLesosns = service.CourseLessonsByType("Exam", 10);
 
             Assert.Equal(2, actualLesosns.Count());
@@ -49,7 +52,9 @@ namespace JudgeSystem.Services.Data.Tests
         public void CourseLessonsByType_WithInValidLessonType_ShouldReturnEmptyCollection()
         {
             var service = CreateLessonServiceWithMockedRepository(new List<Lesson>().AsQueryable());
+
             var actualLesosns = service.CourseLessonsByType("Exam", 10);
+
             Assert.Empty(actualLesosns);
         }
 
@@ -58,8 +63,10 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var lessonService = await CreateLessonService(testData);
+
             var lesson = testData.First(x => x.Name == "test2");
             await lessonService.Delete(lesson);
+
             Assert.False(this.context.Lessons.Any(x => x.Name == lesson.Name));
         }
 
@@ -68,6 +75,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
+
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => lessonService.Delete(new Lesson { Id = 161651 }));
         }
 
@@ -80,7 +88,6 @@ namespace JudgeSystem.Services.Data.Tests
             int id = 2;
             var actualData = await service.GetById(id);
             var expectedData = testData[id - 1];
-
 
             Assert.Equal(actualData.Name, expectedData.Name);
             Assert.Equal(actualData.Type, expectedData.Type);
@@ -215,6 +222,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
+
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => lessonService.Update(new Lesson { Id = 161651 }));
         }
 

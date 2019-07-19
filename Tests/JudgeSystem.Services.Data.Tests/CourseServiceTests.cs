@@ -20,7 +20,9 @@ namespace JudgeSystem.Services.Data.Tests
             var courseService = CreateCourseService();
             string name = "Ef core and unit testing";
             var course = new CourseInputModel { Name = name };
+
             await courseService.Add(course);
+
             Assert.Equal(context.Courses.First().Name, name);
             Assert.True(context.Courses.First().Id != 0);
         }
@@ -31,9 +33,10 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var courseService = CreateCourseServiceWithMockdRepository();
-            var actualData = courseService.All();
-            Assert.Equal(testData.Count, actualData.Count());
 
+            var actualData = courseService.All();
+
+            Assert.Equal(testData.Count, actualData.Count());
             foreach (var data in actualData)
             {
                 Assert.Contains(testData, d => d.Id == data.Id && d.Name == data.Name);
@@ -46,9 +49,10 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Course>>();
             repositoryMock.Setup(r => r.All())
                 .Returns(new List<Course>().AsQueryable());
-
             ICourseService courseService = new CourseService(repositoryMock.Object);
+
             var actualData = courseService.All();
+
             Assert.Empty(actualData);
         }
 
@@ -56,7 +60,9 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetName_WithValidDataAndValidId_ShouldReturnCorrectName()
         {
             var courseService = CreateCourseServiceWithMockdRepository();
+
             var actualName = courseService.GetName(2);
+
             Assert.Equal("course2", actualName);
         }
 
@@ -64,6 +70,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetName_WithValidDataAndInvalidId_ShouldReturnNull()
         {
             var courseService = CreateCourseServiceWithMockdRepository();
+
             Assert.Null(courseService.GetName(5));
         }
 
@@ -74,6 +81,7 @@ namespace JudgeSystem.Services.Data.Tests
             repositoryMock.Setup(r => r.All())
                 .Returns(new List<Course>().AsQueryable());
             var courseService = new CourseService(repositoryMock.Object);
+
             Assert.Null(courseService.GetName(5));
         }
 
@@ -83,7 +91,9 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetTestData());
             await context.SaveChangesAsync();
             var courseService = CreateCourseService();
+
             var actualCourse = await courseService.GetById(2);
+
             Assert.Equal("course2", actualCourse.Name);
             Assert.Equal(2, actualCourse.Id);
         }
@@ -94,6 +104,7 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetTestData());
             await context.SaveChangesAsync();
             var courseService = CreateCourseService();
+
             Assert.Null(await courseService.GetById(5));
         }
 
@@ -101,6 +112,7 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task GetById_WithEmptyDatabase_ShouldReturnNull()
         {
             var courseService = CreateCourseService();
+
             Assert.Null(await courseService.GetById(5));
         }
 
@@ -111,7 +123,9 @@ namespace JudgeSystem.Services.Data.Tests
             await context.SaveChangesAsync();
             var courseService = CreateCourseService();
             await courseService.Updade(new CourseEditModel { Id = 1, Name = "edited" });
+
             var editedCourse = await courseService.GetById(1);
+
             Assert.Equal("edited", editedCourse.Name);
         }
 
@@ -121,8 +135,10 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetTestData());
             await context.SaveChangesAsync();
             var courseService = CreateCourseService();
+
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => courseService
             .Updade(new CourseEditModel { Id = 5, Name = "fakeEdited" }));
+
             Assert.Equal(exception.Message, string.Format(ErrorMessages.NotFoundEntityMessage, "course"));
         }
 
@@ -132,11 +148,12 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetTestData());
             await context.SaveChangesAsync();
             var courseService = CreateCourseService();
+
             var course = await courseService.GetById(2);
             await courseService.Delete(course);
+
             Assert.True(course.IsDeleted);
         }
-
 
         private ICourseService CreateCourseServiceWithMockdRepository()
         {

@@ -20,8 +20,10 @@ namespace JudgeSystem.Services.Data.Tests
         {
             IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
             ExecutedTestService service = new ExecutedTestService(repository);
+
             int initialCount = this.Context.ExecutedTests.Count();
             await service.Create(new ExecutedTest());
+
             Assert.Equal(initialCount + 1, this.Context.ExecutedTests.Count());
         }
 
@@ -32,7 +34,9 @@ namespace JudgeSystem.Services.Data.Tests
             await this.Context.SaveChangesAsync();
             IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
             ExecutedTestService service = new ExecutedTestService(repository);
+
             await service.DeleteExecutedTestsByTestId(4);
+
             Assert.True(this.Context.ExecutedTests.Count() > 0);
             Assert.True(this.Context.ExecutedTests.Count(x => x.TestId == 4) == 0);
         }
@@ -45,7 +49,9 @@ namespace JudgeSystem.Services.Data.Tests
             await this.Context.SaveChangesAsync();
             IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
             ExecutedTestService service = new ExecutedTestService(repository);
+
             await service.DeleteExecutedTestsByTestId(5);
+
             Assert.True(this.Context.ExecutedTests.Count() == testData.Count());
         }
 

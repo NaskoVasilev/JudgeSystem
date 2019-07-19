@@ -19,7 +19,9 @@ namespace JudgeSystem.Services.Data.Tests
             var contest = new Contest { Name = "testContest" };
             var repository = new EfDeletableEntityRepository<Contest>(this.context);
             var contestService = new ContestService(repository, null, null);
+
             await contestService.Create(contest);
+
             Assert.True(context.Contests.Count() == 1);
             Assert.True(context.Contests.First().Name == contest.Name);
         }
@@ -35,7 +37,9 @@ namespace JudgeSystem.Services.Data.Tests
             await context.SaveChangesAsync();
             var repository = new EfRepository<UserContest>(this.context);
             var contestService = new ContestService(null, null, repository);
+
             bool result = await contestService.AddUserToContestIfNotAdded(userId, contestId);
+
             Assert.Equal(expectedResult, result);
         }
 
@@ -47,8 +51,10 @@ namespace JudgeSystem.Services.Data.Tests
             var repository = new EfDeletableEntityRepository<Contest>(this.context);
             var contestService = new ContestService(repository, null, null);
             var inputModel = new ContestEditInputModel { Id = 1, Name = "editedcontest", StartTime = new DateTime(2019, 09, 20), EndTime = new DateTime(2019, 08, 20) };
+
             await contestService.UpdateContest(inputModel);
             var actualResult = context.Contests.First(x => x.Id == 1);
+
             Assert.Equal(inputModel.Name, actualResult.Name);
             Assert.Equal(inputModel.StartTime, actualResult.StartTime);
             Assert.Equal(inputModel.EndTime, actualResult.EndTime);
@@ -61,8 +67,10 @@ namespace JudgeSystem.Services.Data.Tests
             await context.SaveChangesAsync();
             var repository = new EfDeletableEntityRepository<Contest>(this.context);
             var contestService = new ContestService(repository, null, null);
+
             var contest = context.Contests.FirstOrDefault(c => c.Id == 1);
             await contestService.DeleteContestById(1);
+
             Assert.True(contest.IsDeleted);
             Assert.NotNull(contest.DeletedOn);
             Assert.False(context.Contests.Count() == 2);
@@ -78,7 +86,9 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(Enumerable.Empty<Contest>().AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             var result = contestService.GetAllConests(page);
+
             Assert.Empty(result);
         }
 
@@ -89,8 +99,10 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             var actualContests = contestService.GetAllConests(page);
             var expectedData = Enumerable.Range((page - 1) * ContestService.ContestsPerPage , page * ContestService.ContestsPerPage);
+
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
 
@@ -100,10 +112,12 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             int page = 50 / ContestService.ContestsPerPage + 1;
             int expectedEntities = 50 % ContestService.ContestsPerPage;
             var actualContests = contestService.GetAllConests(page);
             var expectedData = Enumerable.Range(50 - expectedEntities, expectedEntities);
+
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
 
@@ -113,7 +127,9 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             var actualResult = contestService.GetNumberOfPages();
+
             Assert.Equal(3, actualResult);
         }
 
@@ -123,7 +139,9 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(Enumerable.Empty<Contest>().AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             var actualResult = contestService.GetNumberOfPages();
+
             Assert.Equal(0, actualResult);
         }
 
@@ -134,7 +152,9 @@ namespace JudgeSystem.Services.Data.Tests
             var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
             repositoryMock.Setup(x => x.All()).Returns(contests.AsQueryable());
             var contestService = new ContestService(repositoryMock.Object, null, null);
+
             var actualResult = contestService.GetNumberOfPages();
+
             Assert.Equal(1, actualResult);
         }
 
