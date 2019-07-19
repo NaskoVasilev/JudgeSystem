@@ -1,6 +1,9 @@
 ﻿namespace JudgeSystem.Web.ViewModels.Search
 {
-	public class SearchLessonViewModel
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Data.Models;
+
+    public class SearchLessonViewModel : IMapFrom<Lesson>
 	{
 		public int Id { get; set; }
 

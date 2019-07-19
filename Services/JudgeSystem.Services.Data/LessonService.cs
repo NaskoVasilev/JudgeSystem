@@ -15,8 +15,9 @@
 	using JudgeSystem.Web.ViewModels.Search;
 
 	using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Common;
 
-	public class LessonService : ILessonService
+    public class LessonService : ILessonService
 	{
 		private readonly IDeletableEntityRepository<Lesson> repository;
 
@@ -81,6 +82,11 @@
 
 		public IEnumerable<SearchLessonViewModel> SearchByName(string keyword)
 		{
+            if(string.IsNullOrEmpty(keyword))
+            {
+                throw new ArgumentException(ErrorMessages.InvalidSearchKeyword);
+            }
+
 			keyword = keyword.ToLower();
 			var results = repository.All()
 				.Where(l => l.Name.ToLower().Contains(keyword))

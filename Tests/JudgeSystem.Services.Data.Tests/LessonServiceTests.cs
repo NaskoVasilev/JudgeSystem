@@ -9,6 +9,8 @@ using System.Linq;
 using JudgeSystem.Data.Models.Enums;
 using Moq;
 using Microsoft.EntityFrameworkCore;
+using System;
+using JudgeSystem.Common;
 
 namespace JudgeSystem.Services.Data.Tests
 {
@@ -102,7 +104,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(1, LessonType.Homework, "test3")]
         [InlineData(10, LessonType.Homework, "")]
         [InlineData(45, LessonType.Exercise, "")]
-        public async Task GetCourseLesosns_WithValidData_ShouldWorkCorrect(int courseId, LessonType lessonType, 
+        public async Task GetCourseLesosns_WithValidData_ShouldWorkCorrect(int courseId, LessonType lessonType,
             string expectedLessonsNames)
         {
             var testData = GetTestData();
@@ -112,6 +114,108 @@ namespace JudgeSystem.Services.Data.Tests
             string actualLessonsNames = string.Join(", ", actualData.Select(x => x.Name));
 
             Assert.Equal(expectedLessonsNames, actualLessonsNames);
+        }
+
+        [Fact]
+        public async Task GetLessonInfo_WithValidId_ShouldReturnValidData()
+        {
+            var testData = GetTestWithIds();
+            var service = await CreateLessonService(testData);
+            var expectedLesson = new Lesson
+            {
+                Id = 999,
+                Name = "test2",
+                CourseId = 4,
+                Problems = new List<Problem>()
+                {
+                    new Problem { Name = "problem1" },
+                    new Problem { Name = "problem2" }
+                },
+                Resources = new List<Resource>
+                {
+                    new Resource { Name = "res1" },
+                    new Resource { Name = "res2" },
+                    new Resource { Name = "res3" }
+                }
+            };
+            await context.AddAsync(expectedLesson);
+            await context.SaveChangesAsync();
+
+            var actualLesson = await service.GetLessonInfo(999);
+
+            Assert.Equal(expectedLesson.Name, actualLesson.Name);
+            Assert.Equal(expectedLesson.CourseId, actualLesson.CourseId);
+            Assert.Equal(expectedLesson.Problems.Count, actualLesson.Problems.Count);
+            Assert.Equal(expectedLesson.Resources.Count, actualLesson.Resources.Count);
+            Assert.Equal(expectedLesson.Resources.Select(x => x.Name).ToList(), actualLesson.Resources.Select(x => x.Name).ToList());
+            Assert.Equal(expectedLesson.Problems.Select(x => x.Name).ToList(), actualLesson.Problems.Select(x => x.Name).ToList());
+        }
+
+        [Theory]
+        [InlineData("C#", "c# WEb API, c# web - asp.NET CoRe")]
+        [InlineData("web", "c# WEb API, c# web - asp.NET CoRe")]
+        [InlineData("test", "test1, test2, test3, test4, test5")]
+        [InlineData("webasp", "")]
+        [InlineData("asp", "c# web - asp.NET CoRe")]
+        [InlineData("es", "test1, test2, test3, test4, test5")]
+        [InlineData("csharp", "")]
+        [InlineData("1", "test1")]
+        public async Task SearchByName_WithDifferentInputs_ShouldWorkCorrect(string keyword, string expectedResult)
+        {
+            var service = await CreateLessonService(GetTestData());
+            await context.AddRangeAsync(new List<Lesson>
+            {
+                new Lesson { Name = "programming basics" },
+                new Lesson { Name = "c# WEb API" },
+                new Lesson { Name = "c# web - asp.NET CoRe" },
+            });
+            await context.SaveChangesAsync();
+
+            var actualResult = service.SearchByName(keyword);
+
+            Assert.Equal(expectedResult, string.Join(", ", actualResult.Select(x => x.Name)));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowArgumentException(string keyword)
+        {
+            var service = await CreateLessonService(GetTestData());
+            await context.SaveChangesAsync();
+
+            var exception = Assert.Throws<ArgumentException>(() => service.SearchByName(keyword));
+            Assert.Equal(exception.Message, ErrorMessages.InvalidSearchKeyword);
+        }
+
+        [Fact]
+        public async Task Update_WithValidData_ShouldWorkCorrect()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+
+            var lesson = context.Lessons.First(x => x.Name == "test2");
+            lesson.Name = "edited";
+            lesson.CourseId = 45;
+            lesson.LessonPassword = "123456";
+            lesson.Resources = new List<Resource> { new Resource { Name = "test"} };
+            await lessonService.Update(lesson);
+            var actualLesson = context.Lessons.First(x => x.Id == lesson.Id);
+
+            Assert.Equal("edited", actualLesson.Name);
+            Assert.Equal(45, actualLesson.CourseId);
+            Assert.Equal(LessonType.Homework, actualLesson.Type);
+            Assert.Equal("123456", actualLesson.LessonPassword);
+            Assert.Equal(1, actualLesson.Resources.Count);
+            Assert.Equal("test", actualLesson.Resources.First().Name);
+        }
+
+        [Fact]
+        public async Task Update_WithNonExistingLesson_ShouldThrowError()
+        {
+            IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
+            var lessonService = new LessonService(repository);
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => lessonService.Update(new Lesson { Id = 161651 }));
         }
 
         private async Task<LessonService> CreateLessonService(List<Lesson> testData)

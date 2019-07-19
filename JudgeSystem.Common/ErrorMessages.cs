@@ -21,5 +21,7 @@ namespace JudgeSystem.Common
 		public const string ActivatedStudentProfile = "Student profile with this activation key is already activated.";
 
 		public const string InvalidStudentProfile = "Your student profile is not activated! Connect to administrators for more info!";
-	}
+
+        public const string InvalidSearchKeyword = "The provided keyword must be at least one symbol long";
+    }
 }
