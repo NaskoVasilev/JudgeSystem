@@ -13,8 +13,10 @@
 
 	using Microsoft.EntityFrameworkCore;
 	using JudgeSystem.Web.ViewModels.Search;
+    using System;
+    using JudgeSystem.Common;
 
-	public class ProblemService : IProblemService
+    public class ProblemService : IProblemService
 	{
 		private readonly IDeletableEntityRepository<Problem> problemRepository;
 
@@ -61,7 +63,7 @@
 			return problem.MaxPoints;
 		}
 
-		public IEnumerable<LessonProblemViewModel> LesosnProblems(int lessonId)
+		public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			return problemRepository.All()
 				.Where(p => p.LessonId == lessonId)
@@ -69,15 +71,20 @@
 				.ToList();
 		}
 
-		public IEnumerable<SearchProblemViewModel> SerchByName(string keyword)
+		public IEnumerable<SearchProblemViewModel> SearchByName(string keyword)
 		{
+            if(string.IsNullOrEmpty(keyword))
+            {
+                throw new ArgumentException(ErrorMessages.InvalidSearchKeyword);
+            }
+
 			keyword = keyword.ToLower();
 			var results = problemRepository.All()
 				.Where(p => p.Name.ToLower().Contains(keyword))
 				.To<SearchProblemViewModel>()
 				.ToList();
 
-			return results;
+            return results;
 		}
 
 		public async Task<Problem> Update(ProblemEditInputModel model)

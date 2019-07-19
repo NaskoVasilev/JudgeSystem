@@ -12,7 +12,7 @@
 	{
 		Task<Problem> Create(ProblemInputModel model);
 
-		IEnumerable<LessonProblemViewModel> LesosnProblems(int lessonId);
+		IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId);
 
 		Task<Problem> GetById(int id);
 
@@ -22,7 +22,7 @@
 
 		Task Delete(Problem problem);
 
-		IEnumerable<SearchProblemViewModel> SerchByName(string keyword);
+		IEnumerable<SearchProblemViewModel> SearchByName(string keyword);
 
 		int GetProblemMaxPoints(int id);
 

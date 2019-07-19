@@ -26,7 +26,7 @@ namespace JudgeSystem.Web.Controllers
 			}
 
 			SearchResultsViewModel searchResults = new SearchResultsViewModel();
-			searchResults.Problems = problemService.SerchByName(keyword).ToList();
+			searchResults.Problems = problemService.SearchByName(keyword).ToList();
 			searchResults.Lessons = lessonService.SearchByName(keyword).ToList();
 			return this.View(searchResults);
 		}

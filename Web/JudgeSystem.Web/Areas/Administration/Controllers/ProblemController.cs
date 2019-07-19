@@ -45,7 +45,7 @@
 		public IActionResult All(int lessonId)
 		{
 			ViewData["lessonId"] = lessonId;
-			var problems = problemService.LesosnProblems(lessonId);
+			var problems = problemService.LessonProblems(lessonId);
 			return View(problems);
 		}
 
