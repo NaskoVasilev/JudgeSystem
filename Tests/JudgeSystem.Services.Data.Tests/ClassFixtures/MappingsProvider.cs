@@ -1,4 +1,5 @@
 ﻿using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels;
 using System.Reflection;
@@ -11,7 +12,7 @@ namespace JudgeSystem.Services.Data.Tests.ClassFixtures
         {
             //Register all mappings in the app
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly, 
-                typeof(CourseInputModel).GetTypeInfo().Assembly);
+                typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestLessonDto).Assembly);
         }
     }
 }

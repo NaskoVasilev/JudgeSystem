@@ -98,7 +98,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Theory]
-        [InlineData(10, LessonType.Exam, "test1, test2")]
+        [InlineData(10, LessonType.Exam, "test1, test5")]
         [InlineData(1, LessonType.Homework, "test3")]
         [InlineData(10, LessonType.Homework, "")]
         [InlineData(45, LessonType.Exercise, "")]
