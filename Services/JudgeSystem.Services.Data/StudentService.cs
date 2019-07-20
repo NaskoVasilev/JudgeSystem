@@ -8,7 +8,8 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.InputModels.Student;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Web.InputModels.Student;
 	using JudgeSystem.Web.ViewModels.Student;
 
 	using Microsoft.EntityFrameworkCore;
@@ -98,8 +99,9 @@
 			return students
 				.OrderBy(s => s.SchoolClass.ClassNumber)
 				.ThenBy(s => s.SchoolClass.ClassType)
-				.ThenBy(s => s.SchoolClass)
-				.To<StudentProfileViewModel>().ToList();
+				.ThenBy(s => s.NumberInCalss)
+				.To<StudentProfileViewModel>()
+                .ToList();
 		}
 
 		public async Task SetStudentProfileAsActivated(Student student)
@@ -112,6 +114,11 @@
 		public async Task<Student> UpdateAsync(StudentEditInputModel model)
 		{
 			Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
+            if(student == null)
+            {
+                throw new EntityNullException(nameof(student));
+            }
+
 			student.FullName = model.FullName;
 			student.Email = model.Email;
 			student.NumberInCalss = model.NumberInCalss;
