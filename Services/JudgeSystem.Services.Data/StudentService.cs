@@ -61,8 +61,7 @@
 
 		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
 		{
-			var student = await this.repository.All().Include(s => s.SchoolClass).FirstOrDefaultAsync(s => s.Id == studentId);
-			return student.To<StudentProfileViewModel>();
+            return await this.GetById<StudentProfileViewModel>(studentId);
 		}
 
 		public Task<Student> GetStudentProfileByActivationKey(string activationKey)
