@@ -7,7 +7,9 @@ window.onload = () => {
 	let currentElement = $(`li.problem-name:contains(${decodeURI(hash).substr(1)})`)[0];
 	if (currentElement) {
 		$(".problem-name").removeClass("active-problem");
-		$(currentElement).addClass("active-problem");
+        $(currentElement).addClass("active-problem");
+        let submissionType = currentElement.dataset.type.toString();
+        hideOneOfCodeInputs(submissionType);
 	}
 	else {
 		$('li.problemName')[0].classList.add('active-problem');
@@ -23,7 +25,10 @@ $(".problem-name").on("click", (e) => {
 
 	let oldId = $(".active-problem")[0].dataset.id;
 	$(".active-problem").removeClass("active-problem");
-	$(e.target).addClass("active-problem");
+    $(e.target).addClass("active-problem");
+
+    let submissionType = e.target.dataset.type.toString();
+    hideOneOfCodeInputs(submissionType);
 
 	window.location.hash = e.target.textContent;
 
@@ -236,3 +241,14 @@ $("#next").on('click', () => {
 		getSubmissions(problemId, ++currentPageNumber);
 	}
 });
+
+function hideOneOfCodeInputs(submissionType) {
+    if (submissionType === "ZipFile") {
+        $(".code-wrapper").hide();
+        $("#zip-file").show();
+    }
+    else {
+        $("#zip-file").hide();
+        $(".code-wrapper").show();
+    }
+}

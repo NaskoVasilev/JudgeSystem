@@ -1,149 +1,160 @@
 ﻿@model LessonViewModel
 
 @{
-	this.ViewData["Title"] = Model.Name;
-	int problemNumber = 0;
-	var firstProblem = Model.Problems.FirstOrDefault();
-	string administrationArea = GlobalConstants.AdministrationArea;
+    this.ViewData["Title"] = Model.Name;
+    int problemNumber = 0;
+    var firstProblem = Model.Problems.FirstOrDefault();
+    string administrationArea = GlobalConstants.AdministrationArea;
 }
 
 <h2 class="text-secondary text-center">@Model.Name</h2>
 @if (Model.ContestId.HasValue)
 {
-	<vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
+    <vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
 }
 @if (Model.Resources.Count > 0 || User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
-	<div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
-		<h4 class="mb-3 mt-0">Downlaod resources</h4>
-		<ul class="list-group d-flex flex-md-row flex-wrap">
-			@foreach (var resource in Model.Resources)
-			{
-				<li class="list-group-item a-holder">
-					<a asp-area="" asp-controller="Resource" asp-action="Download" asp-route-id="@resource.Id">@resource.Name</a>
-				</li>
-			}
-			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-			{
-				<li class="list-group-item a-holder">
-					<a asp-area="@administrationArea" asp-controller="Resource"
-					   asp-action="Create" asp-route-lessonId="@Model.Id">Add Resource</a>
-				</li>
-				<li class="list-group-item a-holder">
-					<a asp-area="@administrationArea" asp-controller="Resource"
-					   asp-action="LessonResources" asp-route-lessonId="@Model.Id">All Resources</a>
-				</li>
-			}
-		</ul>
-	</div>
+    <div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
+        <h4 class="mb-3 mt-0">Downlaod resources</h4>
+        <ul class="list-group d-flex flex-md-row flex-wrap">
+            @foreach (var resource in Model.Resources)
+            {
+                <li class="list-group-item a-holder">
+                    <a asp-area="" asp-controller="Resource" asp-action="Download" asp-route-id="@resource.Id">@resource.Name</a>
+                </li>
+            }
+            @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <li class="list-group-item a-holder">
+                    <a asp-area="@administrationArea" asp-controller="Resource"
+                       asp-action="Create" asp-route-lessonId="@Model.Id">Add Resource</a>
+                </li>
+                <li class="list-group-item a-holder">
+                    <a asp-area="@administrationArea" asp-controller="Resource"
+                       asp-action="LessonResources" asp-route-lessonId="@Model.Id">All Resources</a>
+                </li>
+            }
+        </ul>
+    </div>
 }
 <div class="border p-3 bg-light">
-	<div class="ul-holder mt-0">
-		<ul class="list-group d-flex flex-md-row">
-			@foreach (var problem in Model.Problems)
-			{
-				<li class="list-group-item problem-name" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
-			}
-			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-			{
-				<li class="list-group-item a-holder">
-					<a asp-area="@administrationArea" asp-controller="Problem"
-					   asp-action="Create" asp-route-lessonId="@Model.Id">Add Task</a>
-				</li>
-				<li class="list-group-item a-holder">
-					<a asp-area="@administrationArea" asp-controller="Problem"
-					   asp-action="All" asp-route-lessonId="@Model.Id">All Tasks</a>
-				</li>
-			}
-		</ul>
+    <div class="ul-holder mt-0">
+        <ul class="list-group d-flex flex-md-row">
+            @foreach (var problem in Model.Problems)
+            {
+                <li class="list-group-item problem-name" data-type="@problem.SubmissionType" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
+            }
+            @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <li class="list-group-item a-holder">
+                    <a asp-area="@administrationArea" asp-controller="Problem"
+                       asp-action="Create" asp-route-lessonId="@Model.Id">Add Task</a>
+                </li>
+                <li class="list-group-item a-holder">
+                    <a asp-area="@administrationArea" asp-controller="Problem"
+                       asp-action="All" asp-route-lessonId="@Model.Id">All Tasks</a>
+                </li>
+            }
+        </ul>
 
-		@if (Model.Problems.Count > 0)
-		{
-			<h3 class="mt-3 text-secondary" id="problemName">01. @firstProblem.Name</h3>
-			@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-			{
-				<div class="mt-3" id="admin-buttons">
-					<a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
-					<a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
-					   asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
-					<a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
-					<a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
-				</div>
-			}
-		}
-	</div>
-	<div class="code-wrapper">
-		<textarea class="d-none" name="code" id="code-holder"></textarea>
-	</div>
+        @if (Model.Problems.Count > 0)
+        {
+            <h3 class="mt-3 text-secondary" id="problemName">01. @firstProblem.Name</h3>
+            @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <div class="mt-3" id="admin-buttons">
+                    <a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
+                    <a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
+                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
+                    <a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
+                    <a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
+                </div>
+            }
+        }
+    </div>
+    <div>
 
+    </div>
 
-	<div class="button-holder">
-		@if (Model.ContestId.HasValue)
-		{
-			<button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
-		}
-		else
-		{
-			<button class="btn btn-secondary" id="submit-btn">Submit</button>
-		}
-	</div>
+    <form id="zip-file w-25">
+        <div class="file-upload-wrapper w-25 my-4" data-text="Select your file!">
+            <input name="file-upload-field" type="file" class="file-upload-field" value="">
+        </div>
+    </form>
 
-	<div id="submissions-holder" class="text-center border mt-3">
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th scope="col">Points</th>
-					<th scope="col">Time and memory used</th>
-					<th scope="col">Submission Date</th>
-					<th scope="col">More info</th>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-		<nav aria-label="Page navigation example" class="ml-3">
-			<ul class="pagination">
-				<li class="page-item">
-					<a class="page-link" id="previous" href="#" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-						<span class="sr-only">Previous</span>
-					</a>
-				</li>
-				<li class="page-item page-number"><a class="page-link" href="#">1</a></li>
-				<li class="page-item">
-					<a class="page-link" id="next" href="#" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-						<span class="sr-only">Next</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</div>
+    <div class="code-wrapper">
+        <textarea class="d-none" name="code" id="code-holder"></textarea>
+    </div>
+
+    <div class="button-holder">
+        @if (Model.ContestId.HasValue)
+        {
+            <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
+        }
+        else
+        {
+            <button class="btn btn-secondary" id="submit-btn">Submit</button>
+        }
+    </div>
+
+    <div id="submissions-holder" class="text-center border mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Points</th>
+                    <th scope="col">Time and memory used</th>
+                    <th scope="col">Submission Date</th>
+                    <th scope="col">More info</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <nav aria-label="Page navigation example" class="ml-3">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" id="previous" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item page-number"><a class="page-link" href="#">1</a></li>
+                <li class="page-item">
+                    <a class="page-link" id="next" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
 
 @section Scripts{
-	<script src="~/lib/codemirror/codemirror.js"></script>
-	<script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
-	<script>
-		let codeTextarea = document.getElementById('code-holder');
-		var editor = CodeMirror.fromTextArea(codeTextarea,
-			{
-				lineNumbers: true,
-				matchBrackets: true,
-				mode: "text/x-c++src"
-			});
-	</script>
-	<script src="~/js/notification.js"></script>
-	<script src="~/js/controllers/submissionController.js"></script>
-	<script src="~/js/countdown.js"></script>
+    <script src="~/lib/codemirror/codemirror.js"></script>
+    <script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
+    <script>
+        let codeTextarea = document.getElementById('code-holder');
+        var editor = CodeMirror.fromTextArea(codeTextarea,
+            {
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: "text/x-c++src"
+            });
+    </script>
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/submissionController.js"></script>
+    <script src="~/js/countdown.js"></script>
 
-	@if (Model.ContestId.HasValue)
-	{
-		<script>
-			initializeClock();
-		</script>
-	}
+    @if (Model.ContestId.HasValue)
+    {
+        <script>
+            initializeClock();
+        </script>
+    }
+
+    <script src="~/js/fileUploader.js"></script>
 }
