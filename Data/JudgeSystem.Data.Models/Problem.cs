@@ -5,8 +5,9 @@
 
 	using JudgeSystem.Common;
 	using JudgeSystem.Data.Common.Models;
+    using JudgeSystem.Data.Models.Enums;
 
-	public class Problem : BaseDeletableModel<int>
+    public class Problem : BaseDeletableModel<int>
     {
 		public Problem()
 		{
@@ -25,7 +26,9 @@
 		public int LessonId { get; set; }
 		public Lesson Lesson { get; set; }
 
-		public ICollection<Test> Tests { get; set; }
+        public SubmissionType SubmissionType { get; set; }
+
+        public ICollection<Test> Tests { get; set; }
 
 		public ICollection<Submission> Submissions { get; set; }
 	}
