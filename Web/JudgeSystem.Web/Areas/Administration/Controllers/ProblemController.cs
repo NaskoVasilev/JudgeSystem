@@ -1,19 +1,18 @@
 ﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.ViewModels.Problem;
-	using JudgeSystem.Web.ViewModels.Test;
-	using JudgeSystem.Web.InputModels.Test;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Data;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.ViewModels.Problem;
+    using JudgeSystem.Web.InputModels.Test;
+    using JudgeSystem.Web.InputModels.Problem;
 
-	using Microsoft.AspNetCore.Mvc;
-	using JudgeSystem.Web.InputModels.Problem;
+    using Microsoft.AspNetCore.Mvc;
 
-	public class ProblemController : AdministrationBaseController
+    public class ProblemController : AdministrationBaseController
 	{
 		private readonly IProblemService problemService;
 		private readonly ITestService testService;

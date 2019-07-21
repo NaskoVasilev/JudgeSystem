@@ -2,9 +2,10 @@
 {
 	using System.ComponentModel.DataAnnotations;
 
+    using JudgeSystem.Data.Models.Enums;
 	using Common;
 	using Data.Models;
-	using Services.Mapping;
+    using Services.Mapping;
 
 	public class ProblemInputModel : IMapTo<Problem>
 	{
@@ -18,5 +19,7 @@
 		public int MaxPoints { get; set; }
 
 		public int LessonId { get; set; }
-	}
+
+        public SubmissionType SubmissionType { get; set; }
+    }
 }

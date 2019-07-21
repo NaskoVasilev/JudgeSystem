@@ -4,9 +4,10 @@
 
 	using Common;
 	using Data.Models;
-	using Services.Mapping;
+    using JudgeSystem.Data.Models.Enums;
+    using Services.Mapping;
 
-	public class ProblemEditInputModel : IMapTo<Problem>
+	public class ProblemEditInputModel : IMapTo<Problem>, IMapFrom<Problem>
 	{
 		public int Id { get; set; }
 
@@ -18,5 +19,7 @@
 		
 		[Range(GlobalConstants.ProblemMinPoints, GlobalConstants.ProblemMaxPoints)]
 		public int MaxPoints { get; set; }
-	}
+
+        public SubmissionType SubmissionType { get; set; }
+    }
 }

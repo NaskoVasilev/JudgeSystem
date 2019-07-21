@@ -2,8 +2,9 @@
 {
 	using Services.Mapping;
 	using Data.Models;
+    using JudgeSystem.Data.Models.Enums;
 
-	public class ProblemViewModel : IMapFrom<Problem>
+    public class ProblemViewModel : IMapFrom<Problem>
 	{
 		public int Id { get; set; }
 
@@ -14,5 +15,7 @@
 		public int MaxPoints { get; set; }
 
 		public int TestsCount { get; set; }
-	}
+
+        public SubmissionType SubmissionType { get; set; }
+    }
 }

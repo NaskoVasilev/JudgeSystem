@@ -2,34 +2,41 @@
 
 @{
 	ViewData["Title"] = "Edit Problem";
+    IEnumerable<SelectListItem> submissionTypes = Utility.GetFormatedSelectListItems<SubmissionType>();
 }
 
 <h1>@ViewData["Title"]</h1>
 <div class="row">
 	<div class="col-md-4" >
 		<section>
-			<form method="post">
-				<div asp-validation-summary="All" class="text-danger"></div>
-				<div class="form-group">
-					<label asp-for="Name"></label>
-					<input asp-for="Name" class="form-control" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="MaxPoints"></label>
-					<input asp-for="MaxPoints" class="form-control" />
-					<span asp-validation-for="MaxPoints" class="text-danger"></span>
-				</div>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaxPoints"></label>
+                    <input asp-for="MaxPoints" class="form-control" />
+                    <span asp-validation-for="MaxPoints" class="text-danger"></span>
+                </div>
 
-				<div class="custom-control custom-checkbox mb-3">
-					<input type="checkbox" asp-for="IsExtraTask" class="custom-control-input" id="defaultUnchecked">
-					<label class="custom-control-label" for="defaultUnchecked">Extra Task</label>
-				</div>
+                <div class="form-group">
+                    <label asp-for="SubmissionType"></label>
+                    <select asp-for="SubmissionType" class="form-control" asp-items="submissionTypes"></select>
+                    <span asp-validation-for="SubmissionType" class="text-danger"></span>
+                </div>
 
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Edit</button>
-				</div>
-			</form>
+                <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" asp-for="IsExtraTask" class="custom-control-input" id="defaultUnchecked">
+                    <label class="custom-control-label" for="defaultUnchecked">Extra Task</label>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
 		</section>
 	</div>
 </div>

@@ -1,15 +1,14 @@
 ﻿namespace JudgeSystem.Web.Utilites
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Web.Infrastructure.Extensions;
+    using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Web.Infrastructure.Extensions;
 
-	using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
-	public static class Utility
+    public static class Utility
 	{
 		public static IEnumerable<SelectListItem> GetSelectListItems<T>()
 		{
@@ -22,10 +21,21 @@
 				.ToList();
 		}
 
-		public static IEnumerable<SelectListItem> GetResourceTypesSelectList()
+        public static IEnumerable<SelectListItem> GetFormatedSelectListItems<T>()
+        {
+            return EnumExtensions.GetEnumValuesAsString<T>()
+                .Select(t => new SelectListItem
+                {
+                    Value = t,
+                    Text = t.InsertSpaceBeforeUppercaseLetter()
+                })
+                .ToList();
+        }
+
+        public static IEnumerable<SelectListItem> GetResourceTypesSelectList()
 		{
 			return EnumExtensions.GetEnumValuesAsString<ResourceType>()
-				.Select(r => new SelectListItem { Value = r, Text = r.FormatResourceType() });
+				.Select(r => new SelectListItem { Value = r, Text = r.InsertSpaceBeforeUppercaseLetter() });
 		}
 
 		public static double ConvertBytesToMegaBytes(long bytes)

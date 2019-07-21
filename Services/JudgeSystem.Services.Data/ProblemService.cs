@@ -98,8 +98,9 @@
 			problem.Name = model.Name;
 			problem.MaxPoints = model.MaxPoints;
 			problem.IsExtraTask = model.IsExtraTask;
+			problem.SubmissionType = model.SubmissionType;
 
-			problemRepository.Update(problem);
+            problemRepository.Update(problem);
 			await problemRepository.SaveChangesAsync();
 			return problem;
 		}
