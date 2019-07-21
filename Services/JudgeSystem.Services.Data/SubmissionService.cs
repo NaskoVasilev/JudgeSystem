@@ -168,5 +168,22 @@
 			repository.Update(submission);
 			await repository.SaveChangesAsync();
 		}
-	}
+
+        public byte[] GetSubmissionCodeById(int id)
+        {
+            return this.repository.All()
+                .Where(x => x.Id == id)
+                .Select(x => x.Code)
+                .FirstOrDefault();
+        }
+
+        public string GetProblemNameBySubmissionId(int id)
+        {
+            return this.repository.All()
+                .Include(x => x.Problem)
+                .Where(x => x.Id == id)
+                .Select(x => x.Problem.Name)
+                .FirstOrDefault();
+        }
+    }
 }

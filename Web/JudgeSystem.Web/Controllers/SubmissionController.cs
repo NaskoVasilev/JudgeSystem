@@ -1,26 +1,25 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
-	using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Checkers;
-	using JudgeSystem.Compilers;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.Dtos.Test;
-	using JudgeSystem.Web.InputModels.Submission;
-	using JudgeSystem.Workers.Common;
-	using JudgeSystem.Web.Dtos.Submission;
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Web.Utilites;
-	using JudgeSystem.Web.ViewModels.Submission;
+    using JudgeSystem.Checkers;
+    using JudgeSystem.Compilers;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Data;
+    using JudgeSystem.Web.Dtos.Test;
+    using JudgeSystem.Web.InputModels.Submission;
+    using JudgeSystem.Workers.Common;
+    using JudgeSystem.Web.Dtos.Submission;
+    using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Web.Utilites;
+    using JudgeSystem.Web.ViewModels.Submission;
 
-	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using Newtonsoft.Json;
     using JudgeSystem.Common;
 
     [Authorize]
@@ -47,6 +46,14 @@
 			SubmissionViewModel submission = submissionService.GetSubmissionDetails(id);
 			return View(submission);
 		}
+
+        public IActionResult Download(int id)
+        {
+            byte[] submissionCode = submissionService.GetSubmissionCodeById(id);
+            string problemName = submissionService.GetProblemNameBySubmissionId(id);
+
+            return this.File(submissionCode, GlobalConstants.OctetStreanMimeType, $"{problemName}.zip");
+        }
 
 		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage, int? contestId = null)
 		{

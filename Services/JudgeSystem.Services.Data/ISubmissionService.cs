@@ -26,5 +26,9 @@
 		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage);
 
 		Task UpdateAndAddActualPoints(int submissionId);
-	}
+
+        byte[] GetSubmissionCodeById(int id);
+
+        string GetProblemNameBySubmissionId(int id);
+    }
 }

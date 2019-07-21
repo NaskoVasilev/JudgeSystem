@@ -57,5 +57,8 @@
         public const int SubmissionFileMaxSizeInKb = 16;
 
         public const int MaxSubmissionCodeLength = 15000;
-	}
+
+        public const string OctetStreanMimeType = "application/octet-stream";
+
+    }
 }
