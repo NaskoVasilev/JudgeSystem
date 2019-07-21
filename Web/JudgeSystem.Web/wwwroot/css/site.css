@@ -219,56 +219,56 @@ body {
     position: relative;
     width: 100%;
 }
-.file-upload-wrapper:after
-{
-    content: attr(data-text);
-    font-size: 18px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #fff;
-    padding: 7px 15px;
-    display: block;
-    width: calc(100% - 40px);
-    pointer-events: none;
-    z-index: 20;
-    color: #999;
-    border-radius: 5px 10px 10px 5px;
-    font-weight: 300;
-}
 
-.file-upload-wrapper:before {
-    content: 'Upload';
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: inline-block;
-    height: 40px;
-    background: #4daf7c;
-    color: #fff;
-    font-weight: 700;
-    z-index: 25;
-    font-size: 16px;
-    padding: 9px 15px;
-    text-transform: uppercase;
-    pointer-events: none;
-    border-radius: 0 5px 5px 0;
-}
+    .file-upload-wrapper:after {
+        content: attr(data-text);
+        font-size: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #fff;
+        padding: 7px 15px;
+        display: block;
+        width: calc(100% - 40px);
+        pointer-events: none;
+        z-index: 20;
+        color: #999;
+        border-radius: 5px 10px 10px 5px;
+        font-weight: 300;
+    }
 
-.file-upload-wrapper input {
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 99;
-    margin: 0;
-    padding: 0;
-    display: block;
-    cursor: pointer;
-    width: 100%;
-}
+    .file-upload-wrapper:before {
+        content: 'Upload';
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: inline-block;
+        height: 40px;
+        background: #4daf7c;
+        color: #fff;
+        font-weight: 700;
+        z-index: 25;
+        font-size: 16px;
+        padding: 9px 15px;
+        text-transform: uppercase;
+        pointer-events: none;
+        border-radius: 0 5px 5px 0;
+    }
+
+    /*.file-upload-wrapper input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99;
+        margin: 0;
+        padding: 0;
+        display: block;
+        cursor: pointer;
+        width: 100%;
+    }*/
 
 /*input[type=file] {
     width: 100px;
@@ -306,7 +306,7 @@ body {
     background-color: #ecdcdc;
 }
 
-.problem-name{
+.problem-name {
     cursor: pointer;
 }
 
@@ -318,7 +318,7 @@ body {
     background-color: #442b6b;
 }
 
-#submissions-holder i{
+#submissions-holder i {
     font-size: 18px;
     margin-left: 3px;
 }
@@ -327,12 +327,12 @@ body {
     background-color: #c4e4d1;
 }
 
-.no-width-height{
+.no-width-height {
     width: 0;
     height: 0;
 }
 
-.height-500{
+.height-500 {
     height: 500px;
 }
 
@@ -341,7 +341,7 @@ body {
     right: 0px;
 }
 
-#profile-icon{
+#profile-icon {
     color: orange;
     font-size: 30px;
 }
@@ -351,6 +351,6 @@ body {
     color: orange;
 }
 
-.font-size-20{
+.font-size-20 {
     font-size: 20px;
 }
