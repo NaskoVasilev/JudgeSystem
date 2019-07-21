@@ -1,6 +1,9 @@
 ﻿namespace JudgeSystem.Web.Dtos.Test
 {
-	public class TestDataDto
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Data.Models;
+
+    public class TestDataDto : IMapFrom<Test>
 	{
 		public int Id { get; set; }
 

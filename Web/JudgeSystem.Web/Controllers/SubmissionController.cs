@@ -23,7 +23,7 @@
     using Newtonsoft.Json;
     using JudgeSystem.Common;
 
-    //[Authorize]
+    [Authorize]
     public class SubmissionController : BaseController
 	{
 		private const int SubmissionPerPage = 5;
@@ -96,7 +96,7 @@
                 sourceCodes = new List<string> { model.Code };
                 submissionContent = Encoding.UTF8.GetBytes(model.Code);
             }
-            else if (model.File == null)
+            else if (model.File != null)
             {
                 if(Utility.ConvertBytesToKiloBytes(model.File.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
                 {
