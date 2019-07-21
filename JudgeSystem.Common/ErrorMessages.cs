@@ -23,5 +23,11 @@ namespace JudgeSystem.Common
 		public const string InvalidStudentProfile = "Your student profile is not activated! Connect to administrators for more info!";
 
         public const string InvalidSearchKeyword = "The provided keyword must be at least one symbol long";
+
+        public const string InvalidSubmission = "Please enter valid submission";
+
+        public static string TooBigSubmissionFile = $"The zip file must be smaller than {GlobalConstants.SubmissionFileMaxSizeInKb} KB.";
+
+        public static string TooLongSubmissionCode = $"The submitted code is too long.";
     }
 }

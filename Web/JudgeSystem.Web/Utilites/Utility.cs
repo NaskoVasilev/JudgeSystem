@@ -43,5 +43,11 @@
 			double megabyteInBytes = 1000000;
 			return bytes / megabyteInBytes;
 		}
-	}
+
+        public static double ConvertBytesToKiloBytes(long bytes)
+        {
+            double kilobyteInBytes = 1000;
+            return bytes / kilobyteInBytes;
+        }
+    }
 }

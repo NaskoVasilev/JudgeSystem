@@ -20,24 +20,27 @@
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using Newtonsoft.Json;
+    using JudgeSystem.Common;
 
-    [Authorize]
-	public class SubmissionController : BaseController
+    //[Authorize]
+    public class SubmissionController : BaseController
 	{
 		private const int SubmissionPerPage = 5;
 		private readonly ISubmissionService submissionService;
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly ITestService testService;
 		private readonly IExecutedTestService executedTestService;
+        private readonly IProblemService problemService;
 
-		public SubmissionController(ISubmissionService submissionService, UserManager<ApplicationUser> userManager,
+        public SubmissionController(ISubmissionService submissionService, UserManager<ApplicationUser> userManager,
 			ITestService testService, IExecutedTestService executedTestService)
 		{
 			this.submissionService = submissionService;
 			this.userManager = userManager;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
-		}
+        }
 
 		public IActionResult Details(int id)
 		{
@@ -78,14 +81,46 @@
 			return Json(submissionsCount);
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Create(SubmissionInputModel model)
-		{
-			string userId = userManager.GetUserId(this.User);
+        [IgnoreAntiforgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Create(SubmissionInputModel model)
+        {
+            byte[] submissionContent;
+            List<string> sourceCodes = new List<string>();
+            if (!string.IsNullOrEmpty(model.Code))
+            {
+                if(model.Code.Length > GlobalConstants.MaxSubmissionCodeLength)
+                {
+                    return this.BadRequest(ErrorMessages.TooLongSubmissionCode);
+                }
+                sourceCodes = new List<string> { model.Code };
+                submissionContent = Encoding.UTF8.GetBytes(model.Code);
+            }
+            else if (model.File == null)
+            {
+                if(Utility.ConvertBytesToKiloBytes(model.File.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
+                {
+                    return this.BadRequest(ErrorMessages.TooBigSubmissionFile);
+                }
+
+                using(var stream = new System.IO.MemoryStream())
+                {
+                    await model.File.CopyToAsync(stream);
+                    submissionContent = stream.ToArray();
+                    sourceCodes = ZipParser.ExtractZipFile(stream);
+                }
+            }
+            else
+            {
+                return this.BadRequest(ErrorMessages.InvalidSubmission);
+            }
+
+            string userId = userManager.GetUserId(this.User);
+            model.SubmissionContent = submissionContent;
 			Submission submission = await submissionService.Create(model, userId);
 
 			//TODO make submission compiling and code excution asynchronous
-			await RunTests(submission, submission.ProblemId);
+			await RunTests(submission, submission.ProblemId, sourceCodes);
 			await submissionService.UpdateAndAddActualPoints(submission.Id);
 
 			SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);
@@ -93,11 +128,11 @@
 		}
 
 		[NonAction]
-		private async Task RunTests(Submission submission, int problemId)
+		private async Task RunTests(Submission submission, int problemId, List<string> sourceCodes)
 		{
 			CSharpCompiler compiler = new CSharpCompiler();
 			//TODO: run compilation asynchronously
-			CompileResult compileResult = compiler.CreateAssembly(Encoding.UTF8.GetString(submission.Code));
+			CompileResult compileResult = compiler.CreateAssembly(sourceCodes);
 			if (!compileResult.IsCompiledSuccessfully)
 			{
 				submission.CompilationErrors = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, compileResult.Errors));

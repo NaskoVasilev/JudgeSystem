@@ -34,7 +34,7 @@
 		{
 			Submission submission = new Submission
 			{
-				Code = Encoding.UTF8.GetBytes(model.Code),
+				Code = model.SubmissionContent,
 				ProblemId = model.ProblemId,
 				UserId = userId,
 				ContestId = model.ContestId

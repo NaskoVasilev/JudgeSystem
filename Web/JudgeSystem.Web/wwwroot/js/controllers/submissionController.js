@@ -1,5 +1,6 @@
 ﻿let submissiosPerPage = 5;
 let currentPageClass = 'current-page';
+let zipFileSubmissionType = "ZipFile";
 
 window.onload = () => {
 	let hash = window.location.hash;
@@ -69,24 +70,46 @@ $(".problem-name").on("click", (e) => {
 
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
-	let contestId = $('#submit-btn')[0].dataset.contestid;
-	let code = editor.getValue();
+    let submissionType = $('.active-problem')[0].dataset.type;
+    let contestId = $('#submit-btn')[0].dataset.contestid;
+
+    var formData = new FormData();
+    formData.append('ProblemId', problemId);
+
+    if (submissionType === zipFileSubmissionType) {
+        formData.append('file', $('.file-upload-field')[0].files[0]);
+    }
+    else {
+        let code = editor.getValue();
+        formData.append('code', code);
+    }
+
+    if (contestId) {
+        formData.append('contestId', contestId);
+    }
+
+    console.log(formData);
+
 	let tr = $('<tr></tr>');
 	let pointsTd = $('<td></td>');
 	let spinner = $('<div class="spinner-border text-success" role="status"></div>');
 	pointsTd.append(spinner);
-	tr.append(pointsTd);
+    tr.append(pointsTd);
+
 	let tbody = $('#submissions-holder tbody');
 	tbody.prepend(tr);
 	editor.setValue("");
 
-	let actionData = { problemId, code };
-	if (contestId) {
-		actionData.contestId = contestId;
-	}
+    $.ajax({
+        url: '/Submission/Create',
+        data: formData,
+        type: 'POST',
+        contentType: false,
+        processData: false
+    })
+        .done((response) => {
+            console.log(response)
 
-	$.post('/Submission/Create', actionData)
-		.done((response) => {
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
 			tbody.prepend(tr);
@@ -243,7 +266,7 @@ $("#next").on('click', () => {
 });
 
 function hideOneOfCodeInputs(submissionType) {
-    if (submissionType === "ZipFile") {
+    if (submissionType === zipFileSubmissionType) {
         $(".code-wrapper").hide();
         $("#zip-file").show();
     }

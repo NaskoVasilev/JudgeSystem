@@ -53,5 +53,9 @@
 		public const int MinStudentsInClass = 1;
 
 		public const int MaxStudentsInClass = 26;
+
+        public const int SubmissionFileMaxSizeInKb = 16;
+
+        public const int MaxSubmissionCodeLength = 15000;
 	}
 }
