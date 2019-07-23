@@ -21,13 +21,11 @@
 	{
 		private readonly IRepository<Submission> repository;
 		private readonly IEstimator estimator;
-		private readonly IProblemService problemService;
 
-		public SubmissionService(IRepository<Submission> repository, IEstimator estimator, IProblemService problemService)
+		public SubmissionService(IRepository<Submission> repository, IEstimator estimator)
 		{
 			this.repository = repository;
 			this.estimator = estimator;
-			this.problemService = problemService;
 		}
 
 		public async Task<Submission> Create(SubmissionInputModel model, string userId)
@@ -72,28 +70,6 @@
 			await repository.SaveChangesAsync();
 		}
 
-		public SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
-		{
-			SubmissionResult submissionResult = new SubmissionResult
-			{
-				MaxPoints = submission.Problem.MaxPoints,
-				ActualPoints = submission.ActualPoints,
-				ExecutedTests = submission.ExecutedTests.Select(t => new ExecutedTestResult
-				{
-					IsCorrect = t.IsCorrect,
-					ExecutionResultType = t.ExecutionResultType.ToString()
-				})
-					.ToList(),
-				IsCompiledSuccessfully = submission.CompilationErrors == null || submission.CompilationErrors.Length == 0,
-				SubmissionDate = submission.SubmisionDate.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture),
-				Id = submission.Id,
-				TotalMemoryUsed = submission.ExecutedTests.Sum(t => t.MemoryUsed),
-				TotalTimeUsed = submission.ExecutedTests.Sum(t => t.TimeUsed)
-			};
-
-			return submissionResult;
-		}
-
 		public int GetProblemSubmissionsCount(int problemId, string userId)
 		{
 			return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
@@ -124,7 +100,7 @@
 			return submissions;
 		}
 
-		private IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
+		public IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
 		{
 			var submissions = submissionsFromDb
 				.Include(s => s.ExecutedTests)
@@ -184,6 +160,28 @@
                 .Where(x => x.Id == id)
                 .Select(x => x.Problem.Name)
                 .FirstOrDefault();
+        }
+
+        private SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
+        {
+            SubmissionResult submissionResult = new SubmissionResult
+            {
+                MaxPoints = submission.Problem.MaxPoints,
+                ActualPoints = submission.ActualPoints,
+                ExecutedTests = submission.ExecutedTests.Select(t => new ExecutedTestResult
+                {
+                    IsCorrect = t.IsCorrect,
+                    ExecutionResultType = t.ExecutionResultType.ToString()
+                })
+                .ToList(),
+                IsCompiledSuccessfully = submission.CompilationErrors == null || submission.CompilationErrors.Length == 0,
+                SubmissionDate = submission.SubmisionDate.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture),
+                Id = submission.Id,
+                TotalMemoryUsed = submission.ExecutedTests.Sum(t => t.MemoryUsed),
+                TotalTimeUsed = submission.ExecutedTests.Sum(t => t.TimeUsed)
+            };
+
+            return submissionResult;
         }
     }
 }
