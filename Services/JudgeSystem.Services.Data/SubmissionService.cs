@@ -100,7 +100,7 @@
 			return submissions;
 		}
 
-		public IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
+		private IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
 		{
 			var submissions = submissionsFromDb
 				.Include(s => s.ExecutedTests)
