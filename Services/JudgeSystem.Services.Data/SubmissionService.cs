@@ -1,23 +1,23 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Common.Repositories;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.Dtos.ExecutedTest;
-	using JudgeSystem.Web.Dtos.Submission;
-	using JudgeSystem.Web.InputModels.Submission;
-	using JudgeSystem.Web.ViewModels.Submission;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data.Common.Repositories;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.Dtos.ExecutedTest;
+    using JudgeSystem.Web.Dtos.Submission;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Web.InputModels.Submission;
+    using JudgeSystem.Web.ViewModels.Submission;
 
-	using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
 
-	public class SubmissionService : ISubmissionService
+    public class SubmissionService : ISubmissionService
 	{
 		private readonly IRepository<Submission> repository;
 		private readonly IEstimator estimator;
@@ -86,6 +86,11 @@
 				.Where(s => s.Id == id)
 				.To<SubmissionViewModel>()
 				.FirstOrDefault();
+
+            if(submission == null)
+            {
+                throw new EntityNullException(nameof(submission));
+            }
 
 			submission.ExecutedTests = submission.ExecutedTests.OrderByDescending(t => t.TestIsTrialTest).ToList();
 			return submission;

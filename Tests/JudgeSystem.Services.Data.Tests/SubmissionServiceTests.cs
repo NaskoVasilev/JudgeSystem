@@ -3,6 +3,7 @@ using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Submission;
 using Moq;
 using System;
@@ -104,6 +105,84 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expecctedSubmission.ContestId, submission.ContestId);
         }
 
+        [Theory]
+        [InlineData(3, "me", 2)]
+        [InlineData(4, "me", 0)]
+        [InlineData(2, "me123", 0)]
+        public void GetProblemSubmissionsCount_ShouldReturnDifferentValues_WithDiffernertData(int problemId, 
+            string userId, int expectedCount)
+        {
+            var service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
+
+            int actualCount = service.GetProblemSubmissionsCount(problemId, userId);
+
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        [Theory]
+        [InlineData(2, "me", 1, 2)]
+        [InlineData(3, "me", 2, 0)]
+        public void GetSubmissionsCountByProblemIdAndContestId_ShouldReturnDifferentValues_WithDiffernertData(int problemId,
+          string userId, int contestId, int expectedCount)
+        {
+            var service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
+
+            int actualCount = service.GetSubmissionsCountByProblemIdAndContestId(problemId, contestId, userId);
+
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        [Fact]
+        public void GetSubmissionDetails_WithValidId_ShouldReturnCorrectData()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            var actualSubmission = service.GetSubmissionDetails(1);
+            var expectedSubmission = testData.First(x => x.Id == 1);
+
+            Assert.Equal("using System", actualSubmission.Code);
+            Assert.Equal(3, actualSubmission.ExecutedTests.Count);
+            Assert.Equal(SubmissionType.PlainCode, actualSubmission.ProblemSubmissionType);
+            Assert.True(actualSubmission.CompiledSucessfully);
+            Assert.Empty(actualSubmission.CompilationErrors);
+        }
+
+        [Fact]
+        public void GetSubmissionDetails_WithValidIdAndCompilationErrorrs_IsCompiledSuccessfullyShoulBeFalse()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            var actualSubmission = service.GetSubmissionDetails(2);
+            var expectedSubmission = testData.First(x => x.Id == 2);
+
+            Assert.False(actualSubmission.CompiledSucessfully);
+            Assert.Equal("invalid operation", actualSubmission.CompilationErrors);
+        }
+
+        [Fact]
+        public void GetSubmissionDetails_WithValidIdAndZipFileAsSubmissionType_MappedCodeShouldBeNull()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            var actualSubmission = service.GetSubmissionDetails(2);
+            var expectedSubmission = testData.First(x => x.Id == 2);
+
+            Assert.Empty(actualSubmission.Code);
+            Assert.Equal(expectedSubmission.Problem.SubmissionType, actualSubmission.ProblemSubmissionType);
+        }
+
+        [Fact]
+        public void GetSubmissionDetails_WithInValidId_ShouldReturnThrowEntityNullException()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            Assert.Throws<EntityNullException>(() => service.GetSubmissionDetails(4));
+        }
+
         private async Task<SubmissionService> CreateSubmissionService(List<Submission> testData)
         {
             await this.context.Submissions.AddRangeAsync(testData);
@@ -122,20 +201,45 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Submission> GetDetailedTestData()
         {
+            var user = new ApplicationUser { UserName = "Atanas" };
+
             return new List<Submission>
             {
                 new Submission
                 {
                     Id = 1,
                     ActualPoints = 100,
+                    Code = Encoding.UTF8.GetBytes("using System"),
                     CompilationErrors = null,
                     ExecutedTests = new List<ExecutedTest>
                     {
-                        new ExecutedTest { IsCorrect = true, TimeUsed = 5, MemoryUsed = 10, ExecutionResultType = TestExecutionResultType.Success },
-                        new ExecutedTest { IsCorrect = true, TimeUsed = 20, MemoryUsed = 20, ExecutionResultType = TestExecutionResultType.Success },
-                        new ExecutedTest { IsCorrect = true, TimeUsed = 5, MemoryUsed = 10, ExecutionResultType = TestExecutionResultType.Success }
+                        new ExecutedTest
+                        {
+                            IsCorrect = true,
+                            TimeUsed = 5,
+                            MemoryUsed = 10,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                        },
+                        new ExecutedTest
+                        {
+                            IsCorrect = true,
+                            TimeUsed = 20,
+                            MemoryUsed = 20,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                        },
+                        new ExecutedTest
+                        {
+                            IsCorrect = true,
+                            TimeUsed = 5,
+                            MemoryUsed = 10,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                        }
                     },
-                    Problem = new Problem { MaxPoints = 100 },
+                    Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.PlainCode },
+                    User = user,
                     SubmisionDate = new DateTime(2019, 5, 2),
                     ProblemId = 2,
                     UserId = "test_id",
@@ -144,10 +248,12 @@ namespace JudgeSystem.Services.Data.Tests
                 {
                     Id = 2,
                     ActualPoints = 0,
+                    Code = new byte[] {1, 12, 22, 25, 168 },
                     CompilationErrors = Encoding.UTF8.GetBytes("invalid operation"),
-                    Problem = new Problem { MaxPoints = 100 },
+                    Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.ZipFile },
                     SubmisionDate = new DateTime(2019, 5, 2),
                     ProblemId = 1,
+                    User = user,
                     UserId = "test_id",
                 },
                 new Submission
@@ -162,8 +268,9 @@ namespace JudgeSystem.Services.Data.Tests
                         new ExecutedTest { IsCorrect = true, TimeUsed = 5, MemoryUsed = 10, ExecutionResultType = TestExecutionResultType.Success },
                         new ExecutedTest { IsCorrect = false, TimeUsed = 51, MemoryUsed = 14, ExecutionResultType = TestExecutionResultType.RunTimeError }
                     },
-                    Problem = new Problem { MaxPoints = 100 },
+                    Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.PlainCode },
                     ProblemId = 1,
+                    User = user,
                     UserId = "test_id",
                     SubmisionDate = new DateTime(2019, 6, 2),
                  }
@@ -178,14 +285,14 @@ namespace JudgeSystem.Services.Data.Tests
 
             return new List<Submission>
             {
-                new Submission { Id = 1, ProblemId = 2, UserId = "me", SubmisionDate = new DateTime(2019, 7, 2), Problem = secondProblem },
-                new Submission { Id = 2, ProblemId = 2, UserId = "me", SubmisionDate = new DateTime(2019, 6, 2), Problem = secondProblem },
-                new Submission { Id = 3, ProblemId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = firstProblem },
-                new Submission { Id = 4, ProblemId = 2, UserId = "me", SubmisionDate = new DateTime(2018, 7, 2), Problem = secondProblem },
-                new Submission { Id = 5, ProblemId = 3, UserId = "me", SubmisionDate = new DateTime(2019, 9, 2), Problem = thirdProblem },
-                new Submission { Id = 6, ProblemId = 3, UserId = "me123", SubmisionDate = new DateTime(2019, 2, 2), Problem = thirdProblem },
-                new Submission { Id = 7, ProblemId = 3, UserId = "me", SubmisionDate = new DateTime(2019, 4, 2), Problem = thirdProblem },
-                new Submission { Id = 8, ProblemId = 2, UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = secondProblem },
+                new Submission { Id = 1, ProblemId = 2, ContestId = null, UserId = "me", SubmisionDate = new DateTime(2019, 7, 2), Problem = secondProblem },
+                new Submission { Id = 2, ProblemId = 2, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 6, 2), Problem = secondProblem },
+                new Submission { Id = 3, ProblemId = 1, ContestId = 2,  UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = firstProblem },
+                new Submission { Id = 4, ProblemId = 2, ContestId = 2, UserId = "me", SubmisionDate = new DateTime(2018, 7, 2), Problem = secondProblem },
+                new Submission { Id = 5, ProblemId = 3, ContestId = null, UserId = "me", SubmisionDate = new DateTime(2019, 9, 2), Problem = thirdProblem },
+                new Submission { Id = 6, ProblemId = 3, ContestId = 1, UserId = "me123", SubmisionDate = new DateTime(2019, 2, 2), Problem = thirdProblem },
+                new Submission { Id = 7, ProblemId = 3, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 4, 2), Problem = thirdProblem },
+                new Submission { Id = 8, ProblemId = 2, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = secondProblem },
             };
         }
     }
