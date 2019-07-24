@@ -24,7 +24,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		public async Task<IActionResult> ProblemTests(int problemId)
 		{
 			ViewData["lessonId"] = await problemService.GetLessonId(problemId);
-			var tests = testService.TestsByProblem(problemId);
+			var tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending(problemId);
 			return View(tests);
 		}
 

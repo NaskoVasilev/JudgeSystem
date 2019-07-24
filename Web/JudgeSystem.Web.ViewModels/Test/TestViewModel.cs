@@ -3,7 +3,7 @@
 	using Services.Mapping;
 	using Data.Models;
 
-	public class TestViewModel : IMapTo<Test>
+	public class TestViewModel : IMapFrom<Test>
 	{
 		public int Id { get; set; }
 

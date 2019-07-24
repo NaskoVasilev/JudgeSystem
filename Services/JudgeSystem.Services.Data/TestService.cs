@@ -12,8 +12,9 @@
 	using JudgeSystem.Web.InputModels.Test;
 
 	using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
 
-	public class TestService : ITestService
+    public class TestService : ITestService
 	{
 		private readonly IRepository<Test> repository;
 		private readonly IExecutedTestService executedTestService;
@@ -34,6 +35,11 @@
 
 		public async Task Delete(Test test)
 		{
+            if(!this.Exists(test.Id))
+            {
+                throw new EntityNullException();
+            }
+
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
 
 			repository.Delete(test);
@@ -55,7 +61,7 @@
 			return tests;
 		}
 
-		public IEnumerable<TestViewModel> TestsByProblem(int problemId)
+		public IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId)
 		{
 			return this.repository.All()
 				.Where(t => t.ProblemId == problemId)
@@ -66,8 +72,18 @@
 
 		public async Task Update(Test test)
 		{
+            if(!this.Exists(test.Id))
+            {
+                throw new EntityNullException(nameof(test));
+            }
+
 			repository.Update(test);
 			await repository.SaveChangesAsync();
 		}
+
+        private bool Exists(int id)
+        {
+            return this.repository.All().Any(x => x.Id == id);
+        }
 	}
 }

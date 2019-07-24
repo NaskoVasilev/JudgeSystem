@@ -12,7 +12,7 @@
 	{
 		Task<Test> Add(TestInputModel model);
 
-		IEnumerable<TestViewModel> TestsByProblem(int problemId);
+		IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId);
 
 		Task<Test> GetById(int id);
 
