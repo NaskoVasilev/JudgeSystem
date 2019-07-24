@@ -119,7 +119,7 @@
 			return submissions;
 		}
 
-		public async Task UpdateAndAddActualPoints(int submissionId)
+		public async Task CalculateActualPoints(int submissionId)
 		{
 			Submission submission = this.repository.All()
 				.Where(s => s.Id == submissionId)

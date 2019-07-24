@@ -80,7 +80,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(2, "me", 2, 2, "2, 4")]
         [InlineData(2, "me", 2, 3, "4")]
         [InlineData(2, "me", 2, 5, "")]
-        public async Task GetUserSubmissionsByProblemIdAndContestId_WithValidDataAndDifferentPages_ShouldReturnCorrectData(
+        public async Task GetUserSubmissionsByProblemId_WithValidDataAndDifferentPages_ShouldReturnCorrectData(
             int problemId, string userId, int page, int submissionsPerPage, string expectedIds)
         {
             var testData = PaginationTestData();
@@ -183,6 +183,85 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Throws<EntityNullException>(() => service.GetSubmissionDetails(4));
         }
 
+        [Theory]
+        [InlineData(1, 2, "me", 1, 10, "8, 2")]
+        [InlineData(1, 2, "me", 1, 1, "8")]
+        [InlineData(1, 2, "me", 2, 1, "2")]
+        [InlineData(1, 2, "me", 3, 1, "")]
+        [InlineData(2, 2, "m123e", 1, 10, "")]
+        public async Task GetUserSubmissionsByProblemIdAndContestId_WithValidDataAndDifferentPages_ShouldReturnCorrectData(
+                   int contestId, int problemId, string userId, int page, int submissionsPerPage, string expectedIds)
+        {
+            var testData = PaginationTestData();
+            var service = await CreateSubmissionService(testData);
+
+            var actualSubmissions = service.GetUserSubmissionsByProblemIdAndContestId(contestId, problemId, userId, page, submissionsPerPage);
+
+            Assert.Equal(expectedIds, string.Join(", ", actualSubmissions.Select(x => x.Id)));
+        }
+
+        [Theory]
+        [InlineData(1, 100)]
+        [InlineData(2, 0)]
+        [InlineData(3, 50)]
+        public async Task AddActualPoints_InDifferentCases_ShouldWorkCorrect(int id, int expectedPoints)
+        {
+            var service = await CreateSubmissionService(GetDetailedTestData());
+
+            await service.CalculateActualPoints(id);
+            var actualPoints = this.context.Submissions.Find(id).ActualPoints;
+
+            Assert.Equal(expectedPoints, actualPoints);
+        }
+
+        [Fact]
+        public void GetSubmissionCodeById_WithValidId_ShouldReturnCodeAsByteArray()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            int id = 2;
+
+            var code = service.GetSubmissionCodeById(id);
+            var expectedCode = testData.First(x => x.Id == id).Code;
+
+            Assert.Equal(expectedCode, code);
+        }
+
+        [Fact]
+        public void GetSubmissionCodeById_WithInValidId_ShouldReturnNull()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            var code = service.GetSubmissionCodeById(45);
+
+            Assert.Null(code);
+        }
+
+        [Fact]
+        public async Task GetProblemNameBySubmissionId_WithValidId_ShouldReturnCorrectName()
+        {
+            var service = await CreateSubmissionService(new List<Submission>());
+            var submission = new Submission { Id = 99, Problem = new Problem { Name = "Test_Problem" } };
+            await this.context.AddAsync(submission);
+            await this.context.SaveChangesAsync();
+
+            var problemName = service.GetProblemNameBySubmissionId(99);
+
+            Assert.Equal("Test_Problem", problemName);
+        }
+
+        [Fact]
+        public void GetProblemNameBySubmissionId_WithInValidId_ShouldReturnNull()
+        {
+            var testData = GetDetailedTestData();
+            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+
+            var problemName = service.GetProblemNameBySubmissionId(999);
+
+            Assert.Null(problemName);
+        }
+
         private async Task<SubmissionService> CreateSubmissionService(List<Submission> testData)
         {
             await this.context.Submissions.AddRangeAsync(testData);
@@ -208,7 +287,6 @@ namespace JudgeSystem.Services.Data.Tests
                 new Submission
                 {
                     Id = 1,
-                    ActualPoints = 100,
                     Code = Encoding.UTF8.GetBytes("using System"),
                     CompilationErrors = null,
                     ExecutedTests = new List<ExecutedTest>
@@ -219,7 +297,7 @@ namespace JudgeSystem.Services.Data.Tests
                             TimeUsed = 5,
                             MemoryUsed = 10,
                             ExecutionResultType = TestExecutionResultType.Success,
-                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = false }
                         },
                         new ExecutedTest
                         {
@@ -227,7 +305,7 @@ namespace JudgeSystem.Services.Data.Tests
                             TimeUsed = 20,
                             MemoryUsed = 20,
                             ExecutionResultType = TestExecutionResultType.Success,
-                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = false }
                         },
                         new ExecutedTest
                         {
@@ -235,7 +313,7 @@ namespace JudgeSystem.Services.Data.Tests
                             TimeUsed = 5,
                             MemoryUsed = 10,
                             ExecutionResultType = TestExecutionResultType.Success,
-                            Test = new Test { InputData = "Test", OutputData = "Test123" }
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = true }
                         }
                     },
                     Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.PlainCode },
@@ -247,7 +325,6 @@ namespace JudgeSystem.Services.Data.Tests
                 new Submission
                 {
                     Id = 2,
-                    ActualPoints = 0,
                     Code = new byte[] {1, 12, 22, 25, 168 },
                     CompilationErrors = Encoding.UTF8.GetBytes("invalid operation"),
                     Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.ZipFile },
@@ -259,14 +336,40 @@ namespace JudgeSystem.Services.Data.Tests
                 new Submission
                 {
                     Id = 3,
-                    ActualPoints = 50,
                     CompilationErrors = null,
                     ExecutedTests = new List<ExecutedTest>
                     {
-                        new ExecutedTest { IsCorrect = true, TimeUsed = 5, MemoryUsed = 10, ExecutionResultType = TestExecutionResultType.Success },
-                        new ExecutedTest { IsCorrect = false, TimeUsed = 50, MemoryUsed = 60, ExecutionResultType = TestExecutionResultType.MemoryLimit },
-                        new ExecutedTest { IsCorrect = true, TimeUsed = 5, MemoryUsed = 10, ExecutionResultType = TestExecutionResultType.Success },
-                        new ExecutedTest { IsCorrect = false, TimeUsed = 51, MemoryUsed = 14, ExecutionResultType = TestExecutionResultType.RunTimeError }
+                        new ExecutedTest
+                        {
+                            IsCorrect = true,
+                            TimeUsed = 5,
+                            MemoryUsed = 10,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = true }
+                        },
+                        new ExecutedTest {
+                            IsCorrect = false,
+                            TimeUsed = 50,
+                            MemoryUsed = 60,
+                            ExecutionResultType = TestExecutionResultType.MemoryLimit,
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = true }
+                        },
+                        new ExecutedTest
+                        {
+                            IsCorrect = true,
+                            TimeUsed = 5,
+                            MemoryUsed = 10,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = false }
+                        },
+                        new ExecutedTest
+                        {
+                            IsCorrect = false,
+                            TimeUsed = 51,
+                            MemoryUsed = 14,
+                            ExecutionResultType = TestExecutionResultType.RunTimeError,
+                            Test = new Test { InputData = "Test", OutputData = "Test123", IsTrialTest = false }
+                        }
                     },
                     Problem = new Problem { MaxPoints = 100, SubmissionType = SubmissionType.PlainCode },
                     ProblemId = 1,
