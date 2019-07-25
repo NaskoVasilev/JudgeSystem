@@ -21,6 +21,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using JudgeSystem.Common;
+    using JudgeSystem.Web.Filters;
 
     [Authorize]
     public class SubmissionController : BaseController
@@ -55,6 +56,7 @@
             return this.File(submissionCode, GlobalConstants.OctetStreanMimeType, $"{problemName}.zip");
         }
 
+        [EndpointExceptionFilter]
 		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage, int? contestId = null)
 		{
 			string userId = userManager.GetUserId(this.User);
@@ -72,7 +74,8 @@
 			return Json(submissionResults);
 		}
 
-		public IActionResult GetSubmissionsCount(int problemId, int? contestId = null)
+        [EndpointExceptionFilter]
+        public IActionResult GetSubmissionsCount(int problemId, int? contestId = null)
 		{
 			string userId = userManager.GetUserId(User);
 			int submissionsCount = 0;
@@ -88,6 +91,7 @@
 			return Json(submissionsCount);
 		}
 
+        [EndpointExceptionFilter]
         [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Create(SubmissionInputModel model)

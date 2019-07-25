@@ -17,8 +17,9 @@
 	using Microsoft.AspNetCore.Mvc.Rendering;
 	using Microsoft.AspNetCore.Mvc;
 	using JudgeSystem.Services;
+    using JudgeSystem.Web.Filters;
 
-	public class LessonController : AdministrationBaseController
+    public class LessonController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;
 		private readonly ILessonService lessonService;
@@ -123,7 +124,7 @@
 			Lesson lesson = await lessonService.GetById(model.Id);
 			if(lesson == null)
 			{
-				this.ThrowEntityNullException(nameof(lesson));
+				this.ThrowEntityNotFoundException(nameof(lesson));
 			}
 
 			if (lesson.IsLocked)
@@ -169,6 +170,7 @@
 			}
 		}
 
+        [EndpointExceptionFilter]
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
@@ -196,7 +198,7 @@
 			Lesson lesson = await lessonService.GetById(model.Id);
 			if(lesson == null)
 			{
-				this.ThrowEntityNullException(nameof(lesson));
+				this.ThrowEntityNotFoundException(nameof(lesson));
 			}
 
 			if(lesson.LessonPassword == passwordHashService.HashPassword(model.OldPassword))

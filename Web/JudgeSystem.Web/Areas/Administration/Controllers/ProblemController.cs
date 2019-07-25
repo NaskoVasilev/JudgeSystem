@@ -95,7 +95,7 @@
 
 			if (problem == null)
 			{
-				this.ThrowEntityNullException(nameof(problem));
+				this.ThrowEntityNotFoundException(nameof(problem));
 			}
 
 			await problemService.Delete(problem);

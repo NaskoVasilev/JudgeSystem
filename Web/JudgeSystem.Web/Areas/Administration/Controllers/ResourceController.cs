@@ -13,8 +13,9 @@
 	using JudgeSystem.Web.Infrastructure.Extensions;
 
 	using Microsoft.AspNetCore.Mvc;
+    using JudgeSystem.Web.Filters;
 
-	public class ResourceController : AdministrationBaseController
+    public class ResourceController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;
 		private readonly IFileManager fileManager;
@@ -63,7 +64,7 @@
 
 			if(resource == null)
 			{
-				this.ThrowEntityNullException(nameof(resource));
+				this.ThrowEntityNotFoundException(nameof(resource));
 			}
 
 			ViewData[GlobalConstants.ResourceTypesKey] = Utility.GetResourceTypesSelectList();
@@ -84,7 +85,7 @@
 			Resource resource = await resourceService.GetById(model.Id);
 			if(resource == null)
 			{
-				this.ThrowEntityNullException(nameof(resource));
+				this.ThrowEntityNotFoundException(nameof(resource));
 			}
 
 			string fileName = string.Empty;
@@ -98,6 +99,7 @@
 			return RedirectToAction(nameof(LessonResources), "Resource", new { resource.LessonId });
 		}
 
+        [EndpointExceptionFilter]
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{

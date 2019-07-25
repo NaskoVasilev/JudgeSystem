@@ -68,7 +68,7 @@
 			var lesson = await lessonService.GetById(model.Id);
 			if (lesson == null)
 			{
-				this.ThrowEntityNullException(nameof(lesson));
+				this.ThrowEntityNotFoundException(nameof(lesson));
 			}
 
 			if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))

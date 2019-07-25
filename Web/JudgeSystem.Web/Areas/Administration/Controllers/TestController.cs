@@ -7,6 +7,7 @@ using JudgeSystem.Web.ViewModels.Test;
 using JudgeSystem.Web.InputModels.Test;
 
 using Microsoft.AspNetCore.Mvc;
+using JudgeSystem.Web.Filters;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -28,6 +29,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(tests);
 		}
 
+        [EndpointExceptionFilter]
 		[HttpPost]
 		public async Task<IActionResult> Edit(TestEditInputModel model)
 		{
@@ -44,6 +46,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return Content(string.Format(InfoMessages.SuccessfullyEditMessage, nameof(test)));
 		}
 
+        [EndpointExceptionFilter]
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{

@@ -114,6 +114,7 @@
 		[NonAction]
 		private async Task<bool> SendActivationEmail(string activationKey, string toAddress)
 		{
+            //TODO: Refactor this
 			string fromName = configuration["App:Name"];
 			string sendGridApiKey = configuration["SendGrid:ApiKey"];
 			string fromAddress = configuration["Email:Username"];

@@ -135,7 +135,6 @@ namespace JudgeSystem.Services.Data.Tests
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new Test() { Id = 99 }));
         }
 
-
         private async Task<TestService> CreateTestService(List<Test> tests, List<ExecutedTest> executedTests = null)
         {
             if (executedTests == null)

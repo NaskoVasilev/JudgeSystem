@@ -29,5 +29,7 @@ namespace JudgeSystem.Common
         public static string TooBigSubmissionFile = $"The zip file must be smaller than {GlobalConstants.SubmissionFileMaxSizeInKb} KB.";
 
         public static string TooLongSubmissionCode = $"The submitted code is too long.";
+
+        public const string EndpointErrorMessage = "Some error occurs.";
     }
 }

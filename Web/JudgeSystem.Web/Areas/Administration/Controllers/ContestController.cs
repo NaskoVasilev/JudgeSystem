@@ -2,6 +2,7 @@
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
@@ -52,6 +53,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return Redirect("/");
 		}
 
+        [EndpointExceptionFilter]
 		public IActionResult GetLessons(int courseId, LessonType lessonType)
 		{
 			var lessons = lessonService.GetCourseLesosns(courseId, lessonType);
@@ -127,6 +129,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 		}
 
+        [EndpointExceptionFilter]
 		[HttpGet("/Contest/Results/{contestId}/PagesCount")]
 		public int GetContestResultPagesCount(int contestId)
 		{

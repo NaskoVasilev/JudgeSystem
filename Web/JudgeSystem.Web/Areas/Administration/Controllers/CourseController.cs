@@ -7,7 +7,8 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Data;
 	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.InputModels.Course;
+    using JudgeSystem.Web.Filters;
+    using JudgeSystem.Web.InputModels.Course;
 
 	using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +71,7 @@
 			return RedirectToAction("All", "Course");
 		}
 
+        [EndpointExceptionFilter]
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{

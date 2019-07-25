@@ -37,8 +37,7 @@
 			return RedirectToAction(action, conrtoller, routeValues);
 		}
 
-
-		public void ThrowEntityNullException(string entityName)
+		public void ThrowEntityNotFoundException(string entityName)
 		{
 			throw new EntityNotFoundException(entityName);
 		}
