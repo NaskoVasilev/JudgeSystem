@@ -16,6 +16,7 @@
 
 	using Microsoft.EntityFrameworkCore;
     using JudgeSystem.Common;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
 
     public class LessonService : ILessonService
 	{
@@ -51,20 +52,30 @@
 
 		public async Task Delete(Lesson lesson)
 		{
+            if (!this.Exists(lesson.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
 			this.repository.Delete(lesson);
 			await this.repository.SaveChangesAsync();
 		}
 
-
 		public async Task<Lesson> GetById(int id)
 		{
-			return await repository.All()
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return await repository.All()
 				.FirstOrDefaultAsync(l => l.Id == id);
 		}
 
 		public IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType)
 		{
-			var lessons = repository.All().Where(l => l.CourseId == courseId && l.Type == lesosnType)
+			var lessons = repository.All()
+                .Where(l => l.CourseId == courseId && l.Type == lesosnType)
 				.To<ContestLessonDto>()
 				.ToList();
 
@@ -73,7 +84,12 @@
 
 		public async Task<LessonViewModel> GetLessonInfo(int id)
 		{
-			var lesson = await this.repository.All()
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            var lesson = await this.repository.All()
 				.Include(l => l.Problems)
 				.Include(l => l.Resources)
 				.FirstOrDefaultAsync(l => l.Id == id);
@@ -99,8 +115,18 @@
 
 		public async Task Update(Lesson lesson)
 		{
-			repository.Update(lesson);
+            if (!this.Exists(lesson.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            repository.Update(lesson);
 			await repository.SaveChangesAsync();
 		}
-	}
+
+        private bool Exists(int id)
+        {
+            return this.repository.All().Any(x => x.Id == id);
+        }
+    }
 }

@@ -8,9 +8,9 @@ using Xunit;
 using System.Linq;
 using JudgeSystem.Data.Models.Enums;
 using Moq;
-using Microsoft.EntityFrameworkCore;
 using System;
 using JudgeSystem.Common;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 
 namespace JudgeSystem.Services.Data.Tests
 {
@@ -76,7 +76,7 @@ namespace JudgeSystem.Services.Data.Tests
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
 
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => lessonService.Delete(new Lesson { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Delete(new Lesson { Id = 161651 }));
         }
 
         [Fact]
@@ -95,15 +95,12 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetById_WithInValidId_ShouldReturnNull()
+        public async Task GetById_WithInValidId_ShouldReturnThrowEntityNotFoundException()
         {
             var testData = GetTestData();
             LessonService service = await CreateLessonService(testData);
 
-            int id = 4984;
-            var actualData = await service.GetById(id);
-
-            Assert.Null(actualData);
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(161651));
         }
 
         [Theory]
@@ -156,6 +153,15 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expectedLesson.Resources.Count, actualLesson.Resources.Count);
             Assert.Equal(expectedLesson.Resources.Select(x => x.Name).ToList(), actualLesson.Resources.Select(x => x.Name).ToList());
             Assert.Equal(expectedLesson.Problems.Select(x => x.Name).ToList(), actualLesson.Problems.Select(x => x.Name).ToList());
+        }
+
+        [Fact]
+        public async Task GetLessonInfo()
+        {
+            var testData = GetTestData();
+            LessonService service = await CreateLessonService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonInfo(161651));
         }
 
         [Theory]
@@ -223,7 +229,7 @@ namespace JudgeSystem.Services.Data.Tests
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
 
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => lessonService.Update(new Lesson { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Update(new Lesson { Id = 161651 }));
         }
 
         private async Task<LessonService> CreateLessonService(List<Lesson> testData)
