@@ -58,7 +58,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateStudentService(new List<Student>());
 
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => service.DeleteAsync(new Student { Id = Guid.NewGuid().ToString() }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.DeleteAsync(new Student { Id = Guid.NewGuid().ToString() }));
         }
 
         [Fact]
@@ -90,14 +90,12 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetById_WithInValidId_ShouldReturnNull()
+        public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
 
-            var actualData = await service.GetById(Guid.NewGuid().ToString());
-
-            Assert.Null(actualData);
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -121,6 +119,15 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.NotNull(actualData);
             Assert.Equal(12, actualData.ClassNumber);
             Assert.Equal(SchoolClassType.A, actualData.ClassType);
+        }
+
+        [Fact]
+        public async Task GetStudentClassAsync_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateStudentService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetStudentClassAsync(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -169,6 +176,15 @@ namespace JudgeSystem.Services.Data.Tests
             await service.SetStudentProfileAsActivated(student);
 
             Assert.True(student.IsActivated);
+        }
+
+        [Fact]
+        public async Task SetStudentProfileAsActivated_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateStudentService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.SetStudentProfileAsActivated(new Student { Id = Guid.NewGuid().ToString() }));
         }
 
         [Theory]

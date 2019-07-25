@@ -35,13 +35,23 @@
 
 		public async Task DeleteAsync(Student student)
 		{
-			this.repository.Delete(student);
+            if (!this.Exists(student.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            this.repository.Delete(student);
 			await this.repository.SaveChangesAsync();
 		}
 
 		public async Task<T> GetById<T>(string id)
 		{
-			var student = await repository.All()
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            var student = await repository.All()
 				.Where(s => s.Id == id)
 				.To<T>()
 				.FirstOrDefaultAsync();
@@ -51,13 +61,22 @@
 
 		public async Task<Student> GetById(string id)
 		{
-			return await repository.All().FirstOrDefaultAsync(s => s.Id == id);
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return await repository.All().FirstOrDefaultAsync(s => s.Id == id);
 		}
 
 		public async Task<SchoolClass> GetStudentClassAsync(string id)
 		{
 			Student student = await this.repository.All().Include(s => s.SchoolClass).FirstOrDefaultAsync(s => s.Id == id);
-			return student.SchoolClass;
+            if(student == null)
+            {
+                throw new EntityNotFoundException();
+            }
+            return student.SchoolClass;
 		}
 
 		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
@@ -106,14 +125,24 @@
 
 		public async Task SetStudentProfileAsActivated(Student student)
 		{
-			student.IsActivated = true;
+            if (!this.Exists(student.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            student.IsActivated = true;
 			repository.Update(student);
 			await repository.SaveChangesAsync();
 		}
 
 		public async Task<Student> UpdateAsync(StudentEditInputModel model)
 		{
-			Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
+            if (!this.Exists(model.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
             if(student == null)
             {
                 throw new EntityNotFoundException(nameof(student));
@@ -127,5 +156,10 @@
 			await repository.SaveChangesAsync();
 			return student;
 		}
-	}
+
+        private bool Exists(string id)
+        {
+            return this.repository.All().Any(x => x.Id == id);
+        }
+    }
 }
