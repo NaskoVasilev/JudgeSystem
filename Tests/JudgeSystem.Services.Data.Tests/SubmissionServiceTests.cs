@@ -64,14 +64,12 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetSubmissionResult_WithInValidId_ShouldReturnNull()
+        public async Task GetSubmissionResult_WithInValidId_ShouldThrowEntityNotFoundException()
         {
             var testData = GetDetailedTestData();
             var service = await CreateSubmissionService(testData);
 
-            var actualResult = service.GetSubmissionResult(33);
-
-            Assert.Null(actualResult);
+            Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionResult(4894));
         }
 
         [Theory]
@@ -103,6 +101,15 @@ namespace JudgeSystem.Services.Data.Tests
             var expecctedSubmission = this.context.Submissions.Find(2);
 
             Assert.Equal(expecctedSubmission.ContestId, submission.ContestId);
+        }
+
+        [Fact]
+        public async Task Update_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetDetailedTestData();
+            var service = await CreateSubmissionService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new Submission { Id = 446546}));
         }
 
         [Theory]
@@ -204,7 +211,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(1, 100)]
         [InlineData(2, 0)]
         [InlineData(3, 50)]
-        public async Task AddActualPoints_InDifferentCases_ShouldWorkCorrect(int id, int expectedPoints)
+        public async Task CalculateActualPoints_InDifferentCases_ShouldWorkCorrect(int id, int expectedPoints)
         {
             var service = await CreateSubmissionService(GetDetailedTestData());
 
@@ -212,6 +219,24 @@ namespace JudgeSystem.Services.Data.Tests
             var actualPoints = this.context.Submissions.Find(id).ActualPoints;
 
             Assert.Equal(expectedPoints, actualPoints);
+        }
+
+        [Fact]
+        public async Task CalculateActualPoints_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetDetailedTestData();
+            var service = await CreateSubmissionService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.CalculateActualPoints(4894));
+        }
+
+        [Fact]
+        public async Task GetSubmissionCodeById_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetDetailedTestData();
+            var service = await CreateSubmissionService(testData);
+
+            Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionCodeById(4894));
         }
 
         [Fact]
@@ -225,17 +250,6 @@ namespace JudgeSystem.Services.Data.Tests
             var expectedCode = testData.First(x => x.Id == id).Code;
 
             Assert.Equal(expectedCode, code);
-        }
-
-        [Fact]
-        public void GetSubmissionCodeById_WithInValidId_ShouldReturnNull()
-        {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
-
-            var code = service.GetSubmissionCodeById(45);
-
-            Assert.Null(code);
         }
 
         [Fact]
@@ -257,9 +271,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetDetailedTestData();
             var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
-            var problemName = service.GetProblemNameBySubmissionId(999);
-
-            Assert.Null(problemName);
+            Assert.Throws<EntityNotFoundException>(() => service.GetProblemNameBySubmissionId(999));
         }
 
         private async Task<SubmissionService> CreateSubmissionService(List<Submission> testData)

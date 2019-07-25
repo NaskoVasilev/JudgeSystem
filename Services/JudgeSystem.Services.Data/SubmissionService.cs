@@ -45,6 +45,11 @@
 
 		public SubmissionResult GetSubmissionResult(int id)
 		{
+            if(!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
 			var submissioResult = repository.All()
 				.Where(s => s.Id == id)
 				.Include(s => s.ExecutedTests)
@@ -66,7 +71,12 @@
 
 		public async Task Update(Submission submission)
 		{
-			repository.Update(submission);
+            if (!this.Exists(submission.Id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            repository.Update(submission);
 			await repository.SaveChangesAsync();
 		}
 
@@ -82,7 +92,7 @@
 
 		public SubmissionViewModel GetSubmissionDetails(int id)
 		{
-			var submission = this.repository.All()
+            var submission = this.repository.All()
 				.Where(s => s.Id == id)
 				.To<SubmissionViewModel>()
 				.FirstOrDefault();
@@ -105,23 +115,14 @@
 			return submissions;
 		}
 
-		private IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
-		{
-			var submissions = submissionsFromDb
-				.Include(s => s.ExecutedTests)
-				.Include(s => s.Problem)
-				.OrderByDescending(s => s.SubmisionDate)
-				.Skip((page - 1) * submissionsPerPage)
-				.Take(submissionsPerPage)
-				.Select(MapSubmissionToSubmissionResult)
-				.ToList();
-
-			return submissions;
-		}
-
 		public async Task CalculateActualPoints(int submissionId)
 		{
-			Submission submission = this.repository.All()
+            if (!this.Exists(submissionId))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            Submission submission = this.repository.All()
 				.Where(s => s.Id == submissionId)
 				.Include(s => s.Problem)
 				.Include(s => s.ExecutedTests)
@@ -152,6 +153,11 @@
 
         public byte[] GetSubmissionCodeById(int id)
         {
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
             return this.repository.All()
                 .Where(x => x.Id == id)
                 .Select(x => x.Code)
@@ -160,6 +166,11 @@
 
         public string GetProblemNameBySubmissionId(int id)
         {
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
             return this.repository.All()
                 .Include(x => x.Problem)
                 .Where(x => x.Id == id)
@@ -187,6 +198,25 @@
             };
 
             return submissionResult;
+        }
+
+        private IEnumerable<SubmissionResult> GetSubmissionResults(IQueryable<Submission> submissionsFromDb, int page, int submissionsPerPage)
+        {
+            var submissions = submissionsFromDb
+                .Include(s => s.ExecutedTests)
+                .Include(s => s.Problem)
+                .OrderByDescending(s => s.SubmisionDate)
+                .Skip((page - 1) * submissionsPerPage)
+                .Take(submissionsPerPage)
+                .Select(MapSubmissionToSubmissionResult)
+                .ToList();
+
+            return submissions;
+        }
+
+        private bool Exists(int id)
+        {
+            return this.repository.All().Any(x => x.Id == id);
         }
     }
 }
