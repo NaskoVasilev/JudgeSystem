@@ -48,7 +48,12 @@
 
 		public async Task<Test> GetById(int id)
 		{
-			return await repository.All()
+            if (!this.Exists(id))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return await repository.All()
 				.FirstOrDefaultAsync(t => t.Id == id);
 		}
 

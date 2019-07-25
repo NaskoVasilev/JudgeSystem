@@ -81,9 +81,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateTestService(testData);
 
-            var actualData = await service.GetById(33);
-
-            Assert.Null(actualData);
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(4875));
         }
 
         [Theory]
