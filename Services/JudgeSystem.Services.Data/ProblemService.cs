@@ -92,7 +92,7 @@
 			Problem problem = await GetById(model.Id);
 			if(problem == null)
 			{
-				throw new EntityNullException(nameof(problem));
+				throw new EntityNotFoundException(nameof(problem));
 			}
 
 			problem.Name = model.Name;

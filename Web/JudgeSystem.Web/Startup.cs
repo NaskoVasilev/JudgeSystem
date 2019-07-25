@@ -15,6 +15,7 @@
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Services.Messaging;
     using JudgeSystem.Web.Dtos.Course;
+    using JudgeSystem.Web.Filters;
     using JudgeSystem.Web.InputModels.Course;
 	using JudgeSystem.Web.Utilites;
 	using JudgeSystem.Web.ViewModels;
@@ -74,6 +75,7 @@
                 .AddMvc(options => 
 				{
 					options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.Filters.Add<EntityNotFoundExceptionFilter>();
 				})
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>

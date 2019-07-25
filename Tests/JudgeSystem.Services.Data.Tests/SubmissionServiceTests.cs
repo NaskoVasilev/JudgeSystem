@@ -180,7 +180,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetDetailedTestData();
             var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
-            Assert.Throws<EntityNullException>(() => service.GetSubmissionDetails(4));
+            Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionDetails(4));
         }
 
         [Theory]

@@ -37,7 +37,7 @@
 		{
             if(!this.Exists(test.Id))
             {
-                throw new EntityNullException();
+                throw new EntityNotFoundException();
             }
 
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
@@ -74,7 +74,7 @@
 		{
             if(!this.Exists(test.Id))
             {
-                throw new EntityNullException(nameof(test));
+                throw new EntityNotFoundException(nameof(test));
             }
 
 			repository.Update(test);

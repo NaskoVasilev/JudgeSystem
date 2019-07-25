@@ -1,5 +1,6 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
+    using JudgeSystem.Web.Infrastructure.Exceptions;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController

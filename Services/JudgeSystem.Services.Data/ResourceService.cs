@@ -114,7 +114,7 @@
 
 			if (resource == null)
 			{
-				throw new EntityNullException(nameof(resource));
+				throw new EntityNotFoundException(nameof(resource));
 			}
 
 			if (!string.IsNullOrEmpty(fileName))

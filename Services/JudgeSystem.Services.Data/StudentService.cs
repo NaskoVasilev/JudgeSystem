@@ -116,7 +116,7 @@
 			Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
             if(student == null)
             {
-                throw new EntityNullException(nameof(student));
+                throw new EntityNotFoundException(nameof(student));
             }
 
 			student.FullName = model.FullName;

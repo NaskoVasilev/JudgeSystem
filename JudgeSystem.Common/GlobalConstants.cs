@@ -60,5 +60,6 @@
 
         public const string OctetStreanMimeType = "application/octet-stream";
 
+        public const string Location = "Location";
     }
 }

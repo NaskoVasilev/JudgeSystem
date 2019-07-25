@@ -206,7 +206,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
             var service = await CreateProblemService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNullException>(() => service.Update(inputModel));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
         }
 
         private async Task<ProblemService> CreateProblemService(List<Problem> testData)

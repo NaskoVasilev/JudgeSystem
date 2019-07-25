@@ -40,7 +40,7 @@
 
 		public void ThrowEntityNullException(string entityName)
 		{
-			throw new EntityNullException(entityName);
+			throw new EntityNotFoundException(entityName);
 		}
 	}
 }

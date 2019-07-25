@@ -229,7 +229,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
             var service = await CreateStudentService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNullException>(() => service.UpdateAsync(inputModel));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.UpdateAsync(inputModel));
         }
 
         private async Task<StudentService> CreateStudentService(List<Student> testData)

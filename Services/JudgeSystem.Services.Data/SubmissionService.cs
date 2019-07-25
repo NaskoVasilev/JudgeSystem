@@ -89,7 +89,7 @@
 
             if(submission == null)
             {
-                throw new EntityNullException(nameof(submission));
+                throw new EntityNotFoundException(nameof(submission));
             }
 
 			submission.ExecutedTests = submission.ExecutedTests.OrderByDescending(t => t.TestIsTrialTest).ToList();

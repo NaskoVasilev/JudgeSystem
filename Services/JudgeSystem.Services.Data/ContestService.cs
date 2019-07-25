@@ -8,7 +8,8 @@
 	using JudgeSystem.Data.Common.Repositories;
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.InputModels.Contest;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Web.InputModels.Contest;
 	using JudgeSystem.Web.ViewModels.Contest;
     using JudgeSystem.Web.ViewModels.Problem;
     using JudgeSystem.Web.ViewModels.Student;
@@ -61,6 +62,10 @@
 		public async Task<T> GetById<T>(int contestId)
 		{
 			var contest = await repository.All().FirstOrDefaultAsync(c => c.Id == contestId);
+            if(contest == null)
+            {
+                throw new EntityNotFoundException(nameof(contest));
+            }
 			return contest.To<T>();
 		}
 
@@ -85,7 +90,13 @@
 		public async Task UpdateContest(ContestEditInputModel model)
 		{
 			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == model.Id);
-			contest.Name = model.Name;
+
+            if (contest == null)
+            {
+                throw new EntityNotFoundException(nameof(contest));
+            }
+
+            contest.Name = model.Name;
 			contest.StartTime = model.StartTime;
 			contest.EndTime = model.EndTime;
 			repository.Update(contest);
@@ -95,7 +106,11 @@
 		public async Task DeleteContestById(int id)
 		{
 			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == id);
-			repository.Delete(contest);
+            if (contest == null)
+            {
+                throw new EntityNotFoundException(nameof(contest));
+            }
+            repository.Delete(contest);
 			await repository.SaveChangesAsync();
 		}
 
@@ -119,7 +134,7 @@
 
 		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
 		{
-			var contestResults = repository.All()
+            var contestResults = repository.All()
 				.Where(c => c.Id == contestId)
 				.Select(c => new ContestAllResultsViewModel()
 				{
@@ -163,6 +178,11 @@
 
 		public int GetContestResultsPagesCount(int contestId)
 		{
+            if(!this.repository.All().Any(x => x.Id == contestId))
+            {
+                throw new EntityNotFoundException("contest");
+            }
+
 			int count = repository.All()
 				.Include(c => c.UserContests)
 				.ThenInclude(uc => uc.User)

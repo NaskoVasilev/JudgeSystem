@@ -58,7 +58,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateTestService(new List<Test>());
 
-            await Assert.ThrowsAsync<EntityNullException>(() => service.Delete(new Test { Id = 99 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(new Test { Id = 99 }));
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateTestService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNullException>(() => service.Update(new Test() { Id = 99 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new Test() { Id = 99 }));
         }
 
 

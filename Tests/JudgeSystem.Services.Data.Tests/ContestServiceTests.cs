@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Contest;
 using Moq;
 using System;
@@ -158,13 +159,23 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(1, actualResult);
         }
 
+        [Fact]
+        public void GetById_WithInvalidId_ShouldThrowEntityNotFoundException()
+        {
+            var contests = new List<Contest>() { new Contest() };
+            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
+            repositoryMock.Setup(x => x.All()).Returns(contests.AsQueryable());
+            var contestService = new ContestService(repositoryMock.Object, null, null);
+
+            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.GetById<Contest>(999));
+        }
 
         private List<UserContest> GetUserContestsTestData()
         {
             return new List<UserContest>
             {
-                new UserContest{ContestId = 1, UserId = "user_id_1"},
-                new UserContest{ContestId = 2, UserId = "user_id_20"},
+                new UserContest { ContestId = 1, UserId = "user_id_1" },
+                new UserContest { ContestId = 2, UserId = "user_id_20" },
             };
         }
 
