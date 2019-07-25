@@ -108,8 +108,6 @@ $('#submit-btn').on('click', () => {
         processData: false
     })
         .done((response) => {
-            console.log(response)
-
 			$('#submissions-holder tbody tr:first-of-type').remove();
 			let tr = generateTr(response);
 			tbody.prepend(tr);
@@ -145,7 +143,9 @@ $('#submit-btn').on('click', () => {
 				});
 		})
 		.fail((error) => {
-			showError(error.responseText);
+            showError(error.responseText);
+            console.log("here")
+            hideLoader();
 		});
 });
 
@@ -274,4 +274,8 @@ function hideOneOfCodeInputs(submissionType) {
         $("#zip-file").hide();
         $(".code-wrapper").show();
     }
+}
+
+function hideLoader() {
+    $("#submissions-holder table tbody tr:first").hide();
 }
