@@ -10,7 +10,8 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Services.Mapping;
 	using JudgeSystem.Web.Dtos.Course;
-	using JudgeSystem.Web.InputModels.Course;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Web.InputModels.Course;
 	using JudgeSystem.Web.ViewModels.Course;
 
 	using Microsoft.EntityFrameworkCore;
@@ -43,13 +44,23 @@
 
 		public async Task<Course> GetById(int courseId)
 		{
+            if(!this.Exists(courseId))
+            {
+                throw new EntityNotFoundException("course");
+            }
+
 			return await this.repository.All()
 			.FirstOrDefaultAsync(c => c.Id == courseId);
 		}
 
 		public async Task Updade(CourseEditModel model)
 		{
-			Course course = await GetById(model.Id);
+            if (!this.Exists(model.Id))
+            {
+                throw new EntityNotFoundException("course");
+            }
+
+            Course course = await GetById(model.Id);
 			if(course == null)
 			{
 				throw new ArgumentException(string.Format(ErrorMessages.NotFoundEntityMessage, "course"));
@@ -61,7 +72,12 @@
 
 		public async Task Delete(Course course)
 		{
-			repository.Delete(course);
+            if (!this.Exists(course.Id))
+            {
+                throw new EntityNotFoundException("course");
+            }
+
+            repository.Delete(course);
 			await repository.SaveChangesAsync();
 		}
 
@@ -70,5 +86,10 @@
 			var courses = repository.All().To<ContestCourseDto>().ToList();
 			return courses;
 		}
+
+        private bool Exists(int id)
+        {
+            return this.repository.All().Any(x => x.Id == id);
+        }
 	}
 }
