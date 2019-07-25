@@ -14,6 +14,8 @@ namespace JudgeSystem.Services.Data.Tests
 {
     public class ContestServiceTests : TransientDbContextProvider
     {
+        private readonly IEstimator estimator = new Estimator();
+
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
@@ -47,10 +49,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task UpdateContest_ShouldWorkCorrectWithCorrectData()
         {
-            context.Contests.AddRange(GetContestsTestData());
-            await context.SaveChangesAsync();
-            var repository = new EfDeletableEntityRepository<Contest>(this.context);
-            var contestService = new ContestService(repository, null, null);
+            var contestService = await CreateContestService(GetContestsTestData());
             var inputModel = new ContestEditInputModel { Id = 1, Name = "editedcontest", StartTime = new DateTime(2019, 09, 20), EndTime = new DateTime(2019, 08, 20) };
 
             await contestService.UpdateContest(inputModel);
@@ -64,10 +63,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task DeleteContestById_ShouldWorkCorrectWithValidData()
         {
-            context.Contests.AddRange(GetContestsTestData());
-            await context.SaveChangesAsync();
-            var repository = new EfDeletableEntityRepository<Contest>(this.context);
-            var contestService = new ContestService(repository, null, null);
+            var contestService = await CreateContestService(GetContestsTestData());
 
             var contest = context.Contests.FirstOrDefault(c => c.Id == 1);
             await contestService.DeleteContestById(1);
@@ -84,9 +80,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(20)]
         public void GetAllConests_WithNoData_ShouldReturnEmptyCollection(int page)
         {
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(Enumerable.Empty<Contest>().AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
 
             var result = contestService.GetAllConests(page);
 
@@ -97,9 +91,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(1)]
         public void GetAllConests_WithValidData_ShouldReturnCorrectValues(int page)
         {
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             var actualContests = contestService.GetAllConests(page);
             var expectedData = Enumerable.Range((page - 1) * ContestService.ContestsPerPage , page * ContestService.ContestsPerPage);
@@ -110,9 +102,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetAllConests_WithValidDataWithNotEnoughValues_ShouldReturnOnlyLastEntities()
         {
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             int page = 50 / ContestService.ContestsPerPage + 1;
             int expectedEntities = 50 % ContestService.ContestsPerPage;
@@ -125,9 +115,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetNumberOfPages_WithValidData_ShouldReturnCorrectResult()
         {
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(Generate50ContestsWithStartDate().AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             var actualResult = contestService.GetNumberOfPages();
 
@@ -137,9 +125,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetNumberOfPages_WithNoData_ShouldReturnOne()
         {
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(Enumerable.Empty<Contest>().AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
 
             var actualResult = contestService.GetNumberOfPages();
 
@@ -150,9 +136,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetNumberOfPages_WithOneEntity_ShouldReturnOne()
         {
             var contests = new List<Contest>() { new Contest() };
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(contests.AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             var actualResult = contestService.GetNumberOfPages();
 
@@ -163,11 +147,62 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetById_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
             var contests = new List<Contest>() { new Contest() };
-            var repositoryMock = new Mock<IDeletableEntityRepository<Contest>>();
-            repositoryMock.Setup(x => x.All()).Returns(contests.AsQueryable());
-            var contestService = new ContestService(repositoryMock.Object, null, null);
+            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.GetById<Contest>(999));
+        }
+
+        [Fact]
+        public void UpdateContest_WithInvalidId_ShouldThrowEntityNotFoundException()
+        {
+            var contests = new List<Contest>() { new Contest() };
+            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+
+            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.UpdateContest(new ContestEditInputModel { Id = 45 }));
+        }
+
+        [Fact]
+        public void DeleteContestById_WithInvalidId_ShouldThrowEntityNotFoundException()
+        {
+            var contests = new List<Contest>() { new Contest() };
+            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+
+            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.DeleteContestById(3));
+        }
+
+        [Fact]
+        public void GetContestResultsPagesCount_WithInvalidId_ShouldThrowEntityNotFoundException()
+        {
+            var contests = new List<Contest>() { new Contest() };
+            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+
+            Assert.Throws<EntityNotFoundException>(() => contestService.GetContestResultsPagesCount(23));
+        }
+
+        private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
+        {
+            await this.context.Contests.AddRangeAsync(testData);
+            await this.context.SaveChangesAsync();
+            IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(this.context);
+            var service = new ContestService(repository, this.estimator, userContestRepository);
+            return service;
+        }
+
+        private async Task<ContestService> CreateContestService(List<Contest> testData)
+        {
+            return await this.CreateContestService(testData, null);
+        }
+
+        private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData, IRepository<UserContest> userContestRepository)
+        {
+            var reposotiryMock = new Mock<IDeletableEntityRepository<Contest>>();
+            reposotiryMock.Setup(x => x.All()).Returns(testData);
+            return new ContestService(reposotiryMock.Object, this.estimator, userContestRepository);
+        }
+
+        private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData)
+        {
+            return CreateContestServiceWithMockedRepository(testData, null);
         }
 
         private List<UserContest> GetUserContestsTestData()
