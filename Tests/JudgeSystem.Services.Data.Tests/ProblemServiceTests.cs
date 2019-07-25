@@ -56,7 +56,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var problemService = await CreateProblemService(new List<Problem>()); 
 
-            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => problemService.Delete(new Problem { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => problemService.Delete(new Problem { Id = 161651 }));
         }
 
         [Fact]
@@ -81,10 +81,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateProblemService(testData);
 
-            int id = 4984;
-            var actualData = await service.GetById(id);
-
-            Assert.Null(actualData);
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(165));
         }
 
         [Fact]
@@ -116,11 +113,20 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(problem.Tests.Select(t => t.Id), actualData.Tests.Select(t => t.Id));
         }
 
+        [Fact]
+        public async Task GetByIdWithTests_WithInValidId_ShouldReturnNull()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetByIdWithTests(165));
+        }
+
         [Theory]
         [InlineData(2, "test2, test4")]
         [InlineData(1, "test1")]
         [InlineData(45, "")]
-        public void LesosnProblems_WithDifferentData_ShouldWorkCorrect(int lessonId, string expectedNames)
+        public void LessonProblems_WithDifferentData_ShouldWorkCorrect(int lessonId, string expectedNames)
         {
             var service = CreateProblemServiceWithMockedRepository(GetTestData().AsQueryable());
 
@@ -195,7 +201,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task Update_WithNonExistingLesson_ShouldThrowArgumentEException()
+        public async Task Update_WithNonExistingLesson_ShouldThrowEntityNotFoundException()
         {
             var inputModel = new ProblemEditInputModel
             {
@@ -207,6 +213,45 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateProblemService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
+        }
+
+        [Fact]
+        public async Task GetLessonId_WithValidProblemId_ShouldReturnCorrectData()
+        {
+            var service = await CreateProblemService(GetTestData());
+
+            int actualResult = await service.GetLessonId(4);
+
+            Assert.Equal(2, actualResult);
+        }
+
+        [Fact]
+        public async Task GetLessonId_WithInValidId_ShouldReturnThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(161651));
+        }
+
+        [Fact]
+        public async Task GetProblemMaxPoints_WithValidId_ShouldReturnThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            int actualResult = service.GetProblemMaxPoints(3);
+
+            Assert.Equal(100, actualResult);
+        }
+
+        [Fact]
+        public async Task GetProblemMaxPoints_WithInValidId_ShouldReturnThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            Assert.Throws<EntityNotFoundException>(() => service.GetProblemMaxPoints(161651));
         }
 
         private async Task<ProblemService> CreateProblemService(List<Problem> testData)
