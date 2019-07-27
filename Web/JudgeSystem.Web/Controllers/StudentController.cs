@@ -10,7 +10,8 @@
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
 
 	[Authorize]
 	public class StudentController : BaseController
@@ -18,7 +19,9 @@
 		private readonly IStudentService studentService;
 		private readonly UserManager<ApplicationUser> userManager;
 
-		public StudentController(IStudentService studentService, UserManager<ApplicationUser> userManager)
+		public StudentController(
+            IStudentService studentService, 
+            UserManager<ApplicationUser> userManager)
 		{
 			this.studentService = studentService;
 			this.userManager = userManager;

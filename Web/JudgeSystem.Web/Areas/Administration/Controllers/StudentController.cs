@@ -1,40 +1,37 @@
 ﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-	using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Models.Enums;
     using JudgeSystem.Services.Data;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Services.Messaging;
-	using JudgeSystem.Web.InputModels.Student;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.InputModels.Student;
     using JudgeSystem.Web.ViewModels.Student;
-
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Mvc.Rendering;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.Logging;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
-	public class StudentController : AdministrationBaseController
+    public class StudentController : AdministrationBaseController
 	{
 		private readonly IStudentService studentService;
 		private readonly ISchoolClassService schoolClassService;
-		private readonly IConfiguration configuration;
-		private readonly ILoggerFactory loggerFactory;
+        private readonly IEmailSender emailSender;
 
-		public StudentController(IStudentService studentService, ISchoolClassService schoolClassService,
-			IConfiguration configuration, ILoggerFactory loggerFactory)
+		public StudentController(
+            IStudentService studentService, 
+            ISchoolClassService schoolClassService,
+            IEmailSender emailSender)
 		{
 			this.studentService = studentService;
 			this.schoolClassService = schoolClassService;
-			this.configuration = configuration;
-			this.loggerFactory = loggerFactory;
-		}
+            this.emailSender = emailSender;
+        }
 
 		public IActionResult Create()
 		{
@@ -52,12 +49,7 @@
 			}
 
 			string activationKey = Guid.NewGuid().ToString();
-			bool sendedSuccessfully = await SendActivationEmail(activationKey, model.Email);
-			if (!sendedSuccessfully)
-			{
-				ModelState.AddModelError(string.Empty, ErrorMessages.NotValidEmail);
-				return View(model);
-			}
+			await SendActivationEmail(activationKey, model.Email);
 
 			Student student = model.To<Student>();
 			student.ActivationKeyHash = activationKey;
@@ -112,28 +104,14 @@
 		}
 
 		[NonAction]
-		private async Task<bool> SendActivationEmail(string activationKey, string toAddress)
+		private async Task SendActivationEmail(string activationKey, string toAddress)
 		{
-            //TODO: Refactor this
-			string fromName = configuration["App:Name"];
-			string sendGridApiKey = configuration["SendGrid:ApiKey"];
-			string fromAddress = configuration["Email:Username"];
 			string subject = GlobalConstants.StudentProfileActivationEmailSubject;
 			string message = await ReadEmailTemplateAsync();
 			string activationKeyPlaceholder = "@{activationKey}";
 			message = message.Replace(activationKeyPlaceholder, activationKey);
-
-			try
-			{
-				SendGridEmailSender emailSender = new SendGridEmailSender(loggerFactory, sendGridApiKey, fromAddress, fromName);
-				await emailSender.SendEmailAsync(toAddress, subject, message);
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-
-			return true;
+			
+            await emailSender.SendEmailAsync(toAddress, subject, message);
 		}
 
 		[NonAction]

@@ -1,24 +1,24 @@
 ﻿namespace JudgeSystem.Web
 {
-	using System;
-	using System.Reflection;
+    using System;
+    using System.Reflection;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data;
     using JudgeSystem.Data.Common;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Repositories;
     using JudgeSystem.Data.Seeding;
-	using JudgeSystem.Services;
-	using JudgeSystem.Services.Data;
+    using JudgeSystem.Services;
+    using JudgeSystem.Services.Data;
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Services.Messaging;
     using JudgeSystem.Web.Dtos.Course;
     using JudgeSystem.Web.Filters;
     using JudgeSystem.Web.InputModels.Course;
-	using JudgeSystem.Web.Utilites;
-	using JudgeSystem.Web.ViewModels;
+    using JudgeSystem.Web.Utilites;
+    using JudgeSystem.Web.ViewModels;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -55,7 +55,7 @@
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
-					//TODO: Add email confirmation
+
 					//options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -102,6 +102,13 @@
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
 
+            //Send grid configuration
+            var sendGridSection = this.configuration.GetSection("SendGrid");
+            services.Configure<SendGridOptions>(sendGridSection);
+            var emailSection = this.configuration.GetSection("Email");
+            services.Configure<BaseEmailOptions>(emailSection);
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddSingleton(this.configuration);
 
             // Identity stores
@@ -114,8 +121,6 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICourseService, CourseService>();
 			services.AddTransient<ILessonService, LessonService>();
