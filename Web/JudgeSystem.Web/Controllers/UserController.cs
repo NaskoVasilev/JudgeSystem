@@ -19,7 +19,7 @@ namespace JudgeSystem.Web.Controllers
 		}
 
 		[Authorize]
-		public IActionResult Results()
+		public IActionResult MyResults()
 		{
 			string userId = userManager.GetUserId(this.User);
             UserResultsViewModel userResults = new UserResultsViewModel

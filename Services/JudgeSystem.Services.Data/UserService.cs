@@ -5,6 +5,7 @@
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.ViewModels.User;
 
     public class UserService : IUserService
@@ -32,7 +33,8 @@
 					.Where(p => !p.IsExtraTask)
 					.Sum(p => p.MaxPoints),
 					ContestName = uc.Contest.Name,
-					LessonId = uc.Contest.LessonId
+					LessonId = uc.Contest.LessonId,
+                    ContestId = uc.Contest.Id
 				})
 				.ToList();
 
@@ -81,5 +83,20 @@
 
 			return exams;
 		}
-	}
+
+        public string GetUserId(string studentId)
+        {
+            string userId = this.repository.All()
+                .Where(x => x.StudentId == studentId)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
+            if(userId == null)
+            {
+                throw new EntityNotFoundException("user");
+            }
+
+            return userId;
+        }
+    }
 }

@@ -18,12 +18,18 @@
 		private readonly IProblemService problemService;
 		private readonly ITestService testService;
         private readonly IPracticeService practiceService;
+        private readonly ILessonService lessonService;
 
-        public ProblemController(IProblemService problemService, ITestService testService, IPracticeService practiceService)
+        public ProblemController(
+            IProblemService problemService, 
+            ITestService testService, 
+            IPracticeService practiceService,
+            ILessonService lessonService)
 		{
 			this.problemService = problemService;
 			this.testService = testService;
             this.practiceService = practiceService;
+            this.lessonService = lessonService;
         }
 
 		public IActionResult Create()
@@ -44,9 +50,10 @@
 				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id });
 		}
 
-		public IActionResult All(int lessonId, int practiceId)
+		public IActionResult All(int lessonId)
 		{
             IEnumerable<LessonProblemViewModel> problems = problemService.LessonProblems(lessonId);
+            int practiceId = lessonService.GetPracticeId(lessonId);
             var model = new ProblemAllViewModel
             {
                 Problems = problems,

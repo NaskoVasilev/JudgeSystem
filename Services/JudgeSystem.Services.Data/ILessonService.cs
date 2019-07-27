@@ -27,5 +27,7 @@
 		IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType);
 
 		IEnumerable<SearchLessonViewModel> SearchByName(string keyword);
-	}
+
+        int GetPracticeId(int lessonId);
+    }
 }

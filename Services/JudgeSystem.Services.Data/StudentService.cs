@@ -116,6 +116,7 @@
 			}
 			
 			return students
+                .Where(s => s.IsActivated)
 				.OrderBy(s => s.SchoolClass.ClassNumber)
 				.ThenBy(s => s.SchoolClass.ClassType)
 				.ThenBy(s => s.NumberInCalss)

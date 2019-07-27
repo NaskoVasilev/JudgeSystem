@@ -48,7 +48,15 @@
 				<tr class="row">
 					<td class="col-md-1">@student.NumberInCalss</td>
 					<td class="col-md-1">@student.SchoolClassName</td>
-					<td class="col-md-4">@student.FullName</td>
+					<td class="col-md-4">
+                        <a 
+                           asp-area="@GlobalConstants.AdministrationArea"
+                           asp-action="Results"
+                           asp-controller="User"
+                           asp-route-userId="@student.UserId">
+                           @student.FullName
+                        </a>
+                    </td>
 					<td class="col-md-4">@student.Email</td>
 					<td class="col-md-2">
 						<a class="text-success mx-3" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id">

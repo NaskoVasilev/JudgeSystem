@@ -7,5 +7,7 @@
 		public List<UserCompeteResultViewModel> ContestResults { get; set; }
 
 		public List<UserPracticeResultViewModel> PracticeResults { get; set; }
-	}
+
+        public string UserId { get; set; }
+    }
 }

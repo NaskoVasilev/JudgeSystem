@@ -13,5 +13,7 @@ namespace JudgeSystem.Web.ViewModels.User
 		public int MaxPoints { get; set; }
 
 		public int ActualPoints { get; set; }
-	}
+
+        public int ContestId { get; set; }
+    }
 }

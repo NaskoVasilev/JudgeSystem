@@ -97,7 +97,20 @@
 			return lesson.To<Lesson, LessonViewModel>();
 		}
 
-		public IEnumerable<SearchLessonViewModel> SearchByName(string keyword)
+        public int GetPracticeId(int lessonId)
+        {
+            if(!this.Exists(lessonId))
+            {
+                throw new EntityNotFoundException("lesson");
+            }
+
+            return this.repository.All()
+                .Where(x => x.Id == lessonId)
+                .Select(x => x.Practice.Id)
+                .FirstOrDefault();
+        }
+
+        public IEnumerable<SearchLessonViewModel> SearchByName(string keyword)
 		{
             if(string.IsNullOrEmpty(keyword))
             {

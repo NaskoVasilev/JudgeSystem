@@ -12,9 +12,11 @@
 
 		public string Email { get; set; }
 
-		public int NumberInCalss { get; set; }
+        public string UserId { get; set; }
 
-		public string SchoolClassName { get; set; }
+        public int NumberInCalss { get; set; }
+
+        public string SchoolClassName { get; set; }
 
 		public void CreateMappings(IProfileExpression configuration)
 		{
