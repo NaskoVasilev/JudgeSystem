@@ -49,5 +49,7 @@
 		public virtual ICollection<Submission> Submissions { get; set; }
 
 		public virtual ICollection<UserContest> UserContests { get; set; }
-	}
+
+        public virtual ICollection<UserPractice> UserPractices { get; set; }
+    }
 }

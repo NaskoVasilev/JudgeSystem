@@ -34,5 +34,7 @@
 		public ICollection<Problem> Problems { get; set; }
 
 		public ICollection<Contest> Contests { get; set; }
-	}
+
+        public ICollection<Practice> Practices { get; set; }
+    }
 }

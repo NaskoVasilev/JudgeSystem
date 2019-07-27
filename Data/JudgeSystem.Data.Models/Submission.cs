@@ -28,7 +28,10 @@
 		public int? ContestId { get; set; }
 		public Contest Contest { get; set; }
 
-		public DateTime SubmisionDate { get; set; }
+        public int? PracticeId { get; set; }
+        public Practice Practice { get; set; }
+
+        public DateTime SubmisionDate { get; set; }
 
 		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }

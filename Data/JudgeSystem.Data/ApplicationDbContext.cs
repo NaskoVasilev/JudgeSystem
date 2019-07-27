@@ -35,9 +35,10 @@
 		public DbSet<Submission> Submissions { get; set; }
 		public DbSet<Student> Students { get; set; }
 		public DbSet<SchoolClass> SchoolClasses { get; set; }
+        public DbSet<Practice> Practices { get; set; }
+        public DbSet<UserPractice> UserPractices { get; set; }
 
-
-		public override int SaveChanges() => this.SaveChanges(true);
+        public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -149,6 +150,9 @@
 				.WithOne(s => s.User)
 				.IsRequired(false)
 				.OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<UserPractice>()
+                .HasKey(x => new { x.PracticeId, x.UserId });
 		}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
