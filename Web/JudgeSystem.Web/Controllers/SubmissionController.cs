@@ -130,7 +130,6 @@
             model.SubmissionContent = submissionContent;
 			Submission submission = await submissionService.Create(model, userId);
 
-			//TODO make submission compiling and code excution asynchronous
 			await RunTests(submission, submission.ProblemId, sourceCodes);
 			await submissionService.CalculateActualPoints(submission.Id);
 

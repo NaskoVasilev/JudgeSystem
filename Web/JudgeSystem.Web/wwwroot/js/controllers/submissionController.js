@@ -78,7 +78,7 @@ $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
     let submissionType = $('.active-problem')[0].dataset.type;
     let contestId = $('#submit-btn')[0].dataset.contestid;
-    let practiceId = $('#submit-btn')[0].dataset.practiceId;
+    let practiceId = $('#submit-btn')[0].dataset.practiceid;
 
     var formData = new FormData();
     formData.append('ProblemId', problemId);

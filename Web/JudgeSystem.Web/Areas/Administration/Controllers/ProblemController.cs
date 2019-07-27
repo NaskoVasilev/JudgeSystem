@@ -11,17 +11,20 @@
     using JudgeSystem.Web.InputModels.Problem;
 
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
 
     public class ProblemController : AdministrationBaseController
 	{
 		private readonly IProblemService problemService;
 		private readonly ITestService testService;
+        private readonly IPracticeService practiceService;
 
-		public ProblemController(IProblemService problemService, ITestService testService)
+        public ProblemController(IProblemService problemService, ITestService testService, IPracticeService practiceService)
 		{
 			this.problemService = problemService;
 			this.testService = testService;
-		}
+            this.practiceService = practiceService;
+        }
 
 		public IActionResult Create()
 		{
@@ -41,11 +44,16 @@
 				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id });
 		}
 
-		public IActionResult All(int lessonId)
+		public IActionResult All(int lessonId, int practiceId)
 		{
-			ViewData["lessonId"] = lessonId;
-			var problems = problemService.LessonProblems(lessonId);
-			return View(problems);
+            IEnumerable<LessonProblemViewModel> problems = problemService.LessonProblems(lessonId);
+            var model = new ProblemAllViewModel
+            {
+                Problems = problems,
+                LesosnId = lessonId,
+                PracticeId = practiceId
+            };
+			return View(model);
 		}
 
 		public async Task<IActionResult> Edit(int id)

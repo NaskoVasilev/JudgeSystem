@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LessonProblemViewModel>
+﻿@model ProblemAllViewModel
 
 @{
 	ViewData["Title"] = "All";
@@ -11,8 +11,8 @@
        asp-area="" 
        asp-action="Details" 
        asp-controller="Lesson" 
-       asp-route-id="@ViewData["lessonId"]"
-       asp-route-practiceId="@ViewData["practiceId"]">Back to lesson</a>
+       asp-route-id="@Model.LesosnId"
+       asp-route-practiceId="@Model.PracticeId">Back to lesson</a>
 </div>
 <table class="table table-hover">
 	<thead>
@@ -22,7 +22,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var task in Model)
+		@foreach (var task in Model.Problems)
 		{
 			<tr class="row">
 				<td class="col-md-7">@task.Name</td>
