@@ -10,14 +10,11 @@
     public class UserService : IUserService
 	{
 		private readonly IDeletableEntityRepository<ApplicationUser> repository;
-		private readonly ILessonService lessonService;
 
 		public UserService(
-            IDeletableEntityRepository<ApplicationUser> repository, 
-            ILessonService lessonService)
+            IDeletableEntityRepository<ApplicationUser> repository)
 		{
 			this.repository = repository;
-			this.lessonService = lessonService;
 		}
 
 		public List<UserCompeteResultViewModel> GetContestResults(string userId)
@@ -28,7 +25,7 @@
 				.Select(uc => new UserCompeteResultViewModel()
 				{
 					ActualPoints = uc.Contest.Submissions
-					.Where(s => !s.Problem.IsExtraTask)
+					.Where(s => s.UserId == userId && !s.Problem.IsExtraTask)
 					.GroupBy(s => s.ProblemId)
 					.Sum(x => x.Max(s => s.ActualPoints)),
 					MaxPoints = uc.Contest.Lesson.Problems
@@ -44,28 +41,13 @@
 
 		public List<UserPracticeResultViewModel> GetPracticetResults(string userId)
 		{
-            //TODO: optimize this query
-            //var result = repository.All()
-            //	.Where(u => u.Id == userId)
-            //	.SelectMany(u => u.Submissions)
-            //	.GroupBy(s => s.Problem.Lesson)
-            //	.Select(group => new UserPracticeResultViewModel()
-            //	{
-            //		LessonId = group.Key.Id,
-            //		LessonName = group.Key.Name,
-            //		ActualPoints = group.Where(s => !s.Problem.IsExtraTask)
-            //		.GroupBy(s => s.Problem.Id)
-            //		.Sum(submissionGroup => submissionGroup.Max(submission => submission.ActualPoints)),
-            //		MaxPoints = group.Max(s => s.Problem.Lesson.Problems.Where(p => !p.IsExtraTask).Sum(p => p.MaxPoints))
-            //	})
-            //	.ToList();
             var result = repository.All()
                  .Where(u => u.Id == userId)
                  .SelectMany(u => u.UserPractices)
                  .Select(up => new UserPracticeResultViewModel()
                  {
                      ActualPoints = up.Practice.Submissions
-                     .Where(s => !s.Problem.IsExtraTask)
+                     .Where(s => s.UserId == userId && !s.Problem.IsExtraTask)
                      .GroupBy(s => s.ProblemId)
                      .Sum(x => x.Max(s => s.ActualPoints)),
                      MaxPoints = up.Practice.Lesson.Problems
@@ -92,7 +74,7 @@
 					ContestName = c.Name,
 					LessonId = c.LessonId,
 					MaxPoints = c.Lesson.Problems.Where(p => !p.IsExtraTask).Sum(p => p.MaxPoints),
-					ActualPoints = c.Submissions.GroupBy(s => s.ProblemId)
+					ActualPoints = c.Submissions.Where(x => x.UserId == userId).GroupBy(s => s.ProblemId)
 					.Sum(submissionGroup => submissionGroup.Max(submission => submission.ActualPoints))
 				})
 				.ToList();
