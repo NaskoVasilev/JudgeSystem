@@ -4,7 +4,9 @@
 	{
 		public int LessonId { get; set; }
 
-		public string LessonName { get; set; }
+        public int PracticeId { get; set; }
+
+        public string LessonName { get; set; }
 
 		public int MaxPoints { get; set; }
 

@@ -22,10 +22,12 @@ namespace JudgeSystem.Web.Controllers
 		public IActionResult Results()
 		{
 			string userId = userManager.GetUserId(this.User);
-			UserResultsViewModel userResults = new UserResultsViewModel();
-			userResults.ContestResults = userService.GetContestResults(userId);
-			userResults.PracticeResults = userService.GetPracticetResults(userId);
-			return View(userResults);
+            UserResultsViewModel userResults = new UserResultsViewModel
+            {
+                ContestResults = userService.GetContestResults(userId),
+                PracticeResults = userService.GetPracticetResults(userId)
+            };
+            return View(userResults);
 		}
 	}
 }
