@@ -13,7 +13,7 @@
 			{
 				<tr>
 					<td class="a-holder">
-						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id">@lesson.Name</a>
+						<a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">@lesson.Name</a>
 					</td>
 					@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
 					{

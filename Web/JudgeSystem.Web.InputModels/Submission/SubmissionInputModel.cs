@@ -11,6 +11,8 @@ namespace JudgeSystem.Web.InputModels.Submission
 
 		public int? ContestId { get; set; }
 
+        public int? PracticeId { get; set; }
+
         public IFormFile File { get; set; }
 
         public byte[] SubmissionContent { get; set; }

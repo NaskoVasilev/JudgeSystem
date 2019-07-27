@@ -19,7 +19,9 @@
 
 		public int CourseId { get; set; }
 
-		public LessonType Type { get; set; }
+        public int PracticeId { get; set; }
+
+        public LessonType Type { get; set; }
 
 		public List<LessonContestViewModel> Contests { get; set; }
 

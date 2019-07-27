@@ -1,9 +1,15 @@
 ﻿let submissiosPerPage = 5;
 let currentPageClass = 'current-page';
 let zipFileSubmissionType = "ZipFile";
+let plainCodeSubmissionType = "PlainCode";
 
 window.onload = () => {
-	let hash = window.location.hash;
+    if ($("li.problem-name").length === 0) {
+        hideOneOfCodeInputs(plainCodeSubmissionType);
+        return;
+    }
+
+    let hash = window.location.hash;
 
 	let currentElement = $(`li.problem-name:contains(${decodeURI(hash).substr(1)})`)[0];
 	if (currentElement) {
@@ -72,6 +78,7 @@ $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;
     let submissionType = $('.active-problem')[0].dataset.type;
     let contestId = $('#submit-btn')[0].dataset.contestid;
+    let practiceId = $('#submit-btn')[0].dataset.practiceId;
 
     var formData = new FormData();
     formData.append('ProblemId', problemId);
@@ -86,6 +93,9 @@ $('#submit-btn').on('click', () => {
 
     if (contestId) {
         formData.append('contestId', contestId);
+    }
+    else {
+        formData.append('practiceId', practiceId);
     }
 
     console.log(formData);

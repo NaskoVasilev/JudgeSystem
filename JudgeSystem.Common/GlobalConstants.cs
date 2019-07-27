@@ -61,5 +61,7 @@
         public const string OctetStreanMimeType = "application/octet-stream";
 
         public const string Location = "Location";
+
+        public const string InvalidPracticeId = "Practice id must be specified";
     }
 }

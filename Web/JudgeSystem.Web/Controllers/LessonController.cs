@@ -12,25 +12,31 @@
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Identity;
+    using System;
 
-	[Authorize]
+    [Authorize]
 	public class LessonController : BaseController
 	{
 		private readonly ILessonService lessonService;
 		private readonly IContestService contestService;
 		private readonly IPasswordHashService passwordHashService;
 		private readonly UserManager<ApplicationUser> userManager;
+        private readonly IPracticeService practiceService;
 
-		public LessonController(ILessonService lessonService, IContestService contestService,
-			IPasswordHashService passwordHashService, UserManager<ApplicationUser> userManager)
+        public LessonController(ILessonService lessonService, 
+            IContestService contestService,
+			IPasswordHashService passwordHashService, 
+            UserManager<ApplicationUser> userManager,
+            IPracticeService practiceService)
 		{
 			this.lessonService = lessonService;
 			this.contestService = contestService;
 			this.passwordHashService = passwordHashService;
 			this.userManager = userManager;
-		}
+            this.practiceService = practiceService;
+        }
 
-		public async Task<IActionResult> Details(int id, int? contestId)
+		public async Task<IActionResult> Details(int id, int? contestId, int? practiceId)
 		{
 			var lesson = await lessonService.GetLessonInfo(id);
 			lesson.ContestId = contestId;
@@ -39,6 +45,15 @@
 				string userId = userManager.GetUserId(this.User);
 				await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
 			}
+            else
+            {
+                if(!practiceId.HasValue)
+                {
+                    throw new ArgumentException(GlobalConstants.InvalidPracticeId);
+                }
+                string userId = userManager.GetUserId(this.User);
+                await practiceService.AddUserToPracticeIfNotAdded(userId, practiceId.Value);
+            }
 
 			string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 

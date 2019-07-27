@@ -153,6 +153,12 @@
 
             builder.Entity<UserPractice>()
                 .HasKey(x => new { x.PracticeId, x.UserId });
+
+            builder.Entity<Practice>()
+                .HasOne(x => x.Lesson)
+                .WithOne(x => x.Practice)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 		}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

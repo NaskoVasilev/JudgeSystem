@@ -20,7 +20,9 @@
 
 		public int? ContestId { get; set; }
 
-		public bool IsLocked => LessonPassword != null;
+        public int PracticeId { get; set; }
+
+        public bool IsLocked => LessonPassword != null;
 
 		public ICollection<ResourceViewModel> Resources { get; set; }
 

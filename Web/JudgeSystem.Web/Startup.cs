@@ -127,10 +127,11 @@
 			services.AddTransient<IExecutedTestService, ExecutedTestService>();
 			services.AddTransient<IStudentService, StudentService>();
 			services.AddTransient<ISchoolClassService, SchoolClassService>();
-			services.AddTransient<IFileManager, FileManager>();
+			services.AddTransient<IPracticeService, PracticeService>();
+            services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
-		}
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

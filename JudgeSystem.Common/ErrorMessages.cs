@@ -31,5 +31,7 @@ namespace JudgeSystem.Common
         public static string TooLongSubmissionCode = $"The submitted code is too long.";
 
         public const string EndpointErrorMessage = "Some error occurs.";
+
+        public const string InvalidSubmissionSource = "Either practiceId or contestId must be provided";
     }
 }

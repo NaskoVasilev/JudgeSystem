@@ -29,12 +29,12 @@
 
 		public LessonType Type { get; set; }
 
-		public ICollection<Resource> Resources { get; set; }
+        public Practice Practice { get; set; }
+
+        public ICollection<Resource> Resources { get; set; }
 
 		public ICollection<Problem> Problems { get; set; }
 
 		public ICollection<Contest> Contests { get; set; }
-
-        public ICollection<Practice> Practices { get; set; }
     }
 }

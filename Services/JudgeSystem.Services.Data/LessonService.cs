@@ -91,6 +91,7 @@
 
             var lesson = await this.repository.All()
 				.Include(l => l.Problems)
+                .Include(l => l.Practice)
 				.Include(l => l.Resources)
 				.FirstOrDefaultAsync(l => l.Id == id);
 			return lesson.To<Lesson, LessonViewModel>();

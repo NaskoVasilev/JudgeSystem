@@ -1,5 +1,6 @@
 ﻿namespace JudgeSystem.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -30,12 +31,23 @@
 
 		public async Task<Submission> Create(SubmissionInputModel model, string userId)
 		{
+            if(!model.PracticeId.HasValue && !model.ContestId.HasValue)
+            { 
+                throw new ArgumentException(ErrorMessages.InvalidSubmissionSource);
+            }
+
+            if(model.ContestId.HasValue)
+            {
+                model.PracticeId = null;
+            }
+
 			Submission submission = new Submission
 			{
 				Code = model.SubmissionContent,
 				ProblemId = model.ProblemId,
 				UserId = userId,
-				ContestId = model.ContestId
+				ContestId = model.ContestId,
+                PracticeId = model.PracticeId
 			};
 
 			await repository.AddAsync(submission);

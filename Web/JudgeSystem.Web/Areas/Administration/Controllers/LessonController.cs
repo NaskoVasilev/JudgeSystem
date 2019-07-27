@@ -1,22 +1,21 @@
 ﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.Infrastructure.Extensions;
-	using JudgeSystem.Web.Utilites;
-	using JudgeSystem.Web.ViewModels.Lesson;
-	using JudgeSystem.Web.InputModels.Lesson;
+    using JudgeSystem.Common;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Services.Data;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.Infrastructure.Extensions;
+    using JudgeSystem.Web.Utilites;
+    using JudgeSystem.Web.InputModels.Lesson;
 
-	using Microsoft.AspNetCore.Mvc.Rendering;
-	using Microsoft.AspNetCore.Mvc;
-	using JudgeSystem.Services;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Mvc;
+    using JudgeSystem.Services;
     using JudgeSystem.Web.Filters;
 
     public class LessonController : AdministrationBaseController
@@ -25,15 +24,21 @@
 		private readonly ILessonService lessonService;
 		private readonly IFileManager fileManager;
 		private readonly IPasswordHashService passwordHashService;
+        private readonly IPracticeService practiceService;
 
-		public LessonController(IResourceService resourseService, ILessonService lessonService, 
-			IFileManager fileManager, IPasswordHashService passwordHashService)
+        public LessonController(
+            IResourceService resourseService, 
+            ILessonService lessonService, 
+			IFileManager fileManager, 
+            IPasswordHashService passwordHashService,
+            IPracticeService practiceService)
 		{
 			this.resourceService = resourseService;
 			this.lessonService = lessonService;
 			this.fileManager = fileManager;
 			this.passwordHashService = passwordHashService;
-		}
+            this.practiceService = practiceService;
+        }
 
 		public IActionResult Create()
 		{
@@ -69,8 +74,9 @@
 			}
 
 			Lesson newLesson = await lessonService.CreateLesson(model, resources);
+            var practice = await practiceService.Create(newLesson.Id);
 
-			return RedirectToAction("Details", "Lesson", new { id = newLesson.Id });
+			return RedirectToAction("Details", "Lesson", new { id = newLesson.Id, PracticeId = practice.Id });
 		}
 
 		public async Task<IActionResult> Edit(int id, string lessonType, int courseId)
