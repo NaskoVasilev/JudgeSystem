@@ -56,7 +56,7 @@
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
 
-					//options.SignIn.RequireConfirmedEmail = true;
+					options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserStore<ApplicationUserStore>()

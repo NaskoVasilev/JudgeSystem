@@ -73,7 +73,7 @@
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await this.signInManager.SignInAsync(user, isPersistent: false);
+                    //await this.signInManager.SignInAsync(user, isPersistent: false);
                     return this.LocalRedirect(returnUrl);
                 }
 
