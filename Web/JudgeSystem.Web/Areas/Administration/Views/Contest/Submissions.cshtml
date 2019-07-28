@@ -1,0 +1,77 @@
+﻿@model ContestSubmissionsViewModel
+
+
+<div class="border p-3 bg-light">
+    <div class="ul-holder mt-0">
+        <vc:lesson-problems lesson-id="@Model.LessonId"></vc:lesson-problems>
+    </div>
+
+    <h3 class="mt-3 text-secondary">@Model.ProblemName</h3>
+
+    <div id="submissions-holder" class="text-center border mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Points</th>
+                    <th scope="col">Time and memory used</th>
+                    <th scope="col">Submission Date</th>
+                    <th scope="col">More info</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var submission in Model.Submissions)
+                {
+                    <tr>
+                        <td class="pt-4">
+                            @if (submission.IsCompiledSuccessfully)
+                            {
+                                @foreach (var test in submission.ExecutedTests)
+                                {
+                                    if (test.IsCorrect && test.ExecutionResultType == TestExecutionResultType.Success.ToString())
+                                    {
+                                        <i class="fas fa-check text-success"></i>
+                                    }
+                                    else if (test.ExecutionResultType == TestExecutionResultType.RunTimeError.ToString())
+                                    {
+                                        <i class="fas fa-bomb text-danger"></i>
+                                    }
+                                    else if (test.ExecutionResultType == TestExecutionResultType.MemoryLimit.ToString())
+                                    {
+                                        <i class="fas fa-memory text-danger"></i>
+                                    }
+                                    else if (test.ExecutionResultType == TestExecutionResultType.TimeLimit.ToString())
+                                    {
+                                        <i class="far fa-clock text-primary"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-times text-danger"></i>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <span>Compile time error</span>
+                            }
+                            <span class="ml-3">@submission.ActualPoints/@submission.MaxPoints</span>
+                        </td>
+                        <td>
+                            <span class="d-block">Memory: @submission.TotalMemoryUsed.ToString("F3") MB</span>
+                            <span class="d-block">Time: @submission.TotalTimeUsed.ToString("F3") s</span>
+                        </td>
+                        <td class="pt-4">@submission.SubmissionDate</td>
+                        <td class="pt-3">
+                            <a class="btn btn-dark"
+                               asp-action="Details" 
+                               asp-area="" 
+                               asp-controller="Submission"
+                               asp-route-id="@submission.Id">
+                               Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

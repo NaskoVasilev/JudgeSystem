@@ -27,5 +27,7 @@
 		int GetProblemMaxPoints(int id);
 
 		Task<int> GetLessonId(int problemId);
-	}
+
+        string GetProblemName(int id);
+    }
 }

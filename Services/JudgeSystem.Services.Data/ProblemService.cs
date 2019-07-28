@@ -83,7 +83,22 @@
 			return problem.MaxPoints;
 		}
 
-		public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
+        public string GetProblemName(int id)
+        {
+            string name = this.problemRepository.All()
+                .Where(x => x.Id == id)
+                .Select(x => x.Name)
+                .FirstOrDefault();
+
+            if(name == null)
+            {
+                throw new EntityNotFoundException("problem");
+            }
+
+            return name;
+        }
+
+        public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			return problemRepository.All()
 				.Where(p => p.LessonId == lessonId)

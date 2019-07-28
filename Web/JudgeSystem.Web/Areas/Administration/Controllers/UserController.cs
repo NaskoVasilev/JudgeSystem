@@ -18,7 +18,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             UserResultsViewModel userResults = new UserResultsViewModel
             {
                 ContestResults = userService.GetContestResults(userId),
-                PracticeResults = userService.GetPracticetResults(userId)
+                PracticeResults = userService.GetPracticetResults(userId),
+                UserId = userId
             };
             return View(userResults);
         }

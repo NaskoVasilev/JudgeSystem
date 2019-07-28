@@ -2,10 +2,12 @@
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
+using JudgeSystem.Web.ViewModels.Submission;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -18,16 +20,26 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	public class ContestController : AdministrationBaseController
 	{
 		private const int DefaultPage = 1;
+        private const int SubmissionsPerPage = 5;
 		private readonly IContestService contestService;
 		private readonly ICourseService courseService;
 		private readonly ILessonService lessonService;
+        private readonly ISubmissionService submissionService;
+        private readonly IProblemService problemService;
 
-		public ContestController(IContestService contestService, ICourseService courseService, ILessonService lessonService)
+        public ContestController(
+            IContestService contestService, 
+            ICourseService courseService, 
+            ILessonService lessonService,
+            ISubmissionService submissionService,
+            IProblemService problemService)
 		{
 			this.contestService = contestService;
 			this.courseService = courseService;
 			this.lessonService = lessonService;
-		}
+            this.submissionService = submissionService;
+            this.problemService = problemService;
+        }
 
 		public IActionResult Create()
 		{
@@ -135,5 +147,31 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		{
 			return contestService.GetContestResultsPagesCount(contestId);
 		}
+
+        public IActionResult Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
+        {
+            int baseProblemId;
+            if(problemId.HasValue)
+            {
+                baseProblemId = problemId.Value;
+            }
+            else
+            {
+                baseProblemId = contestService.GetFirstProblemId(contestId);
+            }
+
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, SubmissionsPerPage);
+            string problemName = problemService.GetProblemName(baseProblemId);
+            int lessonId = contestService.GetLessonId(contestId);
+
+            var model = new ContestSubmissionsViewModel
+            {
+                ProblemName = problemName,
+                Submissions = submissions,
+                LessonId = lessonId
+            };
+
+            return View(model);
+        }
 	}
 }

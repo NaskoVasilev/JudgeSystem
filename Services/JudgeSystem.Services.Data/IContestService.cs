@@ -32,5 +32,9 @@
 		ContestAllResultsViewModel GetContestReults(int contestId, int page);
 
 		int GetContestResultsPagesCount(int contestId);
-	}
+
+        int GetFirstProblemId(int contestId);
+
+        int GetLessonId(int contestId);
+    }
 }

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<LessonProblemViewModel>
+
+<div>
+    <ul class="list-group d-flex flex-md-row">
+        @foreach (var problem in Model)
+        {
+            <li class="list-group-item">
+                <a href="#">@problem.Name</a>
+            </li>
+        }
+    </ul>
+</div>
