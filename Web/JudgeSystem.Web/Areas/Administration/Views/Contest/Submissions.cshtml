@@ -1,7 +1,7 @@
 ﻿@model ContestSubmissionsViewModel
 
 
-<div class="border p-3 bg-light">
+<div class="border p-3 bg-light mb-3">
     <div class="ul-holder mt-0">
         <vc:lesson-problems lesson-id="@Model.LessonId" url="@Model.UrlPlaceholder"></vc:lesson-problems>
     </div>
@@ -62,11 +62,11 @@
                         <td class="pt-4">@submission.SubmissionDate</td>
                         <td class="pt-3">
                             <a class="btn btn-dark"
-                               asp-action="Details" 
-                               asp-area="" 
+                               asp-action="Details"
+                               asp-area=""
                                asp-controller="Submission"
                                asp-route-id="@submission.Id">
-                               Details
+                                Details
                             </a>
                         </td>
                     </tr>
@@ -75,3 +75,5 @@
         </table>
     </div>
 </div>
+
+<partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
