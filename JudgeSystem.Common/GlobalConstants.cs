@@ -63,5 +63,7 @@
         public const string Location = "Location";
 
         public const string InvalidPracticeId = "Practice id must be specified";
+
+        public const int SubmissionPerPage = 5;
     }
 }

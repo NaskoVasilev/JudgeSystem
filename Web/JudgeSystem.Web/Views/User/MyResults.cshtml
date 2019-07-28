@@ -25,8 +25,7 @@
 				{
 					<tr class="row">
 						<td class="col-sm-9">
-                            @*TODO: Redirct to page where you can see submission but cannot submit solution*@
-							<a class="text-decoration-none" asp-action="Details" asp-area="" asp-controller="Lesson" asp-route-id="@contestResult.LessonId">@contestResult.ContestName</a>
+							<a class="text-decoration-none" asp-action="MyResults" asp-area="" asp-controller="Contest" asp-route-contestId="@contestResult.ContestId">@contestResult.ContestName</a>
 						</td>
 						<td class="col-sm-3">@contestResult.ActualPoints / @contestResult.MaxPoints</td>
 					</tr>

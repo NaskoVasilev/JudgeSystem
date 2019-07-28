@@ -10,7 +10,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
     public class PracticeController : AdministrationBaseController
     {
         private const int DefaultPage = 1;
-        private const int SubmissionsPerPage = 5;
+
         private readonly IPracticeService practiceService;
         private readonly ILessonService lessonService;
         private readonly ISubmissionService submissionService;
@@ -44,7 +44,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 baseProblemId = lessonService.GetFirstProblemId(lessonId);
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, SubmissionsPerPage);
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
 
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(submissions)}?practiceId={practiceId}&userId={userId}";
@@ -54,7 +54,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             PaginationData paginationData = new PaginationData
             {
                 CurrentPage = page,
-                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, SubmissionsPerPage),
+                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
                 Url = baseUrl + $"&problemId={baseProblemId}" + "&page={0}"
             };
 
