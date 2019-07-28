@@ -10,7 +10,5 @@ namespace JudgeSystem.Services.Data
 		List<UserPracticeResultViewModel> GetPracticetResults(string userId);
 
 		IEnumerable<UserCompeteResultViewModel> GetUserExamResults(string userId);
-
-        string GetUserId(string studentId);
     }
 }

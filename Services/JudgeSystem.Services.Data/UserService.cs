@@ -76,27 +76,12 @@
 					ContestName = c.Name,
 					LessonId = c.LessonId,
 					MaxPoints = c.Lesson.Problems.Where(p => !p.IsExtraTask).Sum(p => p.MaxPoints),
-					ActualPoints = c.Submissions.Where(x => x.UserId == userId).GroupBy(s => s.ProblemId)
+					ActualPoints = c.Submissions.Where(x => x.UserId == userId && !x.Problem.IsExtraTask).GroupBy(s => s.ProblemId)
 					.Sum(submissionGroup => submissionGroup.Max(submission => submission.ActualPoints))
 				})
 				.ToList();
 
 			return exams;
 		}
-
-        public string GetUserId(string studentId)
-        {
-            string userId = this.repository.All()
-                .Where(x => x.StudentId == studentId)
-                .Select(x => x.Id)
-                .FirstOrDefault();
-
-            if(userId == null)
-            {
-                throw new EntityNotFoundException("user");
-            }
-
-            return userId;
-        }
     }
 }
