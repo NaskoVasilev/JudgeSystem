@@ -37,5 +37,19 @@ namespace JudgeSystem.Services.Tests
             Assert.Equal(0, remainingTime.Minutes);
             Assert.Equal(0, remainingTime.Seconds);
         }
+
+        [Theory]
+        [InlineData(0, 10, 100, 0)]
+        [InlineData(10, 0, 100, 0)]
+        [InlineData(10, 5, 100, 50)]
+        [InlineData(9, 4, 70, 31)]
+        [InlineData(9, 5, 70, 38)]
+        public void CalculteProblemPoints_WithDifferntInputs_ShouldReturnDifferentData(int testsCount, int passedTests,
+            int maxPoints, int expectedPoints)
+        {
+            int actualPoints = estimator.CalculteProblemPoints(testsCount, passedTests, maxPoints);
+
+            Assert.Equal(expectedPoints, actualPoints);
+        }
     }
 }

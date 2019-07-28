@@ -25,6 +25,11 @@ namespace JudgeSystem.Services
 
 		public int CalculteProblemPoints(int testsCount, int passedTests, int maxPoints)
 		{
+            if(testsCount == 0 || maxPoints == 0)
+            {
+                return 0;
+            }
+
 			double pointsPerTest = (double)maxPoints / testsCount;
 			double actualPoints = passedTests * pointsPerTest;
 			return (int)actualPoints;
