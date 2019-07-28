@@ -1,4 +1,4 @@
-﻿@model ContestSubmissionsViewModel
+﻿@model PracticeSubmissionsViewModel
 
 <div class="border p-3 bg-light mb-3">
     <div class="ul-holder mt-0">
@@ -7,7 +7,7 @@
 
     <h3 class="mt-3 text-secondary">@Model.ProblemName</h3>
 
-    <partial name="SubmissionsList" model="Model.Submissions" />
+    <partial name="SubmissionsList" model="Model.Submissions"/>
 </div>
 
 <partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />

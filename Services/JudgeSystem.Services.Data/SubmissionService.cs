@@ -190,6 +190,16 @@
                 .FirstOrDefault();
         }
 
+        public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndPracticeId(int practiceId, int problemId, string userId, int page, int submissionsPerPage)
+        {
+            var submissionsFromDb = repository.All()
+                .Where(s => s.PracticeId == practiceId && s.UserId == userId && s.ProblemId == problemId);
+
+            var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
+            return submissions;
+        }
+
+
         private SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
         {
             SubmissionResult submissionResult = new SubmissionResult
@@ -229,6 +239,11 @@
         private bool Exists(int id)
         {
             return this.repository.All().Any(x => x.Id == id);
+        }
+
+        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId)
+        {
+            return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
         }
     }
 }

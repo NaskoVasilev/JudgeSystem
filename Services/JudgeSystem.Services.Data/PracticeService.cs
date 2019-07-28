@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Web.Infrastructure.Exceptions;
 
 namespace JudgeSystem.Services.Data
 {
@@ -32,6 +33,16 @@ namespace JudgeSystem.Services.Data
             await repository.SaveChangesAsync();
 
             return practice;
+        }
+
+        public int GetLessonId(int practiceId)
+        {
+            if(!this.repository.All().Any(x => x.Id == practiceId))
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return this.repository.All().First(x => x.Id == practiceId).LessonId;
         }
     }
 }

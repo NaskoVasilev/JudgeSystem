@@ -33,8 +33,6 @@
 
 		int GetContestResultsPagesCount(int contestId);
 
-        int GetFirstProblemId(int contestId);
-
         int GetLessonId(int contestId);
     }
 }

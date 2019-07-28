@@ -54,10 +54,10 @@
                     <tr class="row">
                         <td class="col-sm-9">
                             <a class="text-decoration-none"
-                               asp-action="Submission"
+                               asp-controller="Practice"
                                asp-area="@GlobalConstants.AdministrationArea"
-                               asp-controller="Lesson"
-                               asp-route-id="@practiceResult.LessonId"
+                               asp-action="Submissions"
+                               asp-route-userId="@Model.UserId"
                                asp-route-practiceId="@practiceResult.PracticeId">
                                @practiceResult.LessonName
                             </a>

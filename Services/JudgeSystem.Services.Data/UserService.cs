@@ -56,8 +56,8 @@
                      .Where(p => !p.IsExtraTask)
                      .Sum(p => p.MaxPoints),
                      LessonName = up.Practice.Lesson.Name,
-                     LessonId = up.Practice.LessonId,
-                     PracticeId = up.Practice.Id
+                     PracticeId = up.Practice.Id,
+                     LessonId = up.Practice.LessonId
                  })
                  .ToList();
 

@@ -20,7 +20,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
     public class ContestController : AdministrationBaseController
 	{
 		private const int DefaultPage = 1;
-        private const int SubmissionsPerPage = 2;
+        private const int SubmissionsPerPage = 5;
 		private readonly IContestService contestService;
 		private readonly ICourseService courseService;
 		private readonly ILessonService lessonService;
@@ -154,18 +154,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         public IActionResult Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
             int baseProblemId;
+            int lessonId = contestService.GetLessonId(contestId);
             if(problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
             }
             else
             {
-                baseProblemId = contestService.GetFirstProblemId(contestId);
+                baseProblemId = lessonService.GetFirstProblemId(lessonId);
             }
 
             var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
-            int lessonId = contestService.GetLessonId(contestId);
 
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Submissions?contestId={contestId}&userId={userId}";
 

@@ -8,5 +8,7 @@ namespace JudgeSystem.Services.Data
         Task<Practice> Create(int lessonId);
 
         Task AddUserToPracticeIfNotAdded(string userId, int value);
+
+        int GetLessonId(int practiceId);
     }
 }

@@ -34,8 +34,4 @@
     <ProjectReference Include="..\JudgeSystem.Web.InputModels\JudgeSystem.Web.InputModels.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.ViewModels\JudgeSystem.Web.ViewModels.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Shared\Partials\" />
-  </ItemGroup>
 </Project>

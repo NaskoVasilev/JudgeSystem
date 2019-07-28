@@ -193,23 +193,6 @@
 			return (int)Math.Ceiling(count / (double)ResultsPerPage);
 		}
 
-        public int GetFirstProblemId(int contestId)
-        {
-            var contest = repository.All()
-                .Include(x => x.Lesson)
-                .ThenInclude(x => x.Problems)
-                .FirstOrDefault(x => x.Id == contestId);
-                
-            if(contest == null)
-            {
-                throw new EntityNotFoundException(nameof(contest));
-            }
-
-            return contest.Lesson.Problems
-                .OrderBy(x => x.CreatedOn)
-                .First().Id;
-        }
-
         public int GetLessonId(int contestId)
         {
             if(!this.repository.All().Any(x => x.Id == contestId))

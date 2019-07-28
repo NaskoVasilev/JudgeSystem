@@ -82,7 +82,22 @@
 			return lessons;
 		}
 
-		public async Task<LessonViewModel> GetLessonInfo(int id)
+        public int GetFirstProblemId(int lessonId)
+        {
+            if (!this.Exists(lessonId))
+            {
+                throw new EntityNotFoundException("lesson");
+            }
+
+            return this.repository.All()
+                .Include(x => x.Problems)
+                .First(x => x.Id == lessonId)
+                .Problems
+                .OrderBy(x => x.CreatedOn)
+                .First().Id;
+        }
+
+        public async Task<LessonViewModel> GetLessonInfo(int id)
 		{
             if (!this.Exists(id))
             {

@@ -30,5 +30,9 @@
         byte[] GetSubmissionCodeById(int id);
 
         string GetProblemNameBySubmissionId(int id);
+
+        IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndPracticeId(int practiceId, int problemId, string userId, int page, int submissionsPerPage);
+
+        int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId);
     }
 }

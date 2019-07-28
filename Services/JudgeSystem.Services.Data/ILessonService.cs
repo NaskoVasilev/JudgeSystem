@@ -29,5 +29,7 @@
 		IEnumerable<SearchLessonViewModel> SearchByName(string keyword);
 
         int GetPracticeId(int lessonId);
+
+        int GetFirstProblemId(int lessonId);
     }
 }
