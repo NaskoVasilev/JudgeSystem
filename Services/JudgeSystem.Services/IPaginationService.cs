@@ -1,6 +1,6 @@
 ﻿namespace JudgeSystem.Services
 {
-    public interface IPaginationHelper
+    public interface IPaginationService
     {
         int CalculatePagesCount(int elementsCount, int elementsPerPage);
     }

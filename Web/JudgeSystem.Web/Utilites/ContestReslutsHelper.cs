@@ -2,39 +2,36 @@
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
-using JudgeSystem.Web.ViewModels.Practice;
-using Microsoft.AspNetCore.Mvc;
+using JudgeSystem.Web.ViewModels.Contest;
 
-namespace JudgeSystem.Web.Areas.Administration.Controllers
+namespace JudgeSystem.Web.Utilites
 {
-    public class PracticeController : AdministrationBaseController
+    public class ContestReslutsHelper
     {
-        private const int DefaultPage = 1;
-
-        private readonly IPracticeService practiceService;
         private readonly ILessonService lessonService;
+        private readonly IContestService contestService;
         private readonly ISubmissionService submissionService;
         private readonly IProblemService problemService;
-        private readonly IPaginationService paginationHelper;
+        private readonly IPaginationService paginationService;
 
-        public PracticeController(
-            IPracticeService practiceService,
+        public ContestReslutsHelper(
             ILessonService lessonService,
+            IContestService contestService,
             ISubmissionService submissionService,
             IProblemService problemService,
-            IPaginationService paginationHelper)
+            IPaginationService paginationService)
         {
-            this.practiceService = practiceService;
             this.lessonService = lessonService;
+            this.contestService = contestService;
             this.submissionService = submissionService;
             this.problemService = problemService;
-            this.paginationHelper = paginationHelper;
+            this.paginationService = paginationService;
         }
 
-        public IActionResult Submissions(string userId, int practiceId, int? problemId, int page = DefaultPage)
+        public ContestSubmissionsViewModel GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
         {
             int baseProblemId;
-            int lessonId = practiceService.GetLessonId(practiceId);
+            int lessonId = contestService.GetLessonId(contestId);
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
@@ -44,21 +41,19 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 baseProblemId = lessonService.GetFirstProblemId(lessonId);
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
 
-            string baseUrl = $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(submissions)}?practiceId={practiceId}&userId={userId}";
-
-            int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndPracticeId(baseProblemId, practiceId, userId);
+            int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId);
 
             PaginationData paginationData = new PaginationData
             {
                 CurrentPage = page,
-                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
+                NumberOfPages = paginationService.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
                 Url = baseUrl + $"&problemId={baseProblemId}" + "&page={0}"
             };
 
-            var model = new PracticeSubmissionsViewModel
+            var model = new ContestSubmissionsViewModel
             {
                 ProblemName = problemName,
                 Submissions = submissions,
@@ -67,7 +62,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 PaginationData = paginationData
             };
 
-            return View(model);
+            return model;
         }
     }
 }

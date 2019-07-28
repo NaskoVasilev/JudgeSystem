@@ -136,7 +136,8 @@
             services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
-			services.AddTransient<IPaginationHelper, PaginationHelper>();
+			services.AddTransient<IPaginationService, PaginationService>();
+			services.AddTransient<ContestReslutsHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,7 +2,7 @@
 
 namespace JudgeSystem.Services
 {
-    public class PaginationHelper : IPaginationHelper
+    public class PaginationService : IPaginationService
     {
         public int CalculatePagesCount(int elementsCount, int elementsPerPage)
         {

@@ -24,24 +24,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		private readonly IContestService contestService;
 		private readonly ICourseService courseService;
 		private readonly ILessonService lessonService;
-        private readonly ISubmissionService submissionService;
-        private readonly IProblemService problemService;
-        private readonly IPaginationHelper paginationHelper;
+        private readonly ContestReslutsHelper contestReslutsHelper;
 
         public ContestController(
             IContestService contestService, 
             ICourseService courseService, 
             ILessonService lessonService,
-            ISubmissionService submissionService,
-            IProblemService problemService,
-            IPaginationHelper paginationHelper)
+            ContestReslutsHelper contestReslutsHelper)
 		{
 			this.contestService = contestService;
 			this.courseService = courseService;
 			this.lessonService = lessonService;
-            this.submissionService = submissionService;
-            this.problemService = problemService;
-            this.paginationHelper = paginationHelper;
+            this.contestReslutsHelper = contestReslutsHelper;
         }
 
 		public IActionResult Create()
@@ -153,39 +147,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public IActionResult Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
-            int baseProblemId;
-            int lessonId = contestService.GetLessonId(contestId);
-            if(problemId.HasValue)
-            {
-                baseProblemId = problemId.Value;
-            }
-            else
-            {
-                baseProblemId = lessonService.GetFirstProblemId(lessonId);
-            }
-
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
-            string problemName = problemService.GetProblemName(baseProblemId);
-
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Submissions?contestId={contestId}&userId={userId}";
 
-            int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId);
-
-            PaginationData paginationData = new PaginationData
-            {
-                CurrentPage = page,
-                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
-                Url = baseUrl + $"&problemId={baseProblemId}" + "&page={0}"
-            };
-
-            var model = new ContestSubmissionsViewModel
-            {
-                ProblemName = problemName,
-                Submissions = submissions,
-                LessonId = lessonId,
-                UrlPlaceholder = baseUrl + "&problemId={0}",
-                PaginationData = paginationData
-            };
+            var model = contestReslutsHelper.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View(model);
         }
