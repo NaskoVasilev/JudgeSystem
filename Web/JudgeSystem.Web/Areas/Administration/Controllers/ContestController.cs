@@ -1,23 +1,21 @@
-﻿using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
-using JudgeSystem.Web.ViewModels.Submission;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	public class ContestController : AdministrationBaseController
+    public class ContestController : AdministrationBaseController
 	{
 		private const int DefaultPage = 1;
         private const int SubmissionsPerPage = 5;
@@ -163,12 +161,15 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
             int lessonId = contestService.GetLessonId(contestId);
+            string urlPlaceholder = "/" + GlobalConstants.AdministrationArea + "/Contest/Submissions?page=" +
+                DefaultPage + "&contestId=" + contestId + "&userId=" + userId + "&problemId={0}";
 
             var model = new ContestSubmissionsViewModel
             {
                 ProblemName = problemName,
                 Submissions = submissions,
-                LessonId = lessonId
+                LessonId = lessonId,
+                UrlPlaceholder = urlPlaceholder
             };
 
             return View(model);

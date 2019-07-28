@@ -16,10 +16,11 @@ namespace JudgeSystem.Web.Components
             this.problemService = problemService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int lessonId)
+        public async Task<IViewComponentResult> InvokeAsync(int lessonId, string url)
         {
-            IEnumerable<LessonProblemViewModel> lessons = await Task.Run(() => problemService.LessonProblems(lessonId));
-            return View(lessons);
+            IEnumerable<LessonProblemViewModel> problems = await Task.Run(() => problemService.LessonProblems(lessonId));
+            var model = new LessonProblemsViewComponentModel { Problems = problems, UrlPlaceholder = url };
+            return View(model);
         }
     }
 }

@@ -10,5 +10,7 @@ namespace JudgeSystem.Web.ViewModels.Contest
         public string ProblemName { get; set; }
 
         public int LessonId { get; set; }
+
+        public string UrlPlaceholder { get; set; }
     }
 }
