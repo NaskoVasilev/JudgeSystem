@@ -7,6 +7,11 @@ namespace JudgeSystem.Services
 	{
 		public TimeRemainingDto CalculateRemainingTime(DateTime endTime)
 		{
+            if(endTime < DateTime.Now)
+            {
+                return new TimeRemainingDto();
+            }
+
 			TimeSpan difference = endTime - DateTime.Now;
 			TimeRemainingDto timeRemaining = new TimeRemainingDto
 			{
