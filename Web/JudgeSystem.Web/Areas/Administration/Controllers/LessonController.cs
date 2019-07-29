@@ -166,7 +166,6 @@
 				await lessonService.Update(lesson);
 				string infoMessage = string.Format(InfoMessages.ChangePasswordSuccessfully, lesson.Name);
 				return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
-
 			}
 			else
 			{

@@ -65,7 +65,7 @@
 				}
 				else
 				{
-					return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id });
+					return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id, practiceId = lesson.PracticeId });
 				}
 			}
 
@@ -89,7 +89,7 @@
 			if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
 			{
 				this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
-				return RedirectToAction(nameof(Details), new { id = lesson.Id });
+				return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
 			}
 
 			ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLessonPassword);
