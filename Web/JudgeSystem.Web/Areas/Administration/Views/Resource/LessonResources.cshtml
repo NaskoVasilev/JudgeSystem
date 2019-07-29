@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ResourceViewModel>
+﻿@model AllResourcesViewModel
 
 @{
 	ViewData["Title"] = "All Resources";
@@ -8,7 +8,13 @@
 <h1 class="text-center mb-3">All Resources</h1>
 
 <div class="d-flex justify-content-center mb-3">
-	<a class="btn btn-outline-primary" asp-area="" asp-action="Details" asp-controller="Lesson" asp-route-id="@ViewData["lessonId"]">Back to lesson</a>
+	<a class="btn btn-outline-primary" asp-area="" 
+       asp-action="Details" 
+       asp-controller="Lesson" 
+       asp-route-id="@Model.LessonId"
+       asp-route-practiceId="@Model.PracticeId">
+       Back to lesson
+    </a>
 </div>
 
 <table class="table">
@@ -21,7 +27,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var resource in Model)
+		@foreach (var resource in Model.Resources)
 		{
 			<tr>
 				<td>

@@ -19,12 +19,14 @@
 	{
 		private readonly IResourceService resourceService;
 		private readonly IFileManager fileManager;
+        private readonly ILessonService lessonService;
 
-		public ResourceController(IResourceService resourceService, IFileManager fileManager)
+        public ResourceController(IResourceService resourceService, IFileManager fileManager, ILessonService lessonService)
 		{
 			this.resourceService = resourceService;
 			this.fileManager = fileManager;
-		}
+            this.lessonService = lessonService;
+        }
 
 		public IActionResult Create()
 		{
@@ -50,12 +52,11 @@
 		}
 
 
-		public IActionResult LessonResources(int lessonId)
+		public IActionResult LessonResources(int lessonId, int practiceId)
 		{
-			ViewData["lessonId"] = lessonId;
 			IEnumerable<ResourceViewModel> resources = resourceService.LessonResources(lessonId);
-
-			return View(resources);
+            var model = new AllResourcesViewModel { Resources = resources, LessonId = lessonId, PracticeId = practiceId };
+            return View(model);
 		}
 
 		public async Task<IActionResult> Edit(int id)
@@ -96,7 +97,8 @@
 			}
 
 			await resourceService.Update(model, fileName);
-			return RedirectToAction(nameof(LessonResources), "Resource", new { resource.LessonId });
+            int practiceId = lessonService.GetPracticeId(resource.LessonId);
+			return RedirectToAction(nameof(LessonResources), "Resource", new { lessonId = resource.LessonId, practiceId });
 		}
 
         [EndpointExceptionFilter]
