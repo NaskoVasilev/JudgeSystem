@@ -46,7 +46,7 @@
 			await resourceService.CreateResource(model, fileName);
 			await fileManager.UploadFile(model.File, fileName);
 
-			return RedirectToAction("Details", "Lesson", new { id = model.LessonId });
+			return RedirectToAction("Details", "Lesson", new { id = model.LessonId, model.PracticeId });
 		}
 
 

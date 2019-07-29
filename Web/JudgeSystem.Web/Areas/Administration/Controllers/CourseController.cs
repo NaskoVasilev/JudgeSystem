@@ -75,7 +75,7 @@
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			 Course course = await courseService.GetById(id);
+			Course course = await courseService.GetById(id);
 			if(course == null)
 			{
 				return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, "course"));

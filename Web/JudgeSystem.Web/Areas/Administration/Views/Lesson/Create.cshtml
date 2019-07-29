@@ -2,38 +2,43 @@
 
 @{
     ViewData["Title"] = "Lesson Create";
-	var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
+    var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-	<div class="col-md-4" >
-		<section>
-			<form method="post" enctype="multipart/form-data">
-				<div asp-validation-summary="All" class="text-danger"></div>
-				<div class="form-group">
-					<label asp-for="Name"></label>
-					<input asp-for="Name" class="form-control" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="LessonPassword"></label>
-					<input asp-for="LessonPassword" class="form-control" />
-					<span asp-validation-for="LessonPassword" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="Type"></label>
-					<select class="form-control" asp-for="Type" asp-items="lessonTypes"></select>
-					<span asp-validation-for="Type" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<input asp-for="Resources" type="file" multiple>
-					<label>Choose Resources</label>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Create</button>
-				</div>
-			</form>
-		</section>
-	</div>
+<h1 class="text-center">@ViewData["Title"]</h1>
+<div class="row" >
+    <div class="col-md-6 mx-auto">
+        <section>
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LessonPassword"></label>
+                    <input asp-for="LessonPassword" class="form-control" />
+                    <span asp-validation-for="LessonPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Type"></label>
+                    <select class="form-control" asp-for="Type" asp-items="lessonTypes"></select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="file-upload-wrapper my-4" data-text="Select your file!">
+                        <input asp-for="Resources" type="file" class="file-upload-field w-100" multiple>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </section>
+    </div>
 </div>
+
+@section Scripts{
+    <script src="~/js/fileUploader.js"></script>
+}

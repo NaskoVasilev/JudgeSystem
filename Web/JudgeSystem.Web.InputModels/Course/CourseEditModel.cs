@@ -4,7 +4,7 @@
 	using Services.Mapping;
 	using System.ComponentModel.DataAnnotations;
 
-	public class CourseEditModel : IMapTo<Course>
+	public class CourseEditModel : IMapTo<Course>, IMapFrom<Course>
 	{
 		public int Id { get; set; }
 

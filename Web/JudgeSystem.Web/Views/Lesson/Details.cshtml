@@ -27,11 +27,11 @@
             {
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Resource"
-                       asp-action="Create" asp-route-lessonId="@Model.Id">Add Resource</a>
+                       asp-action="Create" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">Add Resource</a>
                 </li>
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Resource"
-                       asp-action="LessonResources" asp-route-lessonId="@Model.Id">All Resources</a>
+                       asp-action="LessonResources" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">All Resources</a>
                 </li>
             }
         </ul>
@@ -80,7 +80,7 @@
     </div>
 
     <form id="zip-file" class="col-md-6">
-        <div class="file-upload-wrapper my-4" data-text="Select your file!">
+        <div class="file-upload-wrapper my-4" data-text="Select your files!">
             <input name="file-upload-field" type="file" class="file-upload-field w-100" value="">
         </div>
     </form>

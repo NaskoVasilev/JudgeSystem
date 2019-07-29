@@ -74,7 +74,7 @@
             services
                 .AddMvc(options => 
 				{
-					options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+					//options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.Filters.Add<EntityNotFoundExceptionFilter>();
 				})
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

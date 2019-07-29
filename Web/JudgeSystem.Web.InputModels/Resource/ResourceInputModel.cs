@@ -18,7 +18,9 @@
 
 		public int LessonId { get; set; }
 
-		[Required]
+        public int PracticeId { get; set; }
+
+        [Required]
 		public IFormFile File { get; set; }
 	}
 }
