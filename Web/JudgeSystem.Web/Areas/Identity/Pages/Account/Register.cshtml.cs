@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-
+    using JudgeSystem.Common;
     using JudgeSystem.Data.Models;
 
     using Microsoft.AspNetCore.Authorization;
@@ -73,7 +73,7 @@
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    //await this.signInManager.SignInAsync(user, isPersistent: false);
+                    this.TempData[GlobalConstants.InfoKey] = GlobalConstants.EmailConfirmMessage;
                     return this.LocalRedirect(returnUrl);
                 }
 

@@ -16,12 +16,12 @@
     using JudgeSystem.Data.Models.Enums;
     using JudgeSystem.Web.Utilites;
     using JudgeSystem.Web.ViewModels.Submission;
+    using JudgeSystem.Common;
+    using JudgeSystem.Web.Filters;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using JudgeSystem.Common;
-    using JudgeSystem.Web.Filters;
 
     [Authorize]
     public class SubmissionController : BaseController
@@ -31,7 +31,6 @@
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly ITestService testService;
 		private readonly IExecutedTestService executedTestService;
-        private readonly IProblemService problemService;
 
         public SubmissionController(ISubmissionService submissionService, UserManager<ApplicationUser> userManager,
 			ITestService testService, IExecutedTestService executedTestService)
