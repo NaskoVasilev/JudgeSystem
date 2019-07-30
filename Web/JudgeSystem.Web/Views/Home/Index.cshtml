@@ -1,19 +1,26 @@
 ﻿@{
-	this.ViewData["Title"] = "Home Page";
+    this.ViewData["Title"] = "Home Page";
 }
 
 <div class="jumbotron">
-	<h1 class="display-4">Welcome to our automated Judge System!</h1>
-	<hr class="my-4">
+    <h1 class="display-4">Welcome to our automated Judge System!</h1>
+    <hr class="my-4">
 
-	<div class="d-flex justify-content-between">
-		<div class="col-md-6 border mr-2 height-500 overflow-auto">
-			<h2 class="font-weight-lighter p-3">Active contests</h2>
-			<vc:active-contests></vc:active-contests>
-		</div>
-		<div class="col-md-6 border ml-2 height-500 overflow-auto">
-			<h2 class="font-weight-lighter p-3">Previous contests</h2>
-			<vc:previous-contests></vc:previous-contests>
-		</div>
-	</div>
+    <div class="d-flex justify-content-between">
+        <div class="col-md-6 border mr-2 height-500 overflow-auto">
+            <h2 class="font-weight-lighter p-3">Active contests</h2>
+            <vc:active-contests></vc:active-contests>
+        </div>
+        <div class="col-md-6 border ml-2 height-500 overflow-auto">
+            <h2 class="font-weight-lighter p-3">Previous contests</h2>
+            <vc:previous-contests></vc:previous-contests>
+        </div>
+    </div>
+
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <cache vary-by-user="true" expires-after="TimeSpan.FromMinutes(GlobalConstants.RecommendedLessonChchingMinutes)">
+            <vc:recommended-lessons></vc:recommended-lessons>
+        </cache>
+    }
 </div>

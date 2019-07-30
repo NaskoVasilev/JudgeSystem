@@ -49,5 +49,14 @@
             double kilobyteInBytes = 1000;
             return bytes / kilobyteInBytes;
         }
+
+        public static string GetLessonName(string lessonBaseName, LessonType lessonType)
+        {
+            if(lessonType != LessonType.Exam)
+            {
+                return lessonBaseName + " - " + lessonType.ToString();
+            }
+            return lessonBaseName;
+        }
     }
 }

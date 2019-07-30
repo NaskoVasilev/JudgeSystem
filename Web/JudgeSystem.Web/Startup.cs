@@ -15,6 +15,7 @@
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Services.Messaging;
     using JudgeSystem.Web.Dtos.Course;
+    using JudgeSystem.Web.Dtos.ML;
     using JudgeSystem.Web.Filters;
     using JudgeSystem.Web.InputModels.Course;
     using JudgeSystem.Web.Utilites;
@@ -47,7 +48,7 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddPredictionEnginePool<WordModel, WordModelPrediction>()
+            services.AddPredictionEnginePool<UserLesson, UserLessonScore>()
                 .FromFile(GlobalConstants.LessonsRrecommendationMlModelPath);
 
             services
@@ -140,7 +141,8 @@
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
 			services.AddTransient<IPaginationService, PaginationService>();
-			services.AddTransient<ContestReslutsHelper>();
+			services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
+            services.AddTransient<ContestReslutsHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

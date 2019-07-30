@@ -2,7 +2,6 @@
 
 @{
 	ViewData["Title"] = "All contests";
-	string administrationArea = GlobalConstants.AdministrationArea;
 	int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
 	string url = $"/Administration/Contest/Results/{Model.Id}?page={0}";
 	int numberOfPages = (int)ViewData["numberOfPages"];

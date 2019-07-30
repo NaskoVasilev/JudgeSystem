@@ -1,7 +1,6 @@
 ﻿namespace Sandbox
 {
     using System;
-    using System.Diagnostics;
     using System.IO;
 
     using JudgeSystem.Data;
@@ -10,13 +9,10 @@
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Repositories;
     using JudgeSystem.Data.Seeding;
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Services.Messaging;
 
     using CommandLine;
 
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -83,10 +79,6 @@
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
-
-            // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISmsSender, NullMessageSender>();
         }
     }
 }

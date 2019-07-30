@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.8.0" />
     <PackageReference Include="Microsoft.Extensions.ML" Version="0.14.0" />
+    <PackageReference Include="Microsoft.ML.Recommender" Version="0.14.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
   </ItemGroup>
