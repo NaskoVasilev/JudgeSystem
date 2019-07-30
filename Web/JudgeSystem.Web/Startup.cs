@@ -30,7 +30,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.ML;
 
     public class Startup
     {
@@ -46,6 +46,9 @@
         {
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddPredictionEnginePool<WordModel, WordModelPrediction>()
+                .FromFile(GlobalConstants.LessonsRrecommendationMlModelPath);
 
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>

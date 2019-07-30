@@ -67,5 +67,7 @@
         public const int SubmissionPerPage = 5;
 
         public const string EmailConfirmMessage = "Check your email for confirmation.";
+
+        public const string LessonsRrecommendationMlModelPath = "MLModels/JudgeSystemLessonsModel.zip";
     }
 }
