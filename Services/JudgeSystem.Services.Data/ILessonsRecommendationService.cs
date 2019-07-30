@@ -5,6 +5,6 @@ namespace JudgeSystem.Services.Data
 {
     public interface ILessonsRecommendationService
     {
-        List<RecommendedLessonViewModel> GetTopTenRecommendedLessons();
+        List<RecommendedLessonViewModel> GetTopTenRecommendedLessons(string userId);
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JudgeSystem.Web.ViewModels.Lesson
+﻿namespace JudgeSystem.Web.ViewModels.Lesson
 {
-    public class RecommendedLessonViewModel
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Data.Models;
+
+    public class RecommendedLessonViewModel : IMapFrom<Lesson>
     {
         public int Id { get; set; }
 
@@ -12,6 +11,6 @@ namespace JudgeSystem.Web.ViewModels.Lesson
 
         public int PracticeId { get; set; }
 
-        public int Score { get; set; }
+        public float Score { get; set; }
     }
 }
