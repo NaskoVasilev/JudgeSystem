@@ -20,6 +20,7 @@ namespace JudgeSystem.Services
 
         public async Task<string> Upload(Stream stream, string inputFileName, string containerName)
         {
+            containerName = ReplaceSpacesWithDashes(containerName);
             CloudBlobContainer cloudBlobContainer = await GetBlobContainer(containerName);
 
             string fileName = $"{Path.GetRandomFileName()}_{inputFileName}";
@@ -70,6 +71,11 @@ namespace JudgeSystem.Services
             string fileName = filePath.Substring(indexOfSlash + 1);
 
             return new ResourceFileComponentsDto { FileName = fileName, ContainerName = containerName };
+        }
+
+        private string ReplaceSpacesWithDashes(string value)
+        {
+            return value.Replace(" ", string.Empty);
         }
     }
 }

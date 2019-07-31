@@ -20,20 +20,12 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task CreateLesson_WithValidData_ShouldWorkCorrect()
         {
             var lessonInputModel = new LessonInputModel() { Name = "test", CourseId = 5 };
-            var resources = new List<Resource>()
-            {
-                new Resource { Name = "resource1", },
-                new Resource { Name = "resource2", },
-                new Resource { Name = "resource3", },
-            };
-
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
 
-            await lessonService.CreateLesson(lessonInputModel, resources);
+            await lessonService.CreateLesson(lessonInputModel);
 
             Assert.True(context.Lessons.Any(l => l.Name == "test" && l.CourseId == 5));
-            Assert.True(context.Resources.Count() == 3);
         }
 
         [Fact]

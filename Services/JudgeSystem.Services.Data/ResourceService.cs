@@ -80,10 +80,5 @@
 
             await repository.SaveChangesAsync();
         }
-
-        private string AddExtensionToFileName(string name, string fileName)
-        {
-            return name + "." + GetFileExtension(fileName);
-        }
     }
 }

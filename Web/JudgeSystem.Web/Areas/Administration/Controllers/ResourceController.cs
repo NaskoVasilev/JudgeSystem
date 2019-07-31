@@ -45,17 +45,17 @@
 			{
 				return View(model);
 			}
-            if(!validationService.IsValidFileExtension(model.File.Name))
+            if(!validationService.IsValidFileExtension(model.File.FileName))
             {
                 ModelState.AddModelError(string.Empty, 
-                    string.Format(ErrorMessages.UnsupportedFileFormat, System.IO.Path.GetExtension(model.File.Name)));
+                    string.Format(ErrorMessages.UnsupportedFileFormat, System.IO.Path.GetExtension(model.File.FileName)));
                 return View(model);
             }
             var lesson = await lessonService.GetById(model.LessonId);
 
             using(var stream = model.File.OpenReadStream())
             {
-                string filePath = await azureStorageService.Upload(stream, model.File.Name, lesson.Name);
+                string filePath = await azureStorageService.Upload(stream, model.File.FileName, lesson.Name);
                 await resourceService.CreateResource(model, filePath);
             }
 
@@ -84,7 +84,7 @@
 			{
 				return View(model);
 			}
-            if (!validationService.IsValidFileExtension(model.File.Name))
+            if (!validationService.IsValidFileExtension(model.File.FileName))
             {
                 ModelState.AddModelError(string.Empty,
                     string.Format(ErrorMessages.UnsupportedFileFormat, System.IO.Path.GetExtension(model.File.Name)));
@@ -98,7 +98,7 @@
                 using(var stream = model.File.OpenReadStream())
                 {
                     Lesson lesson = await lessonService.GetById(resource.LessonId);
-                    string filePath = await azureStorageService.Upload(stream, model.File.Name, lesson.Name);
+                    string filePath = await azureStorageService.Upload(stream, model.File.FileName, lesson.Name);
                     await azureStorageService.Delete(resource.FilePath);
                     await resourceService.Update(model, filePath);
                 }
