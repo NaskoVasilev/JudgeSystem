@@ -28,6 +28,7 @@
     using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.Storage;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -113,7 +114,12 @@
             services.Configure<BaseEmailOptions>(emailSection);
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddSingleton(this.configuration);
+            //TODO: remove this
+            //services.AddSingleton(this.configuration);
+
+            //Azure Blob storage configuration
+            string cloudStorageConnectionString = configuration["AzureBlob:StorageConnectionString"];
+            services.AddSingleton(x => CloudStorageAccount.Parse(cloudStorageConnectionString));
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
@@ -142,6 +148,7 @@
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
 			services.AddTransient<IPaginationService, PaginationService>();
 			services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
+			services.AddTransient<IAzureStorageService, AzureStorageService>();
             services.AddTransient<ContestReslutsHelper>();
         }
 
