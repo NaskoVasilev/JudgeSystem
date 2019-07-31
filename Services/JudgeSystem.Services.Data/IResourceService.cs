@@ -9,15 +9,13 @@
 
 	public interface IResourceService
 	{
-		Resource CreateResource(string filePath, string fileName);
-
 		Task<Resource> GetById(int id);
 
-		Task CreateResource(ResourceInputModel model, string fileName);
+		Task CreateResource(ResourceInputModel model, string filePath);
 
 		IEnumerable<ResourceViewModel> LessonResources(int lessonId);
 
-		Task Update(ResourceEditInputModel model, string fileName);
+		Task Update(ResourceEditInputModel model, string filePath = null);
 
 
 		Task Delete(Resource resource);

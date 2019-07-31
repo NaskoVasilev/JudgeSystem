@@ -18,11 +18,11 @@ namespace JudgeSystem.Services
             this.storageAccount = storageAccount;
         }
 
-        public async Task<string> Upload(CloudBlobStream stream, string fileExtension, string containerName)
+        public async Task<string> Upload(Stream stream, string inputFileName, string containerName)
         {
             CloudBlobContainer cloudBlobContainer = await GetBlobContainer(containerName);
 
-            string fileName = $"{Guid.NewGuid().ToString()}.{fileExtension}";
+            string fileName = $"{Path.GetRandomFileName()}_{inputFileName}";
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
             await cloudBlockBlob.UploadFromStreamAsync(stream);
 

@@ -16,8 +16,6 @@
 		[MinLength(3)]
 		public string Name { get; set; }
 
-		public ResourceType ResourceType { get; set; }
-
 		public IFormFile File { get; set; }
 	}
 }

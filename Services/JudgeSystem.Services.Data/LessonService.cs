@@ -41,10 +41,9 @@
 				.ToList();
 		}
 
-		public async Task<Lesson> CreateLesson(LessonInputModel model, IEnumerable<Resource> resources)
+		public async Task<Lesson> CreateLesson(LessonInputModel model)
 		{
 			Lesson lesson = model.To<LessonInputModel, Lesson>();
-			lesson.Resources = resources.ToList();
 			await repository.AddAsync(lesson);
 			await repository.SaveChangesAsync();
 			return lesson;

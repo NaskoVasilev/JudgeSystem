@@ -1,38 +1,39 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-	using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Data;
 
-	using Microsoft.Extensions.FileProviders;
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using JudgeSystem.Services;
+    using System.IO;
 
     [Authorize]
 	public class ResourceController : BaseController
 	{
 		private readonly IResourceService resourceService;
+        private readonly IAzureStorageService azureStorageService;
 
-		public ResourceController(IResourceService resourceService)
+        public ResourceController(
+            IResourceService resourceService,
+            IAzureStorageService azureStorageService)
 		{
 			this.resourceService = resourceService;
-		}
+            this.azureStorageService = azureStorageService;
+        }
 
 		public async Task<IActionResult> Download(int id)
 		{
 			Resource resource = await resourceService.GetById(id);
-			// Construct the path to the physical files folder
-			string filePath = GlobalConstants.FileStorePath;
+			var mimeType = "application/octet-stream"; 
 
-			IFileProvider provider = new PhysicalFileProvider(filePath); // Initialize the Provider
-			IFileInfo fileInfo = provider.GetFileInfo(resource.Link); // Extract the FileInfo
-
-			var readStream = fileInfo.CreateReadStream(); // Extact the Stream
-			var mimeType = "application/octet-stream"; // Set a mimeType
-
-			return File(readStream, mimeType, resource.Name); // Return FileResult
+			using(var stream = new MemoryStream())
+            {
+                await azureStorageService.Download(resource.FilePath, stream);
+		    	return File(stream, mimeType, $"{resource.Name}.{System.IO.Path.GetExtension(resource.FilePath)}"); 
+            }
 		}
 	}
 }

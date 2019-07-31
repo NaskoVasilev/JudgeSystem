@@ -143,12 +143,12 @@
 			services.AddTransient<IStudentService, StudentService>();
 			services.AddTransient<ISchoolClassService, SchoolClassService>();
 			services.AddTransient<IPracticeService, PracticeService>();
-            services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
 			services.AddTransient<IPaginationService, PaginationService>();
 			services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
 			services.AddTransient<IAzureStorageService, AzureStorageService>();
+			services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<ContestReslutsHelper>();
         }
 
