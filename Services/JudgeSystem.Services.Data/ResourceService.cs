@@ -1,11 +1,9 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using JudgeSystem.Common;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Services.Mapping;
