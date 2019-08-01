@@ -32,7 +32,7 @@
 			using(var stream = new MemoryStream())
             {
                 await azureStorageService.Download(resource.FilePath, stream);
-		    	return File(stream, mimeType, $"{resource.Name}.{System.IO.Path.GetExtension(resource.FilePath)}"); 
+		    	return File(stream.ToArray(), mimeType, resource.Name + System.IO.Path.GetExtension(resource.FilePath)); 
             }
 		}
 	}

@@ -371,3 +371,7 @@ input[type=file] {
 .font-size-20 {
     font-size: 20px;
 }
+
+.loader{
+    font-size: 20px;
+}

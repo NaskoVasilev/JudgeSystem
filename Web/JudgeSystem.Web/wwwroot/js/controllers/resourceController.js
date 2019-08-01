@@ -13,3 +13,18 @@ $(".resourceDeleteBtn").on('click', (e) => {
 			showError(error.responseText);
 		});
 });
+
+$("form").on("submit", showFileUploader);
+
+function showFileUploader() {
+    if ($(".file-upload-field")[0].files.length === 0) {
+        return;
+    }
+
+    $("#resource-button").attr("disabled", "disabled");
+    let loader = $('<div class="spinner-border text-success uploader ml-3" role="status"></div>');
+    let container = $('<div class="loader text-success">Uploading file...</div>');
+    container.append(loader);
+    let fileInputDiv = $(".file-upload-wrapper").parent();
+    fileInputDiv.before(container);
+}

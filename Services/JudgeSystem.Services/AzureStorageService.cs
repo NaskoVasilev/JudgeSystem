@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-
-using JudgeSystem.Web.Dtos.Common;
 
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
@@ -12,48 +9,45 @@ namespace JudgeSystem.Services
     public class AzureStorageService : IAzureStorageService
     {
         private readonly CloudStorageAccount storageAccount;
+        private readonly CloudBlobContainer cloudBlobContainer;
 
-        public AzureStorageService(CloudStorageAccount storageAccount)
+        public AzureStorageService(CloudStorageAccount storageAccount, CloudBlobContainer cloudBlobContainer)
         {
             this.storageAccount = storageAccount;
+            this.cloudBlobContainer = cloudBlobContainer;
         }
 
-        public async Task<string> Upload(Stream stream, string inputFileName, string containerName)
+        public async Task<string> Upload(Stream stream, string fileName, string containerName)
         {
-            containerName = ReplaceSpacesWithDashes(containerName);
-            CloudBlobContainer cloudBlobContainer = await GetBlobContainer(containerName);
+            string filePath = $"{Path.GetRandomFileName()}_{fileName}";
 
-            string fileName = $"{Path.GetRandomFileName()}_{inputFileName}";
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
+            CloudBlockBlob cloudBlockBlob = await GetCloudBlockBlob(filePath);
             await cloudBlockBlob.UploadFromStreamAsync(stream);
 
-            return $"{containerName}/{fileName}";
+            return filePath;
         }
 
         public async Task Download(string filePath, Stream stream)
         {
-            ResourceFileComponentsDto resourceFileComponents = GetResourceFileComponents(filePath);
-
-            CloudBlobContainer cloudBlobContainer = await GetBlobContainer(resourceFileComponents.ContainerName);
-
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(resourceFileComponents.FileName);
+            CloudBlockBlob cloudBlockBlob = await GetCloudBlockBlob(filePath);
             await cloudBlockBlob.DownloadToStreamAsync(stream);
         }
 
         public async Task Delete(string filePath)
         {
-            ResourceFileComponentsDto resourceFileComponents = GetResourceFileComponents(filePath);
-
-            CloudBlobContainer cloudBlobContainer = await GetBlobContainer(resourceFileComponents.ContainerName);
-
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(resourceFileComponents.FileName);
+            CloudBlockBlob cloudBlockBlob = await GetCloudBlockBlob(filePath);
             await cloudBlockBlob.DeleteIfExistsAsync();
         }
 
-        private async Task<CloudBlobContainer> GetBlobContainer(string containerName)
+        private async Task<CloudBlockBlob> GetCloudBlockBlob(string filePath)
         {
-            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(containerName);
+            CloudBlobContainer cloudBlobContainer = await ConfigureContainer();
+            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(filePath);
+            return cloudBlockBlob;
+        }
+
+        private async Task<CloudBlobContainer> ConfigureContainer()
+        {
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
             BlobContainerPermissions permissions = new BlobContainerPermissions
@@ -61,21 +55,8 @@ namespace JudgeSystem.Services
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
             await cloudBlobContainer.SetPermissionsAsync(permissions);
+
             return cloudBlobContainer;
-        }
-
-        private ResourceFileComponentsDto GetResourceFileComponents(string filePath)
-        {
-            int indexOfSlash = filePath.IndexOf('/');
-            string containerName = filePath.Substring(0, indexOfSlash);
-            string fileName = filePath.Substring(indexOfSlash + 1);
-
-            return new ResourceFileComponentsDto { FileName = fileName, ContainerName = containerName };
-        }
-
-        private string ReplaceSpacesWithDashes(string value)
-        {
-            return value.Replace(" ", string.Empty);
         }
     }
 }
