@@ -14,7 +14,7 @@
 	{
 		IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId);
 
-		Task<Lesson> CreateLesson(LessonInputModel model, IEnumerable<Resource> resources);
+		Task<Lesson> CreateLesson(LessonInputModel model);
 
 		Task<LessonViewModel> GetLessonInfo(int id);
 

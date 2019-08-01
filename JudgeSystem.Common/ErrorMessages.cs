@@ -33,5 +33,9 @@ namespace JudgeSystem.Common
         public const string EndpointErrorMessage = "Some error occurs.";
 
         public const string InvalidSubmissionSource = "Either practiceId or contestId must be provided";
+
+        public const string UnsupportedFileFormat = "{0} is not supported file format.";
+
+        public const string WrongFileFormat = "Some of the files have worng format. Check extensions and try again.";
     }
 }

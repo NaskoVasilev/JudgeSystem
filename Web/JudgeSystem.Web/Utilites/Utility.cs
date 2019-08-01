@@ -32,12 +32,6 @@
                 .ToList();
         }
 
-        public static IEnumerable<SelectListItem> GetResourceTypesSelectList()
-		{
-			return EnumExtensions.GetEnumValuesAsString<ResourceType>()
-				.Select(r => new SelectListItem { Value = r, Text = r.InsertSpaceBeforeUppercaseLetter() });
-		}
-
 		public static double ConvertBytesToMegaBytes(long bytes)
 		{
 			double megabyteInBytes = 1000000;

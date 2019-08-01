@@ -27,18 +27,9 @@
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <div class="file-upload-wrapper my-4" data-text="Select your file!">
-                        <input asp-for="Resources" type="file" class="file-upload-field w-100" multiple>
-                    </div>
-                </div>
-                <div class="form-group">
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
-
-@section Scripts{
-    <script src="~/js/fileUploader.js"></script>
-}

@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Resource Create";
-    var resourceTypes = ViewData[GlobalConstants.ResourceTypesKey] as IEnumerable<SelectListItem>;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -16,16 +15,12 @@
                     <input asp-for="Name" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="ResourceType"></label>
-                    <select class="form-control" asp-for="ResourceType" asp-items="resourceTypes"></select>
-                </div>
-                <div class="form-group">
                     <div class="file-upload-wrapper my-4" data-text="Select your file!">
                         <input asp-for="File" type="file" class="file-upload-field form-control" value="">
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary" id="resource-button">Add</button>
                 </div>
             </form>
         </section>
@@ -34,4 +29,5 @@
 
 @section Scripts{
     <script src="~/js/fileUploader.js"></script>
+    <script src="~/js/controllers/resourceController.js"></script>
 }

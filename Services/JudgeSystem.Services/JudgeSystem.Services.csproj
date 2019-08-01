@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.Dtos\JudgeSystem.Web.Dtos.csproj" />
   </ItemGroup>
 

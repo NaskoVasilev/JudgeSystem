@@ -28,6 +28,8 @@
     using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.Storage;
+    using Microsoft.Azure.Storage.Blob;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +44,6 @@
             this.configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
@@ -100,20 +101,27 @@
             services
                 .Configure<CookiePolicyOptions>(options =>
                 {
-                    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                     options.CheckConsentNeeded = context => true;
                     options.MinimumSameSitePolicy = SameSiteMode.Lax;
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
 
-            //Send grid configuration
             var sendGridSection = this.configuration.GetSection("SendGrid");
             services.Configure<SendGridOptions>(sendGridSection);
             var emailSection = this.configuration.GetSection("Email");
             services.Configure<BaseEmailOptions>(emailSection);
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddSingleton(this.configuration);
+            //TODO: remove this
+            //services.AddSingleton(this.configuration);
+            //TODO:  Comfigure this things in some other class
+            //Azure Blob storage configuration
+            string cloudStorageConnectionString = configuration["AzureBlob:StorageConnectionString"];
+            var storageAccount = CloudStorageAccount.Parse(cloudStorageConnectionString);
+            services.AddSingleton(storageAccount);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(configuration["AzureBlob:ContainerName"]);
+            services.AddSingleton(cloudBlobContainer);
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
@@ -137,11 +145,12 @@
 			services.AddTransient<IStudentService, StudentService>();
 			services.AddTransient<ISchoolClassService, SchoolClassService>();
 			services.AddTransient<IPracticeService, PracticeService>();
-            services.AddTransient<IFileManager, FileManager>();
 			services.AddTransient<IEstimator, Estimator>();
 			services.AddTransient<IPasswordHashService, PasswordHashService>();
 			services.AddTransient<IPaginationService, PaginationService>();
 			services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
+			services.AddTransient<IAzureStorageService, AzureStorageService>();
+			services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<ContestReslutsHelper>();
         }
 

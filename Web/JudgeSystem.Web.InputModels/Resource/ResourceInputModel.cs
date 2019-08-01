@@ -14,8 +14,6 @@
 		[MinLength(3)]
 		public string Name { get; set; }
 
-		public ResourceType ResourceType { get; set; }
-
 		public int LessonId { get; set; }
 
         public int PracticeId { get; set; }
