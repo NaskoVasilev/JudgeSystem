@@ -4,7 +4,6 @@
     using System.IO;
 
     using JudgeSystem.Data;
-    using JudgeSystem.Data.Common;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Repositories;
@@ -78,7 +77,6 @@
 
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
         }
     }
 }

@@ -5,31 +5,19 @@
 
     using JudgeSystem.Common;
     using JudgeSystem.Data;
-    using JudgeSystem.Data.Common;
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Repositories;
     using JudgeSystem.Data.Seeding;
-    using JudgeSystem.Services;
-    using JudgeSystem.Services.Data;
     using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Services.Messaging;
     using JudgeSystem.Web.Dtos.Course;
     using JudgeSystem.Web.Dtos.ML;
     using JudgeSystem.Web.Filters;
     using JudgeSystem.Web.InputModels.Course;
-    using JudgeSystem.Web.Utilites;
+    using JudgeSystem.Web.IocConfiguration;
     using JudgeSystem.Web.ViewModels;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.Blob;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -52,22 +40,7 @@
             services.AddPredictionEnginePool<UserLesson, UserLessonScore>()
                 .FromFile(GlobalConstants.LessonsRrecommendationMlModelPath);
 
-            services
-                .AddIdentity<ApplicationUser, ApplicationRole>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredLength = 6;
-
-					options.SignIn.RequireConfirmedEmail = true;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddUserStore<ApplicationUserStore>()
-                .AddRoleStore<ApplicationRoleStore>()
-                .AddDefaultTokenProviders()
-                .AddDefaultUI(UIFramework.Bootstrap4);
+            services.ConfigureIdentity();
 
 			services.AddDistributedMemoryCache();
 			services.AddSession(options =>
@@ -106,61 +79,18 @@
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
 
-            var sendGridSection = this.configuration.GetSection("SendGrid");
-            services.Configure<SendGridOptions>(sendGridSection);
-            var emailSection = this.configuration.GetSection("Email");
-            services.Configure<BaseEmailOptions>(emailSection);
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            //TODO: remove this
-            //services.AddSingleton(this.configuration);
-            //TODO:  Comfigure this things in some other class
-            //Azure Blob storage configuration
-            string cloudStorageConnectionString = configuration["AzureBlob:StorageConnectionString"];
-            var storageAccount = CloudStorageAccount.Parse(cloudStorageConnectionString);
-            services.AddSingleton(storageAccount);
-            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(configuration["AzureBlob:ContainerName"]);
-            services.AddSingleton(cloudBlobContainer);
-
-            // Identity stores
-            services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
-            services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
-
-            // Data repositories
-            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
-            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
-
-            // Application services
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ICourseService, CourseService>();
-			services.AddTransient<ILessonService, LessonService>();
-            services.AddTransient<IResourceService, ResourceService>();
-            services.AddTransient<IProblemService, ProblemService>();
-            services.AddTransient<ISubmissionService, SubmissionService>();
-			services.AddTransient<ITestService, TestService>();
-			services.AddTransient<IContestService, ContestService>();
-			services.AddTransient<IExecutedTestService, ExecutedTestService>();
-			services.AddTransient<IStudentService, StudentService>();
-			services.AddTransient<ISchoolClassService, SchoolClassService>();
-			services.AddTransient<IPracticeService, PracticeService>();
-			services.AddTransient<IEstimator, Estimator>();
-			services.AddTransient<IPasswordHashService, PasswordHashService>();
-			services.AddTransient<IPaginationService, PaginationService>();
-			services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
-			services.AddTransient<IAzureStorageService, AzureStorageService>();
-			services.AddTransient<IValidationService, ValidationService>();
-            services.AddTransient<ContestReslutsHelper>();
+            services
+                .AddEmailSendingService(this.configuration)
+                .ConfigureAzureBlobStorage(this.configuration)
+                .AddRepositories()
+                .AddBusinessLogicServices();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly, 
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
 
-			// Seed data on application startup
 			using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
