@@ -116,16 +116,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public IActionResult Results(int id, int? page)
 		{
-			ViewData["numberOfPages"] = contestService.GetContestResultsPagesCount(id);
-			if (page.HasValue)
+            var model = new ContestAllResultsViewModel
+            {
+                NumberOfPages = contestService.GetContestResultsPagesCount(id)
+            };
+
+            if (page.HasValue)
 			{
-				ViewData["currentPage"] = page;
+                model.CurrentPage = page.Value;
 				var contestResults = contestService.GetContestReults(id, page.Value);
 				return PartialView(contestResults);
 			}
 			else
 			{
-				ViewData["currentPage"] = DefaultPage;
+                model.CurrentPage = DefaultPage;
 				var contestResults = contestService.GetContestReults(id, DefaultPage);
 				return View(contestResults);
 			}

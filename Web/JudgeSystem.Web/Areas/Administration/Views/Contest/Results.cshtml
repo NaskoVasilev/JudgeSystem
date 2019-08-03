@@ -4,8 +4,8 @@
 	ViewData["Title"] = "All contests";
 	int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
 	string url = $"/Administration/Contest/Results/{Model.Id}?page={0}";
-	int numberOfPages = (int)ViewData["numberOfPages"];
-	int currentPage = (int)ViewData["currentPage"];
+	int numberOfPages = Model.NumberOfPages;
+	int currentPage = Model.CurrentPage;
 	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = numberOfPages, CurrentPage = currentPage };
 }
 

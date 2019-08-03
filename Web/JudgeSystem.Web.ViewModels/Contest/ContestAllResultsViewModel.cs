@@ -12,5 +12,9 @@ namespace JudgeSystem.Web.ViewModels.Contest
 		public List<ContestResultViewModel> ContestResults { get; set; }
 
 		public List<ContestProblemViewModel> Problems { get; set; }
-	}
+
+        public int NumberOfPages { get; set; }
+
+        public int CurrentPage { get; set; }
+    }
 }
