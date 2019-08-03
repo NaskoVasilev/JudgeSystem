@@ -1,0 +1,9 @@
+﻿@{
+    IEnumerable<SelectListItem> lessonTypes = Utility.GetSelectListItems<LessonType>();
+    var model = Model;
+}
+
+@foreach (var lessonType in lessonTypes)
+{
+    <option value="@lessonType.Value">@lessonType.Text</option>
+}

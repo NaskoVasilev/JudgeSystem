@@ -3,13 +3,12 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using JudgeSystem.Data.Models;
 	using JudgeSystem.Web.InputModels.Contest;
 	using JudgeSystem.Web.ViewModels.Contest;
 
 	public interface IContestService
 	{
-		Task Create(Contest contest);
+		Task Create(ContestCreateInputModel contestCreateInputModel);
 
 		Task<bool> AddUserToContestIfNotAdded(string userId, int contestId);
 

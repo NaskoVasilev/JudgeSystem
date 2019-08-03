@@ -19,7 +19,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
-            var contest = new Contest { Name = "testContest" };
+            var contest = new ContestCreateInputModel { Name = "testContest" };
             var repository = new EfDeletableEntityRepository<Contest>(this.context);
             var contestService = new ContestService(repository, null, null);
 

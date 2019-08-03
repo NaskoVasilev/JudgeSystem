@@ -36,7 +36,7 @@
 
 			await courseService.Add(model);
 
-			return RedirectToAction("All", "Course");
+            return RedirectToAction("All", "Course");
 		}
 
 		public async Task<IActionResult> Edit(int id)

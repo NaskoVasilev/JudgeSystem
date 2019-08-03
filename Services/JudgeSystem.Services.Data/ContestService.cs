@@ -44,8 +44,9 @@
 			return true;
 		}
 
-		public async Task Create(Contest contest)
+        public async Task Create(ContestCreateInputModel contestCreateInputModel)
 		{
+            var contest = contestCreateInputModel.To<Contest>();
 			await repository.AddAsync(contest);
 			await repository.SaveChangesAsync();
 		}

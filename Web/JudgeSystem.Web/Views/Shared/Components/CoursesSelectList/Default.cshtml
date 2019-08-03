@@ -1,0 +1,12 @@
+﻿@model IEnumerable<SelectListItem>
+
+<div class="form-group">
+    <label>Course</label>
+    <select id="course" class="form-control">
+        <option value="" disabled selected>Choose course</option>
+        @foreach (var course in Model)
+        {
+            <option value="@course.Value">@course.Text</option>
+        }
+    </select>
+</div>

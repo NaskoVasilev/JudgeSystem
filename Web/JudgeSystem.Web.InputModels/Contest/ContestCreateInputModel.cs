@@ -9,7 +9,7 @@
 
 	public class ContestCreateInputModel : IMapTo<Contest>
 	{
-		private const string StartEndTimeErrorMessage = "End time must br after start time.";
+		private const string StartEndTimeErrorMessage = "End time must be after start time.";
 
 		[AfterDateTimeNow]
 		public DateTime StartTime { get; set; }

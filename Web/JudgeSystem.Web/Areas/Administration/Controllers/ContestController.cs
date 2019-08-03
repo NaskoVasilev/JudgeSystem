@@ -1,19 +1,15 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common;
 using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
-using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Filters;
-using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -40,25 +36,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public IActionResult Create()
 		{
-			var courses = courseService.GetAllCourses().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
-			ViewData["courses"] = courses;
-			ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
 			return View();
 		}
 
 		[HttpPost]
+        [ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(ContestCreateInputModel model)
 		{
 			if (!ModelState.IsValid)
 			{
-				var courses = courseService.GetAllCourses().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
-				ViewData["courses"] = courses;
-				ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
 				return View(model);
 			}
 
-			Contest contest = model.To<ContestCreateInputModel, Contest>();
-			await contestService.Create(contest);
+			await contestService.Create(model);
+
 			return Redirect("/");
 		}
 
@@ -87,6 +78,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(contest);
 		}
 
+        [ValidateAntiForgeryToken]
 		[HttpPost]
 		public async Task<IActionResult> Edit(ContestEditInputModel model)
 		{
@@ -96,6 +88,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
 			await contestService.UpdateContest(model);
+
 			return RedirectToAction(nameof(ActiveContests));
 		}
 
