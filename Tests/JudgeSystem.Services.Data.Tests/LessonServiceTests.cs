@@ -23,7 +23,7 @@ namespace JudgeSystem.Services.Data.Tests
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
             var lessonService = new LessonService(repository);
 
-            await lessonService.CreateLesson(lessonInputModel);
+            await lessonService.Create(lessonInputModel);
 
             Assert.True(context.Lessons.Any(l => l.Name == "test" && l.CourseId == 5));
         }

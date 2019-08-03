@@ -1,28 +1,27 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Web.Dtos.Lesson;
+using JudgeSystem.Web.InputModels.Lesson;
+using JudgeSystem.Web.ViewModels.Lesson;
+using JudgeSystem.Web.ViewModels.Search;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Web.Dtos.Lesson;
-	using JudgeSystem.Web.InputModels.Lesson;
-	using JudgeSystem.Web.ViewModels.Lesson;
-	using JudgeSystem.Web.ViewModels.Search;
-
 	public interface ILessonService
 	{
 		IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId);
 
-		Task<Lesson> CreateLesson(LessonInputModel model);
+		Task<int> Create(LessonInputModel model);
 
 		Task<LessonViewModel> GetLessonInfo(int id);
 
-		Task<Lesson> GetById(int id);
+		Task<TDestination> GetById<TDestination>(int id);
 
-		Task Update(Lesson lesson);
+		Task<LessonDto> Update(LessonEditInputModel model);
 
-		Task Delete(Lesson lesson);
+		Task<string> Delete(int id);
 
 		IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType);
 
@@ -31,5 +30,9 @@
         int GetPracticeId(int lessonId);
 
         int GetFirstProblemId(int lessonId);
+
+        Task SetPassword(int id, string lessonPassword);
+
+        Task<LessonDto> UpdatePassword(int lessonId, string oldPassword, string newPassword);
     }
 }

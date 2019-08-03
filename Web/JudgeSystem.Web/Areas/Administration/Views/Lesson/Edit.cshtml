@@ -1,8 +1,7 @@
 ﻿@model LessonEditInputModel
 
 @{
-	ViewData["Title"] = "Lesson Edit";
-	var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
+    ViewBag["Title"] = "Lesson Edit";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -18,7 +17,9 @@
 				</div>
 				<div class="form-group">
 					<label asp-for="Type"></label>
-					<select class="form-control" asp-for="Type" asp-items="lessonTypes"></select>
+                    <select class="form-control" asp-for="Type">
+                        <partial name="Partials/LessonTypeOptions" />
+                    </select>
 					<span asp-validation-for="Type" class="text-danger"></span>
 				</div>
 				<div class="form-group">

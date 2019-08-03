@@ -26,13 +26,14 @@ namespace JudgeSystem.Services.Data
             }
         }
 
-        public async Task<Practice> Create(int lessonId)
+        public async Task<int> Create(int lessonId)
         {
             Practice practice = new Practice { LessonId = lessonId };
+
             await repository.AddAsync(practice);
             await repository.SaveChangesAsync();
 
-            return practice;
+            return practice.Id;
         }
 
         public int GetLessonId(int practiceId)

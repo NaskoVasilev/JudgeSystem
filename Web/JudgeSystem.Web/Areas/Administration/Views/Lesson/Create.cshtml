@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Lesson Create";
-    var lessonTypes = ViewData["lessonTypes"] as IEnumerable<SelectListItem>;
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
@@ -23,7 +22,9 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Type"></label>
-                    <select class="form-control" asp-for="Type" asp-items="lessonTypes"></select>
+                    <select class="form-control" asp-for="Type">
+                        <partial name="Partials/LessonTypeOptions" />
+                    </select>
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="form-group">

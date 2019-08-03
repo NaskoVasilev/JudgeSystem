@@ -1,81 +1,57 @@
-﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿using System;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.InputModels.Lesson;
+using JudgeSystem.Services;
+using JudgeSystem.Web.Filters;
+using JudgeSystem.Web.Dtos.Lesson;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Common;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Infrastructure.Extensions;
-    using JudgeSystem.Web.Utilites;
-    using JudgeSystem.Web.InputModels.Lesson;
-
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Mvc;
-    using JudgeSystem.Services;
-    using JudgeSystem.Web.Filters;
-
     public class LessonController : AdministrationBaseController
     {
         private readonly ILessonService lessonService;
-        private readonly IPasswordHashService passwordHashService;
         private readonly IPracticeService practiceService;
 
         public LessonController(
             ILessonService lessonService,
-            IPasswordHashService passwordHashService,
             IPracticeService practiceService)
         {
             this.lessonService = lessonService;
-            this.passwordHashService = passwordHashService;
             this.practiceService = practiceService;
         }
 
         public IActionResult Create()
         {
-            ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
-
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Create(LessonInputModel model)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["lessonTypes"] = EnumExtensions.GetEnumValuesAsString<LessonType>().
-                Select(t => new SelectListItem { Value = t, Text = t })
-                .ToList();
                 return View(model);
             }
 
-            if (model.LessonPassword != null)
-            {
-                model.LessonPassword = passwordHashService.HashPassword(model.LessonPassword);
-            }
+            int lessonId = await lessonService.Create(model);
+            int practiceId = await practiceService.Create(lessonId);
 
-            Lesson newLesson = await lessonService.CreateLesson(model);
-            var practice = await practiceService.Create(newLesson.Id);
-
-            return RedirectToAction("Details", "Lesson", new { id = newLesson.Id, PracticeId = practice.Id });
+            return RedirectToAction("Details", "Lesson", new { id = lessonId, PracticeId = practiceId });
         }
 
-        public async Task<IActionResult> Edit(int id, string lessonType, int courseId)
+        public async Task<IActionResult> Edit(int id)
         {
-            Lesson lesson = await lessonService.GetById(id);
-            if (lesson == null)
-            {
-                string errorMessage = string.Format(ErrorMessages.NotFoundEntityMessage, "lesson");
-                return ShowError(errorMessage, "All", "Course", new { lessonType, courseId });
-            }
-            var model = lesson.To<Lesson, LessonEditInputModel>();
-            ViewData["lessonTypes"] = Utility.GetSelectListItems<LessonType>();
-            return View(model);
+            var lesson = await lessonService.GetById<LessonEditInputModel>(id);
+            return View(lesson);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Edit(LessonEditInputModel model)
         {
@@ -84,16 +60,7 @@
                 return View(model);
             }
 
-            Lesson lesson = await lessonService.GetById(model.Id);
-            if (lesson == null)
-            {
-                string message = string.Format(ErrorMessages.NotFoundEntityMessage, "lesson");
-                return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
-            }
-
-            lesson.Name = model.Name;
-            lesson.Type = model.Type;
-            await lessonService.Update(lesson);
+            var lesson = await lessonService.Update(model);
 
             return RedirectToAction("Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
         }
@@ -103,6 +70,7 @@
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> AddPassword(LessonAddPasswordInputModel model)
         {
@@ -111,20 +79,15 @@
                 return View(model);
             }
 
-            Lesson lesson = await lessonService.GetById(model.Id);
-            if (lesson == null)
-            {
-                this.ThrowEntityNotFoundException(nameof(lesson));
-            }
+            var lesson = await lessonService.GetById<LessonDto>(model.Id);
 
-            if (lesson.IsLocked)
+            if (!string.IsNullOrEmpty(lesson.LessonPassword))
             {
                 string message = string.Format(ErrorMessages.LockedLesson);
                 return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
 
-            lesson.LessonPassword = passwordHashService.HashPassword(model.LessonPassword);
-            await lessonService.Update(lesson);
+            await lessonService.SetPassword(model.Id, model.LessonPassword);
 
             string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
             return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
@@ -135,6 +98,7 @@
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(LessonChangePasswordInputModel model)
         {
@@ -143,18 +107,15 @@
                 return View(model);
             }
 
-            Lesson lesson = await lessonService.GetById(model.Id);
-            if (lesson.IsLocked && lesson.LessonPassword == passwordHashService.HashPassword(model.OldPassword))
+            try
             {
-                lesson.LessonPassword = passwordHashService.HashPassword(model.NewPassword);
-                await lessonService.Update(lesson);
+                var lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, model.NewPassword);
                 string infoMessage = string.Format(InfoMessages.ChangePasswordSuccessfully, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-            else
+            catch (ArgumentException ex)
             {
-                string errorMessage = ErrorMessages.DiffrentLessonPasswords;
-                this.ModelState.AddModelError(string.Empty, errorMessage);
+                this.ModelState.AddModelError(string.Empty, ex.Message);
                 return View(model);
             }
         }
@@ -163,16 +124,7 @@
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            Lesson lesson = await this.lessonService.GetById(id);
-
-            if (lesson == null)
-            {
-                return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, nameof(lesson)));
-            }
-
-            string lessonName = lesson.Name;
-            await lessonService.Delete(lesson);
-
+            var lessonName = await lessonService.Delete(id);
             return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
         }
 
@@ -184,23 +136,17 @@
         [HttpPost]
         public async Task<IActionResult> RemovePassword(LessonRemovePasswordInputModel model)
         {
-            Lesson lesson = await lessonService.GetById(model.Id);
-            if (lesson == null)
+            try
             {
-                this.ThrowEntityNotFoundException(nameof(lesson));
-            }
-
-            if (lesson.LessonPassword == passwordHashService.HashPassword(model.OldPassword))
-            {
-                lesson.LessonPassword = null;
-                await lessonService.Update(lesson);
-
+                LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, null);
                 string infoMessage = string.Format(InfoMessages.PasswordRemoved, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-
-            this.ModelState.AddModelError(string.Empty, ErrorMessages.DiffrentLessonPasswords);
-            return View();
+            catch (ArgumentException ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
         }
     }
 }
