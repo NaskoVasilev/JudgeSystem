@@ -16,12 +16,14 @@ namespace JudgeSystem.Services.Data.Tests
 {
     public class LessonServiceTests : TransientDbContextProvider
     {
+        private readonly IPasswordHashService hashService = new PasswordHashService();
+
         [Fact]
         public async Task CreateLesson_WithValidData_ShouldWorkCorrect()
         {
             var lessonInputModel = new LessonInputModel() { Name = "test", CourseId = 5 };
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
-            var lessonService = new LessonService(repository);
+            var lessonService = new LessonService(repository, hashService);
 
             await lessonService.Create(lessonInputModel);
 
@@ -57,7 +59,7 @@ namespace JudgeSystem.Services.Data.Tests
             var lessonService = await CreateLessonService(testData);
 
             var lesson = testData.First(x => x.Name == "test2");
-            await lessonService.Delete(lesson);
+            await lessonService.Delete(lesson.Id);
 
             Assert.False(this.context.Lessons.Any(x => x.Name == lesson.Name));
         }
@@ -66,9 +68,9 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task Delete_WithNonExistingLesson_ShouldThrowError()
         {
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
-            var lessonService = new LessonService(repository);
+            var lessonService = new LessonService(repository, hashService);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Delete(new Lesson { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Delete(44894));
         }
 
         [Fact]
@@ -78,12 +80,11 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateLessonService(testData);
 
             int id = 2;
-            var actualData = await service.GetById(id);
+            var actualData = await service.GetById<LessonEditInputModel>(id);
             var expectedData = testData[id - 1];
 
             Assert.Equal(actualData.Name, expectedData.Name);
             Assert.Equal(actualData.Type, expectedData.Type);
-            Assert.Equal(actualData.CourseId, expectedData.CourseId);
         }
 
         [Fact]
@@ -92,7 +93,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             LessonService service = await CreateLessonService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(161651));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<LessonEditInputModel>(161651));
         }
 
         [Theory]
@@ -198,30 +199,102 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var lessonService = await CreateLessonService(testData);
+            int id = context.Lessons.First().Id;
+            LessonEditInputModel inputModel = new LessonEditInputModel
+            {
+                Id = id,
+                Name = "Test123",
+                Type = LessonType.Exercise
+            };
 
-            var lesson = context.Lessons.First(x => x.Name == "test2");
-            lesson.Name = "edited";
-            lesson.CourseId = 45;
-            lesson.LessonPassword = "123456";
-            lesson.Resources = new List<Resource> { new Resource { Name = "test"} };
-            await lessonService.Update(lesson);
-            var actualLesson = context.Lessons.First(x => x.Id == lesson.Id);
+            await lessonService.Update(inputModel);
+            var actualLesson = context.Lessons.First(x => x.Id == id);
 
-            Assert.Equal("edited", actualLesson.Name);
-            Assert.Equal(45, actualLesson.CourseId);
-            Assert.Equal(LessonType.Homework, actualLesson.Type);
-            Assert.Equal("123456", actualLesson.LessonPassword);
-            Assert.Equal(1, actualLesson.Resources.Count);
-            Assert.Equal("test", actualLesson.Resources.First().Name);
+            Assert.Equal(inputModel.Name, actualLesson.Name);
+            Assert.Equal(inputModel.Type, actualLesson.Type);
         }
 
         [Fact]
         public async Task Update_WithNonExistingLesson_ShouldThrowError()
         {
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
-            var lessonService = new LessonService(repository);
+            var lessonService = new LessonService(repository, hashService);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Update(new Lesson { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Update(new LessonEditInputModel { Id = 161651 }));
+        }
+
+
+        [Fact]
+        public async Task SetPassword_WithInValidLessonId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+            string lessonPassword = "test456456@$$";
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.SetPassword(1231, lessonPassword));
+        }
+
+        [Fact]
+        public async Task SetPassword_ToLessonWithAlreadyHasPassword_ShouldThrwowArgumentException()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+            int id = context.Lessons.First().Id;
+            await AddLessonWithPassword();
+
+            await Assert.ThrowsAsync<ArgumentException>(() => lessonService.SetPassword(9999, "dfjkdshjkf"));
+        }
+
+        [Fact]
+        public async Task SetPassword_WithValidArguments_ShouldWorkCorrect()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+            var lesson = context.Lessons.First();
+            string lessonPassword = "test456456@$$";
+
+            await lessonService.SetPassword(lesson.Id, lessonPassword);
+
+            Assert.Equal(hashService.HashPassword(lessonPassword), lesson.LessonPassword);
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WithInValidLessonId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.UpdatePassword(1231, "sdsds", "sfdsfds"));
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WithDifferntOldPassword_ShouldThrowArgumentException()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+            await AddLessonWithPassword();
+
+            await Assert.ThrowsAsync<ArgumentException>(() => lessonService.UpdatePassword(9999, "qwe123", "132456"));
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WithValidArguments_ShouldWorkCorrect()
+        {
+            var testData = GetTestData();
+            var lessonService = await CreateLessonService(testData);
+            await AddLessonWithPassword();
+            string newPassword = "123456QWE";
+
+            await lessonService.UpdatePassword(9999, "123qwe", newPassword);
+
+            Assert.Equal(hashService.HashPassword(newPassword), context.Lessons.First(x => x.Id == 9999).LessonPassword);
+        }
+
+        private async Task AddLessonWithPassword()
+        {
+            await this.context.Lessons.AddAsync(new Lesson { Id = 9999, Name = "test6", CourseId = 45,
+                LessonPassword = hashService.HashPassword("123qwe"), Type = LessonType.Exercise });
+            await this.context.SaveChangesAsync();
         }
 
         private async Task<LessonService> CreateLessonService(List<Lesson> testData)
@@ -229,7 +302,7 @@ namespace JudgeSystem.Services.Data.Tests
             await this.context.Lessons.AddRangeAsync(testData);
             await this.context.SaveChangesAsync();
             IDeletableEntityRepository<Lesson> repository = new EfDeletableEntityRepository<Lesson>(this.context);
-            var service = new LessonService(repository);
+            var service = new LessonService(repository, hashService);
             return service;
         }
 
@@ -237,19 +310,18 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Lesson>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new LessonService(reposotiryMock.Object);
-
+            return new LessonService(reposotiryMock.Object, hashService);
         }
 
         private List<Lesson> GetTestData()
         {
             return new List<Lesson>()
             {
-                new Lesson { Name = "test1", CourseId = 10, Type = LessonType.Exam},
-                new Lesson { Name = "test2", CourseId = 8, Type = LessonType.Homework },
-                new Lesson { Name = "test3", CourseId = 1, Type = LessonType.Homework },
-                new Lesson { Name = "test4", CourseId = 10, Type = LessonType.Exercise },
-                new Lesson { Name = "test5", CourseId = 10, Type = LessonType.Exam }
+                new Lesson { Name = "test1", CourseId = 10, Type = LessonType.Exam, Practice = new Practice() },
+                new Lesson { Name = "test2", CourseId = 8, Type = LessonType.Homework, Practice = new Practice() },
+                new Lesson { Name = "test3", CourseId = 1, Type = LessonType.Homework, Practice = new Practice() },
+                new Lesson { Name = "test4", CourseId = 10, Type = LessonType.Exercise, Practice = new Practice() },
+                new Lesson { Name = "test5", CourseId = 10, Type = LessonType.Exam, Practice = new Practice() }
             };
         }
 

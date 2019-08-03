@@ -81,16 +81,16 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             var lesson = await lessonService.GetById<LessonDto>(model.Id);
 
-            if (!string.IsNullOrEmpty(lesson.LessonPassword))
+            try
             {
-                string message = string.Format(ErrorMessages.LockedLesson);
-                return ShowError(message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                await lessonService.SetPassword(model.Id, model.LessonPassword);
+                string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
+                return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-
-            await lessonService.SetPassword(model.Id, model.LessonPassword);
-
-            string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
-            return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+            catch (ArgumentException ex)
+            {
+                return ShowError(ex.Message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+            }
         }
 
         public IActionResult ChangePassword()

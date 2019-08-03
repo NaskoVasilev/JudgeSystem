@@ -1,23 +1,23 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.ViewModels.Lesson;
+using JudgeSystem.Web.InputModels.Lesson;
+using JudgeSystem.Web.Dtos.Lesson;
+using JudgeSystem.Web.ViewModels.Search;
+using JudgeSystem.Common;
+using JudgeSystem.Web.Infrastructure.Exceptions;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Services.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Models.Enums;
-    using Services.Mapping;
-    using JudgeSystem.Web.ViewModels.Lesson;
-    using JudgeSystem.Web.InputModels.Lesson;
-    using JudgeSystem.Web.Dtos.Lesson;
-    using JudgeSystem.Web.ViewModels.Search;
-
-    using Microsoft.EntityFrameworkCore;
-    using JudgeSystem.Common;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
-
     public class LessonService : ILessonService
     {
         private readonly IDeletableEntityRepository<Lesson> repository;
@@ -155,6 +155,10 @@
             if (lesson == null)
             {
                 throw new EntityNotFoundException(nameof(lesson));
+            }
+            if(!string.IsNullOrEmpty(lesson.LessonPassword))
+            {
+                throw new ArgumentException(ErrorMessages.LockedLesson);
             }
 
             lesson.LessonPassword = hashService.HashPassword(lessonPassword);
