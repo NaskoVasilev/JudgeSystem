@@ -26,50 +26,45 @@
 			this.problemRepository = problemRepository;
 		}
 
-		public async Task<Problem> Create(ProblemInputModel model)
+		public async Task<ProblemDto> Create(ProblemInputModel model)
 		{
 			Problem problem = model.To<ProblemInputModel, Problem>();
 			await problemRepository.AddAsync(problem);
 			await problemRepository.SaveChangesAsync();
-			return problem;
+			return problem.To<ProblemDto>();
 		}
 
-		public async Task Delete(Problem problem)
+		public async Task<ProblemDto> Delete(int id)
 		{
-            if(!this.Exists(problem.Id))
+            var problem = await problemRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            if(problem == null)
             {
                 throw new EntityNotFoundException();
             }
 
 			problemRepository.Delete(problem);
 			await problemRepository.SaveChangesAsync();
+
+            return problem.To<ProblemDto>();
 		}
 
-		public async Task<Problem> GetById(int id)
+		public async Task<TDestination> GetById<TDestination>(int id)
 		{
             if (!this.Exists(id))
             {
                 throw new EntityNotFoundException();
             }
 
-            return await problemRepository.All().FirstOrDefaultAsync(p => p.Id == id);
-		}
-
-		public async Task<Problem> GetByIdWithTests(int id)
-		{
-            if (!this.Exists(id))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            return await problemRepository.All()
-				.Include(p => p.Tests)
-				.FirstOrDefaultAsync(p => p.Id == id);
+            return await problemRepository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
 		}
 
 		public async Task<int> GetLessonId(int problemId)
 		{
-			Problem problem = await GetById(problemId);
+			Problem problem = await problemRepository.All().FirstOrDefaultAsync(x => x.Id == problemId);
+            if(problem == null)
+            {
+                throw new EntityNotFoundException();
+            }
 			return problem.LessonId;
 		}
 
@@ -136,18 +131,13 @@
             return results;
 		}
 
-		public async Task<Problem> Update(ProblemEditInputModel model)
+		public async Task<ProblemDto> Update(ProblemEditInputModel model)
 		{
-            if (!this.Exists(model.Id))
+            var problem = await problemRepository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
+            if (problem == null)
             {
                 throw new EntityNotFoundException();
             }
-
-            Problem problem = await GetById(model.Id);
-			if(problem == null)
-			{
-				throw new EntityNotFoundException(nameof(problem));
-			}
 
 			problem.Name = model.Name;
 			problem.MaxPoints = model.MaxPoints;
@@ -155,10 +145,10 @@
 			problem.SubmissionType = model.SubmissionType;
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
-
             problemRepository.Update(problem);
 			await problemRepository.SaveChangesAsync();
-			return problem;
+
+            return problem.To<ProblemDto>();
 		}
 
         private bool Exists(int id)

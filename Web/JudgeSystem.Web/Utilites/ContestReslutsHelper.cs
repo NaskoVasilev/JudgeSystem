@@ -41,7 +41,7 @@ namespace JudgeSystem.Web.Utilites
                 baseProblemId = lessonService.GetFirstProblemId(lessonId);
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
 
             int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId);
@@ -49,7 +49,7 @@ namespace JudgeSystem.Web.Utilites
             PaginationData paginationData = new PaginationData
             {
                 CurrentPage = page,
-                NumberOfPages = paginationService.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
+                NumberOfPages = paginationService.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionsPerPage),
                 Url = baseUrl + $"&problemId={baseProblemId}" + "&page={0}"
             };
 

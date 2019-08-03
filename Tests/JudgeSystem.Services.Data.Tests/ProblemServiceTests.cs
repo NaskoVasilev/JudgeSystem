@@ -2,8 +2,10 @@
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Problem;
+using JudgeSystem.Web.ViewModels.Problem;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
@@ -45,10 +47,9 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var problemService = await CreateProblemService(testData);
 
-            var problem = testData.First(x => x.Name == "test2");
-            await problemService.Delete(problem);
+            await problemService.Delete(2);
 
-            Assert.False(this.context.Lessons.Any(x => x.Name == problem.Name));
+            Assert.False(this.context.Lessons.Any(x => x.Id == 2));
         }
 
         [Fact]
@@ -56,7 +57,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var problemService = await CreateProblemService(new List<Problem>()); 
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => problemService.Delete(new Problem { Id = 161651 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => problemService.Delete(54984));
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateProblemService(testData);
 
             int id = 2;
-            var actualData = await service.GetById(id);
+            var actualData = await service.GetById<ProblemDto>(id);
             var expectedData = testData[id - 1];
 
             Assert.Equal(actualData.Name, expectedData.Name);
@@ -81,45 +82,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateProblemService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(165));
-        }
-
-        [Fact]
-        public async Task GetByIdWithTests_WithValidId_ShouldReturnCorrectData()
-        {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
-            var problem = new Problem
-            {
-                Id = 999,
-                Name = "include all tests",
-                Tests = new List<Test>
-                {
-                    new Test { Id = 1 },
-                    new Test { Id = 2 },
-                    new Test { Id = 3 },
-                    new Test { Id = 4 },
-                    new Test { Id = 5 },
-                }
-            };
-            await context.Problems.AddAsync(problem);
-            await context.SaveChangesAsync();
-
-            var actualData = await service.GetByIdWithTests(999);
-
-            Assert.Equal(problem.Name, actualData.Name);
-            Assert.Equal(problem.MaxPoints, actualData.MaxPoints);
-            Assert.Equal(problem.Tests.Count, actualData.Tests.Count);
-            Assert.Equal(problem.Tests.Select(t => t.Id), actualData.Tests.Select(t => t.Id));
-        }
-
-        [Fact]
-        public async Task GetByIdWithTests_WithInValidId_ShouldReturnNull()
-        {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
-
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetByIdWithTests(165));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<ProblemEditInputModel>(165));
         }
 
         [Theory]

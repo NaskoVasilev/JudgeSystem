@@ -1,29 +1,27 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Models;
+using JudgeSystem.Web.Dtos.Problem;
+using JudgeSystem.Web.InputModels.Problem;
+using JudgeSystem.Web.ViewModels.Problem;
+using JudgeSystem.Web.ViewModels.Search;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Models;
-    using JudgeSystem.Web.Dtos.Problem;
-    using JudgeSystem.Web.InputModels.Problem;
-	using JudgeSystem.Web.ViewModels.Problem;
-	using JudgeSystem.Web.ViewModels.Search;
-
 	public  interface IProblemService
 	{
-		Task<Problem> Create(ProblemInputModel model);
+		Task<ProblemDto> Create(ProblemInputModel model);
 
 		IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId);
 
-		Task<Problem> GetById(int id);
+		Task<TDestination> GetById<TDestination>(int id);
 
-		Task<Problem> GetByIdWithTests(int id);
-
-		Task<Problem> Update(ProblemEditInputModel model);
+		Task<ProblemDto> Update(ProblemEditInputModel model);
 
         ProblemConstraintsDto GetProblemConstraints(int id);
 
-		Task Delete(Problem problem);
+		Task<ProblemDto> Delete(int id);
 
 		IEnumerable<SearchProblemViewModel> SearchByName(string keyword);
 

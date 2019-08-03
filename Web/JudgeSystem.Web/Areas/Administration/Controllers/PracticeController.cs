@@ -3,6 +3,7 @@ using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Practice;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
@@ -44,18 +45,16 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 baseProblemId = lessonService.GetFirstProblemId(lessonId);
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionPerPage);
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
-
-            string baseUrl = $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(submissions)}?practiceId={practiceId}&userId={userId}";
-
+            string baseUrl = GetBaseUrl(userId, practiceId);
             int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndPracticeId(baseProblemId, practiceId, userId);
 
             PaginationData paginationData = new PaginationData
             {
                 CurrentPage = page,
-                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionPerPage),
-                Url = baseUrl + $"&problemId={baseProblemId}" + "&page={0}"
+                NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionsPerPage),
+                Url = GetFullUrl(baseProblemId, baseUrl)
             };
 
             var model = new PracticeSubmissionsViewModel
@@ -68,6 +67,16 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             };
 
             return View(model);
+        }
+
+        private static string GetFullUrl(int baseProblemId, string baseUrl)
+        {
+            return baseUrl + $"&problemId={baseProblemId}" + "&page={0}";
+        }
+
+        private string GetBaseUrl(string userId, int practiceId)
+        {
+            return $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(Submissions)}?practiceId={practiceId}&userId={userId}";
         }
     }
 }

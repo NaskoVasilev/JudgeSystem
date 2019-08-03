@@ -13,6 +13,7 @@
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Identity;
     using System;
+    using JudgeSystem.Web.Dtos.Lesson;
 
     [Authorize]
 	public class LessonController : BaseController
@@ -77,14 +78,11 @@
 			return View();
 		}
 
+        [ValidateAntiForgeryToken]
 		[HttpPost]
 		public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
 		{
-			var lesson = await lessonService.GetById(model.Id);
-			if (lesson == null)
-			{
-				this.ThrowEntityNotFoundException(nameof(lesson));
-			}
+			var lesson = await lessonService.GetById<LessonDto>(model.Id);
 
 			if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
 			{

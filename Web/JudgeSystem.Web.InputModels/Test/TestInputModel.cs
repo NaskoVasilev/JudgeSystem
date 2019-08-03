@@ -1,11 +1,12 @@
-﻿namespace JudgeSystem.Web.InputModels.Test
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using JudgeSystem.Services.Mapping;
+
+
+namespace JudgeSystem.Web.InputModels.Test
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Services.Mapping;
-	using Data.Models;
-
-	public class TestInputModel : IMapTo<Test>
+    public class TestInputModel : IMapTo<Data.Models.Test>
 	{
 		public int Id { get; set; }
 		
@@ -18,5 +19,8 @@
 		public string OutputData { get; set; }
 
 		public bool IsTrialTest { get; set; }
-	}
+
+        [NotMapped]
+        public int LessonId { get; set; }
+    }
 }

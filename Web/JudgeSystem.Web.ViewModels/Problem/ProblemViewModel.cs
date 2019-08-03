@@ -15,8 +15,6 @@
 
 		public int MaxPoints { get; set; }
 
-		public int TestsCount { get; set; }
-
         [Display(Name = "Allowed time in miliseconds")]
         public int AllowedTimeInMilliseconds { get; set; }
 

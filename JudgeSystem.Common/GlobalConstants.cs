@@ -64,7 +64,7 @@
 
         public const string InvalidPracticeId = "Practice id must be specified";
 
-        public const int SubmissionPerPage = 5;
+        public const int SubmissionsPerPage = 5;
 
         public const int RecommendedLessonChchingMinutes = 60;
 
