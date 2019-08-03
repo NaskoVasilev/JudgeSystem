@@ -9,6 +9,8 @@
     using Microsoft.AspNetCore.Authorization;
     using JudgeSystem.Services;
     using System.IO;
+    using JudgeSystem.Web.Dtos.Resource;
+    using JudgeSystem.Common;
 
     [Authorize]
 	public class ResourceController : BaseController
@@ -26,8 +28,8 @@
 
 		public async Task<IActionResult> Download(int id)
 		{
-			Resource resource = await resourceService.GetById(id);
-			var mimeType = "application/octet-stream"; 
+			var resource = await resourceService.GetById<ResourceDto>(id);
+			var mimeType = GlobalConstants.OctetStreamMimeType; 
 
 			using(var stream = new MemoryStream())
             {

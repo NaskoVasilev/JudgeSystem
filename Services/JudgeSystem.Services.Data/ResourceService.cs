@@ -12,6 +12,7 @@
     using JudgeSystem.Web.InputModels.Resource;
 
     using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Web.Dtos.Resource;
 
     public class ResourceService : IResourceService
     {
@@ -35,9 +36,14 @@
             await repository.SaveChangesAsync();
         }
 
-        public async Task<Resource> GetById(int id)
+        public async Task<TDestination> GetById<TDestination>(int id)
         {
-            return await this.repository.All().FirstOrDefaultAsync(r => r.Id == id);
+            var resource = await this.repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            if(resource == null)
+            {
+                throw new EntityNotFoundException(nameof(resource));
+            }
+            return resource;
         }
 
         public IEnumerable<ResourceViewModel> LessonResources(int lessonId)
@@ -48,20 +54,22 @@
                 .ToList();
         }
 
-        public async Task Delete(Resource resource)
+        public async Task<ResourceDto> Delete(int id)
         {
-            if(!this.repository.All().Any(x => x.Id == resource.Id))
+            Resource resource = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
+            if(resource == null)
             {
                 throw new EntityNotFoundException(nameof(resource));
             }
 
             repository.Delete(resource);
             await repository.SaveChangesAsync();
+            return resource.To<ResourceDto>();
         }
 
         public async Task Update(ResourceEditInputModel model, string filePath = null)
         {
-            Resource resource = await GetById(model.Id);
+            Resource resource = await repository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
 
             if (resource == null)
             {

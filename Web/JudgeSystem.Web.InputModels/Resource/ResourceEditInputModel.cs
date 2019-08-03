@@ -1,14 +1,13 @@
-﻿namespace JudgeSystem.Web.InputModels.Resource
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Services.Mapping;
+
+using Microsoft.AspNetCore.Http;
+using AutoMapper;
+
+namespace JudgeSystem.Web.InputModels.Resource
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Data.Models.Enums;
-	using Services.Mapping;
-	using Data.Models;
-
-	using Microsoft.AspNetCore.Http;
-
-	public class ResourceEditInputModel : IMapTo<Resource>, IMapFrom<Resource>
+    public class ResourceEditInputModel : IMapTo<Data.Models.Resource>, IMapFrom<Data.Models.Resource>
 	{
 		public int Id { get; set; }
 
@@ -16,6 +15,7 @@
 		[MinLength(3)]
 		public string Name { get; set; }
 
+        [IgnoreMap]
 		public IFormFile File { get; set; }
 	}
 }

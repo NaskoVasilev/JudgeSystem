@@ -1,19 +1,18 @@
-﻿namespace JudgeSystem.Web.Areas.Administration.Controllers
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.ViewModels.Resource;
+using JudgeSystem.Web.InputModels.Resource;
+using JudgeSystem.Web.Filters;
+using JudgeSystem.Services;
+using JudgeSystem.Web.Dtos.Resource;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.ViewModels.Resource;
-	using JudgeSystem.Web.InputModels.Resource;
-
-	using Microsoft.AspNetCore.Mvc;
-    using JudgeSystem.Web.Filters;
-    using JudgeSystem.Services;
-
     public class ResourceController : AdministrationBaseController
 	{
 		private readonly IResourceService resourceService;
@@ -38,6 +37,7 @@
 			return View();
 		}
 
+        [ValidateAntiForgeryToken]
 		[HttpPost]
 		public async Task<IActionResult> Create(ResourceInputModel model)
 		{
@@ -61,7 +61,6 @@
             return RedirectToAction("Details", "Lesson", new { id = model.LessonId, model.PracticeId });
 		}
 
-
 		public IActionResult LessonResources(int lessonId, int practiceId)
 		{
 			IEnumerable<ResourceViewModel> resources = resourceService.LessonResources(lessonId);
@@ -71,11 +70,11 @@
 
 		public async Task<IActionResult> Edit(int id)
 		{
-			Resource resource = await resourceService.GetById(id);
-			ResourceEditInputModel model = resource.To<ResourceEditInputModel>();
+			var model = await resourceService.GetById<ResourceEditInputModel>(id);
 			return View(model);
 		}
 
+        [ValidateAntiForgeryToken]
 		[HttpPost]
 		public async Task<IActionResult> Edit(ResourceEditInputModel model)
 		{
@@ -90,7 +89,7 @@
                 return View(model);
             }
 
-            Resource resource = await resourceService.GetById(model.Id);
+            var resource = await resourceService.GetById<ResourceDto>(model.Id);
 
 			if(model.File != null)
 			{
@@ -114,14 +113,8 @@
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			Resource resource = await resourceService.GetById(id);
-			if(resource == null)
-			{
-				return BadRequest(string.Format(ErrorMessages.NotFoundEntityMessage, nameof(resource)));
-			}
-
+			var resource = await resourceService.Delete(id);
             await azureStorageService.Delete(resource.FilePath);
-			await resourceService.Delete(resource);
 
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, resource.Name));
 		}

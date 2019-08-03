@@ -1,15 +1,15 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Web.ViewModels.Resource;
+using JudgeSystem.Web.InputModels.Resource;
+using JudgeSystem.Web.Dtos.Resource;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Web.ViewModels.Resource;
-	using JudgeSystem.Web.InputModels.Resource;
-
-	public interface IResourceService
+    public interface IResourceService
 	{
-		Task<Resource> GetById(int id);
+		Task<TDestination> GetById<TDestination>(int id);
 
 		Task CreateResource(ResourceInputModel model, string filePath);
 
@@ -18,6 +18,6 @@
 		Task Update(ResourceEditInputModel model, string filePath = null);
 
 
-		Task Delete(Resource resource);
+		Task<ResourceDto> Delete(int id);
 	}
 }

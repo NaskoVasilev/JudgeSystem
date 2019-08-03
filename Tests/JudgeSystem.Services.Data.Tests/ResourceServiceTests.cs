@@ -1,6 +1,8 @@
 ﻿using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.Problem;
+using JudgeSystem.Web.Dtos.Resource;
 using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Resource;
 using Moq;
@@ -37,7 +39,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateResourceService(testData);
 
-            var actualData = await service.GetById(2);
+            var actualData = await service.GetById<ResourceDto>(2);
             var expectedResut = testData.First(x => x.Id == 2);
 
             Assert.Equal(expectedResut.Name, actualData.Name);
@@ -51,9 +53,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateResourceService(testData);
 
-            var actualResult = await service.GetById(132);
-
-            Assert.Null(actualResult);
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<ResourceDto>(345));
         }
 
         [Fact]
@@ -73,8 +73,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateResourceService(testData);
 
-            var resource = testData.First(x => x.Id == 1);
-            await service.Delete(resource);
+            await service.Delete(1);
 
             Assert.False(this.context.Resources.Any(x => x.Id == 1));
         }
@@ -84,7 +83,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateResourceService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(new Resource { Id = 45 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(45));
         }
 
         [Fact]

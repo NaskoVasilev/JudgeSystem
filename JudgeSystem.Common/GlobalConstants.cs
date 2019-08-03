@@ -32,7 +32,10 @@
 
 		public const string ResourceTypesKey = "resourceTypes";
 
-		public const int SessionIdleTimeout = 2;
+        public const string OctetStreamMimeType = "application/octet-stream";
+
+
+        public const int SessionIdleTimeout = 2;
 
 		public const string StandardDateFormat = "dd/MM/yyyy HH:mm:ss";
 
