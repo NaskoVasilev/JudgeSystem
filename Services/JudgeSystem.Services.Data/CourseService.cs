@@ -42,15 +42,14 @@
 			return repository.All().FirstOrDefault(r => r.Id == courseId)?.Name;
 		}
 
-		public async Task<Course> GetById(int courseId)
+		public TDestination GetById<TDestination>(int courseId)
 		{
             if(!this.Exists(courseId))
             {
                 throw new EntityNotFoundException("course");
             }
 
-			return await this.repository.All()
-			.FirstOrDefaultAsync(c => c.Id == courseId);
+            return repository.All().Where(x => x.Id == courseId).To<TDestination>().First();
 		}
 
 		public async Task Updade(CourseEditModel model)
@@ -60,25 +59,25 @@
                 throw new EntityNotFoundException("course");
             }
 
-            Course course = await GetById(model.Id);
-			if(course == null)
-			{
-				throw new ArgumentException(string.Format(ErrorMessages.NotFoundEntityMessage, "course"));
-			}
+            Course course =  GetById<Course>(model.Id);
 			course.Name = model.Name;
+
 			repository.Update(course);
 			await repository.SaveChangesAsync();
 		}
 
-		public async Task Delete(Course course)
+		public async Task<CourseViewModel> Delete(int id)
 		{
-            if (!this.Exists(course.Id))
+            var course = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
+            if (course == null)
             {
-                throw new EntityNotFoundException("course");
+                throw new EntityNotFoundException(nameof(course));
             }
 
             repository.Delete(course);
 			await repository.SaveChangesAsync();
+
+            return course.To<CourseViewModel>();
 		}
 
 		public IEnumerable<ContestCourseDto> GetAllCourses()

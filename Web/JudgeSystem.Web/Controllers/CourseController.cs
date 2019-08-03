@@ -20,11 +20,10 @@
 			this.lessonService = lessonService;
 		}
 
-		public async Task<IActionResult> Details(int id)
+		public IActionResult Details(int id)
 		{
 			ViewData["lessonTypes"] = EnumExtensions.GetEnumValuesAsString<LessonType>();
-			Course course = await courseService.GetById(id);
-			CourseViewModel model = course.To<CourseViewModel>();
+			var model = courseService.GetById<CourseViewModel>(id);
 			return this.View(model);
 		}
 

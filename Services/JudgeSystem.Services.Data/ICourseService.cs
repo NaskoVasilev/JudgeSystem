@@ -1,14 +1,13 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Web.Dtos.Course;
+using JudgeSystem.Web.InputModels.Course;
+using JudgeSystem.Web.ViewModels.Course;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Web.Dtos.Course;
-	using JudgeSystem.Web.InputModels.Course;
-	using JudgeSystem.Web.ViewModels.Course;
-
-	public interface ICourseService
+    public interface ICourseService
 	{
 		Task Add(CourseInputModel course);
 
@@ -16,11 +15,11 @@
 
 		string GetName(int courseId);
 
-		Task<Course> GetById(int courseId);
+		TDestination GetById<TDestination>(int courseId);
 
 		Task Updade(CourseEditModel model);
 
-		Task Delete(Course course);
+		Task<CourseViewModel> Delete(int id);
 
 		IEnumerable<ContestCourseDto> GetAllCourses();
 	}

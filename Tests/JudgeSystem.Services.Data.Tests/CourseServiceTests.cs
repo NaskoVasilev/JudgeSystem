@@ -1,11 +1,9 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Data.Common.Repositories;
+﻿using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Course;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,7 +82,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var courseService = await CreateCourseService(GetTestData());
 
-            var actualCourse = await courseService.GetById(2);
+            var actualCourse = courseService.GetById<CourseEditModel>(2);
 
             Assert.Equal("course2", actualCourse.Name);
             Assert.Equal(2, actualCourse.Id);
@@ -95,7 +93,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var courseService = await CreateCourseService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => courseService.GetById(456));
+            Assert.Throws<EntityNotFoundException>(() => courseService.GetById<CourseEditModel>(456));
         }
 
         [Fact]
@@ -104,7 +102,7 @@ namespace JudgeSystem.Services.Data.Tests
             var courseService = await CreateCourseService(GetTestData());
             await courseService.Updade(new CourseEditModel { Id = 1, Name = "edited" });
 
-            var editedCourse = await courseService.GetById(1);
+            var editedCourse = this.context.Courses.Find(1);
 
             Assert.Equal("edited", editedCourse.Name);
         }
@@ -123,10 +121,9 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var courseService = await CreateCourseService(GetTestData());
 
-            var course = await courseService.GetById(2);
-            await courseService.Delete(course);
+            await courseService.Delete(2);
 
-            Assert.True(course.IsDeleted);
+            Assert.False(context.Courses.Any(x => x.Id == 2));
         }
 
         [Fact]
@@ -134,10 +131,8 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var courseService = await CreateCourseService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => courseService
-            .Delete(new Course { Id = 5, Name = "fakeEdited" }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => courseService.Delete(45));
         }
-
 
         private async Task<CourseService> CreateCourseService(List<Course> testData)
         {
