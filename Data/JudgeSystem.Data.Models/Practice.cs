@@ -1,7 +1,6 @@
-﻿using JudgeSystem.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Data.Common.Models;
 
 namespace JudgeSystem.Data.Models
 {

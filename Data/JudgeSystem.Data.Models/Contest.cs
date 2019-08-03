@@ -1,12 +1,13 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Models
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
-
-	using JudgeSystem.Data.Common.Models;
-
 	public class Contest : BaseDeletableModel<int>
 	{
 		public Contest()
@@ -16,7 +17,7 @@
 		}
 
 		[Required]
-		[MaxLength(100)]
+		[MaxLength(ModelConstants.ContestNameMaxLength)]
 		public string Name { get; set; }
 
 		public DateTime StartTime { get; set; }

@@ -1,12 +1,14 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Common.Models;
+
+using Microsoft.AspNetCore.Identity;
+
+namespace JudgeSystem.Data.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using JudgeSystem.Data.Common.Models;
-
-    using Microsoft.AspNetCore.Identity;
-
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
         public ApplicationUser()
@@ -19,11 +21,11 @@
 			this.UserContests = new HashSet<UserContest>();
         }
 
-		[MaxLength(30)]
+		[MaxLength(ModelConstants.UserFirstNameMaxLength)]
 		[Required]
 		public string Name { get; set; }
 
-		[MaxLength(30)]
+		[MaxLength(ModelConstants.UserSurnameMaxLength)]
 		[Required]
 		public string Surname { get; set; }
 

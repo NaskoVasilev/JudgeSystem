@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Models
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-
-	using JudgeSystem.Data.Common.Models;
-
 	public class Submission : BaseModel<int>
 	{
 		public Submission()

@@ -1,8 +1,8 @@
-﻿namespace JudgeSystem.Data.Models
-{
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
+namespace JudgeSystem.Data.Models
+{
 	public class Test
 	{
 		public Test()

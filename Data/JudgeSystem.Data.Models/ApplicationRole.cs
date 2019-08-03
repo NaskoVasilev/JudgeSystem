@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System;
+
+using JudgeSystem.Data.Common.Models;
+
+using Microsoft.AspNetCore.Identity;
+
+namespace JudgeSystem.Data.Models
 {
-    using System;
-
-    using JudgeSystem.Data.Common.Models;
-
-    using Microsoft.AspNetCore.Identity;
-
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {
         public ApplicationRole()

@@ -1,15 +1,14 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Models
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Data.Models.Enums;
-
-	public class Resource
+    public class Resource : BaseModel<int>
 	{
-		public int Id { get; set; }
-
 		[Required]
-		[MinLength(3)]
+		[MaxLength(ModelConstants.ResourceNameMaxLength)]
 		public string Name { get; set; }
 
 		[Required]

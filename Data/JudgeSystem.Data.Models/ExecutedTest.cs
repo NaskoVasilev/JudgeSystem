@@ -1,8 +1,8 @@
-﻿namespace JudgeSystem.Data.Models
-{
-	using JudgeSystem.Data.Common.Models;
-	using JudgeSystem.Data.Models.Enums;
+﻿using JudgeSystem.Data.Common.Models;
+using JudgeSystem.Data.Models.Enums;
 
+namespace JudgeSystem.Data.Models
+{
 	public class ExecutedTest : BaseModel<int>
 	{
 		public ExecutedTest()

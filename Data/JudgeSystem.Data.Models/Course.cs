@@ -1,10 +1,11 @@
-﻿namespace JudgeSystem.Data.Models
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Models
 {
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-
-	using Data.Common.Models;
-
 	public class Course : BaseDeletableModel<int>
 	{
 		public Course()
@@ -13,7 +14,7 @@
 		}
 
 		[Required]
-		[MinLength(3)]
+		[MaxLength(ModelConstants.CourseNameMaxLength)]
 		public string Name { get; set; }
 
 		public ICollection<Lesson> Lessons { get; set; }

@@ -1,16 +1,21 @@
-﻿namespace JudgeSystem.Data.Models
-{
-	using JudgeSystem.Data.Common.Models;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+using JudgeSystem.Common;
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Models
+{
     public class Student : BaseModel<string>
 	{
+        [Required]
+        [MaxLength(ModelConstants.StudentFullNameMaxLength)]
 		public string FullName { get; set; }
 
 		[Required]
 		public string ActivationKeyHash { get; set; }
 
 		[Required]
+        [MaxLength(ModelConstants.StudentEmailMaxLength)]
 		public string Email { get; set; }
 
 		public int NumberInCalss { get; set; }

@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Data.Models
-{
-	using JudgeSystem.Data.Common.Models;
-    using JudgeSystem.Data.Models.Enums;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
+using JudgeSystem.Data.Common.Models;
+using JudgeSystem.Data.Models.Enums;
+
+namespace JudgeSystem.Data.Models
+{
     public class SchoolClass : BaseDeletableModel<int>
 	{
 		public SchoolClass()
