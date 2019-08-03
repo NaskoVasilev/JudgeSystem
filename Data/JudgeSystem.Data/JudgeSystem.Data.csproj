@@ -40,7 +40,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\JudgeSystem.Common\JudgeSystem.Common.csproj" />
-    <ProjectReference Include="..\..\Services\JudgeSystem.Services.Data\JudgeSystem.Services.Data.csproj" />
     <ProjectReference Include="..\JudgeSystem.Data.Common\JudgeSystem.Data.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Data.Models\JudgeSystem.Data.Models.csproj" />
   </ItemGroup>

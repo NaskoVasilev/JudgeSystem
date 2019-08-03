@@ -80,6 +80,7 @@
                 });
 
             services
+                .ConfigureSettings(this.configuration)
                 .AddEmailSendingService(this.configuration)
                 .ConfigureAzureBlobStorage(this.configuration)
                 .AddRepositories()

@@ -1,40 +1,52 @@
-﻿namespace JudgeSystem.Data.Seeding
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
+
+using Microsoft.Extensions.DependencyInjection;
+
+namespace JudgeSystem.Data.Seeding
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    public class SchoolClassesSeeder : ISeeder
+    {
+        public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    using JudgeSystem.Common;
-    using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Services.Data;
+                IEnumerable<SchoolClassType> classTypes = Enum.GetValues(typeof(SchoolClassType)).Cast<SchoolClassType>();
 
-	using Microsoft.Extensions.DependencyInjection;
+                for (int classNumber = GlobalConstants.MinClassNumber; classNumber <= GlobalConstants.MaxClassNumber; classNumber++)
+                {
+                    foreach (var classType in classTypes)
+                    {
+                        await SeedSchoolClass(classNumber, classType, context);
+                    }
+                }
 
+                await context.SaveChangesAsync();
+            }
+        }
 
-	public class SchoolClassesSeeder : ISeeder
-	{
-		public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
-		{
-			ISchoolClassService schoolClassService = serviceProvider.GetRequiredService<ISchoolClassService>();
-			IEnumerable<SchoolClassType> classTypes = Enum.GetValues(typeof(SchoolClassType)).Cast<SchoolClassType>();
+        private async Task SeedSchoolClass(int classNumber, SchoolClassType classType, ApplicationDbContext context)
+        {
+            bool exists = context.SchoolClasses.Any(x => x.ClassNumber == classNumber && x.ClassType == classType);
 
-			for (int classNumber = GlobalConstants.MinClassNumber; classNumber <= GlobalConstants.MaxClassNumber; classNumber++)
-			{
-				foreach (var classType in classTypes)
-				{
-					await SeedSchoolClass(classNumber, classType, schoolClassService);
-				}
-			}
-		}
+            if (!exists)
+            {
+                var schoolClass = new SchoolClass
+                {
+                    ClassNumber = classNumber,
+                    ClassType = classType,
+                };
 
-		private async Task SeedSchoolClass(int classNumber, SchoolClassType classType, ISchoolClassService schoolClassService)
-		{
-			bool exists = schoolClassService.ClassExists(classNumber, classType);
-			if(!exists)
-			{
-		 		await schoolClassService.Create(classNumber, classType);
-			}
-		}
-	}
+                await context.SchoolClasses.AddAsync(schoolClass);
+            }
+        }
+    }
 }

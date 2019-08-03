@@ -1,15 +1,15 @@
-﻿namespace JudgeSystem.Data.Seeding
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace JudgeSystem.Data.Seeding
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Common;
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.DependencyInjection;
-
     internal class RolesSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
