@@ -100,8 +100,8 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task Update_WithValidData_ShouldWorkCorrect ()
         {
             var courseService = await CreateCourseService(GetTestData());
-            await courseService.Updade(new CourseEditModel { Id = 1, Name = "edited" });
 
+            await courseService.Updade(new CourseEditModel { Id = 1, Name = "edited" });
             var editedCourse = this.context.Courses.Find(1);
 
             Assert.Equal("edited", editedCourse.Name);

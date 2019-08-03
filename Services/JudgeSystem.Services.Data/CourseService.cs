@@ -54,14 +54,13 @@
 
 		public async Task Updade(CourseEditModel model)
 		{
-            if (!this.Exists(model.Id))
+            var course = await repository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
+            if (course == null)
             {
                 throw new EntityNotFoundException("course");
             }
 
-            Course course =  GetById<Course>(model.Id);
 			course.Name = model.Name;
-
 			repository.Update(course);
 			await repository.SaveChangesAsync();
 		}
