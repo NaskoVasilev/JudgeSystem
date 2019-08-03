@@ -28,6 +28,7 @@ namespace JudgeSystem.Web.IocConfiguration
             services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
             services.AddTransient<IAzureStorageService, AzureStorageService>();
             services.AddTransient<IValidationService, ValidationService>();
+            services.AddTransient<IStudentProfileService, StudentProfileService>();
             services.AddTransient<ContestReslutsHelper>();
 
             return services;

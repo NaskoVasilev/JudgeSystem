@@ -8,6 +8,7 @@
 	using JudgeSystem.Data.Models;
 	using JudgeSystem.Data.Models.Enums;
 	using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.Dtos.Student;
     using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.InputModels.Student;
 	using JudgeSystem.Web.ViewModels.Student;
@@ -25,17 +26,19 @@
 			this.repository = repository;
 		}
 
-		public async Task<Student> Create(Student student)
+		public async Task<StudentDto> Create(StudentCreateInputModel model, string activationKey)
 		{
-			student.ActivationKeyHash = passwordHashService.HashPassword(student.ActivationKeyHash);
+            var student = model.To<Student>();
+			student.ActivationKeyHash = passwordHashService.HashPassword(activationKey);
 			await repository.AddAsync(student);
 			await repository.SaveChangesAsync();
-			return student;
+			return student.To<StudentDto>();
 		}
 
-		public async Task DeleteAsync(Student student)
+		public async Task Delete(string id)
 		{
-            if (!this.Exists(student.Id))
+            var student = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
+            if (student == null)
             {
                 throw new EntityNotFoundException();
             }
@@ -46,37 +49,26 @@
 
 		public async Task<T> GetById<T>(string id)
 		{
-            if (!this.Exists(id))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            var student = await repository.All()
-				.Where(s => s.Id == id)
-				.To<T>()
-				.FirstOrDefaultAsync();
-
-			return student;
-		}
-
-		public async Task<Student> GetById(string id)
-		{
-            if (!this.Exists(id))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            return await repository.All().FirstOrDefaultAsync(s => s.Id == id);
-		}
-
-		public async Task<SchoolClass> GetStudentClassAsync(string id)
-		{
-			Student student = await this.repository.All().Include(s => s.SchoolClass).FirstOrDefaultAsync(s => s.Id == id);
+            var student = await repository.All().Where(s => s.Id == id).To<T>().FirstOrDefaultAsync();
             if(student == null)
             {
                 throw new EntityNotFoundException();
             }
-            return student.SchoolClass;
+			return student;
+		}
+
+		public async Task<SchoolClassDto> GetStudentClass(string id)
+		{
+			Student student = await this.repository.All()
+                .Include(s => s.SchoolClass)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if(student == null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return student.SchoolClass.To<SchoolClassDto>();
 		}
 
 		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
@@ -84,10 +76,13 @@
             return await this.GetById<StudentProfileViewModel>(studentId);
 		}
 
-		public Task<Student> GetStudentProfileByActivationKey(string activationKey)
+		public Task<StudentDto> GetStudentProfileByActivationKey(string activationKey)
 		{
 			string activationKeyHash = passwordHashService.HashPassword(activationKey);
-			return repository.All().FirstOrDefaultAsync(s => s.ActivationKeyHash == activationKeyHash);
+			return repository.All()
+                .Where(x => x.ActivationKeyHash == activationKeyHash)
+                .To<StudentDto>()
+                .FirstOrDefaultAsync();
 		}
 
 		public IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType)
@@ -124,9 +119,10 @@
                 .ToList();
 		}
 
-		public async Task SetStudentProfileAsActivated(Student student)
+		public async Task SetStudentProfileAsActivated(string studentId)
 		{
-            if (!this.Exists(student.Id))
+            var student = await repository.All().FirstOrDefaultAsync(x => x.Id == studentId);
+            if (student == null)
             {
                 throw new EntityNotFoundException();
             }
@@ -136,7 +132,7 @@
 			await repository.SaveChangesAsync();
 		}
 
-		public async Task<Student> UpdateAsync(StudentEditInputModel model)
+		public async Task<StudentDto> Update(StudentEditInputModel model)
 		{
             if (!this.Exists(model.Id))
             {
@@ -155,7 +151,8 @@
 			student.SchoolClassId = model.SchoolClassId;
 			repository.Update(student);
 			await repository.SaveChangesAsync();
-			return student;
+
+			return student.To<StudentDto>();
 		}
 
         private bool Exists(string id)

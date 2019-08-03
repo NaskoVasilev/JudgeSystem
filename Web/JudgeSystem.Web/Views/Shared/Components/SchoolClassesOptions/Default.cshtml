@@ -1,0 +1,6 @@
+﻿@model IEnumerable<SelectListItem>
+
+@foreach (var course in Model)
+{
+    <option value="@course.Value">@course.Text</option>
+}

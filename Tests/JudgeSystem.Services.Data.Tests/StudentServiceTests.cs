@@ -2,6 +2,7 @@
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
@@ -23,15 +24,14 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateStudentService(new List<Student>());
             string activationKey = Guid.NewGuid().ToString();
-            var student = new Student
+            var student = new StudentCreateInputModel
             {
                 FullName = "Test Testov",
                 Email = "test@mail.bg",
-                ActivationKeyHash = activationKey,
                 NumberInCalss = 12
             };
 
-            var actualStudent = await service.Create(student);
+            var actualStudent = await service.Create(student, activationKey);
 
             Assert.NotNull(actualStudent.Id);
             Assert.False(actualStudent.IsActivated);
@@ -45,9 +45,10 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
+            string email = "student2@mail.bg";
+            var studentId = context.Students.First(x => x.Email == email).Id;
 
-            var student = testData.First(x => x.Email == "student2@mail.bg");
-            await service.DeleteAsync(student);
+            await service.Delete(studentId);
 
             Assert.False(this.context.Students.Any(x => x.Email == "student2@mail.bg"));
         }
@@ -57,7 +58,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateStudentService(new List<Student>());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.DeleteAsync(new Student { Id = Guid.NewGuid().ToString() }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -94,7 +95,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(Guid.NewGuid().ToString()));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<StudentDto>(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -113,7 +114,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Students.AddAsync(student);
             await context.SaveChangesAsync();
 
-            var actualData = await service.GetStudentClassAsync(student.Id);
+            var actualData = await service.GetStudentClass(student.Id);
 
             Assert.NotNull(actualData);
             Assert.Equal(12, actualData.ClassNumber);
@@ -126,7 +127,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetStudentClassAsync(Guid.NewGuid().ToString()));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetStudentClass(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -172,7 +173,7 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateStudentService(testData);
             var student = this.context.Students.FirstOrDefault(x => x.FullName == "Student 4");
 
-            await service.SetStudentProfileAsActivated(student);
+            await service.SetStudentProfileAsActivated(student.Id);
 
             Assert.True(student.IsActivated);
         }
@@ -183,7 +184,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.SetStudentProfileAsActivated(new Student { Id = Guid.NewGuid().ToString() }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.SetStudentProfileAsActivated(Guid.NewGuid().ToString() ));
         }
 
         [Theory]
@@ -222,7 +223,7 @@ namespace JudgeSystem.Services.Data.Tests
                SchoolClassId = 12
             };
 
-            await service.UpdateAsync(inputModel);
+            await service.Update(inputModel);
             var actualStudent = context.Students.First(x => x.Id == inputModel.Id);
 
             Assert.Equal(inputModel.Email, actualStudent.Email);
@@ -244,7 +245,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
             var service = await CreateStudentService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.UpdateAsync(inputModel));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
         }
 
         private async Task<StudentService> CreateStudentService(List<Student> testData)

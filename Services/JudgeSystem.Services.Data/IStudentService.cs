@@ -1,20 +1,21 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Web.Dtos.Student;
+using JudgeSystem.Web.InputModels.Student;
+using JudgeSystem.Web.ViewModels.Student;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Web.InputModels.Student;
-	using JudgeSystem.Web.ViewModels.Student;
-
 	public interface IStudentService
 	{
-		Task<Student> Create(Student student);
+		Task<StudentDto> Create(StudentCreateInputModel model, string activationKey);
 
-		Task<Student> GetStudentProfileByActivationKey(string activationKey);
+		Task<StudentDto> GetStudentProfileByActivationKey(string activationKey);
 
-		Task SetStudentProfileAsActivated(Student student);
+		Task SetStudentProfileAsActivated(string id);
 
 		Task<StudentProfileViewModel> GetStudentInfo(string studentId);
 
@@ -22,12 +23,10 @@
 
 		Task<T> GetById<T>(string id);
 
-		Task<Student> UpdateAsync(StudentEditInputModel model);
+		Task Delete(string id);
 
-		Task DeleteAsync(Student student);
+		Task<SchoolClassDto> GetStudentClass(string id);
 
-		Task<SchoolClass> GetStudentClassAsync(string id);
-
-		Task<Student> GetById(string id);
-	}
+        Task<StudentDto> Update(StudentEditInputModel model);
+    }
 }

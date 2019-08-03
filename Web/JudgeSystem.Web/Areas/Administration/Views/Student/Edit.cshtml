@@ -23,8 +23,9 @@
 				</div>
 				<div class="form-group">
 					<label asp-for="SchoolClassId"></label>
-					<select class="form-control" asp-for="SchoolClassId" asp-items="classes">
-					</select>
+                    <select class="form-control" asp-for="SchoolClassId">
+                        <vc:school-classes-options></vc:school-classes-options>
+                    </select>
 				</div>
 				<div class="form-group">
 					<label asp-for="NumberInCalss"></label>

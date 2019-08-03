@@ -2,7 +2,7 @@
 
 @{
 	this.ViewData["Title"] = "All courses";
-	IEnumerable<string> lessonTypes = ViewData["lessonTypes"] as IEnumerable<string>;
+	IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
 }
 
 <h2 class="text-center text-secondary">Courses tree</h2>

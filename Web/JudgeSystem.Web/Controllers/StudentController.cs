@@ -40,7 +40,7 @@
 				return View(model);
 			}
 
-			Student student = await studentService.GetStudentProfileByActivationKey(model.ActivationKey);
+			var student = await studentService.GetStudentProfileByActivationKey(model.ActivationKey);
 			if(student == null)
 			{
 				ModelState.AddModelError(string.Empty, ErrorMessages.InvalidActivationKey);
@@ -53,7 +53,7 @@
 				return View();
 			}
 
-			await studentService.SetStudentProfileAsActivated(student);
+			await studentService.SetStudentProfileAsActivated(student.Id);
 			ApplicationUser user = await userManager.GetUserAsync(this.User);
 			user.StudentId = student.Id;
 			await userManager.UpdateAsync(user);
