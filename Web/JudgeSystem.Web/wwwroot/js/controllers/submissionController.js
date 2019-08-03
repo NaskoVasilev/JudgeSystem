@@ -49,6 +49,8 @@ $(".problem-name").on("click", (e) => {
 
 	$('#problemName')[0].innerText = e.target.textContent;
 
+    changeProblemConstraints(id);
+
 	if ($("#admin-buttons").length > 0) {
 		let editProblemBtnHrefAttribute = $('#editProblemBtn').attr('href');
 		editProblemBtnHrefAttribute = editProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
@@ -154,8 +156,6 @@ $('#submit-btn').on('click', () => {
 		})
 		.fail((error) => {
             showError(error.responseText);
-            console.log("here")
-            hideLoader();
 		});
 });
 
@@ -203,8 +203,8 @@ function getSubmissions(id, page) {
 			$($('.page-number > a')[page - 1]).addClass(currentPageClass);
 
 		})
-		.fail(error => {
-			console.log(error);
+        .fail(error => {
+            showError(error.responseText);
 		});
 }
 
@@ -288,4 +288,13 @@ function hideOneOfCodeInputs(submissionType) {
 
 function hideLoader() {
     $("#submissions-holder table tbody tr:first").hide();
+}
+
+function changeProblemConstraints(id) {
+    $.get("/Problem/Get/" + id)
+        .then(problem => {
+            $(".allowed-time").text(problem.allowedTimeInMilliseconds);
+            $(".allowed-memory").text(problem.allowedMemoryInMegaBytes.toFixed(2));
+        })
+        .catch(error => showError(error.responseText));
 }

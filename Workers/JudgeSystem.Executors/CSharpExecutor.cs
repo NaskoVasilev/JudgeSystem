@@ -7,10 +7,8 @@ namespace JudgeSystem.Executors
 	public class CSharpExecutor
 	{
 		private const int ProcessMaxRunningTime = 1000;
-		private const int TimeLimit = 100;
-		private const int MemoryLimit = 5000000;
 
-		public async Task<ExecutionResult> ProcessExecutionResult(string dllFilePath, string input)
+		public async Task<ExecutionResult> ProcessExecutionResult(string dllFilePath, string input, int timeLimit, int memoryLimit)
 		{
 			string commandPromptArgument = @"/C dotnet " + dllFilePath;
 			ExecutionResult executionResult = new ExecutionResult();
@@ -52,7 +50,7 @@ namespace JudgeSystem.Executors
 				executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
 				executionResult.UserProcessorTime = process.UserProcessorTime;
 
-				if (executionResult.TotalProcessorTime.TotalMilliseconds > TimeLimit)
+				if (executionResult.TotalProcessorTime.TotalMilliseconds > timeLimit)
 				{
 					executionResult.Type = ProcessExecutionResultType.TimeLimit;
 				}
@@ -62,7 +60,7 @@ namespace JudgeSystem.Executors
 					executionResult.Type = ProcessExecutionResultType.RunTimeError;
 				}
 
-				if (executionResult.MemoryUsed > MemoryLimit)
+				if (executionResult.MemoryUsed > memoryLimit)
 				{
 					executionResult.Type = ProcessExecutionResultType.MemoryLimit;
 				}

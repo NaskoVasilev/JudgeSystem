@@ -4,14 +4,16 @@ using JudgeSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JudgeSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190802210714_RenameAllowedTimeInSecondsToRenameAllowedTimeInMiliseconds")]
+    partial class RenameAllowedTimeInSecondsToRenameAllowedTimeInMiliseconds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,7 +288,7 @@ namespace JudgeSystem.Data.Migrations
 
                     b.Property<double>("AllowedMemoryInMegaBytes");
 
-                    b.Property<int>("AllowedTimeInMilliseconds");
+                    b.Property<int>("AllowedTimeInMiliseconds");
 
                     b.Property<DateTime>("CreatedOn");
 

@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20190616134242_SubmissionExecuedTestRelation.Designer.cs" />
     <Compile Remove="Migrations\20190622151223_AddNameAndSurnameToSuer.cs" />
     <Compile Remove="Migrations\20190622151223_AddNameAndSurnameToSuer.Designer.cs" />
+    <Compile Remove="Migrations\20190802202727_AddAllowedTimeAndAlowedMemoryColumnsToProblem.cs" />
+    <Compile Remove="Migrations\20190802202727_AddAllowedTimeAndAlowedMemoryColumnsToProblem.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

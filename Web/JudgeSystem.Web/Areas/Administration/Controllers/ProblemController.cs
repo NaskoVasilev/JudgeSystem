@@ -34,7 +34,7 @@
 
 		public IActionResult Create()
 		{
-			return View();
+			return View(new ProblemInputModel());
 		}
 
 		[HttpPost]
@@ -115,9 +115,9 @@
 
 			await problemService.Delete(problem);
 
-			return RedirectToAction("Details", "Lesson",
-				new { id = lessonId });
-		}
+            return RedirectToAction(nameof(All), "Problem",
+                new { area = GlobalConstants.AdministrationArea, lessonId });
+        }
 
 		public async Task<IActionResult> AddTest(int problemId)
 		{

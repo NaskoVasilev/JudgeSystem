@@ -1,20 +1,21 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Data.Common.Repositories;
-	using JudgeSystem.Data.Models;
-	using Services.Mapping;
-	using JudgeSystem.Web.Infrastructure.Exceptions;
-	using JudgeSystem.Web.ViewModels.Problem;
-	using JudgeSystem.Web.InputModels.Problem;
+    using JudgeSystem.Data.Common.Repositories;
+    using JudgeSystem.Data.Models;
+    using Services.Mapping;
+    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Web.ViewModels.Problem;
+    using JudgeSystem.Web.InputModels.Problem;
 
-	using Microsoft.EntityFrameworkCore;
-	using JudgeSystem.Web.ViewModels.Search;
+    using Microsoft.EntityFrameworkCore;
+    using JudgeSystem.Web.ViewModels.Search;
     using System;
     using JudgeSystem.Common;
+    using JudgeSystem.Web.Dtos.Problem;
 
     public class ProblemService : IProblemService
 	{
@@ -72,7 +73,20 @@
 			return problem.LessonId;
 		}
 
-		public int GetProblemMaxPoints(int id)
+        public ProblemConstraintsDto GetProblemConstraints(int id)
+        {
+            if(!this.Exists(id))
+            {
+                throw new EntityNotFoundException("problem");
+            }
+
+            return problemRepository.All()
+                .Where(x => x.Id == id)
+                .To<ProblemConstraintsDto>()
+                .First();
+        }
+
+        public int GetProblemMaxPoints(int id)
 		{
             if (!this.Exists(id))
             {
@@ -139,6 +153,8 @@
 			problem.MaxPoints = model.MaxPoints;
 			problem.IsExtraTask = model.IsExtraTask;
 			problem.SubmissionType = model.SubmissionType;
+            problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
+            problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
 
             problemRepository.Update(problem);
 			await problemRepository.SaveChangesAsync();

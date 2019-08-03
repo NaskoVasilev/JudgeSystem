@@ -44,6 +44,11 @@
             return bytes / kilobyteInBytes;
         }
 
+        public static int ConvertMegaBytesToBytes(double megabytes)
+        {
+            return (int)(megabytes * 1000 * 1000);
+        }
+
         public static string GetLessonName(string lessonBaseName, LessonType lessonType)
         {
             if(lessonType != LessonType.Exam)

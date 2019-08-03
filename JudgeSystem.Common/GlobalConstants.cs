@@ -71,5 +71,19 @@
         public const string EmailConfirmMessage = "Check your email for confirmation.";
 
         public const string LessonsRrecommendationMlModelPath = "MLModels/JudgeSystemLessonsModel.zip";
+
+        public const double DefaultAllowedMemoryInMegaBytes = 30;
+
+        public const int DefaultAllowedTimeInMilliseconds = 200;
+
+        public const int MinAllowedMemoryInMegaBytes = 0;
+
+        public const int MaxAllowedMemoryInMegaBytes = 100;
+
+        public const int MinAllowedTimeInMilliseconds = 0;
+
+        public const int MaxAllowedTimeInMilliseconds = 1000;
+
+        public const int DefaultMaxPoints = 100;
     }
 }

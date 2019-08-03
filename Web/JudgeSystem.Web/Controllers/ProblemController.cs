@@ -1,16 +1,23 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-	using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Data;
+    using JudgeSystem.Web.Filters;
+    using Microsoft.AspNetCore.Mvc;
 
-	using Microsoft.AspNetCore.Identity;
-
-	public class ProblemController : BaseController
+    public class ProblemController : BaseController
 	{
-		private readonly UserManager<ApplicationUser> userManager;
+        private readonly IProblemService problemService;
 
-		public ProblemController(UserManager<ApplicationUser> userManager)
+        public ProblemController(IProblemService problemService)
 		{
-			this.userManager = userManager;
-		}
+            this.problemService = problemService;
+        }
+
+        [EndpointExceptionFilter]
+        public IActionResult Get(int id)
+        {
+            var problem = problemService.GetProblemConstraints(id);
+            return this.Ok(problem);
+        }
 	}
 }

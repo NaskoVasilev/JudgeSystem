@@ -22,6 +22,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using System.Linq;
 
     [Authorize]
     public class SubmissionController : BaseController
@@ -31,14 +32,20 @@
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly ITestService testService;
 		private readonly IExecutedTestService executedTestService;
+        private readonly IProblemService problemService;
 
-        public SubmissionController(ISubmissionService submissionService, UserManager<ApplicationUser> userManager,
-			ITestService testService, IExecutedTestService executedTestService)
+        public SubmissionController(
+            ISubmissionService submissionService, 
+            UserManager<ApplicationUser> userManager,
+			ITestService testService, 
+            IExecutedTestService executedTestService,
+            IProblemService problemService)
 		{
 			this.submissionService = submissionService;
 			this.userManager = userManager;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
+            this.problemService = problemService;
         }
 
 		public IActionResult Details(int id)
@@ -140,7 +147,7 @@
 		private async Task RunTests(Submission submission, int problemId, List<string> sourceCodes)
 		{
 			CSharpCompiler compiler = new CSharpCompiler();
-			//TODO: run compilation asynchronously
+			
 			CompileResult compileResult = compiler.CreateAssembly(sourceCodes);
 			if (!compileResult.IsCompiledSuccessfully)
 			{
@@ -149,12 +156,15 @@
 				return;
 			}
 
-			IEnumerable<TestDataDto> tests = testService.GetTestsByProblemId(problemId);
+			var tests = testService.GetTestsByProblemId(problemId).ToList();
 			CSharpChecker checker = new CSharpChecker();
+            var problemConstraints = problemService.GetProblemConstraints(problemId);
+            var memoryLimit = Utility.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
+            var timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
 
 			foreach (var test in tests)
 			{
-				CheckerResult checkerResult = await checker.Check(compileResult.OutputFile, test.InputData, test.OutputData);
+				CheckerResult checkerResult = await checker.Check(compileResult.OutputFile, test.InputData, test.OutputData, timeLimit, memoryLimit);
 
 				ExecutedTest executedTest = new ExecutedTest
 				{

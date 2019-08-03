@@ -17,7 +17,14 @@
                     <label asp-for="MaxPoints"></label>
                     <input asp-for="MaxPoints" class="form-control" disabled />
                 </div>
-
+                <div class="form-group">
+                    <label asp-for="AllowedMemoryInMegaBytes"></label>
+                    <input asp-for="AllowedMemoryInMegaBytes" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label asp-for="AllowedTimeInMilliseconds"></label>
+                    <input asp-for="AllowedTimeInMilliseconds" class="form-control" disabled />
+                </div>
                 <div class="form-group">
                     <label asp-for="SubmissionType"></label>
                     <input asp-for="SubmissionType" class="form-control" asp-items="submissionTypes" />

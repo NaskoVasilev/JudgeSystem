@@ -13,9 +13,9 @@ namespace JudgeSystem.Checkers
 			this.cSharpExecutor = new CSharpExecutor();
 		}
 
-		public async Task<CheckerResult> Check(string dllFilePath, string input, string expectedOutput)
+		public async Task<CheckerResult> Check(string dllFilePath, string input, string expectedOutput, int timeLimit, int memoryLimit)
 		{
-			ExecutionResult executionResult = await cSharpExecutor.ProcessExecutionResult(dllFilePath, input);
+			ExecutionResult executionResult = await cSharpExecutor.ProcessExecutionResult(dllFilePath, input, timeLimit, memoryLimit);
 			CheckerResult checkerResult = new CheckerResult(executionResult);
 			if (!executionResult.IsSuccesfull)
 			{

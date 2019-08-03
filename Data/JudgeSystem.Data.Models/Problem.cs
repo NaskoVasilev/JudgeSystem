@@ -23,7 +23,11 @@
 
 		public int MaxPoints { get; set; }
 
-		public int LessonId { get; set; }
+        public int AllowedTimeInMilliseconds { get; set; }
+
+        public double AllowedMemoryInMegaBytes { get; set; }
+
+        public int LessonId { get; set; }
 		public Lesson Lesson { get; set; }
 
         public SubmissionType SubmissionType { get; set; }
