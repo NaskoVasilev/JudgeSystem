@@ -1,8 +1,8 @@
-﻿namespace JudgeSystem.Data.Common.Models
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
+namespace JudgeSystem.Data.Common.Models
+{
     public abstract class BaseModel<TKey> : IAuditInfo
     {
         [Key]

@@ -1,7 +1,7 @@
-﻿namespace JudgeSystem.Data.Common.Models
-{
-    using System;
+﻿using System;
 
+namespace JudgeSystem.Data.Common.Models
+{
     public interface IDeletableEntity
     {
         bool IsDeleted { get; set; }

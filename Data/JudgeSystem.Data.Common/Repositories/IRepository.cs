@@ -1,9 +1,9 @@
-﻿namespace JudgeSystem.Data.Common.Repositories
-{
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 
+namespace JudgeSystem.Data.Common.Repositories
+{
     public interface IRepository<TEntity> : IDisposable
         where TEntity : class
     {

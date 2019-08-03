@@ -1,10 +1,10 @@
-﻿namespace JudgeSystem.Data.Common.Repositories
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Common.Models;
+
+namespace JudgeSystem.Data.Common.Repositories
 {
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Common.Models;
-
     public interface IDeletableEntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {
