@@ -1,14 +1,14 @@
-﻿namespace JudgeSystem.Data.Repositories
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Common.Models;
+using JudgeSystem.Data.Common.Repositories;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Data.Repositories
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Common.Models;
-    using JudgeSystem.Data.Common.Repositories;
-
-    using Microsoft.EntityFrameworkCore;
-
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {

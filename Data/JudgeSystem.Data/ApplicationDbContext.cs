@@ -1,17 +1,17 @@
-﻿namespace JudgeSystem.Data
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Common.Models;
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Data
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Common.Models;
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         private static readonly MethodInfo SetIsDeletedQueryFilterMethod =
@@ -64,6 +64,8 @@
 
             ConfigureUserIdentityRelations(builder);
 
+            ConfigureApplicationEntitiesRelations(builder);
+
             EntityIndexesConfiguration.Configure(builder);
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
@@ -84,6 +86,47 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+        }
+
+        private void ConfigureApplicationEntitiesRelations(ModelBuilder builder)
+        {
+            builder.Entity<ExecutedTest>()
+                .HasOne(t => t.Submission)
+                .WithMany(s => s.ExecutedTests)
+                .HasForeignKey(t => t.SubmissionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ExecutedTest>()
+                .HasOne(et => et.Test)
+                .WithMany(t => t.ExecutedTests)
+                .HasForeignKey(et => et.TestId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Contest>()
+                .HasMany(c => c.UserContests)
+                .WithOne(uc => uc.Contest)
+                .HasForeignKey(uc => uc.ContestId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserContest>().HasKey(uc => new { uc.UserId, uc.ContestId });
+
+            builder.Entity<Submission>().HasOne(s => s.Contest)
+                .WithMany(c => c.Submissions)
+                .HasForeignKey(s => s.ContestId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserPractice>()
+               .HasKey(x => new { x.PracticeId, x.UserId });
+
+            builder.Entity<Practice>()
+                .HasOne(x => x.Lesson)
+                .WithOne(x => x.Practice)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private static void ConfigureUserIdentityRelations(ModelBuilder builder)
@@ -109,27 +152,6 @@
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<ExecutedTest>()
-				.HasOne(t => t.Submission)
-				.WithMany(s => s.ExecutedTests)
-				.HasForeignKey(t => t.SubmissionId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.Entity<ExecutedTest>()
-				.HasOne(et => et.Test)
-				.WithMany(t => t.ExecutedTests)
-				.HasForeignKey(et => et.TestId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.Entity<Contest>()
-				.HasMany(c => c.UserContests)
-				.WithOne(uc => uc.Contest)
-				.HasForeignKey(uc => uc.ContestId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Restrict);
-
 			builder.Entity<ApplicationUser>()
 				.HasMany(u => u.UserContests)
 				.WithOne(uc => uc.User)
@@ -137,28 +159,11 @@
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<UserContest>().HasKey(uc => new { uc.UserId, uc.ContestId });
-
-			builder.Entity<Submission>().HasOne(s => s.Contest)
-				.WithMany(c => c.Submissions)
-				.HasForeignKey(s => s.ContestId)
-				.IsRequired(false)
-				.OnDelete(DeleteBehavior.Restrict);
-
 			builder.Entity<ApplicationUser>()
 				.HasOne(u => u.Student)
 				.WithOne(s => s.User)
 				.IsRequired(false)
 				.OnDelete(DeleteBehavior.SetNull);
-
-            builder.Entity<UserPractice>()
-                .HasKey(x => new { x.PracticeId, x.UserId });
-
-            builder.Entity<Practice>()
-                .HasOne(x => x.Lesson)
-                .WithOne(x => x.Practice)
-                .IsRequired(true)
-                .OnDelete(DeleteBehavior.Restrict);
 		}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

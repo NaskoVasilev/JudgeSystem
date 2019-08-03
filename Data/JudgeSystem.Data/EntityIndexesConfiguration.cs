@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Data
+﻿using System.Linq;
+
+using JudgeSystem.Data.Common.Models;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Data
 {
-    using System.Linq;
-
-    using JudgeSystem.Data.Common.Models;
-
-    using Microsoft.EntityFrameworkCore;
-
     internal static class EntityIndexesConfiguration
     {
         public static void Configure(ModelBuilder modelBuilder)

@@ -1,12 +1,12 @@
-﻿namespace JudgeSystem.Data
+﻿using System.Security.Claims;
+
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace JudgeSystem.Data
 {
-    using System.Security.Claims;
-
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
     public class ApplicationUserStore : UserStore<
         ApplicationUser,
         ApplicationRole,
