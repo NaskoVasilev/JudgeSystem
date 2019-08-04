@@ -1,9 +1,10 @@
-﻿using JudgeSystem.Common;
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Common;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Contest;
-using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Utilites
 {
