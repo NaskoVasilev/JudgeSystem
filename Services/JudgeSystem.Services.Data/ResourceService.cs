@@ -1,19 +1,19 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.ViewModels.Resource;
+using JudgeSystem.Web.InputModels.Resource;
+using JudgeSystem.Web.Dtos.Resource;
+using JudgeSystem.Common.Exceptions;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Services.Data
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.ViewModels.Resource;
-    using JudgeSystem.Web.InputModels.Resource;
-
-    using Microsoft.EntityFrameworkCore;
-    using JudgeSystem.Web.Dtos.Resource;
-    using JudgeSystem.Common.Exceptions;
-
     public class ResourceService : IResourceService
     {
         private readonly IRepository<Resource> repository;
@@ -56,26 +56,17 @@
 
         public async Task<ResourceDto> Delete(int id)
         {
-            Resource resource = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
-            if(resource == null)
-            {
-                throw new EntityNotFoundException(nameof(resource));
-            }
+            Resource resource = await repository.FindAsync(id);
 
             repository.Delete(resource);
             await repository.SaveChangesAsync();
+
             return resource.To<ResourceDto>();
         }
 
         public async Task Update(ResourceEditInputModel model, string filePath = null)
         {
-            Resource resource = await repository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
-
-            if (resource == null)
-            {
-                throw new EntityNotFoundException(nameof(resource));
-            }
-
+            Resource resource = await repository.FindAsync(model.Id);
             if(!string.IsNullOrEmpty(filePath))
             {
                 resource.FilePath = filePath;
