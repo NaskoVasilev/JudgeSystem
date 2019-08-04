@@ -71,7 +71,7 @@ namespace JudgeSystem.Web.Controllers
 				return Redirect("/");
 			}
 
-			StudentProfileViewModel model = await studentService.GetStudentInfo(user.StudentId);
+			StudentProfileViewModel model = await studentService.GetById<StudentProfileViewModel>(user.StudentId);
 			return View(model);
 		}
 	}

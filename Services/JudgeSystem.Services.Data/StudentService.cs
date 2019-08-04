@@ -1,19 +1,20 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Student;
+using JudgeSystem.Web.InputModels.Student;
+using JudgeSystem.Web.ViewModels.Student;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Services.Data
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using JudgeSystem.Common.Exceptions;
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Dtos.Student;
-    using JudgeSystem.Web.InputModels.Student;
-    using JudgeSystem.Web.ViewModels.Student;
-
-    using Microsoft.EntityFrameworkCore;
-
     public class StudentService : IStudentService
 	{
 		private readonly IPasswordHashService passwordHashService;
@@ -36,12 +37,7 @@
 
 		public async Task Delete(string id)
 		{
-            var student = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
-            if (student == null)
-            {
-                throw new EntityNotFoundException();
-            }
-
+            var student = await repository.FindAsync(id);
             this.repository.Delete(student);
 			await this.repository.SaveChangesAsync();
 		}
@@ -68,11 +64,6 @@
             }
 
             return student.SchoolClass.To<SchoolClassDto>();
-		}
-
-		public async Task<StudentProfileViewModel> GetStudentInfo(string studentId)
-		{
-            return await this.GetById<StudentProfileViewModel>(studentId);
 		}
 
 		public Task<StudentDto> GetStudentProfileByActivationKey(string activationKey)
@@ -119,43 +110,25 @@
 
 		public async Task SetStudentProfileAsActivated(string studentId)
 		{
-            var student = await repository.All().FirstOrDefaultAsync(x => x.Id == studentId);
-            if (student == null)
-            {
-                throw new EntityNotFoundException();
-            }
-
+            var student = await repository.FindAsync(studentId);
             student.IsActivated = true;
+
 			repository.Update(student);
 			await repository.SaveChangesAsync();
 		}
 
 		public async Task<StudentDto> Update(StudentEditInputModel model)
 		{
-            if (!this.Exists(model.Id))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            Student student = await repository.All().FirstOrDefaultAsync(s => s.Id == model.Id);
-            if(student == null)
-            {
-                throw new EntityNotFoundException(nameof(student));
-            }
-
+            Student student = await repository.FindAsync(model.Id);
 			student.FullName = model.FullName;
 			student.Email = model.Email;
 			student.NumberInCalss = model.NumberInCalss;
 			student.SchoolClassId = model.SchoolClassId;
+
 			repository.Update(student);
 			await repository.SaveChangesAsync();
 
 			return student.To<StudentDto>();
 		}
-
-        private bool Exists(string id)
-        {
-            return this.repository.All().Any(x => x.Id == id);
-        }
     }
 }

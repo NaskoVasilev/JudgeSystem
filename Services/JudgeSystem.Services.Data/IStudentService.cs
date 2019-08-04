@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.InputModels.Student;
@@ -16,8 +15,6 @@ namespace JudgeSystem.Services.Data
 		Task<StudentDto> GetStudentProfileByActivationKey(string activationKey);
 
 		Task SetStudentProfileAsActivated(string id);
-
-		Task<StudentProfileViewModel> GetStudentInfo(string studentId);
 
 		IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType);
 
