@@ -1,6 +1,7 @@
-﻿using JudgeSystem.Executors;
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Executors;
 using JudgeSystem.Workers.Common;
-using System.Threading.Tasks;
 
 namespace JudgeSystem.Checkers
 {

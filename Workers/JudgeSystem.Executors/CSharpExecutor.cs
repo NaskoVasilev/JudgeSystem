@@ -1,6 +1,7 @@
-﻿using JudgeSystem.Workers.Common;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
+
+using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Executors
 {
