@@ -34,7 +34,6 @@
 
         public const string OctetStreamMimeType = "application/octet-stream";
 
-
         public const int SessionIdleTimeout = 2;
 
 		public const string StandardDateFormat = "dd/MM/yyyy HH:mm:ss";
@@ -60,8 +59,6 @@
         public const int SubmissionFileMaxSizeInKb = 16;
 
         public const int MaxSubmissionCodeLength = 15000;
-
-        public const string OctetStreanMimeType = "application/octet-stream";
 
         public const string Location = "Location";
 

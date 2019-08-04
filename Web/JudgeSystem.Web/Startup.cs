@@ -1,28 +1,28 @@
-﻿namespace JudgeSystem.Web
+﻿using System;
+using System.Reflection;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data;
+using JudgeSystem.Data.Seeding;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Course;
+using JudgeSystem.Web.Dtos.ML;
+using JudgeSystem.Web.Filters;
+using JudgeSystem.Web.InputModels.Course;
+using JudgeSystem.Web.IocConfiguration;
+using JudgeSystem.Web.ViewModels;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.ML;
+
+namespace JudgeSystem.Web
 {
-    using System;
-    using System.Reflection;
-
-    using JudgeSystem.Common;
-    using JudgeSystem.Data;
-    using JudgeSystem.Data.Seeding;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Dtos.Course;
-    using JudgeSystem.Web.Dtos.ML;
-    using JudgeSystem.Web.Filters;
-    using JudgeSystem.Web.InputModels.Course;
-    using JudgeSystem.Web.IocConfiguration;
-    using JudgeSystem.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.ML;
-
     public class Startup
     {
         private readonly IConfiguration configuration;
@@ -52,7 +52,6 @@
             services
                 .AddMvc(options => 
 				{
-					//options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.Filters.Add<EntityNotFoundExceptionFilter>();
 				})
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

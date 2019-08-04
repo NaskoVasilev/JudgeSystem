@@ -1,48 +1,46 @@
-﻿namespace JudgeSystem.Web.Controllers
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using JudgeSystem.Checkers;
+using JudgeSystem.Compilers;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.InputModels.Submission;
+using JudgeSystem.Workers.Common;
+using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Web.Utilites;
+using JudgeSystem.Web.ViewModels.Submission;
+using JudgeSystem.Common;
+using JudgeSystem.Web.Filters;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+namespace JudgeSystem.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Checkers;
-    using JudgeSystem.Compilers;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Web.Dtos.Test;
-    using JudgeSystem.Web.InputModels.Submission;
-    using JudgeSystem.Workers.Common;
-    using JudgeSystem.Web.Dtos.Submission;
-    using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Web.Utilites;
-    using JudgeSystem.Web.ViewModels.Submission;
-    using JudgeSystem.Common;
-    using JudgeSystem.Web.Filters;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-    using System.Linq;
-
     [Authorize]
     public class SubmissionController : BaseController
 	{
-		private const int SubmissionPerPage = 5;
-		private readonly ISubmissionService submissionService;
 		private readonly UserManager<ApplicationUser> userManager;
+		private readonly ISubmissionService submissionService;
 		private readonly ITestService testService;
 		private readonly IExecutedTestService executedTestService;
         private readonly IProblemService problemService;
 
         public SubmissionController(
-            ISubmissionService submissionService, 
             UserManager<ApplicationUser> userManager,
+            ISubmissionService submissionService, 
 			ITestService testService, 
             IExecutedTestService executedTestService,
             IProblemService problemService)
 		{
-			this.submissionService = submissionService;
 			this.userManager = userManager;
+			this.submissionService = submissionService;
 			this.testService = testService;
 			this.executedTestService = executedTestService;
             this.problemService = problemService;
@@ -59,11 +57,12 @@
             byte[] submissionCode = submissionService.GetSubmissionCodeById(id);
             string problemName = submissionService.GetProblemNameBySubmissionId(id);
 
-            return this.File(submissionCode, GlobalConstants.OctetStreanMimeType, $"{problemName}.zip");
+            return this.File(submissionCode, GlobalConstants.OctetStreamMimeType, $"{problemName}.zip");
         }
 
         [EndpointExceptionFilter]
-		public IActionResult GetProblemSubmissions(int problemId, int page = 1, int submissionsPerPage = SubmissionPerPage, int? contestId = null)
+		public IActionResult GetProblemSubmissions(int problemId, int page = 1, 
+            int submissionsPerPage = GlobalConstants.SubmissionsPerPage, int? contestId = null)
 		{
 			string userId = userManager.GetUserId(this.User);
 			IEnumerable<SubmissionResult> submissionResults = new List<SubmissionResult>();
@@ -98,7 +97,6 @@
 		}
 
         [EndpointExceptionFilter]
-        [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Create(SubmissionInputModel model)
         {
@@ -143,7 +141,6 @@
 			return Json(submissionResult);
 		}
 
-		[NonAction]
 		private async Task RunTests(Submission submission, int problemId, List<string> sourceCodes)
 		{
 			CSharpCompiler compiler = new CSharpCompiler();
