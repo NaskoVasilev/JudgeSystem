@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Common;
 
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
@@ -12,8 +13,8 @@ namespace JudgeSystem.Web.InputModels.Resource
 		public int Id { get; set; }
 
 		[Required]
-		[MinLength(3)]
-		public string Name { get; set; }
+        [StringLength(ModelConstants.ResourceNameMaxLength, MinimumLength = ModelConstants.ResourceNameMinLength)]
+        public string Name { get; set; }
 
         [IgnoreMap]
 		public IFormFile File { get; set; }

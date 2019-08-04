@@ -24,10 +24,6 @@
 
 		public const string ZipFileExtension = ".zip";
 
-		public const int ProblemMinPoints = 1;
-
-		public const int ProblemMaxPoints = 100;
-
 		public const string ResourceTypesKey = "resourceTypes";
 
         public const string OctetStreamMimeType = "application/octet-stream";
@@ -55,6 +51,8 @@
 		public const int MaxStudentsInClass = 26;
 
         public const int SubmissionFileMaxSizeInKb = 16;
+
+        public const int MinSubmissionCodeLength = 10;
 
         public const int MaxSubmissionCodeLength = 15000;
 

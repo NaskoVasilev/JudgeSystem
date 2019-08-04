@@ -12,13 +12,16 @@ namespace JudgeSystem.Web.InputModels.Contest
 		private const string StartEndTimeErrorMessage = "End time must be after start time.";
 
 		[AfterDateTimeNow]
+        [Display(Name = ModelConstants.ContestStartTimeDisplayName)]
 		public DateTime StartTime { get; set; }
 
 		[AfterDateTimeNow]
 		[AfterDate(nameof(StartTime), StartEndTimeErrorMessage)]
-		public DateTime EndTime { get; set; }
+        [Display(Name = ModelConstants.ContestEndTimeDisplayName)]
+        public DateTime EndTime { get; set; }
 
-		public int LessonId { get; set; }
+        [Display(Name = ModelConstants.ContestLessonIdDisplayName)]
+        public int LessonId { get; set; }
 
 		[Required]
 		[StringLength(ModelConstants.ContestNameMaxLength, MinimumLength = ModelConstants.ContestNameMinLength)]

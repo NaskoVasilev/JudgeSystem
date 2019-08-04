@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
+using JudgeSystem.Common;
 using JudgeSystem.Services.Mapping;
+
+using AutoMapper;
 
 
 namespace JudgeSystem.Web.InputModels.Test
@@ -12,15 +14,19 @@ namespace JudgeSystem.Web.InputModels.Test
 		
 		public int ProblemId { get; set; }
 
-		[Required]
-		public string InputData { get; set; }
+		[MaxLength(ModelConstants.TestInputDataMaxLength)]
+        [Display(Name = ModelConstants.TestInputDataDisplayName)]
+        public string InputData { get; set; }
 
 		[Required]
-		public string OutputData { get; set; }
+        [MaxLength(ModelConstants.TestOutputDataMaxLength)]
+        [Display(Name = ModelConstants.TestOutputDataDisplayName)]
+        public string OutputData { get; set; }
 
-		public bool IsTrialTest { get; set; }
+        [Display(Name = ModelConstants.TestIsTrialTestDisplayName)]
+        public bool IsTrialTest { get; set; }
 
-        [NotMapped]
+        [IgnoreMap]
         public int LessonId { get; set; }
     }
 }

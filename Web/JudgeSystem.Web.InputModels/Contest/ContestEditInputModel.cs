@@ -14,11 +14,13 @@ namespace JudgeSystem.Web.InputModels.Contest
 		public int Id { get; set; }
 
 		[AfterDateTimeNow]
-		public DateTime StartTime { get; set; }
+        [Display(Name = ModelConstants.ContestStartTimeDisplayName)]
+        public DateTime StartTime { get; set; }
 
 		[AfterDateTimeNow]
 		[AfterDate(nameof(StartTime), StartEndTimeErrorMessage)]
-		public DateTime EndTime { get; set; }
+        [Display(Name = ModelConstants.ContestEndTimeDisplayName)]
+        public DateTime EndTime { get; set; }
 
 		[Required]
 		[StringLength(ModelConstants.ContestNameMaxLength, MinimumLength = ModelConstants.ContestNameMinLength)]

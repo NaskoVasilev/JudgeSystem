@@ -10,6 +10,9 @@
         #region Contest models consatnts
         public const int ContestNameMaxLength = 50;
         public const int ContestNameMinLength = 5;
+        public const string ContestStartTimeDisplayName = "Start time";
+        public const string ContestEndTimeDisplayName = "End time";
+        public const string ContestLessonIdDisplayName = "Lesson";
         #endregion
 
         #region Lesson models consatnts
@@ -28,15 +31,38 @@
 
         #region Problem models consatnts
         public const int ProblemNameMaxLength = 30;
+        public const int ProblemNameMinLength = 3;
+        public const int ProblemMinPoints = 1;
+        public const int ProblemMaxPoints = 300;
+        public const string ProblemIsExtraTaskDisplayName = "Extra task";
+        public const string ProblemMaxPointsDisplayName = "Max points";
+        public const string ProblemAllowedTimeInMillisecondsDisplayName = "Allowed time in miliseconds";
+        public const string ProblemAllowedMemoryInMegaBytesDisplayName = "Allowed memory in MB";
+        public const string ProblemSubmissionTypeDisplayName = "Submission type";
         #endregion
 
         #region Resource models consatnts
         public const int ResourceNameMaxLength = 30;
+        public const int ResourceNameMinLength = 3;
         #endregion
 
         #region Student models consatnts
         public const int StudentFullNameMaxLength = 50;
+        public const int StudentFullNameMinLength = 10;
         public const int StudentEmailMaxLength = 30;
+        public const string StudentActivationKeyDisplayName = "Activation key";
+        public const string StudentFullNameDisplayName = "Full name";
+        public const string StudentSchoolClassIdDisplayName = "Class";
+        public const string StudentNumberInClassDisplayName = "Number in class";
+
+        #endregion
+
+        #region Test models consatnts
+        public const int TestInputDataMaxLength = 10000;
+        public const int TestOutputDataMaxLength = 10000;
+        public const string TestInputDataDisplayName = "Input";
+        public const string TestOutputDataDisplayName = "Expected output";
+        public const string TestIsTrialTestDisplayName = "Trial test";
         #endregion
     }
 }

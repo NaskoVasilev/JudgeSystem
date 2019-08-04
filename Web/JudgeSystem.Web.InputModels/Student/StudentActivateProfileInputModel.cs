@@ -1,10 +1,13 @@
-﻿namespace JudgeSystem.Web.InputModels.Student
-{
-	using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+using JudgeSystem.Common;
+
+namespace JudgeSystem.Web.InputModels.Student
+{
 	public class StudentActivateProfileInputModel
 	{
 		[Required]
-		public string ActivationKey { get; set; }
+        [Display(Name = ModelConstants.StudentActivationKeyDisplayName)]
+        public string ActivationKey { get; set; }
 	}
 }

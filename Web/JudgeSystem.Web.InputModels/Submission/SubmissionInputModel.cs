@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+
+using Microsoft.AspNetCore.Http;
 
 namespace JudgeSystem.Web.InputModels.Submission
 {
-	public class SubmissionInputModel
+    public class SubmissionInputModel
 	{
+        [MinLength(GlobalConstants.MinSubmissionCodeLength)]
 		public string Code { get; set; }
 
 		public int ProblemId { get; set; }

@@ -1,30 +1,30 @@
-﻿namespace JudgeSystem.Web.InputModels.Student
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Common;
+
+namespace JudgeSystem.Web.InputModels.Student
 {
-    using System.ComponentModel.DataAnnotations;
-
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-    using JudgeSystem.Common;
-
-    public class StudentEditInputModel : IMapFrom<Student>, IMapTo<Student>
+    public class StudentEditInputModel : IMapFrom<Data.Models.Student>, IMapTo<Data.Models.Student>
 	{
-		public const int FullnameMinLength = 5;
-		public const int FullnameMaxLength = 100;
-
 		[Required]
 		public string Id { get; set; }
 
-		[Required]
-		[StringLength(FullnameMaxLength, MinimumLength = FullnameMinLength)]
-		public string FullName { get; set; }
+        [Required]
+        [MinLength(ModelConstants.StudentFullNameMinLength), MaxLength(ModelConstants.StudentFullNameMaxLength)]
+        [Display(Name = ModelConstants.StudentFullNameDisplayName)]
+        public string FullName { get; set; }
 
-		[EmailAddress]
-		[Required]
-		public string Email { get; set; }
+        [Required]
+        [EmailAddress]
+        [MaxLength(ModelConstants.StudentEmailMaxLength)]
+        public string Email { get; set; }
 
-		[Range(GlobalConstants.MinStudentsInClass, GlobalConstants.MaxStudentsInClass)]
-		public int NumberInCalss { get; set; }
+        [Range(GlobalConstants.MinStudentsInClass, GlobalConstants.MaxStudentsInClass)]
+        [Display(Name = ModelConstants.StudentNumberInClassDisplayName)]
+        public int NumberInCalss { get; set; }
 
-		public int SchoolClassId { get; set; }
+        [Display(Name = ModelConstants.StudentSchoolClassIdDisplayName)]
+        public int SchoolClassId { get; set; }
 	}
 }
