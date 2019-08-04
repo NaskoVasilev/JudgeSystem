@@ -1,10 +1,9 @@
-﻿namespace JudgeSystem.Web.Controllers
+﻿using JudgeSystem.Common;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Controllers
 {
-    using JudgeSystem.Common;
-    using JudgeSystem.Common.Exceptions;
-
-    using Microsoft.AspNetCore.Mvc;
-
     public class BaseController : Controller
     {
 		public IActionResult ShowError(string errorMessage, string action, string conrtoller)
@@ -35,11 +34,6 @@
 		{
 			TempData[GlobalConstants.InfoKey] = infoMessage;
 			return RedirectToAction(action, conrtoller, routeValues);
-		}
-
-		public void ThrowEntityNotFoundException(string entityName)
-		{
-			throw new EntityNotFoundException(entityName);
 		}
 	}
 }

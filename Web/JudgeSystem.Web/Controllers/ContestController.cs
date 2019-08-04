@@ -2,7 +2,6 @@
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
-using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Utilites;
@@ -18,28 +17,16 @@ namespace JudgeSystem.Web.Controllers
         private const int DefaultPage = 1;
 
 		private readonly IContestService contestService;
-        private readonly ILessonService lessonService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly ISubmissionService submissionService;
-        private readonly IProblemService problemService;
-        private readonly IPaginationService paginationHelper;
         private readonly ContestReslutsHelper contestReslutsHelper;
 
         public ContestController(
             IContestService contestService,
-            ILessonService lessonService,
             UserManager<ApplicationUser> userManager,
-            ISubmissionService submissionService,
-            IProblemService problemService,
-            IPaginationService paginationHelper,
             ContestReslutsHelper contestReslutsHelper)
 		{
 			this.contestService = contestService;
-            this.lessonService = lessonService;
             this.userManager = userManager;
-            this.submissionService = submissionService;
-            this.problemService = problemService;
-            this.paginationHelper = paginationHelper;
             this.contestReslutsHelper = contestReslutsHelper;
         }
 

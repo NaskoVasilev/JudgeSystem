@@ -1,15 +1,14 @@
-﻿@model IEnumerable<LessonLinkViewModel>
+﻿@model CourseLessonsViewModel
 
 @{
-	string courseName = this.ViewData["course"].ToString();
-	this.ViewData["Title"] = courseName;
+	this.ViewData["Title"] = Model.Name;
 }
 
-<h2 class="text-center text-secondary mb-4">@courseName</h2>
+<h2 class="text-center text-secondary mb-4">@Model.Name</h2>
 <div class="row">
 	<table class="table table">
 		<tbody>
-			@foreach (var lesson in Model)
+			@foreach (var lesson in Model.Lessons)
 			{
 				<tr>
 					<td class="a-holder">
