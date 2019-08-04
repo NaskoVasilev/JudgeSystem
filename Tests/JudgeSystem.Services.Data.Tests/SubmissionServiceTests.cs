@@ -1,9 +1,9 @@
 ﻿using JudgeSystem.Common;
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Submission;
 using Moq;
 using System;

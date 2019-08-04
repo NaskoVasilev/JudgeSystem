@@ -1,22 +1,22 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Common.Repositories;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Web.Dtos.Course;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Common;
+    using JudgeSystem.Common.Exceptions;
+    using JudgeSystem.Data.Common.Repositories;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Services.Mapping;
+    using JudgeSystem.Web.Dtos.Course;
     using JudgeSystem.Web.InputModels.Course;
-	using JudgeSystem.Web.ViewModels.Course;
+    using JudgeSystem.Web.ViewModels.Course;
 
-	using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
 
-	public class CourseService : ICourseService
+    public class CourseService : ICourseService
 	{
 		private readonly IDeletableEntityRepository<Course> repository;
 

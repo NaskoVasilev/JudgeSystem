@@ -1,7 +1,7 @@
 ﻿namespace JudgeSystem.Web.Filters
 {
     using JudgeSystem.Common;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Common.Exceptions;
     using JudgeSystem.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;

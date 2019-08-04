@@ -12,9 +12,9 @@ using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.ViewModels.Search;
 using JudgeSystem.Common;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 
 using Microsoft.EntityFrameworkCore;
+using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Services.Data
 {

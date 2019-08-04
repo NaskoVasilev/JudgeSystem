@@ -1,21 +1,20 @@
 ﻿namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Common.Repositories;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Services.Mapping;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using JudgeSystem.Common.Exceptions;
+    using JudgeSystem.Data.Common.Repositories;
+    using JudgeSystem.Data.Models;
+    using JudgeSystem.Data.Models.Enums;
+    using JudgeSystem.Services.Mapping;
     using JudgeSystem.Web.Dtos.Student;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.InputModels.Student;
-	using JudgeSystem.Web.ViewModels.Student;
+    using JudgeSystem.Web.ViewModels.Student;
 
-	using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
 
-	public class StudentService : IStudentService
+    public class StudentService : IStudentService
 	{
 		private readonly IPasswordHashService passwordHashService;
 		private readonly IRepository<Student> repository;

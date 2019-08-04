@@ -1,9 +1,9 @@
 ﻿namespace JudgeSystem.Web.Controllers
 {
-	using JudgeSystem.Common;
-	using JudgeSystem.Web.Infrastructure.Exceptions;
+    using JudgeSystem.Common;
+    using JudgeSystem.Common.Exceptions;
 
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     public class BaseController : Controller
     {

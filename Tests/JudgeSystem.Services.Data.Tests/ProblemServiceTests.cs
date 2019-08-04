@@ -1,9 +1,9 @@
 ﻿using JudgeSystem.Common;
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.Problem;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Web.ViewModels.Problem;
 using Microsoft.EntityFrameworkCore;

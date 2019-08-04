@@ -17,6 +17,8 @@ namespace JudgeSystem.Data.Common.Repositories
 
         void Delete(TEntity entity);
 
+        Task<TEntity> FindAsync(object id);
+
         Task<int> SaveChangesAsync();
     }
 }

@@ -7,12 +7,12 @@
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.ViewModels.Resource;
     using JudgeSystem.Web.InputModels.Resource;
 
     using Microsoft.EntityFrameworkCore;
     using JudgeSystem.Web.Dtos.Resource;
+    using JudgeSystem.Common.Exceptions;
 
     public class ResourceService : IResourceService
     {

@@ -3,6 +3,7 @@ using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Contest;
+using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Utilites
 {
@@ -28,10 +29,10 @@ namespace JudgeSystem.Web.Utilites
             this.paginationService = paginationService;
         }
 
-        public ContestSubmissionsViewModel GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
+        public async Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
         {
             int baseProblemId;
-            int lessonId = contestService.GetLessonId(contestId);
+            int lessonId = await contestService.GetLessonId(contestId);
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;

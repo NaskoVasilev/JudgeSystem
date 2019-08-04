@@ -7,12 +7,12 @@
     using System.Threading.Tasks;
 
     using JudgeSystem.Common;
+    using JudgeSystem.Common.Exceptions;
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Services.Mapping;
     using JudgeSystem.Web.Dtos.ExecutedTest;
     using JudgeSystem.Web.Dtos.Submission;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.InputModels.Submission;
     using JudgeSystem.Web.ViewModels.Submission;
 

@@ -7,7 +7,6 @@
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using Services.Mapping;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.ViewModels.Problem;
     using JudgeSystem.Web.InputModels.Problem;
 
@@ -16,6 +15,7 @@
     using System;
     using JudgeSystem.Common;
     using JudgeSystem.Web.Dtos.Problem;
+    using JudgeSystem.Common.Exceptions;
 
     public class ProblemService : IProblemService
 	{

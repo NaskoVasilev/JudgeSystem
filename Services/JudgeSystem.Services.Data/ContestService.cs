@@ -1,34 +1,33 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.InputModels.Contest;
+using JudgeSystem.Web.ViewModels.Contest;
+using JudgeSystem.Web.ViewModels.Problem;
+using JudgeSystem.Web.ViewModels.Student;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace JudgeSystem.Services.Data
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Data.Common.Repositories;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
-    using JudgeSystem.Web.InputModels.Contest;
-	using JudgeSystem.Web.ViewModels.Contest;
-    using JudgeSystem.Web.ViewModels.Problem;
-    using JudgeSystem.Web.ViewModels.Student;
-
-    using Microsoft.EntityFrameworkCore;
-
-	public class ContestService : IContestService
+    public class ContestService : IContestService
 	{
 		public const int ContestsPerPage = 20;
 		public const int ResultsPerPage = 15;
+
 		private readonly IDeletableEntityRepository<Contest> repository;
-		private readonly IEstimator estimator;
 		private readonly IRepository<UserContest> userContestRepository;
 
-		public ContestService(IDeletableEntityRepository<Contest> repository, IEstimator estimator, 
+		public ContestService(IDeletableEntityRepository<Contest> repository,
 			IRepository<UserContest> userContestRepository)
 		{
 			this.repository = repository;
-			this.estimator = estimator;
 			this.userContestRepository = userContestRepository;
 		}
 
@@ -62,11 +61,7 @@
 
 		public async Task<T> GetById<T>(int contestId)
 		{
-			var contest = await repository.All().FirstOrDefaultAsync(c => c.Id == contestId);
-            if(contest == null)
-            {
-                throw new EntityNotFoundException(nameof(contest));
-            }
+            var contest = await repository.FindAsync(contestId);
 			return contest.To<T>();
 		}
 
@@ -84,33 +79,25 @@
 		{
 			var contests = repository.All()
 				.Where(c => c.EndTime < DateTime.Now && (DateTime.Now - c.EndTime).Days <= passedDays)
-				.To<PreviousContestViewModel>().ToList();
+				.To<PreviousContestViewModel>()
+                .ToList();
 			return contests;
 		}
 
-		public async Task UpdateContest(ContestEditInputModel model)
+		public async Task Update(ContestEditInputModel model)
 		{
-			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == model.Id);
-
-            if (contest == null)
-            {
-                throw new EntityNotFoundException(nameof(contest));
-            }
-
+            Contest contest = await repository.FindAsync(model.Id);
             contest.Name = model.Name;
 			contest.StartTime = model.StartTime;
 			contest.EndTime = model.EndTime;
+
 			repository.Update(contest);
 			await repository.SaveChangesAsync();
 		}
 
-		public async Task DeleteContestById(int id)
+		public async Task Delete(int id)
 		{
-			Contest contest = await repository.All().FirstOrDefaultAsync(c => c.Id == id);
-            if (contest == null)
-            {
-                throw new EntityNotFoundException(nameof(contest));
-            }
+            Contest contest = await repository.FindAsync(id);
             repository.Delete(contest);
 			await repository.SaveChangesAsync();
 		}
@@ -194,17 +181,10 @@
 			return (int)Math.Ceiling(count / (double)ResultsPerPage);
 		}
 
-        public int GetLessonId(int contestId)
+        public async Task<int> GetLessonId(int contestId)
         {
-            if(!this.repository.All().Any(x => x.Id == contestId))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            return this.repository.All()
-                .Where(x => x.Id == contestId)
-                .Select(x => x.LessonId)
-                .First();
+            var contest = await this.repository.FindAsync(contestId);
+            return contest.LessonId;
         }
     }
 }

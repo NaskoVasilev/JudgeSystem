@@ -10,7 +10,7 @@ using JudgeSystem.Data.Models.Enums;
 using Moq;
 using System;
 using JudgeSystem.Common;
-using JudgeSystem.Web.Infrastructure.Exceptions;
+using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Services.Data.Tests
 {

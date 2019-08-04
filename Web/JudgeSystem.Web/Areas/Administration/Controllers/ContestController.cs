@@ -87,7 +87,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				return View(model);
 			}
 
-			await contestService.UpdateContest(model);
+			await contestService.Update(model);
 
 			return RedirectToAction(nameof(ActiveContests));
 		}
@@ -102,7 +102,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[ActionName(nameof(Delete))]
 		public async Task<IActionResult> DeletePost(int id)
 		{
-			await contestService.DeleteContestById(id);
+			await contestService.Delete(id);
 			return RedirectToAction(nameof(ActiveContests));
 		}
 
@@ -142,11 +142,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return contestService.GetContestResultsPagesCount(contestId);
 		}
 
-        public IActionResult Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
+        public async Task<IActionResult> Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Submissions?contestId={contestId}&userId={userId}";
 
-            var model = contestReslutsHelper.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            var model = await contestReslutsHelper.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View(model);
         }

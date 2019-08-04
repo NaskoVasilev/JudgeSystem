@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,18 @@ namespace JudgeSystem.Data.Repositories
         public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
 
         public virtual Task AddAsync(TEntity entity) => this.DbSet.AddAsync(entity);
+
+        public async Task<TEntity> FindAsync(object id)
+        {
+            var model = await DbSet.FindAsync(id);
+
+            if(model == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity).Name);
+            }
+
+            return model;
+        }
 
         public virtual void Update(TEntity entity)
         {

@@ -1,7 +1,7 @@
-﻿using JudgeSystem.Data.Common.Repositories;
+﻿using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Course;
 using Moq;
 using System.Collections.Generic;

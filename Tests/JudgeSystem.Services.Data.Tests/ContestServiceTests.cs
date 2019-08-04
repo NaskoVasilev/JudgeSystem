@@ -1,7 +1,7 @@
-﻿using JudgeSystem.Data.Common.Repositories;
+﻿using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Contest;
 using Moq;
 using System;
@@ -14,14 +14,12 @@ namespace JudgeSystem.Services.Data.Tests
 {
     public class ContestServiceTests : TransientDbContextProvider
     {
-        private readonly IEstimator estimator = new Estimator();
-
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
             var contest = new ContestCreateInputModel { Name = "testContest" };
             var repository = new EfDeletableEntityRepository<Contest>(this.context);
-            var contestService = new ContestService(repository, null, null);
+            var contestService = new ContestService(repository, null);
 
             await contestService.Create(contest);
 
@@ -39,7 +37,7 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetUserContestsTestData());
             await context.SaveChangesAsync();
             var repository = new EfRepository<UserContest>(this.context);
-            var contestService = new ContestService(null, null, repository);
+            var contestService = new ContestService(null, repository);
 
             bool result = await contestService.AddUserToContestIfNotAdded(userId, contestId);
 
@@ -52,7 +50,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contestService = await CreateContestService(GetContestsTestData());
             var inputModel = new ContestEditInputModel { Id = 1, Name = "editedcontest", StartTime = new DateTime(2019, 09, 20), EndTime = new DateTime(2019, 08, 20) };
 
-            await contestService.UpdateContest(inputModel);
+            await contestService.Update(inputModel);
             var actualResult = context.Contests.First(x => x.Id == 1);
 
             Assert.Equal(inputModel.Name, actualResult.Name);
@@ -66,7 +64,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contestService = await CreateContestService(GetContestsTestData());
 
             var contest = context.Contests.FirstOrDefault(c => c.Id == 1);
-            await contestService.DeleteContestById(1);
+            await contestService.Delete(1);
 
             Assert.True(contest.IsDeleted);
             Assert.NotNull(contest.DeletedOn);
@@ -158,7 +156,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contests = new List<Contest>() { new Contest() };
             var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
-            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.UpdateContest(new ContestEditInputModel { Id = 45 }));
+            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.Update(new ContestEditInputModel { Id = 45 }));
         }
 
         [Fact]
@@ -167,7 +165,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contests = new List<Contest>() { new Contest() };
             var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
-            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.DeleteContestById(3));
+            Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.Delete(3));
         }
 
         [Fact]
@@ -184,7 +182,7 @@ namespace JudgeSystem.Services.Data.Tests
             await this.context.Contests.AddRangeAsync(testData);
             await this.context.SaveChangesAsync();
             IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(this.context);
-            var service = new ContestService(repository, this.estimator, userContestRepository);
+            var service = new ContestService(repository, userContestRepository);
             return service;
         }
 
@@ -197,7 +195,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Contest>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new ContestService(reposotiryMock.Object, this.estimator, userContestRepository);
+            return new ContestService(reposotiryMock.Object, userContestRepository);
         }
 
         private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData)

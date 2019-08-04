@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Web.InputModels.Contest;
+using JudgeSystem.Web.ViewModels.Contest;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Web.InputModels.Contest;
-	using JudgeSystem.Web.ViewModels.Contest;
-
 	public interface IContestService
 	{
 		Task Create(ContestCreateInputModel contestCreateInputModel);
@@ -20,9 +20,9 @@
 
 		IEnumerable<ContestBreifInfoViewModel> GetActiveAndFollowingContests();
 
-		Task UpdateContest(ContestEditInputModel model);
+		Task Update(ContestEditInputModel model);
 
-		Task DeleteContestById(int id);
+		Task Delete(int id);
 
 		IEnumerable<ContestViewModel> GetAllConests(int page);
 
@@ -32,6 +32,6 @@
 
 		int GetContestResultsPagesCount(int contestId);
 
-        int GetLessonId(int contestId);
+        Task<int> GetLessonId(int contestId);
     }
 }

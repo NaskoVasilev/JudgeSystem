@@ -1,5 +1,5 @@
 ﻿using JudgeSystem.Common;
-using JudgeSystem.Web.Infrastructure.Exceptions;
+using JudgeSystem.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

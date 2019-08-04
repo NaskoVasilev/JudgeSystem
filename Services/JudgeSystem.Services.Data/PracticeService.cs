@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
-using JudgeSystem.Web.Infrastructure.Exceptions;
 
 namespace JudgeSystem.Services.Data
 {

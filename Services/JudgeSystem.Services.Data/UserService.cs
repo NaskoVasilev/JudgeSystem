@@ -5,7 +5,6 @@
     using JudgeSystem.Data.Common.Repositories;
     using JudgeSystem.Data.Models;
     using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Web.Infrastructure.Exceptions;
     using JudgeSystem.Web.ViewModels.User;
 
     public class UserService : IUserService
