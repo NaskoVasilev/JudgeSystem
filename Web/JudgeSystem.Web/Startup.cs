@@ -3,6 +3,7 @@ using System.Reflection;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data;
+using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Seeding;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Course;
@@ -15,6 +16,7 @@ using JudgeSystem.Web.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

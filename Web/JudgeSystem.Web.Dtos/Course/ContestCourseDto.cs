@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.Dtos.Course
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class ContestCourseDto : IMapFrom<Course>
+namespace JudgeSystem.Web.Dtos.Course
+{
+	public class ContestCourseDto : IMapFrom<Data.Models.Course>
 	{
 		public int Id { get; set; }
 

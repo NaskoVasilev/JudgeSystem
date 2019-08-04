@@ -61,6 +61,7 @@
                 {
                     this.logger.LogInformation("User created a new account with password.");
 
+                    await userManager.AddToRoleAsync(user, GlobalConstants.BaseRoleName);
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = this.Url.Page(
                         "/Account/ConfirmEmail",

@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.Dtos.Problem
-{
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-    public class ProblemConstraintsDto : IMapFrom<Problem>
+namespace JudgeSystem.Web.Dtos.Problem
+{
+    public class ProblemConstraintsDto : IMapFrom<Data.Models.Problem>
     {
         public int AllowedTimeInMilliseconds { get; set; }
 

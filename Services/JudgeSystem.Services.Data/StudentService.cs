@@ -8,6 +8,7 @@ using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Student;
+using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
 

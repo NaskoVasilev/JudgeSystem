@@ -1,6 +1,4 @@
-﻿using JudgeSystem.Data.Models.Enums;
-
-namespace JudgeSystem.Web.Dtos.ExecutedTest
+﻿namespace JudgeSystem.Web.Dtos.ExecutedTest
 {
 	public class ExecutedTestResult
 	{

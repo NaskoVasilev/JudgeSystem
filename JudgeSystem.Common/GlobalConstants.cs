@@ -6,7 +6,9 @@
 
         public const string StudentRoleName = "Student";
 
-		public const string AdministrationArea = "Administration";
+        public const string BaseRoleName = "User";
+
+        public const string AdministrationArea = "Administration";
 
 		public const string InfoKey = "info";
 

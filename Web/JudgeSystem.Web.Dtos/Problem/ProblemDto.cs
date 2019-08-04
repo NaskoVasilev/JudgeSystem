@@ -20,6 +20,5 @@ namespace JudgeSystem.Web.Dtos.Problem
         public int LessonId { get; set; }
 
         public SubmissionType SubmissionType { get; set; }
-
     }
 }

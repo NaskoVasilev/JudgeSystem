@@ -27,7 +27,7 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<TestDto> Add(TestInputModel model)
 		{
-			Test test = model.To<TestInputModel, Test>();
+			Test test = model.To<Test>();
 			await repository.AddAsync(test);
 			await repository.SaveChangesAsync();
 			return test.To<TestDto>();
