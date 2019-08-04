@@ -197,26 +197,6 @@ namespace JudgeSystem.Services.Data.Tests
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(161651));
         }
 
-        [Fact]
-        public async Task GetProblemMaxPoints_WithValidId_ShouldReturnThrowEntityNotFoundException()
-        {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
-
-            int actualResult = service.GetProblemMaxPoints(3);
-
-            Assert.Equal(100, actualResult);
-        }
-
-        [Fact]
-        public async Task GetProblemMaxPoints_WithInValidId_ShouldReturnThrowEntityNotFoundException()
-        {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
-
-            Assert.Throws<EntityNotFoundException>(() => service.GetProblemMaxPoints(161651));
-        }
-
         private async Task<ProblemService> CreateProblemService(List<Problem> testData)
         {
             await this.context.Problems.AddRangeAsync(testData);

@@ -25,8 +25,6 @@ namespace JudgeSystem.Services.Data
 
 		IEnumerable<SearchProblemViewModel> SearchByName(string keyword);
 
-		int GetProblemMaxPoints(int id);
-
 		Task<int> GetLessonId(int problemId);
 
         string GetProblemName(int id);
