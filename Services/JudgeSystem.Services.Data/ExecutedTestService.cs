@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 
 namespace JudgeSystem.Services.Data
 {
-	public class ExecutedTestService : IExecutedTestService
+    public class ExecutedTestService : IExecutedTestService
 	{
 		private readonly IRepository<ExecutedTest> repository;
 
