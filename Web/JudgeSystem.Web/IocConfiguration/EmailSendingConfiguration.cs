@@ -1,4 +1,5 @@
-﻿using JudgeSystem.Services.Messaging;
+﻿using JudgeSystem.Common;
+using JudgeSystem.Services.Messaging;
 
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
@@ -8,15 +9,12 @@ namespace JudgeSystem.Web.IocConfiguration
 {
     public static class EmailSendingConfiguration
     {
-        private const string SendGridOptionsKey = "SendGrid";
-        private const string EmailOptionsKey = "Email";
-
         public static IServiceCollection AddEmailSendingService(this IServiceCollection services, IConfiguration configuration)
         {
-            var sendGridSection = configuration.GetSection(SendGridOptionsKey);
+            var sendGridSection = configuration.GetSection(AppSettingsSections.SendGridSection);
             services.Configure<SendGridOptions>(sendGridSection);
 
-            var emailSection = configuration.GetSection(EmailOptionsKey);
+            var emailSection = configuration.GetSection(AppSettingsSections.EmailSection);
             services.Configure<BaseEmailOptions>(emailSection);
 
             services.AddTransient<IEmailSender, EmailSender>();

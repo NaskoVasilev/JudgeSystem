@@ -9,19 +9,10 @@ namespace JudgeSystem.Web.IocConfiguration
     {
         public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            ConfigureAdminSettings(services, configuration);
+            services.AddSingleton(x => configuration.GetSection(AppSettingsSections.AdminSection).Get<AdminSettings>());
 
             return services;
         }
 
-        private static void ConfigureAdminSettings(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton(x =>
-            {
-                AdminSettings adminSettings = new AdminSettings();
-                configuration.GetSection(AppSettingsSections.AdminSection).Bind(adminSettings);
-                return adminSettings;
-            });
-        }
     }
 }

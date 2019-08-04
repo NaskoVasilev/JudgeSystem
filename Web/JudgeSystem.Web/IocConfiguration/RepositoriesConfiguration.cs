@@ -1,5 +1,6 @@
 ﻿using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Repositories;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JudgeSystem.Web.IocConfiguration
