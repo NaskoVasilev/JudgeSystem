@@ -1,22 +1,21 @@
-﻿namespace Sandbox
+﻿using System;
+using System.IO;
+
+using JudgeSystem.Data;
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Repositories;
+using JudgeSystem.Data.Seeding;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using CommandLine;
+
+namespace Sandbox
 {
-    using System;
-    using System.IO;
-
-    using JudgeSystem.Data;
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Repositories;
-    using JudgeSystem.Data.Seeding;
-
-    using CommandLine;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     public static class Program
     {
         public static int Main(string[] args)
