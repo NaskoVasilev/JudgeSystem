@@ -16,16 +16,6 @@
 
 		public const string FileStorePath = "F:\\JudgeSystemStore\\";
 
-		public const string WordFileExtension = ".docx";
-
-		public const string PowerPointFileExtension = ".pptx";
-
-		public const string VideoFileExtension = ".mp4";
-
-		public const string ZipFileExtension = ".zip";
-
-		public const string ResourceTypesKey = "resourceTypes";
-
         public const string OctetStreamMimeType = "application/octet-stream";
 
         public const int SessionIdleTimeout = 2;
@@ -62,7 +52,7 @@
 
         public const int SubmissionsPerPage = 5;
 
-        public const int RecommendedLessonChchingMinutes = 60;
+        public const int RecommendedLessonsCachingMinutes = 60;
 
         public const string EmailConfirmMessage = "Check your email for confirmation.";
 
@@ -72,11 +62,11 @@
 
         public const int DefaultAllowedTimeInMilliseconds = 200;
 
-        public const int MinAllowedMemoryInMegaBytes = 0;
+        public const int MinAllowedMemoryInMegaBytes = 10;
 
         public const int MaxAllowedMemoryInMegaBytes = 100;
 
-        public const int MinAllowedTimeInMilliseconds = 0;
+        public const int MinAllowedTimeInMilliseconds = 50;
 
         public const int MaxAllowedTimeInMilliseconds = 1000;
 

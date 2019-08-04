@@ -19,7 +19,7 @@
 
     @if (this.User.Identity.IsAuthenticated)
     {
-        <cache vary-by-user="true" expires-after="TimeSpan.FromMinutes(GlobalConstants.RecommendedLessonChchingMinutes)">
+        <cache vary-by-user="true" expires-after="TimeSpan.FromMinutes(GlobalConstants.RecommendedLessonsCachingMinutes)">
             <vc:recommended-lessons></vc:recommended-lessons>
         </cache>
     }
