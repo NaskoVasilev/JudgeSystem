@@ -1,18 +1,17 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Common.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+
+using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.InputModels.Problem;
-using JudgeSystem.Web.ViewModels.Problem;
-using Microsoft.EntityFrameworkCore;
+
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests

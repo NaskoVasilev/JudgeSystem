@@ -1,6 +1,8 @@
-﻿using JudgeSystem.Data;
+﻿using System;
+
+using JudgeSystem.Data;
+
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace JudgeSystem.Services.Data.Tests.Factories
 {

@@ -1,16 +1,18 @@
-﻿using JudgeSystem.Data.Common.Repositories;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Web.InputModels.Lesson;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using JudgeSystem.Data.Repositories;
-using Xunit;
-using System.Linq;
 using JudgeSystem.Data.Models.Enums;
-using Moq;
-using System;
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
+
+using Xunit;
+using Moq;
 
 namespace JudgeSystem.Services.Data.Tests
 {

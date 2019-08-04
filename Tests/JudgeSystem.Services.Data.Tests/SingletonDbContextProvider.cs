@@ -1,5 +1,6 @@
 ﻿using JudgeSystem.Data;
 using JudgeSystem.Services.Data.Tests.ClassFixtures;
+
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests

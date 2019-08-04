@@ -1,10 +1,12 @@
-﻿using JudgeSystem.Common.Exceptions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests

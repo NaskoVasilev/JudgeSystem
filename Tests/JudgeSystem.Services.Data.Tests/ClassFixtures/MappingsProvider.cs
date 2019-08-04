@@ -1,8 +1,9 @@
-﻿using JudgeSystem.Services.Mapping;
+﻿using System.Reflection;
+
+using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels;
-using System.Reflection;
 
 namespace JudgeSystem.Services.Data.Tests.ClassFixtures
 {

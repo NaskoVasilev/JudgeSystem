@@ -1,14 +1,16 @@
-﻿using JudgeSystem.Common.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.InputModels.Contest;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Xunit;
+using Moq;
 
 namespace JudgeSystem.Services.Data.Tests
 {
@@ -92,7 +94,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             var actualContests = contestService.GetAllConests(page);
-            var expectedData = Enumerable.Range((page - 1) * ContestService.ContestsPerPage , page * ContestService.ContestsPerPage);
+            var expectedData = Enumerable.Range((page - 1) * ContestService.ContestsPerPage, page * ContestService.ContestsPerPage);
 
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
@@ -223,7 +225,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         private IEnumerable<Contest> Generate50ContestsWithStartDate()
         {
-            for (int i = 1; i <= 50 ; i++)
+            for (int i = 1; i <= 50; i++)
             {
                 yield return new Contest { Id = 50 - i, StartTime = DateTime.UtcNow.AddDays(i) };
             }

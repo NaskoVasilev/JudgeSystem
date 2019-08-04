@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Data;
 using JudgeSystem.Services.Data.Tests.ClassFixtures;
 using JudgeSystem.Services.Data.Tests.Factories;
+
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
