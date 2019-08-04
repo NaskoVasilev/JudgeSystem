@@ -1,9 +1,9 @@
-﻿namespace JudgeSystem.Services
-{
-	using System.Security.Cryptography;
-	using System.Text;
+﻿using System.Text;
+using System.Security.Cryptography;
 
-	public class PasswordHashService : IPasswordHashService
+namespace JudgeSystem.Services
+{
+    public class PasswordHashService : IPasswordHashService
 	{
 		public string HashPassword(string password)
 		{

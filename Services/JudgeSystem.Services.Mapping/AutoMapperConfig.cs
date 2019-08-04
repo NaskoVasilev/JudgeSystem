@@ -1,13 +1,13 @@
-﻿namespace JudgeSystem.Services.Mapping
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+using AutoMapper;
+using AutoMapper.Configuration;
+
+namespace JudgeSystem.Services.Mapping
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using AutoMapper;
-    using AutoMapper.Configuration;
-
     public static class AutoMapperConfig
     {
         private static bool initialized;

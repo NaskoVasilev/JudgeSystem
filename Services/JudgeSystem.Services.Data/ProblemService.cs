@@ -29,7 +29,7 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<ProblemDto> Create(ProblemInputModel model)
 		{
-			Problem problem = model.To<ProblemInputModel, Problem>();
+			Problem problem = model.To<Problem>();
 			await problemRepository.AddAsync(problem);
 			await problemRepository.SaveChangesAsync();
 			return problem.To<ProblemDto>();

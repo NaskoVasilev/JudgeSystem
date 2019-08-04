@@ -1,13 +1,13 @@
-﻿namespace JudgeSystem.Services.Mapping
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+
+namespace JudgeSystem.Services.Mapping
 {
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
-
-	using AutoMapper;
-	using AutoMapper.QueryableExtensions;
-
-    public static class QueryableMappingExtensions
+    public static class MappingExtensions
     {
         public static IQueryable<TDestination> To<TDestination>(
             this IQueryable source,
@@ -32,12 +32,6 @@
 
             return source.ProjectTo<TDestination>(parameters);
         }
-
-		public static Destination To<Source, Destination>(this Source source)
-		{
-			var destination = Mapper.Map<Source, Destination>(source);
-			return destination;
-		}
 
 		public static Destination To<Destination>(this object source)
 		{

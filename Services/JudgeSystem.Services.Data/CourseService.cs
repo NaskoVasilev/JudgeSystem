@@ -23,7 +23,7 @@ namespace JudgeSystem.Services.Data
 
 		public async Task Add(CourseInputModel model)
 		{
-			Course course = model.To<CourseInputModel, Course>();
+			Course course = model.To<Course>();
 			await this.repository.AddAsync(course);
 			await this.repository.SaveChangesAsync();
 		}

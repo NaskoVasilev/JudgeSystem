@@ -1,7 +1,7 @@
-﻿namespace JudgeSystem.Services.Mapping
-{
-    using AutoMapper;
+﻿using AutoMapper;
 
+namespace JudgeSystem.Services.Mapping
+{
     public interface IHaveCustomMappings
     {
         void CreateMappings(IProfileExpression configuration);

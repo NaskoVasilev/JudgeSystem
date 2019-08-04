@@ -1,19 +1,16 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 
 namespace JudgeSystem.Services
 {
     public class AzureStorageService : IAzureStorageService
     {
-        private readonly CloudStorageAccount storageAccount;
         private readonly CloudBlobContainer cloudBlobContainer;
 
-        public AzureStorageService(CloudStorageAccount storageAccount, CloudBlobContainer cloudBlobContainer)
+        public AzureStorageService(CloudBlobContainer cloudBlobContainer)
         {
-            this.storageAccount = storageAccount;
             this.cloudBlobContainer = cloudBlobContainer;
         }
 

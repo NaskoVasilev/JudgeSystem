@@ -1,5 +1,6 @@
-﻿using JudgeSystem.Web.Dtos.Common;
-using System;
+﻿using System;
+
+using JudgeSystem.Web.Dtos.Common;
 
 namespace JudgeSystem.Services
 {

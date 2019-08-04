@@ -45,7 +45,7 @@ namespace JudgeSystem.Services.Data
 
         public async Task<LessonDto> Create(LessonInputModel model)
         {
-            Lesson lesson = model.To<LessonInputModel, Lesson>();
+            Lesson lesson = model.To<Lesson>();
             if (!string.IsNullOrEmpty(lesson.LessonPassword))
             {
                 lesson.LessonPassword = hashService.HashPassword(lesson.LessonPassword);
