@@ -1,5 +1,4 @@
-﻿using JudgeSystem.Data.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace JudgeSystem.Services.Data
 {
@@ -9,6 +8,6 @@ namespace JudgeSystem.Services.Data
 
         Task AddUserToPracticeIfNotAdded(string userId, int value);
 
-        int GetLessonId(int practiceId);
+        Task<int> GetLessonId(int practiceId);
     }
 }

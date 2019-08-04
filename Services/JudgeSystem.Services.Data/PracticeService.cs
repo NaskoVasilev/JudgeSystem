@@ -36,14 +36,10 @@ namespace JudgeSystem.Services.Data
             return practice.Id;
         }
 
-        public int GetLessonId(int practiceId)
+        public async Task<int> GetLessonId(int practiceId)
         {
-            if(!this.repository.All().Any(x => x.Id == practiceId))
-            {
-                throw new EntityNotFoundException();
-            }
-
-            return this.repository.All().First(x => x.Id == practiceId).LessonId;
+            var practice = await repository.FindAsync(practiceId);
+            return practice.LessonId;
         }
     }
 }

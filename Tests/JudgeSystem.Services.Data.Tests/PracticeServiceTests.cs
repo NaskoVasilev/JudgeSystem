@@ -49,7 +49,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreatePracticeService(GetTestData(), null);
 
-            int actualId =  service.GetLessonId(2);
+            int actualId =  await service.GetLessonId(2);
 
             Assert.Equal(45, actualId);
         }
@@ -59,7 +59,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreatePracticeService(GetTestData(), null);
 
-            Assert.Throws<EntityNotFoundException>(() => service.GetLessonId(22));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(22));
         }
 
 

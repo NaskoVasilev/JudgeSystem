@@ -1,5 +1,6 @@
-﻿using JudgeSystem.Web.ViewModels.Lesson;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Web.ViewModels.Lesson;
 
 namespace JudgeSystem.Services.Data
 {

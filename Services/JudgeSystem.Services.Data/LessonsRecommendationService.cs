@@ -1,18 +1,20 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Linq;
+using System.Collections.Generic;
+
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.ML;
+using JudgeSystem.Web.ViewModels.Lesson;
+
+using Microsoft.Extensions.ML;
+
+namespace JudgeSystem.Services.Data
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Web.Dtos.ML;
-    using JudgeSystem.Web.ViewModels.Lesson;
-
-    using Microsoft.Extensions.ML;
-
     public class LessonsRecommendationService : ILessonsRecommendationService
     {
         private const int CountOfRecommendedLessons = 10;
+
         private readonly PredictionEnginePool<UserLesson, UserLessonScore> predictionEngine;
         private readonly IDeletableEntityRepository<Lesson> lessonRepository;
         private readonly IRepository<UserPractice> userPracticeRepository;

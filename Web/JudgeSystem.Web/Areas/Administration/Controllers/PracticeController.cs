@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Common;
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Common;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
@@ -32,10 +34,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.paginationHelper = paginationHelper;
         }
 
-        public IActionResult Submissions(string userId, int practiceId, int? problemId, int page = DefaultPage)
+        public async Task<IActionResult> Submissions(string userId, int practiceId, int? problemId, int page = DefaultPage)
         {
             int baseProblemId;
-            int lessonId = practiceService.GetLessonId(practiceId);
+            int lessonId = await practiceService.GetLessonId(practiceId);
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
