@@ -1,5 +1,6 @@
 ﻿using JudgeSystem.Services.Data;
 using JudgeSystem.Web.ViewModels.User;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
@@ -18,7 +19,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             UserResultsViewModel userResults = new UserResultsViewModel
             {
                 ContestResults = userService.GetContestResults(userId),
-                PracticeResults = userService.GetPracticetResults(userId),
+                PracticeResults = userService.GetPracticeResults(userId),
                 UserId = userId
             };
             return View(userResults);

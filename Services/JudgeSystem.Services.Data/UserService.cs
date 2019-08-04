@@ -1,12 +1,13 @@
-﻿namespace JudgeSystem.Services.Data
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using JudgeSystem.Data.Common.Repositories;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Web.ViewModels.User;
+﻿using System.Collections.Generic;
+using System.Linq;
 
+using JudgeSystem.Data.Common.Repositories;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Web.ViewModels.User;
+
+namespace JudgeSystem.Services.Data
+{
     public class UserService : IUserService
 	{
 		private readonly IDeletableEntityRepository<ApplicationUser> repository;
@@ -40,7 +41,7 @@
 			return result;
 		}
 
-		public List<UserPracticeResultViewModel> GetPracticetResults(string userId)
+		public List<UserPracticeResultViewModel> GetPracticeResults(string userId)
 		{
             var result = repository.All()
                  .Where(u => u.Id == userId)

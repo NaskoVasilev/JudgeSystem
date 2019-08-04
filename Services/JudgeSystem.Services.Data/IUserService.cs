@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using JudgeSystem.Web.ViewModels.User;
 
 namespace JudgeSystem.Services.Data
@@ -7,7 +8,7 @@ namespace JudgeSystem.Services.Data
 	{
 		List<UserCompeteResultViewModel> GetContestResults(string userId);
 
-		List<UserPracticeResultViewModel> GetPracticetResults(string userId);
+		List<UserPracticeResultViewModel> GetPracticeResults(string userId);
 
 		IEnumerable<UserCompeteResultViewModel> GetUserExamResults(string userId);
     }

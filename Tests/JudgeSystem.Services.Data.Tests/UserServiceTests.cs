@@ -43,7 +43,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetPracticeResultsTestData();
             var service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualResults = service.GetPracticetResults("test_user");
+            var actualResults = service.GetPracticeResults("test_user");
             var expectedResult = testData.First().UserPractices.Select(s => s.Practice).ToList();
 
             Assert.Equal(2, actualResults.Count);

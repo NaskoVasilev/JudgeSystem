@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.ViewModels.User;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace JudgeSystem.Web.Controllers
             UserResultsViewModel userResults = new UserResultsViewModel
             {
                 ContestResults = userService.GetContestResults(userId),
-                PracticeResults = userService.GetPracticetResults(userId)
+                PracticeResults = userService.GetPracticeResults(userId)
             };
             return View(userResults);
 		}
