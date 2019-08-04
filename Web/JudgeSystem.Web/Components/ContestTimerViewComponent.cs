@@ -1,9 +1,11 @@
-﻿using JudgeSystem.Services;
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Dtos.Common;
 using JudgeSystem.Web.Dtos.Contest;
+
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Components
 {

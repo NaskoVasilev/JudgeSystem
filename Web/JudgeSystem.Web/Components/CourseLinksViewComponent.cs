@@ -1,15 +1,13 @@
-﻿namespace JudgeSystem.Web.Components
+﻿using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Infrastructure.Extensions;
+using JudgeSystem.Web.ViewModels.Course;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Components
 {
-	using System.Threading.Tasks;
-	using System.Collections.Generic;
-
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.Infrastructure.Extensions;
-
-	using Microsoft.AspNetCore.Mvc;
-
-	[ViewComponent(Name = "CourseLinks")]
+    [ViewComponent(Name = "CourseLinks")]
 	public class CourseLinksViewComponent : ViewComponent
 	{
 		private readonly ICourseService courseService;
@@ -19,13 +17,14 @@
 			this.courseService = courseService;
 		}
 
-		public async Task<IViewComponentResult> InvokeAsync(string className)
+		public IViewComponentResult Invoke(string className)
 		{
-			IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
-			var courses = await Task.Run(() => courseService.All());
-			ViewData["class"] = className;
-			ViewData["lessonTypes"] = lessonTypes; 
-			return View(courses);
+            var model = new AllCoursesViewModel
+            {
+                LessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>(),
+                Courses = courseService.All()
+            };
+			return View(model);
 		}
 	}
 }

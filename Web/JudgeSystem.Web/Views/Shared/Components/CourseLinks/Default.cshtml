@@ -1,17 +1,13 @@
-﻿@model IEnumerable<CourseViewModel>
-
-@{
-	IEnumerable<string> lessonTypes = ViewData["lessonTypes"] as IEnumerable<string>;
-}
+﻿@model AllCoursesViewModel
 
 
-@foreach (var course in Model)
+@foreach (var course in Model.Courses)
 	{
 		<li class="dropdown-submenu"  id="course-@course.Id">
 			<a class="dropdown-item" tabindex="-1" asp-area="" asp-controller="Course" 
 			   asp-action="Details" asp-route-id="@course.Id">@course.Name</a>
 			<ul class="dropdown-menu">
-				@foreach (var lessonType in lessonTypes)
+				@foreach (var lessonType in Model.LessonTypes)
 				{
 					<li class="dropdown-item">
 						<a class="dropdown-item"

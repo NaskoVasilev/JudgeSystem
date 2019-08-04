@@ -1,8 +1,10 @@
-﻿using JudgeSystem.Data.Models;
+﻿using System.Security.Claims;
+
+using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace JudgeSystem.Web.Components
 {

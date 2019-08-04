@@ -1,8 +1,10 @@
-﻿using JudgeSystem.Services.Data;
-using JudgeSystem.Web.ViewModels.Contest;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.ViewModels.Contest;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Components
 {
@@ -19,7 +21,8 @@ namespace JudgeSystem.Web.Components
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			IEnumerable<PreviousContestViewModel> previousContests = await Task.Run(() => contestService.GetPreviousContests(PassedDaysFromContestEndTime));
+			IEnumerable<PreviousContestViewModel> previousContests = await Task.Run(() => 
+            contestService.GetPreviousContests(PassedDaysFromContestEndTime));
 			return View(previousContests);
 		}
 	}

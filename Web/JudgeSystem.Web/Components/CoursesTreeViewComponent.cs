@@ -1,11 +1,9 @@
-﻿namespace JudgeSystem.Web.Components
+﻿using JudgeSystem.Services.Data;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Components
 {
-    using JudgeSystem.Data.Models.Enums;
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Web.Infrastructure.Extensions;
-
-    using Microsoft.AspNetCore.Mvc;
-
     [ViewComponent(Name = "CoursesTree")]
 	public class CoursesTreeViewComponent : ViewComponent
 	{

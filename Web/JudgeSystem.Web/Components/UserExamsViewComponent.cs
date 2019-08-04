@@ -1,12 +1,12 @@
-﻿namespace JudgeSystem.Web.Components
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.ViewModels.User;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Components
 {
-    using System.Collections.Generic;
-
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Web.ViewModels.User;
-
-    using Microsoft.AspNetCore.Mvc;
-
     public class UserExamsViewComponent : ViewComponent
 	{
 		private readonly IUserService userService;
