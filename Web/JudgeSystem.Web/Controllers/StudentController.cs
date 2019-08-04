@@ -45,7 +45,6 @@ namespace JudgeSystem.Web.Controllers
 				ModelState.AddModelError(string.Empty, ErrorMessages.InvalidActivationKey);
 				return View();
 			}
-
 			if (student.IsActivated)
 			{
 				ModelState.AddModelError(string.Empty, ErrorMessages.ActivatedStudentProfile);
@@ -53,7 +52,8 @@ namespace JudgeSystem.Web.Controllers
 			}
 
 			await studentService.SetStudentProfileAsActivated(student.Id);
-			ApplicationUser user = await userManager.GetUserAsync(this.User);
+
+            ApplicationUser user = await userManager.GetUserAsync(this.User);
 			user.StudentId = student.Id;
 			await userManager.UpdateAsync(user);
 			await userManager.AddToRoleAsync(user, GlobalConstants.StudentRoleName);
@@ -67,8 +67,7 @@ namespace JudgeSystem.Web.Controllers
 			ApplicationUser user = await userManager.GetUserAsync(this.User);
 			if(user.StudentId == null)
 			{
-				this.ShowError(ErrorMessages.InvalidStudentProfile, "Home", "Controller");
-				return Redirect("/");
+				return this.ShowError(ErrorMessages.InvalidStudentProfile, "Index", "Home");
 			}
 
 			StudentProfileViewModel model = await studentService.GetById<StudentProfileViewModel>(user.StudentId);

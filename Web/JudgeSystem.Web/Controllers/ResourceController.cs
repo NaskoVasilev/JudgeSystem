@@ -1,17 +1,16 @@
-﻿namespace JudgeSystem.Web.Controllers
+﻿using System.Threading.Tasks;
+using System.IO;
+
+using JudgeSystem.Services.Data;
+using JudgeSystem.Services;
+using JudgeSystem.Web.Dtos.Resource;
+using JudgeSystem.Common;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Controllers
 {
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Services.Data;
-
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-    using JudgeSystem.Services;
-    using System.IO;
-    using JudgeSystem.Web.Dtos.Resource;
-    using JudgeSystem.Common;
-
     [Authorize]
 	public class ResourceController : BaseController
 	{

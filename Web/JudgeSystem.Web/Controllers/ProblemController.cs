@@ -1,9 +1,10 @@
-﻿namespace JudgeSystem.Web.Controllers
-{
-    using JudgeSystem.Services.Data;
-    using JudgeSystem.Web.Filters;
-    using Microsoft.AspNetCore.Mvc;
+﻿using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Filters;
 
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Controllers
+{
     public class ProblemController : BaseController
 	{
         private readonly IProblemService problemService;
