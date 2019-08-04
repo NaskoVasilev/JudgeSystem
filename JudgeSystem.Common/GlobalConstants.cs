@@ -2,6 +2,8 @@
 {
     public static class GlobalConstants
     {
+        public const string DefaultConnectionStringName = "DefaultConnection";
+
         public const string AdministratorRoleName = "Administrator";
 
         public const string StudentRoleName = "Student";
