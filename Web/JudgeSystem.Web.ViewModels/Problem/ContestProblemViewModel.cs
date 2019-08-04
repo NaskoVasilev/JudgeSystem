@@ -1,9 +1,9 @@
-﻿namespace JudgeSystem.Web.ViewModels.Problem
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
+using JudgeSystem.Data.Models;
 
-	public class ContestProblemViewModel : IMapFrom<Problem>
+namespace JudgeSystem.Web.ViewModels.Problem
+{
+	public class ContestProblemViewModel : IMapFrom<Data.Models.Problem>
 	{
 		public int Id { get; set; }
 

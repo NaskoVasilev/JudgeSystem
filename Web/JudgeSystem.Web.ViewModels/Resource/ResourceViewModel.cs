@@ -1,9 +1,9 @@
-﻿namespace JudgeSystem.Web.ViewModels.Resource
-{
-	using Services.Mapping;
-	using Data.Models;
+﻿using JudgeSystem.Services.Mapping;
+using JudgeSystem.Data.Models;
 
-	public class ResourceViewModel : IMapFrom<Resource>
+namespace JudgeSystem.Web.ViewModels.Resource
+{
+	public class ResourceViewModel : IMapFrom<Data.Models.Resource>
 	{
 		public int Id { get; set; }
 

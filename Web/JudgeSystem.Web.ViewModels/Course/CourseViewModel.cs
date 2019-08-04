@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.ViewModels.Course
-{
-	using Services.Mapping;
-	using Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class CourseViewModel : IMapFrom<Course>
+namespace JudgeSystem.Web.ViewModels.Course
+{
+    public class CourseViewModel : IMapFrom<Data.Models.Course>
 	{
 		public int Id { get; set; }
 

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace JudgeSystem.Web.ViewModels.Contest
 {
-	public class ContestAllViewModel
+    public class ContestAllViewModel
 	{
 		public IEnumerable<ContestViewModel> Contests { get; set; }
 

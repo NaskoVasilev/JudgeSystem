@@ -1,10 +1,9 @@
-﻿namespace JudgeSystem.Web.ViewModels.Lesson
-{
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Data.Models;
-    using JudgeSystem.Data.Models.Enums;
+﻿using JudgeSystem.Services.Mapping;
+using JudgeSystem.Data.Models.Enums;
 
-    public class RecommendedLessonViewModel : IMapFrom<Lesson>
+namespace JudgeSystem.Web.ViewModels.Lesson
+{
+    public class RecommendedLessonViewModel : IMapFrom<Data.Models.Lesson>
     {
         public int Id { get; set; }
 

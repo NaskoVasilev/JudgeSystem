@@ -1,6 +1,7 @@
-﻿using JudgeSystem.Web.Dtos.Submission;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Infrastructure.Pagination;
-using System.Collections.Generic;
 
 namespace JudgeSystem.Web.ViewModels.Contest
 {

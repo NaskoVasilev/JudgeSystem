@@ -1,5 +1,6 @@
-﻿using JudgeSystem.Web.ViewModels.Problem;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Web.ViewModels.Problem;
 
 namespace JudgeSystem.Web.ViewModels.Contest
 {

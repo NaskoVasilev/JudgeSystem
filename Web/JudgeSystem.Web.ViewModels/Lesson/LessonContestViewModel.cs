@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.ViewModels.Lesson
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class LessonContestViewModel : IMapFrom<Contest>
+namespace JudgeSystem.Web.ViewModels.Lesson
+{
+    public class LessonContestViewModel : IMapFrom<Data.Models.Contest>
 	{
 		public int Id { get; set; }
 

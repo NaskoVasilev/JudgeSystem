@@ -1,10 +1,10 @@
-﻿namespace JudgeSystem.Web.ViewModels.Student
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-	using AutoMapper;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class StudentProfileViewModel : IMapFrom<Student>, IHaveCustomMappings
+using AutoMapper;
+
+namespace JudgeSystem.Web.ViewModels.Student
+{
+    public class StudentProfileViewModel : IMapFrom<Data.Models.Student>, IHaveCustomMappings
 	{
 		public string Id { get; set; }
 
@@ -20,7 +20,7 @@
 
 		public void CreateMappings(IProfileExpression configuration)
 		{
-			configuration.CreateMap<Student, StudentProfileViewModel>()
+			configuration.CreateMap<Data.Models.Student, StudentProfileViewModel>()
 				.ForMember(x => x.SchoolClassName, y => y.MapFrom(s => $"{s.SchoolClass.ClassNumber} {s.SchoolClass.ClassType}"));
 		}
 	}

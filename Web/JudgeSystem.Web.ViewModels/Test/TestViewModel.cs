@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.ViewModels.Test
-{
-	using Services.Mapping;
-	using Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class TestViewModel : IMapFrom<Test>
+namespace JudgeSystem.Web.ViewModels.Test
+{
+    public class TestViewModel : IMapFrom<Data.Models.Test>
 	{
 		public int Id { get; set; }
 

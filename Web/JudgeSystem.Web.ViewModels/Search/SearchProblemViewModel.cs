@@ -1,9 +1,8 @@
-﻿namespace JudgeSystem.Web.ViewModels.Search
-{
-    using JudgeSystem.Services.Mapping;
-    using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
 
-    public class SearchProblemViewModel : IMapFrom<Problem>
+namespace JudgeSystem.Web.ViewModels.Search
+{
+    public class SearchProblemViewModel : IMapFrom<Data.Models.Problem>
     {
         public string Name { get; set; }
 

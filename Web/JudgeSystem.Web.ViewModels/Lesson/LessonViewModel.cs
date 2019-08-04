@@ -1,14 +1,13 @@
-﻿namespace JudgeSystem.Web.ViewModels.Lesson
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Services.Mapping;
+
+using JudgeSystem.Web.ViewModels.Problem;
+using JudgeSystem.Web.ViewModels.Resource;
+
+namespace JudgeSystem.Web.ViewModels.Lesson
 {
-	using System.Collections.Generic;
-
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-
-	using Web.ViewModels.Problem;
-	using Web.ViewModels.Resource;
-
-	public class LessonViewModel : IMapFrom<Lesson>
+    public class LessonViewModel : IMapFrom<Data.Models.Lesson>
 	{
 		public int Id { get; set; }
 

@@ -1,10 +1,8 @@
-﻿namespace JudgeSystem.Web.ViewModels.Student
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-	using AutoMapper;
+﻿using JudgeSystem.Services.Mapping;
 
-	public class StudentBreifInfoViewModel : IMapFrom<Student>
+namespace JudgeSystem.Web.ViewModels.Student
+{
+    public class StudentBreifInfoViewModel : IMapFrom<Data.Models.Student>
 	{
 		public int ClassNumber { get; set; }
 

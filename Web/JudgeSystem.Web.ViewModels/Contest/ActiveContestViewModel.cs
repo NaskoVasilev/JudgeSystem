@@ -1,12 +1,12 @@
-﻿namespace JudgeSystem.Web.ViewModels.Contest
+﻿using System;
+
+using JudgeSystem.Services.Mapping;
+
+using AutoMapper;
+
+namespace JudgeSystem.Web.ViewModels.Contest
 {
-	using System;
-
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-    using AutoMapper;
-
-    public class ActiveContestViewModel : IMapFrom<Contest>
+    public class ActiveContestViewModel : IMapFrom<Data.Models.Contest>
 	{
 		public string Name { get; set; }
 

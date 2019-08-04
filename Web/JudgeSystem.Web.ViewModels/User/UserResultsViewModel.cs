@@ -1,7 +1,7 @@
-﻿namespace JudgeSystem.Web.ViewModels.User
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace JudgeSystem.Web.ViewModels.User
+{
 	public class UserResultsViewModel
 	{
 		public List<UserCompeteResultViewModel> ContestResults { get; set; }

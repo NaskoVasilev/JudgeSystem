@@ -1,9 +1,9 @@
-﻿namespace JudgeSystem.Web.ViewModels.Contest
-{
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
+﻿using JudgeSystem.Services.Mapping;
+using JudgeSystem.Data.Models;
 
-	public class ContestBreifInfoViewModel : IMapFrom<Contest>
+namespace JudgeSystem.Web.ViewModels.Contest
+{
+	public class ContestBreifInfoViewModel : IMapFrom<Data.Models.Contest>
 	{
 		public string Name { get; set; }
 

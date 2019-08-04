@@ -1,11 +1,11 @@
-﻿namespace JudgeSystem.Web.ViewModels.ExecutedTest
-{
-	using JudgeSystem.Data.Models.Enums;
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-	using AutoMapper;
+﻿using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
 
-	public class ExecutedTestViewModel : IMapFrom<ExecutedTest>
+using AutoMapper;
+
+namespace JudgeSystem.Web.ViewModels.ExecutedTest
+{
+    public class ExecutedTestViewModel : IMapFrom<Data.Models.ExecutedTest>
 	{
 		public int Id { get; set; }
 
@@ -45,7 +45,6 @@
 				{
 					exectionResult = "Time limit";
 				}
-
 				else if(ExecutionResultType == TestExecutionResultType.Success && this.IsCorrect)
 				{
 					exectionResult = "Correct answer";

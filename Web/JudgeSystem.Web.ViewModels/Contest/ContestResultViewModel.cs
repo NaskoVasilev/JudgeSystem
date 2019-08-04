@@ -1,6 +1,7 @@
-﻿using JudgeSystem.Web.ViewModels.Student;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using JudgeSystem.Web.ViewModels.Student;
 
 namespace JudgeSystem.Web.ViewModels.Contest
 {
