@@ -13,7 +13,7 @@ namespace JudgeSystem.Services.Data
 	{
 		IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId);
 
-		Task<int> Create(LessonInputModel model);
+		Task<LessonDto> Create(LessonInputModel model);
 
 		Task<LessonViewModel> GetLessonInfo(int id);
 

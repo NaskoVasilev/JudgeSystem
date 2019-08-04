@@ -39,10 +39,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            int lessonId = await lessonService.Create(model);
-            int practiceId = await practiceService.Create(lessonId);
+            var lesson = await lessonService.Create(model);
+            int practiceId = await practiceService.Create(lesson.Id);
 
-            return RedirectToAction("Details", "Lesson", new { id = lessonId, PracticeId = practiceId });
+            return RedirectToAction("Details", "Lesson", new { id = lesson.Id, PracticeId = practiceId });
         }
 
         public async Task<IActionResult> Edit(int id)

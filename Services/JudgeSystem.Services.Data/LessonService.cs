@@ -12,9 +12,9 @@ using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.ViewModels.Search;
 using JudgeSystem.Common;
+using JudgeSystem.Common.Exceptions;
 
 using Microsoft.EntityFrameworkCore;
-using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Services.Data
 {
@@ -43,7 +43,7 @@ namespace JudgeSystem.Services.Data
                 .ToList();
         }
 
-        public async Task<int> Create(LessonInputModel model)
+        public async Task<LessonDto> Create(LessonInputModel model)
         {
             Lesson lesson = model.To<LessonInputModel, Lesson>();
             if (!string.IsNullOrEmpty(lesson.LessonPassword))
@@ -53,30 +53,27 @@ namespace JudgeSystem.Services.Data
 
             await repository.AddAsync(lesson);
             await repository.SaveChangesAsync();
-            return lesson.Id;
+            return lesson.To<LessonDto>();
         }
 
         public async Task<string> Delete(int id)
         {
-            var lesson = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
-            if (lesson == null)
-            {
-                throw new EntityNotFoundException();
-            }
+            var lesson = await repository.FindAsync(id);
 
             this.repository.Delete(lesson);
             await this.repository.SaveChangesAsync();
+
             return lesson.Name;
         }
 
         public async Task<TDestination> GetById<TDestination>(int id)
         {
-            if (!this.Exists(id))
+            var lesson = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            if(lesson == null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException(nameof(lesson));
             }
-
-            return await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            return lesson;
         }
 
         public IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType)
@@ -96,27 +93,23 @@ namespace JudgeSystem.Services.Data
                 throw new EntityNotFoundException("lesson");
             }
 
-            return this.repository.All()
-                .Include(x => x.Problems)
-                .First(x => x.Id == lessonId)
-                .Problems
-                .OrderBy(x => x.CreatedOn)
-                .First().Id;
+            return this.repository.All().Include(x => x.Problems)
+                .First(x => x.Id == lessonId).Problems
+                .OrderBy(x => x.CreatedOn).First().Id;
         }
 
         public async Task<LessonViewModel> GetLessonInfo(int id)
         {
-            if (!this.Exists(id))
-            {
-                throw new EntityNotFoundException();
-            }
-
             var lesson = await this.repository.All()
-                .Include(l => l.Problems)
-                .Include(l => l.Practice)
-                .Include(l => l.Resources)
-                .FirstOrDefaultAsync(l => l.Id == id);
-            return lesson.To<Lesson, LessonViewModel>();
+                .Where(x => x.Id == id)
+                .To<LessonViewModel>()
+                .FirstOrDefaultAsync();
+
+            if(lesson == null)
+            {
+                throw new EntityNotFoundException(nameof(lesson));
+            }
+            return lesson;
         }
 
         public int GetPracticeId(int lessonId)
@@ -129,7 +122,7 @@ namespace JudgeSystem.Services.Data
             return this.repository.All()
                 .Where(x => x.Id == lessonId)
                 .Select(x => x.Practice.Id)
-                .FirstOrDefault();
+                .First();
         }
 
         public IEnumerable<SearchLessonViewModel> SearchByName(string keyword)
@@ -146,16 +139,11 @@ namespace JudgeSystem.Services.Data
                 .ToList();
 
             return results;
-
         }
 
         public async Task SetPassword(int id, string lessonPassword)
         {
-            var lesson = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
-            if (lesson == null)
-            {
-                throw new EntityNotFoundException(nameof(lesson));
-            }
+            var lesson = await repository.FindAsync(id);
             if(!string.IsNullOrEmpty(lesson.LessonPassword))
             {
                 throw new ArgumentException(ErrorMessages.LockedLesson);
@@ -168,14 +156,10 @@ namespace JudgeSystem.Services.Data
 
         public async Task<LessonDto> Update(LessonEditInputModel model)
         {
-            var lesson = await repository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (lesson == null)
-            {
-                throw new EntityNotFoundException();
-            }
-
+            var lesson = await repository.FindAsync(model.Id);
             lesson.Name = model.Name;
             lesson.Type = model.Type;
+
             repository.Update(lesson);
             await repository.SaveChangesAsync();
 
@@ -184,19 +168,16 @@ namespace JudgeSystem.Services.Data
 
         public async Task<LessonDto> UpdatePassword(int lessonId, string oldPassword, string newPassword)
         {
-            var lesson = await repository.All().FirstOrDefaultAsync(x => x.Id == lessonId);
-            if (lesson == null)
-            {
-                throw new EntityNotFoundException(nameof(lesson));
-            }
+            var lesson = await repository.FindAsync(lessonId);
             if (lesson.LessonPassword != hashService.HashPassword(oldPassword))
             {
                 throw new ArgumentException(ErrorMessages.DiffrentLessonPasswords);
             }
-
             lesson.LessonPassword = hashService.HashPassword(newPassword);
+
             repository.Update(lesson);
             await repository.SaveChangesAsync();
+
             return lesson.To<LessonDto>();
         }
 

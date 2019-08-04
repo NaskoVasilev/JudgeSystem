@@ -133,7 +133,8 @@ namespace JudgeSystem.Services.Data.Tests
                     new Resource { Name = "res1" },
                     new Resource { Name = "res2" },
                     new Resource { Name = "res3" }
-                }
+                },
+                Practice = new Practice { Id = 12 }
             };
             await context.AddAsync(expectedLesson);
             await context.SaveChangesAsync();
@@ -144,6 +145,7 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expectedLesson.CourseId, actualLesson.CourseId);
             Assert.Equal(expectedLesson.Problems.Count, actualLesson.Problems.Count);
             Assert.Equal(expectedLesson.Resources.Count, actualLesson.Resources.Count);
+            Assert.Equal(expectedLesson.Practice.Id, actualLesson.PracticeId);
             Assert.Equal(expectedLesson.Resources.Select(x => x.Name).ToList(), actualLesson.Resources.Select(x => x.Name).ToList());
             Assert.Equal(expectedLesson.Problems.Select(x => x.Name).ToList(), actualLesson.Problems.Select(x => x.Name).ToList());
         }
