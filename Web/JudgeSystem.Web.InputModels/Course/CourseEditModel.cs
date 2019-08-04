@@ -1,15 +1,16 @@
-﻿namespace JudgeSystem.Web.InputModels.Course
-{
-	using JudgeSystem.Data.Models;
-	using Services.Mapping;
-	using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-	public class CourseEditModel : IMapTo<Course>, IMapFrom<Course>
+using JudgeSystem.Common;
+using JudgeSystem.Services.Mapping;
+
+namespace JudgeSystem.Web.InputModels.Course
+{
+	public class CourseEditModel : IMapTo<Data.Models.Course>, IMapFrom<Data.Models.Course>
 	{
 		public int Id { get; set; }
 
 		[Required]
-		[MinLength(3)]
+		[StringLength(ModelConstants.CourseNameMaxLength, MinimumLength = ModelConstants.CourseNameMinLength)]
 		public string Name { get; set; }
 	}
 }

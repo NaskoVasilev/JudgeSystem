@@ -1,13 +1,13 @@
-﻿namespace JudgeSystem.Web.InputModels.Contest
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Infrastructure.Attributes.Validation;
+
+namespace JudgeSystem.Web.InputModels.Contest
 {
-	using System;
-
-	using JudgeSystem.Services.Mapping;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Web.Infrastructure.Attributes.Validation;
-	using System.ComponentModel.DataAnnotations;
-
-	public class ContestCreateInputModel : IMapTo<Contest>
+	public class ContestCreateInputModel : IMapTo<Data.Models.Contest>
 	{
 		private const string StartEndTimeErrorMessage = "End time must be after start time.";
 
@@ -21,7 +21,7 @@
 		public int LessonId { get; set; }
 
 		[Required]
-		[StringLength(100, MinimumLength = 5)]
+		[StringLength(ModelConstants.ContestNameMaxLength, MinimumLength = ModelConstants.ContestNameMinLength)]
 		public string Name { get; set; }
 	}
 }

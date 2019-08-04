@@ -1,23 +1,23 @@
-﻿namespace JudgeSystem.Web.InputModels.Lesson
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Common;
+
+namespace JudgeSystem.Web.InputModels.Lesson
 {
-    using System.ComponentModel.DataAnnotations;
-
-    using Data.Models.Enums;
-    using Services.Mapping;
-    using Data.Models;
-    using Common;
-
-    public class LessonInputModel : IMapTo<Lesson>
+    public class LessonInputModel : IMapTo<Data.Models.Lesson>
 	{
 		[Required]
-		[MinLength(GlobalConstants.NameMinLength)]
-		public string Name { get; set; }
+        [StringLength(ModelConstants.LessonNameMaxLength, MinimumLength = ModelConstants.LessonNameMinLength)]
+        public string Name { get; set; }
 
 		public int CourseId { get; set; }
 
-		[Display(Name = "Lesson Password")]
+		[Display(Name = ModelConstants.LessonPasswordDisplayName)]
 		[DataType(DataType.Password)]
-		public string LessonPassword { get; set; }
+        [StringLength(ModelConstants.LessonPasswordMaxLength, MinimumLength = ModelConstants.LessonPasswordMinLength)]
+        public string LessonPassword { get; set; }
 
 		[Required]
 		public LessonType Type { get; set; }

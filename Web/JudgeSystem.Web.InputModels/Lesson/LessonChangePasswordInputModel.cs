@@ -1,21 +1,22 @@
-﻿namespace JudgeSystem.Web.InputModels.Lesson
+﻿using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Common;
+
+namespace JudgeSystem.Web.InputModels.Lesson
 {
-	using System.ComponentModel.DataAnnotations;
-
-	using Common;
-
 	public class LessonChangePasswordInputModel
 	{
 		public int Id { get; set; }
 
 		[Required]
 		[DataType(DataType.Password)]
+        [Display(Name = ModelConstants.LessonOldPasswordDisplayName)]
 		public string OldPassword { get; set; }
 
-		//TODO: Use some regex for the password for more security
 		[Required]
-		[MinLength(GlobalConstants.PasswordMinLength)]
-		[DataType(DataType.Password)]
+        [StringLength(ModelConstants.LessonPasswordMaxLength, MinimumLength = ModelConstants.LessonPasswordMinLength)]
+        [DataType(DataType.Password)]
+        [Display(Name = ModelConstants.LessonPasswordDisplayName)]
 		public string NewPassword { get; set; }
 	}
 }

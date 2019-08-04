@@ -1,15 +1,9 @@
-﻿namespace JudgeSystem.Web.Infrastructure.Extensions
-{
-	using System;
+﻿using System;
 
+namespace JudgeSystem.Web.Infrastructure.Extensions
+{
 	public static class StringExtensions
 	{
-		public static string NormalizeFileName(this string name)
-		{
-			int indexOfExtensionStart = name.LastIndexOf('.');
-			return name.Substring(0, Math.Min(name.Length, indexOfExtensionStart));
-		}
-
         public static string InsertSpaceBeforeUppercaseLetter(this string text)
         {
             string tempText = text;

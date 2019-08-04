@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using JudgeSystem.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace JudgeSystem.Web.InputModels.Lesson
 {
@@ -6,8 +7,10 @@ namespace JudgeSystem.Web.InputModels.Lesson
 	{
 		public int Id { get; set; }
 
-		[DataType(DataType.Password)]
-		[Display(Name = "Lesson Password")]
-		public string LessonPassword { get; set; }
+        [Required]
+        [StringLength(ModelConstants.LessonPasswordMaxLength, MinimumLength = ModelConstants.LessonPasswordMinLength)]
+        [DataType(DataType.Password)]
+        [Display(Name = ModelConstants.LessonPasswordDisplayName)]
+        public string LessonPassword { get; set; }
 	}
 }

@@ -24,13 +24,9 @@
 
 		public const string ZipFileExtension = ".zip";
 
-		public const int NameMinLength = 3;
-
 		public const int ProblemMinPoints = 1;
 
 		public const int ProblemMaxPoints = 100;
-
-		public const int PasswordMinLength = 5;
 
 		public const string ResourceTypesKey = "resourceTypes";
 

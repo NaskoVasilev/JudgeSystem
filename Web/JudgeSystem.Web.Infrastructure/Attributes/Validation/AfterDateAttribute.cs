@@ -1,8 +1,8 @@
-﻿namespace JudgeSystem.Web.Infrastructure.Attributes.Validation
-{
-	using System;
-	using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
+namespace JudgeSystem.Web.Infrastructure.Attributes.Validation
+{
 	[AttributeUsage(AttributeTargets.Property)]
 	public class AfterDateAttribute : ValidationAttribute
 	{
