@@ -10,15 +10,15 @@
 
 	public interface ITestService
 	{
-		Task<Test> Add(TestInputModel model);
+		Task<TestDto> Add(TestInputModel model);
 
 		IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId);
 
-		Task<Test> GetById(int id);
+		Task<TDestination> GetById<TDestination>(int id);
 
-		Task Delete(Test test);
+		Task Delete(int id);
 
-		Task Update(Test test);
+		Task Update(TestEditInputModel test);
 
 		IEnumerable<TestDataDto> GetTestsByProblemId(int problemId);
 	}

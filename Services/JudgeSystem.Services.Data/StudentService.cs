@@ -101,7 +101,6 @@
 			}
 			else if(classType.HasValue)
 			{
-				SchoolClassType schoolClassType = (SchoolClassType)classType;
 				students = repository.All()
 					.Where(s => s.SchoolClass.ClassType == classType.Value);
 			}

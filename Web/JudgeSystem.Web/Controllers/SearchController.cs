@@ -1,9 +1,11 @@
-﻿using JudgeSystem.Common;
-using JudgeSystem.Services.Data;
-using JudgeSystem.Web.ViewModels.Search;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+
+using JudgeSystem.Web.ViewModels.Search;
+using JudgeSystem.Common;
+using JudgeSystem.Services.Data;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -25,10 +27,13 @@ namespace JudgeSystem.Web.Controllers
 				return View("ErrorView");
 			}
 
-			SearchResultsViewModel searchResults = new SearchResultsViewModel();
-			searchResults.Problems = problemService.SearchByName(keyword).ToList();
-			searchResults.Lessons = lessonService.SearchByName(keyword).ToList();
-			return this.View(searchResults);
+            SearchResultsViewModel searchResults = new SearchResultsViewModel
+            {
+                Problems = problemService.SearchByName(keyword).ToList(),
+                Lessons = lessonService.SearchByName(keyword).ToList()
+            };
+
+            return this.View(searchResults);
 		}
 	}
 }

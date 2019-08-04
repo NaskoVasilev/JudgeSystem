@@ -1,19 +1,18 @@
-﻿namespace JudgeSystem.Web.Controllers
+﻿using System.Threading.Tasks;
+
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.InputModels.Student;
+using JudgeSystem.Web.ViewModels.Student;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace JudgeSystem.Web.Controllers
 {
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Common;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.InputModels.Student;
-	using JudgeSystem.Web.ViewModels.Student;
-
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-
-	[Authorize]
+    [Authorize]
 	public class StudentController : BaseController
 	{
 		private readonly IStudentService studentService;

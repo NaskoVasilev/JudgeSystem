@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TestViewModel>
+﻿@model ProblemTestsViewModel
 
 @{
 	ViewData["Title"] = "Problem Tests";
@@ -8,9 +8,9 @@
 <h2 class="text-center mb-3">Problem Tests</h2>
 <div class="d-flex justify-content-center mb-3">
 	<a class="btn btn-outline-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
-	   asp-route-lessonId="@ViewData["lessonId"]">Back to all problems</a>
+	   asp-route-lessonId="@Model.LessonId">Back to all problems</a>
 </div>
-@foreach (TestViewModel test in Model)
+@foreach (TestViewModel test in Model.Tests)
 {
 	<div>
 		@if (test.IsTrialTest)

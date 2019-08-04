@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.Infrastructure.Exceptions;
 using JudgeSystem.Web.InputModels.Test;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.AddAsync(test);
             await context.SaveChangesAsync();
 
-            await service.Delete(test);
+            await service.Delete(1);
 
             Assert.Empty(context.ExecutedTests);
             Assert.Empty(context.Tests);
@@ -58,7 +59,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateTestService(new List<Test>());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(new Test { Id = 99 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(999));
         }
 
         [Fact]
@@ -67,7 +68,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateTestService(testData);
 
-            var actualData = await service.GetById(3);
+            var actualData = await service.GetById<TestDto>(3);
             var expectedData = testData.First(x => x.Id == 3);
 
             Assert.Equal(expectedData.InputData, actualData.InputData);
@@ -81,7 +82,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testData = GetTestData();
             var service = await CreateTestService(testData);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById(4875));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<TestEditInputModel>(4875));
         }
 
         [Theory]
@@ -113,18 +114,18 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var testData = GetTestData();
             var service = await CreateTestService(testData);
-            var test = testData.First(x => x.Id == 3);
-            test.InputData = "test123";
-            test.OutputData = "321tset0";
-            test.IsTrialTest = false;
+            var testInputModel = new TestEditInputModel
+            {
+                Id = 3,
+                InputData = "test123",
+                OutputData = "321tset0",
+            };
 
-            await service.Update(test);
-            var actualTest = context.Tests.First(x => x.Id == test.Id);
+            await service.Update(testInputModel);
+            var actualTest = context.Tests.First(x => x.Id == testInputModel.Id);
 
-            Assert.Equal(actualTest.InputData, test.InputData);
-            Assert.Equal(actualTest.OutputData, test.OutputData);
-            Assert.Equal(actualTest.IsTrialTest, test.IsTrialTest);
-
+            Assert.Equal(actualTest.InputData, testInputModel.InputData);
+            Assert.Equal(actualTest.OutputData, testInputModel.OutputData);
         }
 
         [Fact]
@@ -132,7 +133,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateTestService(GetTestData());
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new Test() { Id = 99 }));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new TestEditInputModel() { Id = 99 }));
         }
 
         private async Task<TestService> CreateTestService(List<Test> tests, List<ExecutedTest> executedTests = null)

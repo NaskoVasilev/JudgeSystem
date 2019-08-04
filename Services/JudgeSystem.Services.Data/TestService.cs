@@ -25,36 +25,34 @@
 			this.executedTestService = executedTestService;
 		}
 
-		public async Task<Test> Add(TestInputModel model)
+		public async Task<TestDto> Add(TestInputModel model)
 		{
 			Test test = model.To<TestInputModel, Test>();
 			await repository.AddAsync(test);
 			await repository.SaveChangesAsync();
-			return test;
+			return test.To<TestDto>();
 		}
 
-		public async Task Delete(Test test)
+		public async Task Delete(int id)
 		{
-            if(!this.Exists(test.Id))
+            var test = await repository.All().FirstOrDefaultAsync(x => x.Id == id);
+            if(test == null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("test");
             }
-
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
-
-			repository.Delete(test);
+            repository.Delete(test);
 			await repository.SaveChangesAsync();
 		}
 
-		public async Task<Test> GetById(int id)
+		public async Task<TDestination> GetById<TDestination>(int id)
 		{
-            if (!this.Exists(id))
+            var test = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            if(test == null)
             {
                 throw new EntityNotFoundException();
             }
-
-            return await repository.All()
-				.FirstOrDefaultAsync(t => t.Id == id);
+            return test;
 		}
 
 		public IEnumerable<TestDataDto> GetTestsByProblemId(int problemId)
@@ -75,20 +73,18 @@
 				.ToList();
 		}
 
-		public async Task Update(Test test)
+		public async Task Update(TestEditInputModel model)
 		{
-            if(!this.Exists(test.Id))
+            var test = await repository.All().FirstOrDefaultAsync(x => x.Id == model.Id);
+            if(test == null)
             {
-                throw new EntityNotFoundException(nameof(test));
+                throw new EntityNotFoundException("test");
             }
 
-			repository.Update(test);
+            test.InputData = model.InputData.Trim();
+            test.OutputData = model.OutputData.Trim();
+            repository.Update(test);
 			await repository.SaveChangesAsync();
 		}
-
-        private bool Exists(int id)
-        {
-            return this.repository.All().Any(x => x.Id == id);
-        }
 	}
 }

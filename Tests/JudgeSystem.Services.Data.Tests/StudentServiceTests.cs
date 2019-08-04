@@ -1,4 +1,5 @@
-﻿using JudgeSystem.Data.Common.Repositories;
+﻿
+using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
@@ -286,7 +287,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new SchoolClass { ClassNumber = 12, ClassType = SchoolClassType.B },
             };
 
-            return new List<Student>
+            var students = new List<Student>
             {
                 new Student { Id = "id_1", Email = "student1@mail.bg", NumberInCalss= 1, SchoolClass = classes[0] },
                 new Student { Id = "id_6", Email = "student6@mail.bg", NumberInCalss= 14, SchoolClass = classes[2] },
@@ -298,6 +299,14 @@ namespace JudgeSystem.Services.Data.Tests
                 new Student { Id = "id_9", Email = "student9@mail.bg", NumberInCalss= 11, SchoolClass = classes[3] },
                 new Student { Id = "id_2", Email = "student2@mail.bg", NumberInCalss= 15, SchoolClass = classes[0] },
             };
+
+            foreach (var student in students)
+            {
+                student.User = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = student.Email };
+                student.IsActivated = true;
+            }
+
+            return students;
         }
     }
 }
