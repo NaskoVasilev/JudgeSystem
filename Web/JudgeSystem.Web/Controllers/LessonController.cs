@@ -1,97 +1,107 @@
-﻿namespace JudgeSystem.Web.Controllers
+﻿using System.Threading.Tasks;
+using System;
+
+using JudgeSystem.Common;
+using JudgeSystem.Services;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Web.InputModels.Lesson;
+using JudgeSystem.Data.Models;
+using JudgeSystem.Web.Dtos.Lesson;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using JudgeSystem.Web.ViewModels.Lesson;
+
+namespace JudgeSystem.Web.Controllers
 {
-	using System.Threading.Tasks;
-
-	using JudgeSystem.Common;
-	using JudgeSystem.Services;
-	using JudgeSystem.Services.Data;
-	using JudgeSystem.Web.InputModels.Lesson;
-	using JudgeSystem.Data.Models;
-
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Http;
-	using Microsoft.AspNetCore.Identity;
-    using System;
-    using JudgeSystem.Web.Dtos.Lesson;
-
     [Authorize]
-	public class LessonController : BaseController
-	{
-		private readonly ILessonService lessonService;
-		private readonly IContestService contestService;
-		private readonly IPasswordHashService passwordHashService;
-		private readonly UserManager<ApplicationUser> userManager;
+    public class LessonController : BaseController
+    {
+        private readonly ILessonService lessonService;
+        private readonly IContestService contestService;
+        private readonly IPasswordHashService passwordHashService;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IPracticeService practiceService;
 
-        public LessonController(ILessonService lessonService, 
+        public LessonController(ILessonService lessonService,
             IContestService contestService,
-			IPasswordHashService passwordHashService, 
+            IPasswordHashService passwordHashService,
             UserManager<ApplicationUser> userManager,
             IPracticeService practiceService)
-		{
-			this.lessonService = lessonService;
-			this.contestService = contestService;
-			this.passwordHashService = passwordHashService;
-			this.userManager = userManager;
+        {
+            this.lessonService = lessonService;
+            this.contestService = contestService;
+            this.passwordHashService = passwordHashService;
+            this.userManager = userManager;
             this.practiceService = practiceService;
         }
 
-		public async Task<IActionResult> Details(int id, int? contestId, int? practiceId)
-		{
-			var lesson = await lessonService.GetLessonInfo(id);
-			lesson.ContestId = contestId;
-			if (contestId.HasValue)
-			{
-				string userId = userManager.GetUserId(this.User);
-				await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
-			}
+        public async Task<IActionResult> Details(int id, int? contestId, int? practiceId)
+        {
+            var lesson = await lessonService.GetLessonInfo(id);
+            lesson.ContestId = contestId;
+            await AddUserToContestOrPracticeIfNotAdded(contestId, practiceId);
+
+            if (lesson.IsLocked)
+            {
+                return GetDetailsViewOrRedirectToEnterPasswordPage(lesson);
+            }
+
+            return View(lesson);
+        }
+
+        public IActionResult EnterPassword()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
+        {
+            var lesson = await lessonService.GetById<LessonDto>(model.Id);
+
+            if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
+            {
+                this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
+                return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
+            }
+
+            ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLessonPassword);
+            return View(model);
+        }
+
+        private async Task AddUserToContestOrPracticeIfNotAdded(int? contestId, int? practiceId)
+        {
+            string userId = userManager.GetUserId(this.User);
+            if (contestId.HasValue)
+            {
+                await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
+            }
             else
             {
-                if(!practiceId.HasValue)
+                if (!practiceId.HasValue)
                 {
                     throw new ArgumentException(GlobalConstants.InvalidPracticeId);
                 }
-                string userId = userManager.GetUserId(this.User);
                 await practiceService.AddUserToPracticeIfNotAdded(userId, practiceId.Value);
             }
+        }
 
-			string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
+        private IActionResult GetDetailsViewOrRedirectToEnterPasswordPage(LessonViewModel lesson)
+        {
+            string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 
-			if (lesson.IsLocked)
-			{
-				if (sessionValue != null && sessionValue == this.User.Identity.Name)
-				{
-					return View(lesson);
-				}
-				else
-				{
-					return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id, practiceId = lesson.PracticeId });
-				}
-			}
-
-			return View(lesson);
-		}
-
-		public IActionResult EnterPassword()
-		{
-			return View();
-		}
-
-        [ValidateAntiForgeryToken]
-		[HttpPost]
-		public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
-		{
-			var lesson = await lessonService.GetById<LessonDto>(model.Id);
-
-			if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
-			{
-				this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
-				return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
-			}
-
-			ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLessonPassword);
-			return View(model);
-		}
-	}
+            if (sessionValue != null && sessionValue == this.User.Identity.Name)
+            {
+                return View(lesson);
+            }
+            else
+            {
+                return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id, practiceId = lesson.PracticeId });
+            }
+        }
+    }
 }
