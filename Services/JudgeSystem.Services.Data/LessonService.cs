@@ -69,7 +69,7 @@ namespace JudgeSystem.Services.Data
         public async Task<TDestination> GetById<TDestination>(int id)
         {
             var lesson = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
-            if(lesson == null)
+            if (lesson == null)
             {
                 throw new EntityNotFoundException(nameof(lesson));
             }
@@ -105,7 +105,7 @@ namespace JudgeSystem.Services.Data
                 .To<LessonViewModel>()
                 .FirstOrDefaultAsync();
 
-            if(lesson == null)
+            if (lesson == null)
             {
                 throw new EntityNotFoundException(nameof(lesson));
             }
@@ -144,7 +144,7 @@ namespace JudgeSystem.Services.Data
         public async Task SetPassword(int id, string lessonPassword)
         {
             var lesson = await repository.FindAsync(id);
-            if(!string.IsNullOrEmpty(lesson.LessonPassword))
+            if (!string.IsNullOrEmpty(lesson.LessonPassword))
             {
                 throw new ArgumentException(ErrorMessages.LockedLesson);
             }
@@ -173,7 +173,15 @@ namespace JudgeSystem.Services.Data
             {
                 throw new ArgumentException(ErrorMessages.DiffrentLessonPasswords);
             }
-            lesson.LessonPassword = hashService.HashPassword(newPassword);
+
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                lesson.LessonPassword = null;
+            }
+            else
+            {
+                lesson.LessonPassword = hashService.HashPassword(newPassword);
+            }
 
             repository.Update(lesson);
             await repository.SaveChangesAsync();

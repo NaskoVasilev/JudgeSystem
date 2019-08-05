@@ -115,7 +115,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
             catch (ArgumentException ex)
             {
-                this.ModelState.AddModelError(string.Empty, ex.Message);
+                this.ModelState.AddModelError(nameof(LessonChangePasswordInputModel.OldPassword), ex.Message);
                 return View(model);
             }
         }
@@ -144,7 +144,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
             catch (ArgumentException ex)
             {
-                this.ModelState.AddModelError(string.Empty, ex.Message);
+                this.ModelState.AddModelError(nameof(LessonRemovePasswordInputModel.OldPassword), ex.Message);
                 return View();
             }
         }

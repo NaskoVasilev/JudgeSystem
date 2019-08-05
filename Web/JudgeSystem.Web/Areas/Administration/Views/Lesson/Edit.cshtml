@@ -1,12 +1,12 @@
 ﻿@model LessonEditInputModel
 
 @{
-    ViewBag["Title"] = "Lesson Edit";
+    ViewData["Title"] = "Lesson Edit";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center mb-4">@ViewData["Title"]</h1>
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-5 mx-auto">
 		<section>
 			<form method="post">
 				<div asp-validation-summary="All" class="text-danger"></div>
