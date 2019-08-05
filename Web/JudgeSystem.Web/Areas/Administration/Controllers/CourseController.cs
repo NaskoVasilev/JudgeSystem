@@ -39,7 +39,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public IActionResult Edit(int id)
         {
-            var course = courseService.GetById<CourseInputModel>(id);
+            var course = courseService.GetById<CourseEditModel>(id);
             return View(course);
         }
 

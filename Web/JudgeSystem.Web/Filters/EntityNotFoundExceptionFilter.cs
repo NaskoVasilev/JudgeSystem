@@ -8,17 +8,17 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace JudgeSystem.Web.Filters
 {
-    public class EntityNotFoundExceptionFilter : IExceptionFilter
+    public class EntityNotFoundExceptionFilter : ExceptionFilterAttribute
     {
         private const string EntityNotFoundErrorViewName = "EntityNotFoundError";
         private readonly IModelMetadataProvider modelMetadataProvider;
-
+        
         public EntityNotFoundExceptionFilter(IModelMetadataProvider modelMetadataProvider)
         {
             this.modelMetadataProvider = modelMetadataProvider;
         }
 
-        public void OnException(ExceptionContext context)
+        public override void OnException(ExceptionContext context)
         {
             if(context.Exception is EntityNotFoundException)
             {

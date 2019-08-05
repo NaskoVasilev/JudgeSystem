@@ -18,18 +18,15 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		private const int DefaultPage = 1;
 
 		private readonly IContestService contestService;
-		private readonly ICourseService courseService;
 		private readonly ILessonService lessonService;
         private readonly ContestReslutsHelper contestReslutsHelper;
 
         public ContestController(
             IContestService contestService, 
-            ICourseService courseService, 
             ILessonService lessonService,
             ContestReslutsHelper contestReslutsHelper)
 		{
 			this.contestService = contestService;
-			this.courseService = courseService;
 			this.lessonService = lessonService;
             this.contestReslutsHelper = contestReslutsHelper;
         }

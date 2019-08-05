@@ -17,9 +17,11 @@ $(".courseDeleteBtn").on('click', (e) => {
 		.done((response) => {
 			$(button.parentElement.parentElement.parentElement).hide();
 			$('#course-' + lessonId).hide();
-			showInfo(response);
+            showInfo(response);
+            console.log(response)
 		})
 		.fail((error) => {
 			showError(error.responseText);
+            console.log(error);
 		});
 });
