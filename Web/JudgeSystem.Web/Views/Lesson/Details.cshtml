@@ -42,7 +42,13 @@
         <ul class="list-group d-flex flex-md-row">
             @foreach (var problem in Model.Problems)
             {
-                <li class="list-group-item problem-name" data-type="@problem.SubmissionType" data-id="@problem.Id">@($"{(++problemNumber).ToString("D2")}. {problem.Name}")</li>
+                <li class="list-group-item problem-name" data-type="@problem.SubmissionType" data-id="@problem.Id">
+                    @($"{(++problemNumber).ToString("D2")}. {problem.Name}")
+                    @if(problem.IsExtraTask)
+                    {
+                        <span class="text-success ml-2 font-size-10"><i class="fas fa-star"></i></span>
+                    }
+                </li>
             }
             @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
@@ -79,18 +85,19 @@
 
     </div>
 
-    <form id="zip-file" class="col-md-6">
-        <div class="file-upload-wrapper my-4" data-text="Select your files!">
-            <input name="file-upload-field" type="file" class="file-upload-field w-100" value="">
-        </div>
-    </form>
-
-    <div class="code-wrapper">
-        <textarea class="d-none" name="code" id="code-holder"></textarea>
-    </div>
-
-    @if(Model.Problems.Count > 0)
+    @if (Model.Problems.Count > 0)
     {
+
+        <form id="zip-file" class="col-md-6">
+            <div class="file-upload-wrapper my-4" data-text="Select your files!">
+                <input name="file-upload-field" type="file" class="file-upload-field w-100" value="">
+            </div>
+        </form>
+
+        <div class="code-wrapper">
+            <textarea class="d-none" name="code" id="code-holder"></textarea>
+        </div>
+
         <div class="mt-3">
             <p class="my-1">
                 <span class="font-weight-bold">Allowed working time: </span>
@@ -103,49 +110,57 @@
                 <span class="font-italic">MB</span>
             </p>
         </div>
+
+        <div class="button-holder">
+            @if (Model.ContestId.HasValue)
+            {
+                <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
+            }
+            else
+            {
+                <button class="btn btn-secondary" id="submit-btn" data-practiceId="@Model.PracticeId">Submit</button>
+            }
+        </div>
+
+        <div id="submissions-holder" class="text-center border mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Points</th>
+                        <th scope="col">Time and memory used</th>
+                        <th scope="col">Submission Date</th>
+                        <th scope="col">More info</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <nav aria-label="Page navigation example" class="ml-3">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" id="previous" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item page-number"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item">
+                        <a class="page-link" id="next" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+    else
+    {
+        <hr />
+        <p class="text-info font-size-20 text-center">Currently there are no tasks for this problem!</p>
+        <hr />
+
     }
 
-    <div class="button-holder">
-        @if (Model.ContestId.HasValue)
-        {
-            <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
-        }
-        else
-        {
-            <button class="btn btn-secondary" id="submit-btn" data-practiceId="@Model.PracticeId">Submit</button>
-        }
-    </div>
-
-    <div id="submissions-holder" class="text-center border mt-3">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Points</th>
-                    <th scope="col">Time and memory used</th>
-                    <th scope="col">Submission Date</th>
-                    <th scope="col">More info</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <nav aria-label="Page navigation example" class="ml-3">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" id="previous" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item page-number"><a class="page-link" href="#">1</a></li>
-                <li class="page-item">
-                    <a class="page-link" id="next" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
 
 

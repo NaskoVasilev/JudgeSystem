@@ -7,5 +7,7 @@ namespace JudgeSystem.Web.ViewModels.Search
 		public int Id { get; set; }
 
 		public string Name { get; set; }
-	}
+
+        public int PracticeId { get; set; }
+    }
 }

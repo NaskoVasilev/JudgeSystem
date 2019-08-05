@@ -9,5 +9,7 @@ namespace JudgeSystem.Web.ViewModels.Search
         public string LessonName { get; set; }
 
         public int LessonId { get; set; }
+
+        public int LessonPracticeId { get; set; }
     }
 }

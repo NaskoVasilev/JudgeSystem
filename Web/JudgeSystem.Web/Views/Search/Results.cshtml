@@ -31,8 +31,11 @@ else
 							<div class="col-md-3 col-sm-6 col-12">
 								<div class="card">
 									<div class="card-body">
-										<a class="card-text text-secondary" asp-area="" asp-controller="Lesson" asp-action="Details"
-										   asp-route-id="@Model.Lessons[j].Id">
+										<a class="card-text text-secondary" 
+                                           asp-area="" asp-controller="Lesson" 
+                                           asp-action="Details"
+										   asp-route-id="@Model.Lessons[j].Id"
+                                           asp-route-practiceId="@Model.Lessons[j].PracticeId">
 											@Model.Lessons[j].Name
 										</a>
 									</div>
@@ -61,8 +64,11 @@ else
 								<div class="card">
 									<div class="card-body">
 										<p class="card-text">@Model.Problems[j].Name</p>
-										<a class="card-text text-secondary" asp-area="" asp-controller="Lesson" asp-action="Details"
-										   asp-route-id="@Model.Problems[j].LessonId" asp-fragment="@Model.Problems[j].Name">
+										<a class="card-text text-secondary" asp-area="" 
+                                           asp-controller="Lesson" asp-action="Details"
+										   asp-route-id="@Model.Problems[j].LessonId" 
+                                           asp-route-practiceId="@Model.Problems[j].LessonPracticeId"
+                                           asp-fragment="@Model.Problems[j].Name">
 											@Model.Problems[j].LessonName
 										</a>
 									</div>

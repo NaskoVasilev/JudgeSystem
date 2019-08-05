@@ -154,6 +154,11 @@ namespace JudgeSystem.Web.Controllers
 			}
 
 			var tests = testService.GetTestsByProblemId(problemId).ToList();
+            if(tests.Count == 0)
+            {
+                return;
+            }
+
 			CSharpChecker checker = new CSharpChecker();
             var problemConstraints = problemService.GetProblemConstraints(problemId);
             var memoryLimit = Utility.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;

@@ -100,8 +100,6 @@ $('#submit-btn').on('click', () => {
         formData.append('practiceId', practiceId);
     }
 
-    console.log(formData);
-
 	let tr = $('<tr></tr>');
 	let pointsTd = $('<td></td>');
 	let spinner = $('<div class="spinner-border text-success" role="status"></div>');
@@ -151,11 +149,13 @@ $('#submit-btn').on('click', () => {
 					}
 				})
 				.fail((error) => {
-					console.log(error);
+                    showError(error.responseText);
+                    hideLoader();
 				});
 		})
 		.fail((error) => {
             showError(error.responseText);
+            hideLoader();
 		});
 });
 

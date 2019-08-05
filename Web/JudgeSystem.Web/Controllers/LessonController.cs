@@ -69,7 +69,7 @@ namespace JudgeSystem.Web.Controllers
                 return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
             }
 
-            ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLessonPassword);
+            ModelState.AddModelError(nameof(LessonPasswordInputModel.LessonPassword), ErrorMessages.InvalidLessonPassword);
             return View(model);
         }
 
