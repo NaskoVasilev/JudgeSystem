@@ -5,6 +5,11 @@
         #region User models constants
         public const int UserFirstNameMaxLength = 30;
         public const int UserSurnameMaxLength = 30;
+        public const int UserPasswordMinLength = 5;
+        public const int UserPasswordMaxLength = 50;
+        public const string UserNewPasswordDisplayName = "New password";
+        public const string UserOldPasswordDisplayName = "Current password";
+        public const string UserConfirmPasswordDisplayName = "Confirm new password";
         #endregion
 
         #region Contest models consatnts

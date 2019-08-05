@@ -11,5 +11,8 @@
 		public const string SuccessfullyEditMessage = "The \"{0}\" was successfully edited.";
 
 		public const string PasswordRemoved = "The password of the lesson \"{0}\" was removed successfully.";
-	}
+
+        public const string ChangeUserPasswordSuccessfully = "Your password has been changed.";
+
+    }
 }
