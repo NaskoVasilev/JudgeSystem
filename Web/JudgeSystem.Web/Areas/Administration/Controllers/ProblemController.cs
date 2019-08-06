@@ -103,7 +103,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> AddTest(int problemId)
 		{
-            var model = new TestInputModel { LessonId = await problemService.GetLessonId(problemId) };
+            string problemName = problemService.GetProblemName(problemId);
+            var model = new TestInputModel { LessonId = await problemService.GetLessonId(problemId), ProblemName = problemName };
 			return View(model);
 		}
 

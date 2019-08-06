@@ -28,5 +28,7 @@ namespace JudgeSystem.Web.InputModels.Test
 
         [IgnoreMap]
         public int LessonId { get; set; }
+
+        public string ProblemName { get; set; }
     }
 }
