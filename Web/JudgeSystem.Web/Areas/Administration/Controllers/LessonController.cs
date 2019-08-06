@@ -84,7 +84,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             try
             {
                 await lessonService.SetPassword(model.Id, model.LessonPassword);
-                string infoMessage = string.Format(InfoMessages.AddPasswordSuccessfully, lesson.Name);
+                string infoMessage = string.Format(InfoMessages.AddLessonPasswordSuccessfully, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (ArgumentException ex)
@@ -110,7 +110,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             try
             {
                 var lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, model.NewPassword);
-                string infoMessage = string.Format(InfoMessages.ChangePasswordSuccessfully, lesson.Name);
+                string infoMessage = string.Format(InfoMessages.ChangeLessonPasswordSuccessfully, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (ArgumentException ex)
@@ -139,7 +139,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             try
             {
                 LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, null);
-                string infoMessage = string.Format(InfoMessages.PasswordRemoved, lesson.Name);
+                string infoMessage = string.Format(InfoMessages.LessonPasswordRemoved, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (ArgumentException ex)

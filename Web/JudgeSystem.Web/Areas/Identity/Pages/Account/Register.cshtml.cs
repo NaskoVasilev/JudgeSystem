@@ -74,7 +74,7 @@
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    this.TempData[GlobalConstants.InfoKey] = GlobalConstants.EmailConfirmMessage;
+                    this.TempData[GlobalConstants.InfoKey] = InfoMessages.VerificationEmailSentMessage;
                     return this.LocalRedirect(returnUrl);
                 }
 

@@ -6,7 +6,7 @@
 
 		public const string DiffrentLessonPasswords = "Invalid old password.";
 
-		public const string InvalidLessonPassword = "Invalid password.";
+		public const string InvalidPassword = "Invalid password.";
 
 		public const string TooShorPasswordMessage = "The lesson password must be at least five symbols.";
 
@@ -35,5 +35,7 @@
         public const string UnsupportedFileFormat = "{0} is not supported file format.";
 
         public const string WrongFileFormat = "Some of the files have worng format. Check extensions and try again.";
+
+        public const string InvalidPracticeId = "Practice id must be specified";
     }
 }

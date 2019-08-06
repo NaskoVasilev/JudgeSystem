@@ -2,7 +2,7 @@
 @model PersonalDataModel
 @{
     ViewData["Title"] = "Personal Data";
-    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+    ViewData[IdentityAreaConstants.ActivePageKey] = ManageNavPages.PersonalData;
 }
 
 <h4>@ViewData["Title"]</h4>

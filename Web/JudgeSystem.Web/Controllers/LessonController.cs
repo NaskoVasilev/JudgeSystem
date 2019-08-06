@@ -69,7 +69,7 @@ namespace JudgeSystem.Web.Controllers
                 return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
             }
 
-            ModelState.AddModelError(nameof(LessonPasswordInputModel.LessonPassword), ErrorMessages.InvalidLessonPassword);
+            ModelState.AddModelError(nameof(LessonPasswordInputModel.LessonPassword), ErrorMessages.InvalidPassword);
             return View(model);
         }
 
@@ -84,7 +84,7 @@ namespace JudgeSystem.Web.Controllers
             {
                 if (!practiceId.HasValue)
                 {
-                    throw new ArgumentException(GlobalConstants.InvalidPracticeId);
+                    throw new ArgumentException(ErrorMessages.InvalidPracticeId);
                 }
                 await practiceService.AddUserToPracticeIfNotAdded(userId, practiceId.Value);
             }

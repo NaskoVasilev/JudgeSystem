@@ -10,6 +10,7 @@
         public const string UserNewPasswordDisplayName = "New password";
         public const string UserOldPasswordDisplayName = "Current password";
         public const string UserConfirmPasswordDisplayName = "Confirm new password";
+        public const string UserPhoneNumberDisplayName = "Phone number";
         #endregion
 
         #region Contest models consatnts

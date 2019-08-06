@@ -1,21 +1,20 @@
-﻿namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-
-#pragma warning disable SA1649 // File name should match first type name
     public class IndexModel : PageModel
-#pragma warning restore SA1649 // File name should match first type name
     {
+        private const string ConfirmationPageUrl = "/Account/ConfirmEmail";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IEmailSender emailSender;
@@ -43,24 +42,14 @@
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
-            if (user == null)
-            {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
-            }
-
-            var userName = await this.userManager.GetUserNameAsync(user);
-            var email = await this.userManager.GetEmailAsync(user);
-            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
-
-            this.Username = userName;
+            this.Username = user.UserName;
+            this.IsEmailConfirmed = user.EmailConfirmed;
 
             this.Input = new InputModel
             {
-                Email = email,
-                PhoneNumber = phoneNumber,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
             };
-
-            this.IsEmailConfirmed = await this.userManager.IsEmailConfirmedAsync(user);
 
             return this.Page();
         }
@@ -73,35 +62,26 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            if (user == null)
-            {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
-            }
-
-            var email = await this.userManager.GetEmailAsync(user);
-            if (this.Input.Email != email)
+            if (this.Input.Email != user.Email)
             {
                 var setEmailResult = await this.userManager.SetEmailAsync(user, this.Input.Email);
                 if (!setEmailResult.Succeeded)
                 {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
+                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
             }
 
-            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
-            if (this.Input.PhoneNumber != phoneNumber)
+            if (this.Input.PhoneNumber != user.PhoneNumber)
             {
                 var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
 
             await this.signInManager.RefreshSignInAsync(user);
-            this.StatusMessage = "Your profile has been updated";
+            this.StatusMessage = InfoMessages.SuccessfullyUpdatedProfile;
             return this.RedirectToPage();
         }
 
@@ -113,25 +93,18 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            if (user == null)
-            {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
-            }
-
-            var userId = await this.userManager.GetUserIdAsync(user);
-            var email = await this.userManager.GetEmailAsync(user);
             var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = this.Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = userId, code = code },
-                protocol: this.Request.Scheme);
-            await this.emailSender.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            this.StatusMessage = "Verification email sent. Please check your email.";
+            var callbackUrl = this.Url.Page(
+                ConfirmationPageUrl,
+                pageHandler: null,
+                values: new { userId = user.Id, code },
+                protocol: this.Request.Scheme);
+
+            string message = string.Format(GlobalConstants.EmailConfirmationMessage, HtmlEncoder.Default.Encode(callbackUrl));
+            await this.emailSender.SendEmailAsync(user.Email, GlobalConstants.ConfirmEmailSubject, message);
+
+            this.StatusMessage = InfoMessages.VerificationEmailSentMessage;
             return this.RedirectToPage();
         }
 
@@ -142,7 +115,7 @@
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = ModelConstants.UserPhoneNumberDisplayName)]
             public string PhoneNumber { get; set; }
         }
     }
