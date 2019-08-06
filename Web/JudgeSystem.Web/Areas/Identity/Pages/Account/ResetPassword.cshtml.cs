@@ -1,20 +1,21 @@
-﻿namespace JudgeSystem.Web.Areas.Identity.Pages.Account
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
-
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-
     [AllowAnonymous]
-#pragma warning disable SA1649 // File name should match first type name
     public class ResetPasswordModel : PageModel
-#pragma warning restore SA1649 // File name should match first type name
     {
+        private const string LoginPageRoute = "./Login";
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public ResetPasswordModel(UserManager<ApplicationUser> userManager)
@@ -29,7 +30,7 @@
         {
             if (code == null)
             {
-                return this.BadRequest("A code must be supplied for password reset.");
+                throw new ArgumentException("A code must be supplied for password reset.");
             }
             else
             {
@@ -37,6 +38,7 @@
                 {
                     Code = code,
                 };
+
                 return this.Page();
             }
         }
@@ -52,13 +54,13 @@
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return this.RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage(LoginPageRoute);
             }
 
             var result = await this.userManager.ResetPasswordAsync(user, this.Input.Code, this.Input.Password);
             if (result.Succeeded)
             {
-                return this.RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage(LoginPageRoute);
             }
 
             foreach (var error in result.Errors)
@@ -76,13 +78,13 @@
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(ModelConstants.UserPasswordMaxLength, MinimumLength = ModelConstants.UserPasswordMinLength)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = ModelConstants.UserConfirmPasswordDisplayName)]
+            [Compare(nameof(Password))]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }

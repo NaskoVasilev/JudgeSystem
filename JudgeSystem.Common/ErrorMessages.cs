@@ -37,5 +37,7 @@
         public const string WrongFileFormat = "Some of the files have worng format. Check extensions and try again.";
 
         public const string InvalidPracticeId = "Practice id must be specified";
+
+        public const string InvalidLoginAttempt = "Invalid login attempt.";
     }
 }

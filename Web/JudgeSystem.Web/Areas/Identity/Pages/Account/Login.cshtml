@@ -5,9 +5,9 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5 mx-auto">
         <section>
             <form id="account" method="post">
                 <hr />
@@ -22,23 +22,19 @@
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
+                <div class="custom-control custom-checkbox mb-3 ml-1">
+                    <input type="checkbox" asp-for="Input.RememberMe" class="custom-control-input" />
+                    <label class="custom-control-label" asp-for="Input.RememberMe"></label>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
                 <div class="form-group">
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" class="text-success font-weight-bold" asp-page="./ForgotPassword">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" class="text-info font-weight-bold" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
                 </div>
             </form>

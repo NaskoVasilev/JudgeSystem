@@ -1,34 +1,33 @@
-﻿namespace JudgeSystem.Web.Areas.Identity.Pages.Account
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using JudgeSystem.Common;
+using JudgeSystem.Data.Models;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
+
+namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-    using JudgeSystem.Common;
-    using JudgeSystem.Data.Models;
-
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-    using Microsoft.Extensions.Logging;
-
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private const string EmailConfirmationUrl = "/Account/ConfirmEmail";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
         }
@@ -64,15 +63,13 @@
                     await userManager.AddToRoleAsync(user, GlobalConstants.BaseRoleName);
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = this.Url.Page(
-                        "/Account/ConfirmEmail",
+                        EmailConfirmationUrl,
                         pageHandler: null,
-                        values: new { userId = user.Id, code = code },
+                        values: new { userId = user.Id, code },
                         protocol: this.Request.Scheme);
 
-                    await this.emailSender.SendEmailAsync(
-                        this.Input.Email,
-                        "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string message = string.Format(GlobalConstants.EmailConfirmationMessage, HtmlEncoder.Default.Encode(callbackUrl));
+                    await this.emailSender.SendEmailAsync(this.Input.Email, GlobalConstants.ConfirmEmailSubject, message);
 
                     this.TempData[GlobalConstants.InfoKey] = InfoMessages.VerificationEmailSentMessage;
                     return this.LocalRedirect(returnUrl);
@@ -84,38 +81,35 @@
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return this.Page();
         }
 
         public class InputModel
         {
-			[MinLength(3), MaxLength(30)]
+			[StringLength(ModelConstants.UserFirstNameMaxLength, MinimumLength = ModelConstants.UserFirstNameMinLength)]
 			[Required]
 			public string Name { get; set; }
 
-			[MinLength(3), MaxLength(30)]
-			[Required]
+            [StringLength(ModelConstants.UserSurnameMaxLength, MinimumLength = ModelConstants.UserSurnameMinLength)]
+            [Required]
 			public string Surname { get; set; }
 
-			[Required]
-			[MinLength(5), MaxLength(30)]
+            [StringLength(ModelConstants.UserUsernameMaxLength, MinimumLength = ModelConstants.UserUsernameMinLength)]
+            [Required]
 			public string Username { get; set; }
 
 			[Required]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(ModelConstants.UserPasswordMaxLength, MinimumLength = ModelConstants.UserPasswordMinLength)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = ModelConstants.UserConfirmPasswordDisplayName)]
+            [Compare(nameof(Password))]
             public string ConfirmPassword { get; set; }
         }
     }

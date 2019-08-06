@@ -43,6 +43,8 @@
         public const string StudentProfileActivationEmailSubject = "Student profile activation";
         public const string ConfirmEmailSubject = "Confirm your email";
         public static string EmailConfirmationMessage = "Please confirm your account by <a href='{0}'>clicking here</a>.";
+        public const string ResetPasswordEmailSubject = "Reset Password";
+        public const string PasswordResetMessage = "Please reset your password by <a href='{0}'>clicking here</a>.";
         #endregion
 
         #region Validations and constraints

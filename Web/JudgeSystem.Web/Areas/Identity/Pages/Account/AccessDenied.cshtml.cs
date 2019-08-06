@@ -1,10 +1,8 @@
-﻿namespace JudgeSystem.Web.Areas.Identity.Pages.Account
-{
-    using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-#pragma warning disable SA1649 // File name should match first type name
+namespace JudgeSystem.Web.Areas.Identity.Pages.Account
+{
     public class AccessDeniedModel : PageModel
-#pragma warning restore SA1649 // File name should match first type name
     {
         public void OnGet()
         {

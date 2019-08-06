@@ -17,5 +17,7 @@
         public const string SuccessfullyUpdatedProfile = "Your profile has been updated";
 
         public const string VerificationEmailSentMessage = "Verification email sent. Please check your email";
+
+        public const string SuccessfullyConfirmedEmail = "Your email was successfully confirmed.";
     }
 }
