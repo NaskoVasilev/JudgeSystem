@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using JudgeSystem.Web.ViewModels.Lesson;
+using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -84,7 +85,7 @@ namespace JudgeSystem.Web.Controllers
             {
                 if (!practiceId.HasValue)
                 {
-                    throw new ArgumentException(ErrorMessages.InvalidPracticeId);
+                    throw new BadRequestException(ErrorMessages.InvalidPracticeId);
                 }
                 await practiceService.AddUserToPracticeIfNotAdded(userId, practiceId.Value);
             }

@@ -9,6 +9,7 @@ using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Dtos.Lesson;
 
 using Microsoft.AspNetCore.Mvc;
+using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -87,7 +88,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 string infoMessage = string.Format(InfoMessages.AddLessonPasswordSuccessfully, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-            catch (ArgumentException ex)
+            catch (BadRequestException ex)
             {
                 return ShowError(ex.Message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
@@ -113,7 +114,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 string infoMessage = string.Format(InfoMessages.ChangeLessonPasswordSuccessfully, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-            catch (ArgumentException ex)
+            catch (BadRequestException ex)
             {
                 this.ModelState.AddModelError(nameof(LessonChangePasswordInputModel.OldPassword), ex.Message);
                 return View(model);
@@ -142,7 +143,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 string infoMessage = string.Format(InfoMessages.LessonPasswordRemoved, lesson.Name);
                 return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
-            catch (ArgumentException ex)
+            catch (BadRequestException ex)
             {
                 this.ModelState.AddModelError(nameof(LessonRemovePasswordInputModel.OldPassword), ex.Message);
                 return View();

@@ -91,29 +91,6 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expectedIds, string.Join(", ", actualSubmissions.Select(x => x.Id)));
         }
 
-        [Fact]
-        public async Task Update_WithValidData_ShouldWorkCorrect()
-        {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
-            var submission = this.context.Submissions.Find(2);
-            submission.ContestId = 3;
-
-            await service.Update(submission);
-            var expecctedSubmission = this.context.Submissions.Find(2);
-
-            Assert.Equal(expecctedSubmission.ContestId, submission.ContestId);
-        }
-
-        [Fact]
-        public async Task Update_WithInValidId_ShouldThrowEntityNotFoundException()
-        {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
-
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new Submission { Id = 446546}));
-        }
-
         [Theory]
         [InlineData(3, "me", 2)]
         [InlineData(4, "me", 0)]
@@ -281,7 +258,7 @@ namespace JudgeSystem.Services.Data.Tests
             await this.context.Submissions.AddRangeAsync(testData);
             await this.context.SaveChangesAsync();
             IRepository<Submission> repository = new EfRepository<Submission>(this.context);
-            var service = new SubmissionService(repository, this.estimator);
+            var service = new SubmissionService(repository, this.estimator, null, null, null, null);
             return service;
         }
 
@@ -289,7 +266,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IRepository<Submission>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new SubmissionService(reposotiryMock.Object, this.estimator);
+            return new SubmissionService(reposotiryMock.Object, this.estimator, null, null, null, null);
         }
 
         private List<Submission> GetDetailedTestData()

@@ -101,7 +101,7 @@ namespace JudgeSystem.Services.Data
 		{
             if(string.IsNullOrEmpty(keyword))
             {
-                throw new ArgumentException(ErrorMessages.InvalidSearchKeyword);
+                throw new BadRequestException(ErrorMessages.InvalidSearchKeyword);
             }
 
 			keyword = keyword.ToLower();

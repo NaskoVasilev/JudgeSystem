@@ -131,12 +131,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowArgumentException(string keyword)
+        public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowBadRequestException(string keyword)
         {
             var service = await CreateProblemService(GetTestData());
             await context.SaveChangesAsync();
 
-            var exception = Assert.Throws<ArgumentException>(() => service.SearchByName(keyword));
+            var exception = Assert.Throws<BadRequestException>(() => service.SearchByName(keyword));
             Assert.Equal(exception.Message, ErrorMessages.InvalidSearchKeyword);
         }
 

@@ -17,6 +17,9 @@
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.Infrastructure\JudgeSystem.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.InputModels\JudgeSystem.Web.InputModels.csproj" />
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.ViewModels\JudgeSystem.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Checkers\JudgeSystem.Checkers.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Compilers\JudgeSystem.Compilers.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
     <ProjectReference Include="..\JudgeSystem.Services\JudgeSystem.Services.csproj" />
   </ItemGroup>

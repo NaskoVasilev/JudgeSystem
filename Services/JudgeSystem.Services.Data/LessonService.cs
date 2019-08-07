@@ -129,7 +129,7 @@ namespace JudgeSystem.Services.Data
         {
             if (string.IsNullOrEmpty(keyword))
             {
-                throw new ArgumentException(ErrorMessages.InvalidSearchKeyword);
+                throw new BadRequestException(ErrorMessages.InvalidSearchKeyword);
             }
 
             keyword = keyword.ToLower();
@@ -146,7 +146,7 @@ namespace JudgeSystem.Services.Data
             var lesson = await repository.FindAsync(id);
             if (!string.IsNullOrEmpty(lesson.LessonPassword))
             {
-                throw new ArgumentException(ErrorMessages.LockedLesson);
+                throw new BadRequestException(ErrorMessages.LockedLesson);
             }
 
             lesson.LessonPassword = hashService.HashPassword(lessonPassword);
@@ -171,7 +171,7 @@ namespace JudgeSystem.Services.Data
             var lesson = await repository.FindAsync(lessonId);
             if (lesson.LessonPassword != hashService.HashPassword(oldPassword))
             {
-                throw new ArgumentException(ErrorMessages.DiffrentLessonPasswords);
+                throw new BadRequestException(ErrorMessages.DiffrentLessonPasswords);
             }
 
             if (string.IsNullOrEmpty(newPassword))

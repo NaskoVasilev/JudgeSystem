@@ -52,9 +52,10 @@
         #endregion
 
         #region Submissions and problems related constants
+        public const string cSharpFileExtension = ".cs";
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
-        public const int MaxSubmissionCodeLength = 15000;
+        public const int MaxSubmissionCodeLength = 10000;
         public const double DefaultAllowedMemoryInMegaBytes = 30;
         public const int DefaultAllowedTimeInMilliseconds = 200;
         public const int MinAllowedMemoryInMegaBytes = 10;

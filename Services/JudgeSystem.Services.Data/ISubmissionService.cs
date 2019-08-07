@@ -1,17 +1,15 @@
-﻿namespace JudgeSystem.Services.Data
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using JudgeSystem.Web.InputModels.Submission;
+using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Web.ViewModels.Submission;
+
+namespace JudgeSystem.Services.Data
 {
-	using System.Threading.Tasks;
-	using JudgeSystem.Web.InputModels.Submission;
-	using JudgeSystem.Data.Models;
-	using JudgeSystem.Web.Dtos.Submission;
-	using System.Collections.Generic;
-	using JudgeSystem.Web.ViewModels.Submission;
-
-	public interface ISubmissionService
+    public interface ISubmissionService
 	{
-		Task<Submission> Create(SubmissionInputModel model, string userId);
-
-		Task Update(Submission submission);
+		Task<SubmissionDto> Create(SubmissionInputModel model, string userId);
 
 		IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage);
 
@@ -34,5 +32,7 @@
         IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndPracticeId(int practiceId, int problemId, string userId, int page, int submissionsPerPage);
 
         int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId);
+
+        Task ExecuteSubmission(int submissionId, List<string> sourceCodes);
     }
 }

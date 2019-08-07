@@ -189,12 +189,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowArgumentException(string keyword)
+        public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowBadRequestException(string keyword)
         {
             var service = await CreateLessonService(GetTestData());
             await context.SaveChangesAsync();
 
-            var exception = Assert.Throws<ArgumentException>(() => service.SearchByName(keyword));
+            var exception = Assert.Throws<BadRequestException>(() => service.SearchByName(keyword));
             Assert.Equal(exception.Message, ErrorMessages.InvalidSearchKeyword);
         }
 
@@ -239,14 +239,14 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task SetPassword_ToLessonWithAlreadyHasPassword_ShouldThrwowArgumentException()
+        public async Task SetPassword_ToLessonWithAlreadyHasPassword_ShouldThrwowBadRequestException()
         {
             var testData = GetTestData();
             var lessonService = await CreateLessonService(testData);
             int id = context.Lessons.First().Id;
             await AddLessonWithPassword();
 
-            await Assert.ThrowsAsync<ArgumentException>(() => lessonService.SetPassword(9999, "dfjkdshjkf"));
+            await Assert.ThrowsAsync<BadRequestException>(() => lessonService.SetPassword(9999, "dfjkdshjkf"));
         }
 
         [Fact]
@@ -272,13 +272,13 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task UpdatePassword_WithDifferntOldPassword_ShouldThrowArgumentException()
+        public async Task UpdatePassword_WithDifferntOldPassword_ShouldThrowBadRequestException()
         {
             var testData = GetTestData();
             var lessonService = await CreateLessonService(testData);
             await AddLessonWithPassword();
 
-            await Assert.ThrowsAsync<ArgumentException>(() => lessonService.UpdatePassword(9999, "qwe123", "132456"));
+            await Assert.ThrowsAsync<BadRequestException>(() => lessonService.UpdatePassword(9999, "qwe123", "132456"));
         }
 
         [Fact]
