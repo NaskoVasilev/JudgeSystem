@@ -37,6 +37,9 @@
         #region Pagination constants
         public const int PaginationOffset = 5;
         public const int SubmissionsPerPage = 5;
+        public const string QueryStringDelimiter = "&";
+        public const string ProblemIdKey = "problemId";
+        public const string PageKey = "page";
         #endregion
 
         #region Email constants

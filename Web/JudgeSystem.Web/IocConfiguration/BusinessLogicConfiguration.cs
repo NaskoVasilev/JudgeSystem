@@ -30,7 +30,6 @@ namespace JudgeSystem.Web.IocConfiguration
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IStudentProfileService, StudentProfileService>();
             services.AddTransient<IUtilityService, UtilityService>();
-            services.AddTransient<ContestReslutsHelper>();
 
             return services;
         }

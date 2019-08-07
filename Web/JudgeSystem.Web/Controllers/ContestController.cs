@@ -18,16 +18,13 @@ namespace JudgeSystem.Web.Controllers
 
 		private readonly IContestService contestService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly ContestReslutsHelper contestReslutsHelper;
 
         public ContestController(
             IContestService contestService,
-            UserManager<ApplicationUser> userManager,
-            ContestReslutsHelper contestReslutsHelper)
+            UserManager<ApplicationUser> userManager)
 		{
 			this.contestService = contestService;
             this.userManager = userManager;
-            this.contestReslutsHelper = contestReslutsHelper;
         }
 
         [EndpointExceptionFilter]
@@ -44,7 +41,7 @@ namespace JudgeSystem.Web.Controllers
             string userId = userManager.GetUserId(this.User);
             string baseUrl = $"/Contest/MyResults?contestId={contestId}";
 
-            var model = await contestReslutsHelper.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            var model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View($"Areas/{GlobalConstants.AdministrationArea}/Views/Contest/Submissions.cshtml", model);
         }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.ViewModels.Contest;
 using JudgeSystem.Web.ViewModels.Problem;
@@ -23,13 +25,26 @@ namespace JudgeSystem.Services.Data
 
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
+        private readonly ILessonService lessonService;
+        private readonly IProblemService problemService;
+        private readonly ISubmissionService submissionService;
+        private readonly IPaginationService paginationService;
 
-		public ContestService(IDeletableEntityRepository<Contest> repository,
-			IRepository<UserContest> userContestRepository)
+        public ContestService(
+            IDeletableEntityRepository<Contest> repository,
+			IRepository<UserContest> userContestRepository,
+            ILessonService lessonService,
+            IProblemService problemService,
+            ISubmissionService submissionService,
+            IPaginationService paginationService)
 		{
 			this.repository = repository;
 			this.userContestRepository = userContestRepository;
-		}
+            this.lessonService = lessonService;
+            this.problemService = problemService;
+            this.submissionService = submissionService;
+            this.paginationService = paginationService;
+        }
 
 		public async Task<bool> AddUserToContestIfNotAdded(string userId, int contestId)
 		{
@@ -185,6 +200,43 @@ namespace JudgeSystem.Services.Data
         {
             var contest = await this.repository.FindAsync(contestId);
             return contest.LessonId;
+        }
+
+        public async Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
+        {
+            int baseProblemId;
+            int lessonId = await this.GetLessonId(contestId);
+            if (problemId.HasValue)
+            {
+                baseProblemId = problemId.Value;
+            }
+            else
+            {
+                baseProblemId = lessonService.GetFirstProblemId(lessonId);
+            }
+
+            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
+            string problemName = problemService.GetProblemName(baseProblemId);
+
+            int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId);
+
+            PaginationData paginationData = new PaginationData
+            {
+                CurrentPage = page,
+                NumberOfPages = paginationService.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionsPerPage),
+                Url = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}=" + "{0}"
+            };
+
+            var model = new ContestSubmissionsViewModel
+            {
+                ProblemName = problemName,
+                Submissions = submissions,
+                LessonId = lessonId,
+                UrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}",
+                PaginationData = paginationData
+            };
+
+            return model;
         }
     }
 }

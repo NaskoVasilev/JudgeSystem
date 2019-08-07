@@ -33,5 +33,7 @@ namespace JudgeSystem.Services.Data
 		int GetContestResultsPagesCount(int contestId);
 
         Task<int> GetLessonId(int contestId);
+
+        Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl);
     }
 }

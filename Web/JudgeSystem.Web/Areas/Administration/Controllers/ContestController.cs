@@ -6,7 +6,6 @@ using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
-using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Contest;
 
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +18,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		private readonly IContestService contestService;
 		private readonly ILessonService lessonService;
-        private readonly ContestReslutsHelper contestReslutsHelper;
 
         public ContestController(
             IContestService contestService, 
-            ILessonService lessonService,
-            ContestReslutsHelper contestReslutsHelper)
+            ILessonService lessonService)
 		{
 			this.contestService = contestService;
 			this.lessonService = lessonService;
-            this.contestReslutsHelper = contestReslutsHelper;
         }
 
 		public IActionResult Create()
@@ -141,9 +137,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
-            string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Submissions?contestId={contestId}&userId={userId}";
+            string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/{nameof(Submissions)}?contestId={contestId}&userId={userId}";
 
-            var model = await contestReslutsHelper.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            var model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View(model);
         }

@@ -64,7 +64,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 ProblemName = problemName,
                 Submissions = submissions,
                 LessonId = lessonId,
-                UrlPlaceholder = baseUrl + "&problemId={0}",
+                UrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}",
                 PaginationData = paginationData
             };
 
@@ -73,12 +73,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         private static string GetFullUrl(int baseProblemId, string baseUrl)
         {
-            return baseUrl + $"&problemId={baseProblemId}" + "&page={0}";
+            return baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}" + "={0}";
         }
 
         private string GetBaseUrl(string userId, int practiceId)
         {
-            return $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(Submissions)}?practiceId={practiceId}&userId={userId}";
+            return $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(Submissions)}?practiceId={practiceId}{GlobalConstants.QueryStringDelimiter}userId={userId}";
         }
     }
 }
