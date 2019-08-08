@@ -17,14 +17,17 @@ namespace JudgeSystem.Web.Controllers
 	{
 		private readonly IStudentService studentService;
 		private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-		public StudentController(
+        public StudentController(
             IStudentService studentService, 
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
 		{
 			this.studentService = studentService;
 			this.userManager = userManager;
-		}
+            this.signInManager = signInManager;
+        }
 
 		public IActionResult ActivateStudentProfile()
 		{
@@ -57,6 +60,7 @@ namespace JudgeSystem.Web.Controllers
 			user.StudentId = student.Id;
 			await userManager.UpdateAsync(user);
 			await userManager.AddToRoleAsync(user, GlobalConstants.StudentRoleName);
+            await signInManager.SignInAsync(user, isPersistent: false);
 
 			return Redirect("/Identity/Account/Manage");
 		}

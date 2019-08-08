@@ -35,6 +35,8 @@ namespace JudgeSystem.Services.Data
 		public IEnumerable<SchoolClassDto> GetAllClasses()
 		{
 			return repository.All()
+                .OrderBy(x => x.ClassNumber)
+                .ThenBy(x => x.ClassType)
 				.To<SchoolClassDto>()
 				.ToList();
 		}

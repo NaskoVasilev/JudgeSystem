@@ -20,7 +20,7 @@ namespace JudgeSystem.Web.Controllers
 			this.lessonService = lessonService;
 		}
 
-		public IActionResult Results([Required, MinLength(GlobalConstants.SearchKeywordMinLength)] string keyword)
+		public IActionResult Results([Required] string keyword)
 		{
 			if(!ModelState.IsValid)
 			{

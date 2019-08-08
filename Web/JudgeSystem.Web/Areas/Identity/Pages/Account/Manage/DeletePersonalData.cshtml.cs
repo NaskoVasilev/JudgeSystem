@@ -39,6 +39,8 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
                 return this.Page();
             }
 
+            var userRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, userRoles);
             var result = await this.userManager.DeleteAsync(user);
             var userId = await this.userManager.GetUserIdAsync(user);
             if (!result.Succeeded)

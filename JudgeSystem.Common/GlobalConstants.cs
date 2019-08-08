@@ -50,10 +50,6 @@
         public const string PasswordResetMessage = "Please reset your password by <a href='{0}'>clicking here</a>.";
         #endregion
 
-        #region Validations and constraints
-        public const int SearchKeywordMinLength = 3;
-        #endregion
-
         #region Submissions and problems related constants
         public const string cSharpFileExtension = ".cs";
         public const int SubmissionFileMaxSizeInKb = 16;
