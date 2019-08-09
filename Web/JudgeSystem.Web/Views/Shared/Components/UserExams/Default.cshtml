@@ -13,9 +13,9 @@
 			@foreach (var examResult in Model)
 			{
 				<tr class="row">
-					<td class="col-sm-9">
-						<a class="text-decoration-none" asp-action="Details" asp-area="" asp-controller="Lesson" asp-route-id="@examResult.LessonId">@examResult.ContestName</a>
-					</td>
+                    <td class="col-sm-9">
+                        <a class="text-decoration-none" asp-action="MyResults" asp-area="" asp-controller="Contest" asp-route-contestId="@examResult.ContestId">@examResult.ContestName</a>
+                    </td>
 					<td class="col-sm-3">@examResult.ActualPoints / @examResult.MaxPoints</td>
 				</tr>
 			}

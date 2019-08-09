@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Dtos.SchoolClass;
+using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
 
@@ -43,7 +45,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             string activationKey = await studentProfileService.SendActivationEmail(model.Email);
 			var student = await studentService.Create(model, activationKey);
-            return await RedirectToStudentsByClass(student.Id);
+            return await RedirectToStudentsByClass(student.SchoolClassId);
 		}
 
 		public IActionResult StudentsByClass(int? classNumber, SchoolClassType? classType)
@@ -68,7 +70,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
 			var student = await studentService.Update(model);
-            return await RedirectToStudentsByClass(student.Id);
+            return await RedirectToStudentsByClass(student.SchoolClassId);
 		}
 
 		public async Task<IActionResult> Delete(string id)
@@ -82,13 +84,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[ActionName(nameof(Delete))]
 		public async Task<IActionResult> DeletePost(string id)
         {
-            await studentService.Delete(id);
-            return await RedirectToStudentsByClass(id);
+            StudentDto student = await studentService.Delete(id);
+            return await RedirectToStudentsByClass(student.SchoolClassId);
         }
 
-        private async Task<IActionResult> RedirectToStudentsByClass(string id)
+        private async Task<IActionResult> RedirectToStudentsByClass(int schoolClassId)
         {
-            var schoolClass = await studentService.GetStudentClass(id);
+            var schoolClass = await schoolClassService.GetById<SchoolClassDto>(schoolClassId);
             return RedirectToAction(nameof(StudentsByClass),
                 new { classNumber = schoolClass.ClassNumber, classType = schoolClass.ClassType });
         }

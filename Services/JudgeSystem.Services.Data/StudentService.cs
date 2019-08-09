@@ -36,11 +36,12 @@ namespace JudgeSystem.Services.Data
 			return student.To<StudentDto>();
 		}
 
-		public async Task Delete(string id)
+		public async Task<StudentDto> Delete(string id)
 		{
             var student = await repository.FindAsync(id);
             this.repository.Delete(student);
 			await this.repository.SaveChangesAsync();
+            return student.To<StudentDto>();
 		}
 
 		public async Task<T> GetById<T>(string id)

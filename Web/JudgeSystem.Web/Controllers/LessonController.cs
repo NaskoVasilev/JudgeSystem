@@ -41,6 +41,12 @@ namespace JudgeSystem.Web.Controllers
 
         public async Task<IActionResult> Details(int id, int? contestId, int? practiceId)
         {
+            if(contestId.HasValue && !User.IsInRole(GlobalConstants.StudentRoleName) && !User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                TempData[GlobalConstants.InfoKey] = ErrorMessages.ContestsAccessibleOnlyForStudents;
+                return Redirect("/");
+            }
+
             var lesson = await lessonService.GetLessonInfo(id);
             lesson.ContestId = contestId;
             await AddUserToContestOrPracticeIfNotAdded(contestId, practiceId);

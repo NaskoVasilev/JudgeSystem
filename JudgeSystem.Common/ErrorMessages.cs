@@ -39,5 +39,7 @@
         public const string InvalidPracticeId = "Practice id must be specified";
 
         public const string InvalidLoginAttempt = "Invalid login attempt.";
+
+        public const string ContestsAccessibleOnlyForStudents = "Contests are accessible only for students.";
     }
 }

@@ -21,7 +21,7 @@ namespace JudgeSystem.Services.Data
 
 		Task<T> GetById<T>(string id);
 
-		Task Delete(string id);
+		Task<StudentDto> Delete(string id);
 
 		Task<SchoolClassDto> GetStudentClass(string id);
 

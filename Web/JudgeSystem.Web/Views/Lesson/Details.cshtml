@@ -44,7 +44,7 @@
             {
                 <li class="list-group-item problem-name" data-type="@problem.SubmissionType" data-id="@problem.Id">
                     @($"{(++problemNumber).ToString("D2")}. {problem.Name}")
-                    @if(problem.IsExtraTask)
+                    @if (problem.IsExtraTask)
                     {
                         <span class="text-success ml-2 font-size-10"><i class="fas fa-star"></i></span>
                     }
@@ -87,8 +87,9 @@
 
     @if (Model.Problems.Count > 0)
     {
+        string fileFormDisplay = firstProblem.SubmissionType == SubmissionType.PlainCode ? "none" : "block";
 
-        <form id="zip-file" class="col-md-6">
+        <form id="zip-file" class="col-md-6" style="display:@fileFormDisplay">
             <div class="file-upload-wrapper my-4" data-text="Select your files!">
                 <input name="file-upload-field" type="file" class="file-upload-field w-100" value="">
             </div>

@@ -10,7 +10,6 @@ namespace JudgeSystem.Web.Components
     [ViewComponent(Name = "SchoolClassesOptions")]
     public class SchoolClassesOptionsViewComponent : ViewComponent
     {
-        private const int DefaultId = 0;
         private readonly ISchoolClassService schoolClassService;
 
         public SchoolClassesOptionsViewComponent(ISchoolClassService schoolClassService)
@@ -18,7 +17,7 @@ namespace JudgeSystem.Web.Components
             this.schoolClassService = schoolClassService;
         }
 
-        public IViewComponentResult Invoke(int id = DefaultId)
+        public IViewComponentResult Invoke(int id)
         {
             var schoolClasses = schoolClassService.GetAllClasses()
                 .Select(c => new SelectListItem

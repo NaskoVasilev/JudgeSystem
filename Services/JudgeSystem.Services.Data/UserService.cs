@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
@@ -11,12 +11,21 @@ namespace JudgeSystem.Services.Data
     public class UserService : IUserService
 	{
 		private readonly IDeletableEntityRepository<ApplicationUser> repository;
+        private readonly IRepository<UserPractice> userPracticeReository;
+        private readonly IRepository<UserContest> userContestReository;
+        private readonly IStudentService studentService;
 
-		public UserService(
-            IDeletableEntityRepository<ApplicationUser> repository)
+        public UserService(
+            IDeletableEntityRepository<ApplicationUser> repository,
+            IRepository<UserPractice> userPracticeReository,
+            IRepository<UserContest> userContestReository,
+            IStudentService studentService)
 		{
 			this.repository = repository;
-		}
+            this.userPracticeReository = userPracticeReository;
+            this.userContestReository = userContestReository;
+            this.studentService = studentService;
+        }
 
 		public List<UserCompeteResultViewModel> GetContestResults(string userId)
 		{
@@ -73,6 +82,7 @@ namespace JudgeSystem.Services.Data
 				.Where(c => c.Lesson.Type == LessonType.Exam)
 				.Select(c => new UserCompeteResultViewModel
 				{
+                    ContestId = c.Id,
 					ContestName = c.Name,
 					LessonId = c.LessonId,
 					MaxPoints = c.Lesson.Problems.Where(p => !p.IsExtraTask).Sum(p => p.MaxPoints),
@@ -83,5 +93,39 @@ namespace JudgeSystem.Services.Data
 
 			return exams;
 		}
+
+        public async Task DeleteUserData(string userId, string studentId)
+        {
+            await DeleteUserPractices(userId);
+            await DeleteUserContests(userId);
+            if(studentId != null)
+            {
+                await studentService.Delete(studentId);
+            }
+        }
+
+        private async Task DeleteUserContests(string userId)
+        {
+            var userContests = userContestReository.All().Where(x => x.UserId == userId).ToList();
+
+            foreach (var userContest in userContests)
+            {
+                userContestReository.Delete(userContest);
+            }
+
+            await userContestReository.SaveChangesAsync();
+        }
+
+        private async Task DeleteUserPractices(string userId)
+        {
+            var userPractices = userPracticeReository.All().Where(x => x.UserId == userId).ToList();
+
+            foreach (var userPractice in userPractices)
+            {
+                userPracticeReository.Delete(userPractice);
+            }
+
+            await userPracticeReository.SaveChangesAsync();
+        }
     }
 }

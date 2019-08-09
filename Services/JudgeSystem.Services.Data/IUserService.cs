@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using JudgeSystem.Web.ViewModels.User;
 
 namespace JudgeSystem.Services.Data
@@ -11,5 +11,7 @@ namespace JudgeSystem.Services.Data
 		List<UserPracticeResultViewModel> GetPracticeResults(string userId);
 
 		IEnumerable<UserCompeteResultViewModel> GetUserExamResults(string userId);
+
+        Task DeleteUserData(string userId, string studentId);
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
-
+using JudgeSystem.Services.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,13 +14,16 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IUserService userService;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IUserService userService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.userService = userService;
         }
 
         [BindProperty]
@@ -41,11 +44,11 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
             var userRoles = await userManager.GetRolesAsync(user);
             await userManager.RemoveFromRolesAsync(user, userRoles);
+            await userService.DeleteUserData(user.Id, user.StudentId);
             var result = await this.userManager.DeleteAsync(user);
-            var userId = await this.userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
 
             await this.signInManager.SignOutAsync();

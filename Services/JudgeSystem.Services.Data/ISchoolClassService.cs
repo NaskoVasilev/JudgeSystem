@@ -14,5 +14,7 @@ namespace JudgeSystem.Services.Data
 		bool ClassExists(int classNumber, SchoolClassType classType);
 
 		Task<SchoolClassDto> Create(int classNumber, SchoolClassType classType);
-	}
+
+        Task<T> GetById<T>(int id);
+ 	}
 }

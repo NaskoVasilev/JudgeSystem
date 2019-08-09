@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.SchoolClass;
+using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Services.Data
 {
@@ -40,5 +41,15 @@ namespace JudgeSystem.Services.Data
 				.To<SchoolClassDto>()
 				.ToList();
 		}
-	}
+
+        public async Task<T> GetById<T>(int id)
+        {
+            var schoolClass = await repository.All().Where(x => x.Id == id).To<T>().FirstOrDefaultAsync();
+            if(schoolClass == null)
+            {
+                throw new EntityNotFoundException();
+            }
+            return schoolClass;
+        }
+    }
 }
