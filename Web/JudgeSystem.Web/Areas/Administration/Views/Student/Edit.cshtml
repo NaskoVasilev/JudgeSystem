@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit Student";
-	var classes = ViewData["classes"] as IEnumerable<SelectListItem>;
 }
 
 <h2 class="text-center">@ViewData["Title"]</h2>
@@ -24,7 +23,7 @@
 				<div class="form-group">
 					<label asp-for="SchoolClassId"></label>
                     <select class="form-control" asp-for="SchoolClassId">
-                        <vc:school-classes-options></vc:school-classes-options>
+                        <vc:school-classes-options id="@Model.SchoolClassId"></vc:school-classes-options>
                     </select>
 				</div>
 				<div class="form-group">

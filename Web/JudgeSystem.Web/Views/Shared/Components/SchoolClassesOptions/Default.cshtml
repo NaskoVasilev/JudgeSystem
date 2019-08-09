@@ -1,6 +1,14 @@
 ﻿@model IEnumerable<SelectListItem>
 
-@foreach (var course in Model)
+@foreach (var schoolClass in Model)
 {
-    <option value="@course.Value">@course.Text</option>
+    if (schoolClass.Selected)
+    {
+
+        <option value="@schoolClass.Value" selected>@schoolClass.Text</option>
+    }
+    else
+    {
+        <option value="@schoolClass.Value">@schoolClass.Text</option>
+    }
 }

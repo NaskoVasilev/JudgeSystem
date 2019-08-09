@@ -1,4 +1,6 @@
-﻿namespace JudgeSystem.Common
+﻿using System;
+
+namespace JudgeSystem.Common
 {
     public static class GlobalConstants
     {
@@ -8,7 +10,6 @@
         public const string StudentRoleName = "Student";
         public const string BaseRoleName = "User";
         public const string AdministrationArea = "Administration";
-        public const string FileStorePath = "F:\\JudgeSystemStore\\";
         public const string LessonsRrecommendationMlModelPath = "MLModels/JudgeSystemLessonsModel.zip";
         #endregion
 

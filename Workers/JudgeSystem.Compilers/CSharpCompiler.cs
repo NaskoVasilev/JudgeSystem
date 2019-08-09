@@ -38,7 +38,7 @@ namespace JudgeSystem.Compilers
 			}
 			CSharpCompilation compilation = this.BuildCSharpCompilation(syntaxTrees);
 
-			string outputDllPath = CompilationSettings.WorkingDirectoryPath + assemblyName + ".dll";
+            string outputDllPath = GetOutputDllPath();
 			EmitResult emitResult = compilation.Emit(outputDllPath);
 
 			if(!emitResult.Success)
@@ -53,13 +53,26 @@ namespace JudgeSystem.Compilers
 			}
 
 			string runtimeConfigJsonFileContent = GenerateRuntimeConfigJsonFile();
-			string runtimeConfigJsonFilePath = CompilationSettings.WorkingDirectoryPath + assemblyName + CompilationSettings.RunTimeConfigJsonFileName;
+            string runtimeConfigJsonFilePath = GetRuntimeConfigJsonFilePath();
 			File.WriteAllText(runtimeConfigJsonFilePath, runtimeConfigJsonFileContent);
 
 			return new CompileResult(outputDllPath);
 		}
 
-		private CSharpCompilation BuildCSharpCompilation(List<SyntaxTree> syntaxTrees)
+        public void DeleteGeneratedFiles()
+        {
+            string outputDllPath = GetOutputDllPath();
+            File.Delete(outputDllPath);
+            string runtimeConfigJsonFilePath = GetRuntimeConfigJsonFilePath();
+            File.Delete(runtimeConfigJsonFilePath);
+        }
+
+        private string GetOutputDllPath() => CompilationSettings.WorkingDirectoryPath + assemblyName + ".dll";
+
+        private string GetRuntimeConfigJsonFilePath() => CompilationSettings.WorkingDirectoryPath + assemblyName + CompilationSettings.RunTimeConfigJsonFileName;
+
+
+        private CSharpCompilation BuildCSharpCompilation(List<SyntaxTree> syntaxTrees)
 		{
 			CSharpCompilation compilation = CSharpCompilation.Create(this.assemblyName)
 						.WithOptions(new CSharpCompilationOptions(OutputKind.ConsoleApplication))

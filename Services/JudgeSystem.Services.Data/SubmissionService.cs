@@ -227,6 +227,7 @@ namespace JudgeSystem.Services.Data
             else
             {
                 await RunTests(submission, compileResult);
+                compiler.DeleteGeneratedFiles();
             }
         }
 
