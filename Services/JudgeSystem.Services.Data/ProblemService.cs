@@ -77,16 +77,10 @@ namespace JudgeSystem.Services.Data
 
         public string GetProblemName(int id)
         {
-            string name = this.problemRepository.All()
+            return this.problemRepository.All()
                 .Where(x => x.Id == id)
                 .Select(x => x.Name)
                 .FirstOrDefault();
-
-            if(name == null)
-            {
-                throw new EntityNotFoundException("problem");
-            }
-            return name;
         }
 
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)

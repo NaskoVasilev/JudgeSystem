@@ -36,7 +36,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Submissions(string userId, int practiceId, int? problemId, int page = DefaultPage)
         {
-            int baseProblemId;
+            int baseProblemId = 0;
             int lessonId = await practiceService.GetLessonId(practiceId);
             if (problemId.HasValue)
             {
@@ -44,7 +44,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
             else
             {
-                baseProblemId = lessonService.GetFirstProblemId(lessonId);
+                baseProblemId = lessonService.GetFirstProblemId(lessonId) ?? baseProblemId;
             }
 
             var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);

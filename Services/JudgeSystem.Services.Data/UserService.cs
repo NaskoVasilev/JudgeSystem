@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
@@ -32,6 +33,7 @@ namespace JudgeSystem.Services.Data
 			var result = repository.All()
 				.Where(u => u.Id == userId)
 				.SelectMany(u => u.UserContests)
+                .Where(uc => uc.Contest.Lesson.Problems.Count > 0)
 				.Select(uc => new UserCompeteResultViewModel()
 				{
 					ActualPoints = uc.Contest.Submissions
@@ -55,6 +57,7 @@ namespace JudgeSystem.Services.Data
             var result = repository.All()
                  .Where(u => u.Id == userId)
                  .SelectMany(u => u.UserPractices)
+                 .Where(uc => uc.Practice.Lesson.Problems.Count > 0)
                  .Select(up => new UserPracticeResultViewModel()
                  {
                      ActualPoints = up.Practice.Submissions
@@ -78,7 +81,8 @@ namespace JudgeSystem.Services.Data
 			var exams = repository.All()
 				.Where(u => u.Id == userId)
 				.SelectMany(u => u.UserContests)
-				.Select(uc => uc.Contest)
+                .Where(uc => uc.Contest.Lesson.Problems.Count > 0)
+                .Select(uc => uc.Contest)
 				.Where(c => c.Lesson.Type == LessonType.Exam)
 				.Select(c => new UserCompeteResultViewModel
 				{

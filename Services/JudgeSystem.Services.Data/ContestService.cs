@@ -204,7 +204,7 @@ namespace JudgeSystem.Services.Data
 
         public async Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
         {
-            int baseProblemId;
+            int baseProblemId = 0;
             int lessonId = await this.GetLessonId(contestId);
             if (problemId.HasValue)
             {
@@ -212,7 +212,7 @@ namespace JudgeSystem.Services.Data
             }
             else
             {
-                baseProblemId = lessonService.GetFirstProblemId(lessonId);
+                baseProblemId = lessonService.GetFirstProblemId(lessonId) ?? baseProblemId;
             }
 
             var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);

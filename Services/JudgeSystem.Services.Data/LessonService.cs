@@ -86,16 +86,17 @@ namespace JudgeSystem.Services.Data
             return lessons;
         }
 
-        public int GetFirstProblemId(int lessonId)
+        public int? GetFirstProblemId(int lessonId)
         {
             if (!this.Exists(lessonId))
             {
                 throw new EntityNotFoundException("lesson");
             }
 
-            return this.repository.All().Include(x => x.Problems)
+            return this.repository.All()
+                .Include(x => x.Problems)
                 .First(x => x.Id == lessonId).Problems
-                .OrderBy(x => x.CreatedOn).First().Id;
+                .OrderBy(x => x.CreatedOn).FirstOrDefault()?.Id;
         }
 
         public async Task<LessonViewModel> GetLessonInfo(int id)

@@ -29,7 +29,7 @@ namespace JudgeSystem.Services.Data
 
         int GetPracticeId(int lessonId);
 
-        int GetFirstProblemId(int lessonId);
+        int? GetFirstProblemId(int lessonId);
 
         Task SetPassword(int id, string lessonPassword);
 
