@@ -34,7 +34,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData("user_id_1", 80, true)]
         [InlineData("user_id_unknown", 2, true)]
         [InlineData("user_id_20", 2, false)]
-        public async Task AddUserToContestIfNotAdded_WithCorrectData_ShouldWorkCorrect(string userId, int contestId, bool expectedResult)
+        public async Task AddUserToContestIfNotAdded_WithDifferenrtData_ShouldWorkCorrect(string userId, int contestId, bool expectedResult)
         {
             context.AddRange(GetUserContestsTestData());
             await context.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task UpdateContest_ShouldWorkCorrectWithCorrectData()
+        public async Task UpdateContest_WithCorrectData_ShouldWorkCorrect()
         {
             var contestService = await CreateContestService(GetContestsTestData());
             var inputModel = new ContestEditInputModel { Id = 1, Name = "editedcontest", StartTime = new DateTime(2019, 09, 20), EndTime = new DateTime(2019, 08, 20) };
@@ -61,7 +61,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task DeleteContestById_ShouldWorkCorrectWithValidData()
+        public async Task DeleteContestById_WithValidData_ShouldWorkCorrectWithValidData()
         {
             var contestService = await CreateContestService(GetContestsTestData());
 
@@ -179,6 +179,36 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Throws<EntityNotFoundException>(() => contestService.GetContestResultsPagesCount(23));
         }
 
+        [Fact]
+        public async Task GetActiveContests_WithDifferentData_ShouldReturnsOnlyActiveContests()
+        {
+            var service = await CreateContestService(GetTestData());
+
+            var actualData = service.GetActiveContests();
+
+            Assert.Equal(new List<int>() { 1, 3 }, actualData.Select(x => x.Id));
+        }
+
+        [Fact]
+        public async Task GetPreviousContests_WithDifferentData_ShouldReturnsOnlyPassedContests()
+        {
+            var service = await CreateContestService(GetTestData());
+
+            var actualData = service.GetPreviousContests(3);
+
+            Assert.Equal(new List<string>() { "compete5" }, actualData.Select(x => x.Name));
+        }
+
+        [Fact]
+        public async Task GetActiveAndFollowingContests_WithDifferentData_ShouldReturnsOnlyActiveAndFollowingContests()
+        {
+            var service = await CreateContestService(GetTestData());
+
+            var actualData = service.GetPreviousContests(3);
+
+            Assert.Equal(new List<string>() { "compete1", "compete3", "compete4" }, actualData.Select(x => x.Name));
+        }
+
         private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
         {
             await this.context.Contests.AddRangeAsync(testData);
@@ -220,6 +250,18 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 new Contest{Id = 1, Name = "contest1", EndTime = new DateTime(2019, 12, 20), StartTime = new DateTime(2019, 07, 05)},
                 new Contest{Id = 2, Name = "contest2", EndTime = new DateTime(2019, 05, 20), StartTime = new DateTime(2019, 04, 05)},
+            };
+        }
+
+        private List<Contest> GetTestData()
+        {
+            return new List<Contest>()
+            {
+                new Contest { Id = 1,  Name = "compete1", EndTime = DateTime.Now.AddDays(1), StartTime = DateTime.Now.AddDays(-1) },
+                new Contest { Id = 2,  Name = "compete2", EndTime = DateTime.Now.AddDays(-4), StartTime = DateTime.Now.AddDays(-10) },
+                new Contest { Id = 3,  Name = "compete3", EndTime = DateTime.Now.AddMinutes(10), StartTime = DateTime.Now.AddHours(-1) },
+                new Contest { Id = 4,  Name = "compete4", EndTime = DateTime.Now.AddDays(10), StartTime = DateTime.Now.AddHours(1) },
+                new Contest { Id = 5,  Name = "compete5", EndTime = DateTime.Now.AddDays(-2), StartTime = DateTime.Now.AddHours(-5) },
             };
         }
 

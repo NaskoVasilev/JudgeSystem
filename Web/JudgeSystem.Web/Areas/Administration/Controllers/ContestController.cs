@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
@@ -15,16 +17,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
     public class ContestController : AdministrationBaseController
 	{
 		private const int DefaultPage = 1;
+        private const int ContestsPerPage = 15;
 
 		private readonly IContestService contestService;
 		private readonly ILessonService lessonService;
+        private readonly IPaginationService paginationService;
 
         public ContestController(
             IContestService contestService, 
-            ILessonService lessonService)
+            ILessonService lessonService,
+            IPaginationService paginationService)
 		{
 			this.contestService = contestService;
 			this.lessonService = lessonService;
+            this.paginationService = paginationService;
         }
 
 		public IActionResult Create()
@@ -101,32 +107,17 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public IActionResult All(int page = DefaultPage)
 		{
-			int numberOfPages = contestService.GetNumberOfPages();
 			IEnumerable<ContestViewModel> contests = contestService.GetAllConests(page);
+            int numberOfPages = paginationService.CalculatePagesCount(contests.Count(), ContestsPerPage);
 			ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page };
 			return View(model);
 		}
 
-		public IActionResult Results(int id, int? page)
+		public IActionResult Results(int id, int page = DefaultPage)
 		{
-            var model = new ContestAllResultsViewModel
-            {
-                NumberOfPages = contestService.GetContestResultsPagesCount(id)
-            };
-
-            if (page.HasValue)
-			{
-                model.CurrentPage = page.Value;
-				var contestResults = contestService.GetContestReults(id, page.Value);
-				return PartialView(contestResults);
-			}
-			else
-			{
-                model.CurrentPage = DefaultPage;
-				var contestResults = contestService.GetContestReults(id, DefaultPage);
-				return View(contestResults);
-			}
-		}
+            var model = contestService.GetContestReults(id, page);
+            return View(model);
+        }
 
         [EndpointExceptionFilter]
 		[HttpGet("/Contest/Results/{contestId}/PagesCount")]

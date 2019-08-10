@@ -137,7 +137,7 @@ namespace JudgeSystem.Services.Data
 
 		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
 		{
-            var contestResults = repository.All()
+            var model = repository.All()
 				.Where(c => c.Id == contestId)
 				.Select(c => new ContestAllResultsViewModel()
 				{
@@ -176,7 +176,10 @@ namespace JudgeSystem.Services.Data
 				})
 				.FirstOrDefault();
 
-			return contestResults;
+            model.NumberOfPages = paginationService.CalculatePagesCount(model.ContestResults.Count, ResultsPerPage);
+            model.CurrentPage = page;
+
+			return model;
 		}
 
 		public int GetContestResultsPagesCount(int contestId)

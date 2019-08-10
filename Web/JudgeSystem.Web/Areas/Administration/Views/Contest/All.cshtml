@@ -3,7 +3,7 @@
 @{
 	ViewData["Title"] = "All contests";
 	string administrationArea = GlobalConstants.AdministrationArea;
-	string url = "/Administration/Contest/All?page={0}"; 
+	string url = $"/{GlobalConstants.AdministrationArea}/Contest/All?{GlobalConstants.PageKey}=" + "{0}"; 
 	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
@@ -32,15 +32,13 @@
 	</tbody>
 </table>
 
-<partial name="_ServerSidePaginationPartial" model="paginationData" />
+<partial name="_ClientSidePaginationPartial" model="paginationData" />
 
-@*client side pagination example*@
-@*<partial name="_ClientSidePaginationPartial" model="paginationData" />*@
-@*@section Scripts{
+@section Scripts{
 		<script src="~/js/pagination.js"></script>
 		<script>
-			let url = "/Administration/Contest/All?page={pageNumber}";
+			let url = "@url";
 			let numberOfPagesUrl = "/Contest/GetNumberOfPages";
 			InitializePaginationList(url, numberOfPagesUrl)
 		</script>
-}*@
+}

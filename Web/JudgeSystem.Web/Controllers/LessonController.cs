@@ -73,7 +73,11 @@ namespace JudgeSystem.Web.Controllers
             if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
             {
                 this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
-                return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = lessonService.GetPracticeId(lesson.Id) });
+                if(model.ContestId.HasValue)
+                {
+                    return RedirectToAction(nameof(Details), new { id = lesson.Id, contestId = model.ContestId.Value });
+                }
+                return RedirectToAction(nameof(Details), new { id = lesson.Id, practiceId = model.PracticeId.Value });
             }
 
             ModelState.AddModelError(nameof(LessonPasswordInputModel.LessonPassword), ErrorMessages.InvalidPassword);
@@ -107,6 +111,10 @@ namespace JudgeSystem.Web.Controllers
             }
             else
             {
+                if(lesson.ContestId.HasValue)
+                {
+                    return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id, contestId = lesson.ContestId.Value });
+                }
                 return RedirectToAction(nameof(EnterPassword), new { id = lesson.Id, practiceId = lesson.PracticeId });
             }
         }

@@ -1,12 +1,10 @@
 ﻿@model ContestAllResultsViewModel
 
 @{
-	ViewData["Title"] = "All contests";
-	int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
-	string url = $"/Administration/Contest/Results/{Model.Id}?page={0}";
-	int numberOfPages = Model.NumberOfPages;
-	int currentPage = Model.CurrentPage;
-	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = numberOfPages, CurrentPage = currentPage };
+    ViewData["Title"] = "All contests";
+    int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
+    string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
+    PaginationData paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
 <h2 class="text-center mb-4">Results for @Model.Name</h2>
@@ -46,11 +44,11 @@
 	</tbody>
 </table>
 
-<partial name="_ClientSidePaginationPartial" model="paginationData" />
+<partial name="_ServerSidePaginationPartial" model="paginationData" />
 @section Scripts{
 	<script src="~/js/pagination.js"></script>
 	<script>
-		let url = "/Administration/Contest/Results/@Model.Id?page={pageNumber}";
+		let url = "@paginationUrl";
 		let numberOfPagesUrl = "/Contest/Results/@Model.Id/PagesCount";
 		InitializePaginationList(url, numberOfPagesUrl)
 	</script>

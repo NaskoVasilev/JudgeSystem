@@ -15,22 +15,36 @@ namespace JudgeSystem.Web.Tests
             this.server = server;
         }
 
-        [Fact]
-        public async Task IndexPageShouldReturnStatusCode200WithTitle()
+        [Theory]
+        [InlineData("/")]
+        [InlineData("/Home/Index")]
+        [InlineData("/Identity/Account/Login")]
+        [InlineData("/Identity/Account/Register")]
+        [InlineData("/Course/All")]
+        public async Task RequestToGivenUrlShoudReturnSuccessStatusCode(string url)
         {
             var client = this.server.CreateClient();
-            var response = await client.GetAsync("/");
+            var response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            Assert.Contains("<title>", responseContent);
         }
 
-        [Fact]
-        public async Task AccountManagePageRequiresAuthorization()
+        [Theory]
+        [InlineData("/Identity/Account/Manage")]
+        [InlineData("/User/MyResults")]
+        [InlineData("/Administration/Course/Create")]
+        [InlineData("/Student/Profile")]
+        [InlineData("/Administration/Contest/Create")]
+        [InlineData("/Administration/Student/Create")]
+        [InlineData("/Administration/Contest/ActiveContests")]
+        [InlineData("/Administration/Contest/All")]
+        [InlineData("/Administration/Student/StudentsByClass")]
+        public async Task AccessPageWithGivenUrlShoudRedirectToLoginPage(string url)
         {
             var client = this.server.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-            var response = await client.GetAsync("Identity/Account/Manage");
+            var response = await client.GetAsync(url);
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+            string expectedUrl = $"/Identity/Account/Login?ReturnUrl={WebUtility.UrlEncode(url)}";
+            Assert.Contains(expectedUrl, response.Headers.Location.ToString());
         }
     }
 }

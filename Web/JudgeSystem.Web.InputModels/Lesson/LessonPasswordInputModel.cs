@@ -12,5 +12,9 @@ namespace JudgeSystem.Web.InputModels.Lesson
         [DataType(DataType.Password)]
         [Display(Name = ModelConstants.LessonPasswordDisplayName)]
         public string LessonPassword { get; set; }
-	}
+
+        public int? PracticeId { get; set; }
+
+        public int? ContestId { get; set; }
+    }
 }
