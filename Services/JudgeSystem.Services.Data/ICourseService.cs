@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using JudgeSystem.Web.Dtos.Course;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels.Course;
 
@@ -20,7 +18,5 @@ namespace JudgeSystem.Services.Data
 		Task Updade(CourseEditModel model);
 
 		Task<CourseViewModel> Delete(int id);
-
-		IEnumerable<ContestCourseDto> GetAllCourses();
 	}
 }

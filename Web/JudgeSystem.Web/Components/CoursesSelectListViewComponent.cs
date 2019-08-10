@@ -19,7 +19,7 @@ namespace JudgeSystem.Web.Components
 
         public IViewComponentResult Invoke()
         {
-            var courses = courseService.GetAllCourses()
+            var courses = courseService.All()
                 .Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
             return View(courses);
         }

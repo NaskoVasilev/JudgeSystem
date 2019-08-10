@@ -66,11 +66,5 @@ namespace JudgeSystem.Services.Data
 
             return course.To<CourseViewModel>();
 		}
-
-		public IEnumerable<ContestCourseDto> GetAllCourses()
-		{
-			var courses = repository.All().To<ContestCourseDto>().ToList();
-			return courses;
-		}
 	}
 }
