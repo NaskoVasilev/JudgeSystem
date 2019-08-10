@@ -291,7 +291,7 @@ namespace JudgeSystem.Services.Data
         private async Task RunTests(Submission submission, CompileResult compileResult)
         {
             var tests = testService.GetTestsByProblemId(submission.ProblemId).ToList();
-            var problemConstraints = problemService.GetProblemConstraints(submission.ProblemId);
+            var problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
             if (tests.Count == 0)
             {
                 return;

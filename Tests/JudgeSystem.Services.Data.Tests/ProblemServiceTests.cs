@@ -108,7 +108,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData("1", "test1")]
         public async Task SearchByName_WithDifferentInputs_ShouldWorkCorrect(string keyword, string expectedResult)
         {
-            var lesson = new Lesson() { Id = 1, Name = "lesson1" };
+            var lesson = new Lesson() { Id = 1, Name = "lesson1", Practice = new Practice() };
             var data = GetTestData();
             foreach (var problem in data)
             {
@@ -194,6 +194,29 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateProblemService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(161651));
+        }
+
+
+        [Fact]
+        public async Task GetProblemName_WithValidId_ShouldReturnCorrectData()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            int id = 2;
+            var problemName = service.GetProblemName(id);
+            var expectedName = testData[id - 1].Name;
+
+            Assert.Equal(expectedName, problemName);
+        }
+
+        [Fact]
+        public async Task GetProblemName_WithInValidId_ShouldReturnNull()
+        {
+            var testData = GetTestData();
+            var service = await CreateProblemService(testData);
+
+            Assert.Null(service.GetProblemName(321));
         }
 
         private async Task<ProblemService> CreateProblemService(List<Problem> testData)

@@ -64,7 +64,6 @@ namespace JudgeSystem.Services.Data.Tests
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(22));
         }
 
-
         private async Task<PracticeService> CreatePracticeService(List<Practice> testData, IRepository<UserPractice> userPracticeRepository)
         {
             await this.context.Practices.AddRangeAsync(testData);

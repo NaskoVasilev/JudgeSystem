@@ -61,20 +61,6 @@ namespace JudgeSystem.Services.Data
 			return problem.LessonId;
 		}
 
-        public ProblemConstraintsDto GetProblemConstraints(int id)
-        {
-            var problem = problemRepository.All()
-                .Where(x => x.Id == id)
-                .To<ProblemConstraintsDto>()
-                .FirstOrDefault();
-
-            if(problem == null)
-            {
-                throw new EntityNotFoundException(nameof(problem));
-            }
-            return problem;
-        }
-
         public string GetProblemName(int id)
         {
             return this.problemRepository.All()

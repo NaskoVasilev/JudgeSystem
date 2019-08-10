@@ -19,8 +19,6 @@ namespace JudgeSystem.Services.Data
 
 		Task<ProblemDto> Update(ProblemEditInputModel model);
 
-        ProblemConstraintsDto GetProblemConstraints(int id);
-
 		Task<ProblemDto> Delete(int id);
 
 		IEnumerable<SearchProblemViewModel> SearchByName(string keyword);
