@@ -8,7 +8,7 @@ namespace JudgeSystem.Services.Tests
 {
     public class ValidationServiceTests
     {
-        private readonly IValidationService validationService;
+        private readonly ValidationService validationService;
 
         public ValidationServiceTests()
         {
