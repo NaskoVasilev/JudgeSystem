@@ -86,7 +86,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<ApplicationUser>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new UserService(reposotiryMock.Object);
+            return new UserService(reposotiryMock.Object, null, null, null);
         }
 
         private List<ApplicationUser> GetContestResultsTestData()

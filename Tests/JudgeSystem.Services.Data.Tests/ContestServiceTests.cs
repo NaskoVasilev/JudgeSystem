@@ -11,11 +11,16 @@ using JudgeSystem.Web.InputModels.Contest;
 
 using Xunit;
 using Moq;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Common;
+using JudgeSystem.Web.Dtos.Submission;
 
 namespace JudgeSystem.Services.Data.Tests
 {
     public class ContestServiceTests : TransientDbContextProvider
     {
+        private readonly IPaginationService paginationService = new PaginationService();
+
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
@@ -94,7 +99,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             var actualContests = contestService.GetAllConests(page);
-            var expectedData = Enumerable.Range((page - 1) * ContestService.ContestsPerPage, page * ContestService.ContestsPerPage);
+            var expectedData = Enumerable.Range((page - 1) * GlobalConstants.ContestsPerPage, page * GlobalConstants.ContestsPerPage);
 
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
@@ -104,8 +109,8 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
-            int page = 50 / ContestService.ContestsPerPage + 1;
-            int expectedEntities = 50 % ContestService.ContestsPerPage;
+            int page = 50 / GlobalConstants.ContestsPerPage + 1;
+            int expectedEntities = 50 % GlobalConstants.ContestsPerPage;
             var actualContests = contestService.GetAllConests(page);
             var expectedData = Enumerable.Range(50 - expectedEntities, expectedEntities);
 
@@ -204,9 +209,152 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var service = await CreateContestService(GetTestData());
 
-            var actualData = service.GetPreviousContests(3);
+            var actualData = service.GetActiveAndFollowingContests();
 
             Assert.Equal(new List<string>() { "compete1", "compete3", "compete4" }, actualData.Select(x => x.Name));
+        }
+
+        [Fact]
+        public async Task GetContestReults_WithValidContestId_ShouldWorkCorrect()
+        {
+            var testData = GetContestReultsTestData();
+            var service = await CreateContestService(testData);
+
+            var actualContest = service.GetContestReults(11, 1);
+            var expectedContest = testData.First();
+            var expectedProblems = expectedContest.Lesson.Problems.OrderBy(x => x.CreatedOn).ToList();
+
+            Assert.Equal(expectedContest.Name, actualContest.Name);
+            Assert.Equal(1, actualContest.NumberOfPages);
+            Assert.Equal(1, actualContest.CurrentPage);
+            Assert.Equal(expectedProblems.Count, actualContest.Problems.Count);
+            for (int i = 0; i < actualContest.Problems.Count; i++)
+            {
+                var actualProblem = actualContest.Problems[i];
+                var expectedProblem = expectedProblems[i];
+                Assert.Equal(expectedProblem.Name, actualProblem.Name);
+                Assert.Equal(expectedProblem.Id, actualProblem.Id);
+                Assert.Equal(expectedProblem.IsExtraTask, actualProblem.IsExtraTask);
+            }
+            Assert.Equal(2, actualContest.ContestResults.Count);
+            var naskoResults = actualContest.ContestResults[0];
+            Assert.Equal(50, naskoResults.PointsByProblem[1]);
+            Assert.Equal(100, naskoResults.PointsByProblem[3]);
+            Assert.Equal(150, naskoResults.Total);
+            Assert.Equal(11, naskoResults.Student.ClassNumber);
+            Assert.Equal("A", naskoResults.Student.ClassType);
+            Assert.Equal(2, naskoResults.Student.NumberInCalss);
+            Assert.Equal("Atanas Vasilev", naskoResults.Student.FullName);
+            var martoResults = actualContest.ContestResults[1];
+            Assert.Equal(60, martoResults.PointsByProblem[1]);
+            Assert.Equal(100, martoResults.PointsByProblem[2]);
+            Assert.Equal(70, martoResults.PointsByProblem[3]);
+            Assert.Equal(230, martoResults.Total);
+            Assert.Equal(12, martoResults.Student.ClassNumber);
+            Assert.Equal("B", martoResults.Student.ClassType);
+            Assert.Equal(17, martoResults.Student.NumberInCalss);
+            Assert.Equal("Marto Martinov", martoResults.Student.FullName);
+        }
+
+        [Fact]
+        public async Task GetContestReults_WithInvalidContestId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetContestReultsTestData();
+            var service = await CreateContestService(testData);
+
+            Assert.Throws<EntityNotFoundException>(() => service.GetContestReults(564, 12));
+        }
+
+        [Theory]
+        [InlineData(10)]
+        [InlineData(60)]
+        [InlineData(65)]
+        public void GetNumberOfPages_WithDifferentData_ShouldWorkCorrect(int userContestsCount)
+        {
+            var contest = GenerateContestForGetContestResultsPagesCount(userContestsCount);
+            var testData = new List<Contest> { GenerateContestForGetContestResultsPagesCount(userContestsCount) };
+            var service = CreateContestServiceWithMockedRepository(testData.AsQueryable());
+
+            var expectedPages = service.GetContestResultsPagesCount(contest.Id);
+
+            Assert.Equal(paginationService.CalculatePagesCount(userContestsCount, ContestService.ResultsPerPage), expectedPages);
+        }
+
+        [Fact]
+        public async Task GetLessonId_WithInvalidId_ShouldThrowEntityNotFoundException()
+        {
+            var contestService = await CreateContestService(GetTestData());
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.GetLessonId(999));
+        }
+
+        [Fact]
+        public async Task GetLessonId_WithValidId_ShouldReturnCottectData()
+        {
+            var testData = new List<Contest> { new Contest { Id = 1, LessonId = 10 } };
+            var contestService = await CreateContestService(testData);
+
+            var expectedLessonId = await contestService.GetLessonId(1);
+
+            Assert.Equal(10, expectedLessonId);
+        }
+
+        [Theory]
+        [InlineData(115)]
+        [InlineData(null)]
+        public async Task GetContestSubmissions_WithMockedDependencies_ShouldWorkCorrect(int? problemId)
+        {
+            //Arrange
+            int lessonId = 10;
+            int baseProblemId = problemId ?? 200;
+            int contestId = 1;
+            string baseUrl = "baseUrl/test?contestId=" + contestId;
+            string problemName = "Mocking";
+            string userId = "nasko_user";
+            int page = 3;
+            int totalSubmissions = 20;
+            int pagesCount = 7;
+            var submissionResults = new List<SubmissionResult>();
+            for (int i = 0; i < 3; i++)
+            {
+                submissionResults.Add(new SubmissionResult { ActualPoints = i + 50, Id = i });
+            }
+
+            await context.Contests.AddAsync(new Contest { Id = contestId, LessonId = lessonId });
+            await context.SaveChangesAsync();
+            var repository = new EfDeletableEntityRepository<Contest>(context);
+
+            var lessonServiceMock = new Mock<ILessonService>();
+            lessonServiceMock.Setup(x => x.GetFirstProblemId(lessonId)).Returns(baseProblemId);
+
+            var problemServiceMock = new Mock<IProblemService>();
+            problemServiceMock.Setup(x => x.GetProblemName(baseProblemId)).Returns(problemName);
+
+            var submissionServiceMock = new Mock<ISubmissionService>();
+            submissionServiceMock.Setup(x =>
+                x.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, It.IsAny<int>())).Returns(submissionResults);
+            submissionServiceMock.Setup(x => 
+                x.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId)).Returns(totalSubmissions);
+
+            var paginationServiceMock = new Mock<IPaginationService>();
+            paginationServiceMock.Setup(x => 
+                x.CalculatePagesCount(totalSubmissions, It.IsAny<int>())).Returns(pagesCount);
+            var service = new ContestService(repository, null, lessonServiceMock.Object, problemServiceMock.Object, 
+                submissionServiceMock.Object, paginationServiceMock.Object);
+
+            //Act
+            var actualModel = await service.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            string expecedUrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}";
+            string expecedPaginationUrl = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}=" + "{0}";
+
+            //Assert
+            Assert.Equal(problemName, actualModel.ProblemName);
+            Assert.Equal(lessonId, actualModel.LessonId);
+            Assert.Equal(submissionResults.Count, actualModel.Submissions.Count());
+            Assert.Equal(expecedUrlPlaceholder, actualModel.UrlPlaceholder);
+            Assert.Equal(expecedPaginationUrl, actualModel.PaginationData.Url);
+            Assert.Equal(page, actualModel.PaginationData.CurrentPage);
+            Assert.Equal(pagesCount, actualModel.PaginationData.NumberOfPages);
         }
 
         private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
@@ -214,7 +362,7 @@ namespace JudgeSystem.Services.Data.Tests
             await this.context.Contests.AddRangeAsync(testData);
             await this.context.SaveChangesAsync();
             IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(this.context);
-            var service = new ContestService(repository, userContestRepository, null, null, null, null);
+            var service = new ContestService(repository, userContestRepository, null, null, null, paginationService);
             return service;
         }
 
@@ -227,7 +375,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Contest>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new ContestService(reposotiryMock.Object, userContestRepository, null, null, null, null);
+            return new ContestService(reposotiryMock.Object, userContestRepository, null, null, null, paginationService);
         }
 
         private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData)
@@ -271,6 +419,122 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 yield return new Contest { Id = 50 - i, StartTime = DateTime.UtcNow.AddDays(i) };
             }
+        }
+
+        private List<Contest> GetContestReultsTestData()
+        {
+            const int contestId = 11;
+            var lesson = new Lesson { Id = 10 };
+            var problems = new List<Problem>
+            {
+                new Problem { Id = 1, Name = "problem1", LessonId = lesson.Id, IsExtraTask = false },
+                new Problem { Id = 2, Name = "problem2", LessonId = lesson.Id, IsExtraTask = false },
+                new Problem { Id = 3, Name = "problem3", LessonId = lesson.Id, IsExtraTask = true },
+            };
+            lesson.Problems = problems;
+
+            var naskoStudent = new Student
+            {
+                Id = "nasko-student",
+                SchoolClass = new SchoolClass { ClassNumber = 11, ClassType = SchoolClassType.A },
+                NumberInCalss = 2,
+                FullName = "Atanas Vasilev",
+            };
+            var martoStudent = new Student
+            {
+                Id = "marto-student",
+                SchoolClass = new SchoolClass { ClassNumber = 12, ClassType = SchoolClassType.B },
+                NumberInCalss = 17,
+                FullName = "Marto Martinov",
+            };
+
+            return new List<Contest>()
+            {
+                new Contest
+                {
+                    Id = contestId,
+                    Name = "contestResults",
+                    Lesson = lesson,
+                    UserContests = new List<UserContest>
+                    {
+                        new UserContest
+                        {
+                            User = new ApplicationUser
+                            {
+                                StudentId = naskoStudent.Id,
+                                UserName = "nasko",
+                                Student = naskoStudent,
+                                Submissions = new List<Submission>
+                                {
+                                    new Submission { ContestId = contestId, ProblemId =  problems[0].Id, ActualPoints = 40},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[0].Id, ActualPoints = 50},
+                                    new Submission { ContestId = 12, ProblemId =  15, ActualPoints = 100},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[2].Id, ActualPoints = 100},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[2].Id, ActualPoints = 100},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[2].Id, ActualPoints = 20},
+                                }
+                            },
+                            ContestId = contestId
+                        },
+                        new UserContest
+                        {
+                            User = new ApplicationUser
+                            {
+                                StudentId = martoStudent.Id,
+                                UserName = "marto",
+                                Student = martoStudent,
+                                Submissions = new List<Submission>
+                                {
+                                    new Submission { ContestId = contestId, ProblemId =  problems[0].Id, ActualPoints = 40},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[0].Id, ActualPoints = 60},
+                                    new Submission { ContestId = 12, ProblemId =  15, ActualPoints = 100},
+                                    new Submission { ContestId = 123, ProblemId =  155, ActualPoints = 50},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[1].Id, ActualPoints = 100},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[1].Id, ActualPoints = 50},
+                                    new Submission { ContestId = contestId, ProblemId =  problems[2].Id, ActualPoints = 70},
+                                }
+                            },
+                            ContestId = contestId
+                        },
+                        new UserContest
+                        {
+                            User = new ApplicationUser
+                            {
+                                UserName = "not-students",
+                            },
+                            ContestId = contestId
+                        }
+                    }
+                }
+            };
+        }
+
+        private Contest GenerateContestForGetContestResultsPagesCount(int userContestsCount)
+        {
+            List<UserContest> userContests = new List<UserContest>();
+            for (int i = 0; i < userContestsCount; i++)
+            {
+                userContests.Add(new UserContest
+                {
+                    User = new ApplicationUser
+                    {
+                        StudentId = "test" + i,
+                    }
+                });
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                userContests.Add(new UserContest
+                {
+                    User = new ApplicationUser
+                    {
+                        StudentId = null
+                    }
+                });
+            }
+
+            return new Contest { Id = 1, UserContests = userContests };
         }
     }
 }

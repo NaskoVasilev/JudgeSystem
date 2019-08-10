@@ -41,6 +41,7 @@ namespace JudgeSystem.Common
         public const string QueryStringDelimiter = "&";
         public const string ProblemIdKey = "problemId";
         public const string PageKey = "page";
+        public const int ContestsPerPage = 20;
         #endregion
 
         #region Email constants

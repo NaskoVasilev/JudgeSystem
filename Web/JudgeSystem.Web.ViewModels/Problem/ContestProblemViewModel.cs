@@ -8,5 +8,7 @@ namespace JudgeSystem.Web.ViewModels.Problem
 		public int Id { get; set; }
 
 		public string Name { get; set; }
-	}
+
+        public bool IsExtraTask { get; set; }
+    }
 }

@@ -20,7 +20,6 @@ namespace JudgeSystem.Services.Data
 {
     public class ContestService : IContestService
 	{
-		public const int ContestsPerPage = 20;
 		public const int ResultsPerPage = 15;
 
 		private readonly IDeletableEntityRepository<Contest> repository;
@@ -121,8 +120,8 @@ namespace JudgeSystem.Services.Data
 		{
 			var contests = repository.All()
 				.OrderByDescending(c => c.StartTime)
-				.Skip((page - 1) * ContestsPerPage)
-				.Take(ContestsPerPage)
+				.Skip((page - 1) * GlobalConstants.ContestsPerPage)
+				.Take(GlobalConstants.ContestsPerPage)
 				.To<ContestViewModel>()
 				.ToList();
 
@@ -132,7 +131,7 @@ namespace JudgeSystem.Services.Data
 		public int GetNumberOfPages()
 		{
 			int numberOfContests = repository.All().Count();
-			return (int)Math.Ceiling((double)numberOfContests / ContestsPerPage);
+			return (int)Math.Ceiling((double)numberOfContests / GlobalConstants.ContestsPerPage);
 		}
 
 		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
@@ -148,7 +147,8 @@ namespace JudgeSystem.Services.Data
 					.Select(p => new ContestProblemViewModel
 					{
 						Id = p.Id,
-						Name = p.Name
+						Name = p.Name,
+                        IsExtraTask = p.IsExtraTask
 					})
 					.ToList(),
 					ContestResults = c.UserContests
@@ -176,6 +176,11 @@ namespace JudgeSystem.Services.Data
 				})
 				.FirstOrDefault();
 
+            if(model == null)
+            {
+                throw new EntityNotFoundException(nameof(Contest));
+            }
+
             model.NumberOfPages = paginationService.CalculatePagesCount(model.ContestResults.Count, ResultsPerPage);
             model.CurrentPage = page;
 
@@ -196,7 +201,8 @@ namespace JudgeSystem.Services.Data
 				.UserContests
 				.Where(uc => uc.User.StudentId != null)
 				.Count();
-			return (int)Math.Ceiling(count / (double)ResultsPerPage);
+
+            return paginationService.CalculatePagesCount(count, ResultsPerPage);
 		}
 
         public async Task<int> GetLessonId(int contestId)
