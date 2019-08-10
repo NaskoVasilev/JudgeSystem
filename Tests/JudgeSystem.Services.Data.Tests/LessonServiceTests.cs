@@ -90,7 +90,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetById_WithInValidId_ShouldReturnThrowEntityNotFoundException()
+        public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
             var testData = GetTestData();
             LessonService service = await CreateLessonService(testData);
@@ -113,6 +113,70 @@ namespace JudgeSystem.Services.Data.Tests
             string actualLessonsNames = string.Join(", ", actualData.Select(x => x.Name));
 
             Assert.Equal(expectedLessonsNames, actualLessonsNames);
+        }
+
+        [Fact]
+        public async Task GetFirstProblemId_WithLessonWithProblems_ShouldReturnCorrectData()
+        {
+            var lesson = new Lesson
+            {
+                Id = 10,
+                Problems = new List<Problem>
+                {
+                    new Problem { Id = 12 },
+                    new Problem { Id = 15 },
+                }
+
+            };
+            var service = await CreateLessonService(new List<Lesson> { lesson });
+
+            int? actualData = service.GetFirstProblemId(lesson.Id);
+
+            Assert.Equal(12, actualData);
+        }
+
+        [Fact]
+        public async Task GetFirstProblemId_WithInvalidLessonId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            LessonService service = await CreateLessonService(testData);
+
+            Assert.Throws<EntityNotFoundException>(() => service.GetFirstProblemId(161651));
+        }
+
+        [Fact]
+        public async Task GetFirstProblemId_WithLessonWithoutProblems_ShouldReturnNull()
+        {
+            var lesson = new Lesson { Id = 10 };
+            var service = await CreateLessonService(new List<Lesson> { lesson });
+
+            int? actualData = service.GetFirstProblemId(lesson.Id);
+
+            Assert.Null(actualData);
+        }
+
+        [Fact]
+        public async Task GetPracticeId_WithValidId_ShouldReturnCorrectData()
+        {
+            var lesson = new Lesson
+            {
+                Id = 10,
+                Practice = new Practice { Id = 20 }
+            };
+            var service = await CreateLessonService(new List<Lesson> { lesson });
+
+            var practiceId = service.GetPracticeId(lesson.Id);
+
+            Assert.Equal(lesson.Practice.Id, practiceId);
+        }
+
+        [Fact]
+        public async Task GetPracticeId_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            LessonService service = await CreateLessonService(testData);
+
+            Assert.Throws<EntityNotFoundException>(() => service.GetPracticeId(161651));
         }
 
         [Fact]
@@ -175,9 +239,9 @@ namespace JudgeSystem.Services.Data.Tests
             var service = await CreateLessonService(GetTestData());
             await context.AddRangeAsync(new List<Lesson>
             {
-                new Lesson { Name = "programming basics" },
-                new Lesson { Name = "c# WEb API" },
-                new Lesson { Name = "c# web - asp.NET CoRe" },
+                new Lesson { Name = "programming basics", Practice = new Practice() },
+                new Lesson { Name = "c# WEb API", Practice = new Practice() },
+                new Lesson { Name = "c# web - asp.NET CoRe", Practice = new Practice() },
             });
             await context.SaveChangesAsync();
 
@@ -226,7 +290,6 @@ namespace JudgeSystem.Services.Data.Tests
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => lessonService.Update(new LessonEditInputModel { Id = 161651 }));
         }
-
 
         [Fact]
         public async Task SetPassword_WithInValidLessonId_ShouldThrowEntityNotFoundException()
