@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
-
+using JudgeSystem.Data.Repositories;
 using Moq;
 using Xunit;
 
@@ -82,6 +82,34 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal("Exam contest", secondExamResult.ContestName);
         }
 
+        [Theory]
+        [InlineData("student_id")]
+        [InlineData(null)]
+        public async Task DeleteUserData_WiithExistingUserId_ShouldDeleteAllUserDataInTheDatabase(string studentId)
+        {
+            var user = GetUser();
+            await context.Users.AddAsync(user);
+            await context.SaveChangesAsync();
+            IRepository<UserContest> userContestRepository = new EfRepository<UserContest>(context);
+            IRepository<UserPractice> userPracticeRepository = new EfRepository<UserPractice>(context);
+            var studentServiceMock = new Mock<IStudentService>();
+            studentServiceMock.Setup(x => x.Delete(studentId));
+            var userService = new UserService(null, userPracticeRepository, userContestRepository, studentServiceMock.Object);
+
+            await userService.DeleteUserData(user.Id, studentId);
+
+            Assert.Equal(0, context.UserContests.Count(x => x.UserId == user.Id));
+            Assert.Equal(0, context.UserPractices.Count(x => x.UserId == user.Id));
+            if(studentId != null)
+            {
+                studentServiceMock.Verify(x => x.Delete(studentId), Times.Once());
+            }
+            else
+            {
+                studentServiceMock.Verify(x => x.Delete(studentId), Times.Never());
+            }
+        }
+
         private UserService CreateUserServiceWithMockedRepository(IQueryable<ApplicationUser> testData)
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<ApplicationUser>>();
@@ -92,7 +120,7 @@ namespace JudgeSystem.Services.Data.Tests
         private List<ApplicationUser> GetContestResultsTestData()
         {
             Problem sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
-            Problem helloWorld = new Problem { Id = 2, Name = "Hello world",  IsExtraTask = false, MaxPoints = 100 };
+            Problem helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
             Problem multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
             Problem interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
             Problem inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
@@ -338,6 +366,37 @@ namespace JudgeSystem.Services.Data.Tests
                 new ApplicationUser
                 {
                     Id = "test_userr"
+                }
+            };
+        }
+
+        private ApplicationUser GetUser()
+        {
+            return new ApplicationUser
+            {
+                Id = "user_id",
+                Student = new Student() { Id = "student_id" },
+                UserPractices = new List<UserPractice>
+                {
+                    new UserPractice
+                    {
+                        Practice = new Practice() { Id = 1 }
+                    },
+                    new UserPractice
+                    {
+                        Practice = new Practice() { Id = 2 }
+                    },
+                },
+                UserContests = new List<UserContest>
+                {
+                    new UserContest()
+                    {
+                        Contest = new Contest(){ Id = 11 },
+                    },
+                    new UserContest()
+                    {
+                        Contest = new Contest(){ Id = 12 },
+                    }
                 }
             };
         }

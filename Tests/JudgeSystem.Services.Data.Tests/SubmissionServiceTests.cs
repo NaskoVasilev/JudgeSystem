@@ -33,14 +33,31 @@ namespace JudgeSystem.Services.Data.Tests
                 SubmissionContent = Encoding.UTF8.GetBytes(code),
                 ContestId = null,
                 ProblemId = 1,
+                PracticeId = 12
             };
 
             var actualSubmission = await service.Create(submission, userId);
 
             Assert.Equal(Encoding.UTF8.GetString(actualSubmission.Code), code);
-            Assert.Null(actualSubmission.CompilationErrors);
             Assert.Equal(actualSubmission.ProblemId, submission.ProblemId);
             Assert.Contains(this.context.Submissions, x => x.Id == actualSubmission.Id);
+        }
+
+        [Fact]
+        public async Task Create_WithNotProvidedContestIdOrPracticeId_ShouldThrowBadRequestException()
+        {
+            var service = await CreateSubmissionService(new List<Submission>());
+            string code = "using System;";
+            string userId = "use_test_id";
+            var submission = new SubmissionInputModel
+            {
+                SubmissionContent = Encoding.UTF8.GetBytes(code),
+                ContestId = null,
+                ProblemId = 1,
+                PracticeId = null
+            };
+
+            await Assert.ThrowsAsync<BadRequestException>(() => service.Create(submission, userId));
         }
 
         [Fact]

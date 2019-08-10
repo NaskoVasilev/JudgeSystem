@@ -124,7 +124,7 @@ namespace JudgeSystem.Services.Data.Tests
 
             var actualResult = contestService.GetNumberOfPages();
 
-            Assert.Equal(3, actualResult);
+            Assert.Equal(5, actualResult);
         }
 
         [Fact]
