@@ -3,6 +3,7 @@ using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.Filters;
 
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -16,9 +17,9 @@ namespace JudgeSystem.Web.Controllers
         }
 
         [EndpointExceptionFilter]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var problem = problemService.GetById<ProblemConstraintsDto>(id);
+            var problem = await problemService.GetById<ProblemConstraintsDto>(id);
             return this.Ok(problem);
         }
 	}

@@ -5,6 +5,7 @@
 	<div class="border-top border-bottom overflow-auto pt-3">
 		<div>
 			<a asp-area="" asp-action="Details" asp-controller="Lesson" asp-route-id="@contest.LessonId" 
+               asp-route-practiceId="@contest.LessonPracticeId"
 			   class="h3 text-decoration-none text-secondary">@contest.Name</a>
 			<p class="mt-2">Ended: @contest.EndTime</p>
 		</div>

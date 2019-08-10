@@ -20,16 +20,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		private readonly IContestService contestService;
 		private readonly ILessonService lessonService;
-        private readonly IPaginationService paginationService;
 
         public ContestController(
             IContestService contestService, 
-            ILessonService lessonService,
-            IPaginationService paginationService)
+            ILessonService lessonService)
 		{
 			this.contestService = contestService;
 			this.lessonService = lessonService;
-            this.paginationService = paginationService;
         }
 
 		public IActionResult Create()
@@ -107,7 +104,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		public IActionResult All(int page = DefaultPage)
 		{
 			IEnumerable<ContestViewModel> contests = contestService.GetAllConests(page);
-            int numberOfPages = paginationService.CalculatePagesCount(contests.Count(), GlobalConstants.ContestsPerPage);
+            int numberOfPages = contestService.GetNumberOfPages();
 			ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page };
 			return View(model);
 		}

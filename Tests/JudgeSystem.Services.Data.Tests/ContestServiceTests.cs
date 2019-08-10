@@ -403,13 +403,14 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Contest> GetTestData()
         {
+            var lesson = new Lesson { Id = 10, Practice = new Practice() };
             return new List<Contest>()
             {
-                new Contest { Id = 1,  Name = "compete1", EndTime = DateTime.Now.AddDays(1), StartTime = DateTime.Now.AddDays(-1) },
-                new Contest { Id = 2,  Name = "compete2", EndTime = DateTime.Now.AddDays(-4), StartTime = DateTime.Now.AddDays(-10) },
-                new Contest { Id = 3,  Name = "compete3", EndTime = DateTime.Now.AddMinutes(10), StartTime = DateTime.Now.AddHours(-1) },
-                new Contest { Id = 4,  Name = "compete4", EndTime = DateTime.Now.AddDays(10), StartTime = DateTime.Now.AddHours(1) },
-                new Contest { Id = 5,  Name = "compete5", EndTime = DateTime.Now.AddDays(-2), StartTime = DateTime.Now.AddHours(-5) },
+                new Contest { Id = 1,  Name = "compete1", EndTime = DateTime.Now.AddDays(1), StartTime = DateTime.Now.AddDays(-1), Lesson = lesson },
+                new Contest { Id = 2,  Name = "compete2", EndTime = DateTime.Now.AddDays(-4), StartTime = DateTime.Now.AddDays(-10), Lesson = lesson },
+                new Contest { Id = 3,  Name = "compete3", EndTime = DateTime.Now.AddMinutes(10), StartTime = DateTime.Now.AddHours(-1), Lesson = lesson },
+                new Contest { Id = 4,  Name = "compete4", EndTime = DateTime.Now.AddDays(10), StartTime = DateTime.Now.AddHours(1), Lesson = lesson },
+                new Contest { Id = 5,  Name = "compete5", EndTime = DateTime.Now.AddDays(-2), StartTime = DateTime.Now.AddHours(-5), Lesson = lesson },
             };
         }
 

@@ -20,7 +20,7 @@ namespace JudgeSystem.Services.Data
 {
     public class ContestService : IContestService
 	{
-		public const int ResultsPerPage = 15;
+		public const int ResultsPerPage = 5;
 
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
@@ -181,7 +181,7 @@ namespace JudgeSystem.Services.Data
                 throw new EntityNotFoundException(nameof(Contest));
             }
 
-            model.NumberOfPages = paginationService.CalculatePagesCount(model.ContestResults.Count, ResultsPerPage);
+            model.NumberOfPages = this.GetContestResultsPagesCount(contestId);
             model.CurrentPage = page;
 
 			return model;

@@ -7,7 +7,7 @@
 	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
-<h2 class="text-center mb-4">All active contests</h2>
+<h2 class="text-center mb-4">All contests</h2>
 
 <table class="table table-hover">
 	<thead>
@@ -32,7 +32,7 @@
 	</tbody>
 </table>
 
-<partial name="_ClientSidePaginationPartial" model="paginationData" />
+<partial name="_ServerSidePaginationPartial" model="paginationData" />
 
 @section Scripts{
 		<script src="~/js/pagination.js"></script>

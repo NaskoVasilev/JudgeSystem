@@ -11,9 +11,11 @@ namespace JudgeSystem.Web.ViewModels.Contest
 	{
 		public string Name { get; set; }
 
-		public string LessonId { get; set; }
+		public int LessonId { get; set; }
 
-		public string EndTime { get; set; }
+        public int LessonPracticeId { get; set; }
+
+        public string EndTime { get; set; }
 
 		public void CreateMappings(IProfileExpression configuration)
 		{
