@@ -102,7 +102,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetStudentClassAsync_WithValidId_ShouldReturnCorrectData()
+        public async Task GetStudentClass_WithValidId_ShouldReturnCorrectData()
         {
             var testData = GetTestData();
             var service = await CreateStudentService(testData);
@@ -125,7 +125,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetStudentClassAsync_WithInValidId_ShouldThrowEntityNotFoundException()
+        public async Task GetStudentClass_WithInValidId_ShouldThrowEntityNotFoundException()
         {
             var testData = GetTestData();
             var service = await CreateStudentService(testData);

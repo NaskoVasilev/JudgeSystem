@@ -26,6 +26,7 @@ namespace JudgeSystem.Common
         public const string EmailTemplatesFolder = "EmailTemplates";
         public const string JsonContentType = "text/json";
         public const string PersonalDataFileName = "JudgePersonalData.json";
+        public static string[] AllowedFileExtensoins = new string[] { ".ppt", ".pptx", ".doc", ".docx", ".xls", ".cs", ".zip", ".json", ".xml", ".mp4", ".avi", ".txt" };
         #endregion
 
         #region Student and class related constants

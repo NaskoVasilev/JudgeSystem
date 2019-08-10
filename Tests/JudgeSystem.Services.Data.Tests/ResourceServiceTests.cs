@@ -67,7 +67,6 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal("1, 3", string.Join(", ", actualResults.Select(x => x.Id)));
         }
 
-
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {

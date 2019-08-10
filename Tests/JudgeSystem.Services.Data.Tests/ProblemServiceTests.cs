@@ -76,7 +76,7 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetById_WithInValidId_ShouldReturnNull()
+        public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
             var testData = GetTestData();
             var service = await CreateProblemService(testData);

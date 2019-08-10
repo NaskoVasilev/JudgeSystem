@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
-
+using JudgeSystem.Web.Dtos.SchoolClass;
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
@@ -52,6 +52,30 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 Assert.Contains(testData, x => x.Id == schoolClass.Id && x.ClassNumber == schoolClass.ClassNumber && x.ClassType == schoolClass.ClassType);
             }
+        }
+
+        [Fact]
+        public async Task GetById_WithValidId_ShouldReturnCorrectData()
+        {
+            var testData = GetTestData();
+            var service = await CreateSchoolClassService(testData);
+
+            int id = 2;
+            var actualData = await service.GetById<SchoolClassDto>(id);
+            var expectedData = testData.First(x => x.Id == id);
+
+            Assert.Equal(actualData.Name, expectedData.Name);
+            Assert.Equal(actualData.ClassNumber, expectedData.ClassNumber);
+            Assert.Equal(actualData.ClassType, expectedData.ClassType);
+        }
+
+        [Fact]
+        public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
+        {
+            var testData = GetTestData();
+            var service = await CreateSchoolClassService(testData);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<SchoolClassDto>(165));
         }
 
         private async Task<SchoolClassService> CreateSchoolClassService(List<SchoolClass> testData)
