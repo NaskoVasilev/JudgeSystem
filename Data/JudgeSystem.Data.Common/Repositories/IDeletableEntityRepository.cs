@@ -14,8 +14,8 @@ namespace JudgeSystem.Data.Common.Repositories
 
         Task<TEntity> GetByIdWithDeletedAsync(params object[] id);
 
-        void HardDelete(TEntity entity);
+        Task HardDeleteAsync(TEntity entity);
 
-        void Undelete(TEntity entity);
+        Task UndeleteAsync(TEntity entity);
     }
 }

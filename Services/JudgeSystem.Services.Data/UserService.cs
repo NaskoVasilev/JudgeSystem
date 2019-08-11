@@ -114,7 +114,7 @@ namespace JudgeSystem.Services.Data
 
             foreach (var userContest in userContests)
             {
-                userContestReository.Delete(userContest);
+                userContestReository.DeleteAsync(userContest);
             }
 
             await userContestReository.SaveChangesAsync();
@@ -126,7 +126,7 @@ namespace JudgeSystem.Services.Data
 
             foreach (var userPractice in userPractices)
             {
-                userPracticeReository.Delete(userPractice);
+                userPracticeReository.DeleteAsync(userPractice);
             }
 
             await userPracticeReository.SaveChangesAsync();

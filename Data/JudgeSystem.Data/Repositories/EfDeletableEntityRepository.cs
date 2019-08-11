@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 using JudgeSystem.Data.Common.Models;
@@ -27,27 +28,27 @@ namespace JudgeSystem.Data.Repositories
 
         public Task<TEntity> GetByIdWithDeletedAsync(params object[] id)
         {
-            var byIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);
+            Expression<Func<TEntity, bool>> byIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(Context, id);
 
-            return this.AllWithDeleted().FirstOrDefaultAsync(byIdPredicate);
+            return AllWithDeleted().FirstOrDefaultAsync(byIdPredicate);
         }
 
-        public void HardDelete(TEntity entity) => base.Delete(entity);
+        public Task HardDeleteAsync(TEntity entity) => base.DeleteAsync(entity);
 
-        public void Undelete(TEntity entity)
+        public Task UndeleteAsync(TEntity entity)
         {
             entity.IsDeleted = false;
             entity.DeletedOn = null;
 
-            this.Update(entity);
+            return UpdateAsync(entity);
         }
 
-        public override void Delete(TEntity entity)
+        public override async Task DeleteAsync(TEntity entity)
         {
             entity.IsDeleted = true;
             entity.DeletedOn = DateTime.UtcNow;
 
-            this.Update(entity);
+            await UpdateAsync(entity);
         }
     }
 }

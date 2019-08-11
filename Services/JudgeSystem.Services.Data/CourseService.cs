@@ -53,7 +53,7 @@ namespace JudgeSystem.Services.Data
             var course = await repository.FindAsync(model.Id);
             course.Name = model.Name;
 
-            repository.Update(course);
+            repository.UpdateAsync(course);
 			await repository.SaveChangesAsync();
 		}
 
@@ -61,7 +61,7 @@ namespace JudgeSystem.Services.Data
 		{
             var course = await repository.FindAsync(id);
 
-            repository.Delete(course);
+            repository.DeleteAsync(course);
 			await repository.SaveChangesAsync();
 
             return course.To<CourseViewModel>();

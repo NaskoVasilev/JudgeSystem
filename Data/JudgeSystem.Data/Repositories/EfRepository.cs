@@ -14,23 +14,27 @@ namespace JudgeSystem.Data.Repositories
     {
         public EfRepository(ApplicationDbContext context)
         {
-            this.Context = context ?? throw new ArgumentNullException(nameof(context));
-            this.DbSet = this.Context.Set<TEntity>();
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            DbSet = Context.Set<TEntity>();
         }
 
         protected DbSet<TEntity> DbSet { get; set; }
 
         protected ApplicationDbContext Context { get; set; }
 
-        public virtual IQueryable<TEntity> All() => this.DbSet;
+        public virtual IQueryable<TEntity> All() => DbSet;
 
-        public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
+        public virtual IQueryable<TEntity> AllAsNoTracking() => DbSet.AsNoTracking();
 
-        public virtual Task AddAsync(TEntity entity) => this.DbSet.AddAsync(entity);
+        public virtual async Task AddAsync(TEntity entity)
+        {
+            await DbSet.AddAsync(entity);
+            await SaveChangesAsync();
+        }
 
         public async Task<TEntity> FindAsync(object id)
         {
-            var model = await DbSet.FindAsync(id);
+            TEntity model = await DbSet.FindAsync(id);
 
             if(model == null)
             {
@@ -40,21 +44,20 @@ namespace JudgeSystem.Data.Repositories
             return model;
         }
 
-        public virtual void Update(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
-            var entry = this.Context.Entry(entity);
-            if (entry.State == EntityState.Detached)
-            {
-                this.DbSet.Attach(entity);
-            }
-
-            entry.State = EntityState.Modified;
+            DbSet.Update(entity);
+            await SaveChangesAsync();
         }
 
-        public virtual void Delete(TEntity entity) => this.DbSet.Remove(entity);
+        public virtual async Task DeleteAsync(TEntity entity)
+        {
+            DbSet.Remove(entity);
+            await SaveChangesAsync();
+        }
 
-        public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
+        public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
 
-        public void Dispose() => this.Context.Dispose();
+        public void Dispose() => Context.Dispose();
     }
 }

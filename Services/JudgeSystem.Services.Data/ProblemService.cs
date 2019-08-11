@@ -39,7 +39,7 @@ namespace JudgeSystem.Services.Data
 		{
             var problem = await problemRepository.FindAsync(id);
 
-			problemRepository.Delete(problem);
+			problemRepository.DeleteAsync(problem);
 			await problemRepository.SaveChangesAsync();
 
             return problem.To<ProblemDto>();
@@ -104,7 +104,7 @@ namespace JudgeSystem.Services.Data
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
 
-            problemRepository.Update(problem);
+            problemRepository.UpdateAsync(problem);
 			await problemRepository.SaveChangesAsync();
             return problem.To<ProblemDto>();
 		}

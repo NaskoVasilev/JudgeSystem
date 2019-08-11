@@ -37,7 +37,7 @@ namespace JudgeSystem.Services.Data
 		{
             var test = await repository.FindAsync(id);
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
-            repository.Delete(test);
+            repository.DeleteAsync(test);
 			await repository.SaveChangesAsync();
 		}
 
@@ -74,7 +74,7 @@ namespace JudgeSystem.Services.Data
             var test = await repository.FindAsync(model.Id);
             test.InputData = model.InputData.Trim();
             test.OutputData = model.OutputData.Trim();
-            repository.Update(test);
+            repository.UpdateAsync(test);
 			await repository.SaveChangesAsync();
 		}
 	}

@@ -25,7 +25,7 @@ namespace JudgeSystem.Services.Data
 		{
 			foreach (var executedTest in repository.All().Where(t => t.TestId == testId).ToList())
 			{
-				repository.Delete(executedTest);
+				repository.DeleteAsync(executedTest);
 			}
 
 			await repository.SaveChangesAsync();

@@ -60,7 +60,7 @@ namespace JudgeSystem.Services.Data
         {
             var lesson = await repository.FindAsync(id);
 
-            this.repository.Delete(lesson);
+            this.repository.DeleteAsync(lesson);
             await this.repository.SaveChangesAsync();
 
             return lesson.Name;
@@ -151,7 +151,7 @@ namespace JudgeSystem.Services.Data
             }
 
             lesson.LessonPassword = hashService.HashPassword(lessonPassword);
-            repository.Update(lesson);
+            repository.UpdateAsync(lesson);
             await repository.SaveChangesAsync();
         }
 
@@ -161,7 +161,7 @@ namespace JudgeSystem.Services.Data
             lesson.Name = model.Name;
             lesson.Type = model.Type;
 
-            repository.Update(lesson);
+            repository.UpdateAsync(lesson);
             await repository.SaveChangesAsync();
 
             return lesson.To<LessonDto>();
@@ -184,7 +184,7 @@ namespace JudgeSystem.Services.Data
                 lesson.LessonPassword = hashService.HashPassword(newPassword);
             }
 
-            repository.Update(lesson);
+            repository.UpdateAsync(lesson);
             await repository.SaveChangesAsync();
 
             return lesson.To<LessonDto>();

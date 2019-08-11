@@ -168,7 +168,7 @@ namespace JudgeSystem.Services.Data
                 submission.ActualPoints = estimator.CalculteProblemPoints(executedTests, passedTests, maxPoints);
             }
 
-            repository.Update(submission);
+            repository.UpdateAsync(submission);
             await repository.SaveChangesAsync();
         }
 
@@ -279,7 +279,7 @@ namespace JudgeSystem.Services.Data
                 throw new EntityNotFoundException();
             }
 
-            repository.Update(submission);
+            repository.UpdateAsync(submission);
             await repository.SaveChangesAsync();
         }
 

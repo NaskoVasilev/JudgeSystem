@@ -8,6 +8,7 @@ using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.ViewModels.Contest;
@@ -47,41 +48,40 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<bool> AddUserToContestIfNotAdded(string userId, int contestId)
 		{
-			if(this.userContestRepository.All().SingleOrDefault(uc => uc.UserId == userId && uc.ContestId == contestId) != null)
+			if(userContestRepository.All().SingleOrDefault(uc => uc.UserId == userId && uc.ContestId == contestId) != null)
 			{
 				return false;
 			}
 
 			await userContestRepository.AddAsync(new UserContest { UserId = userId, ContestId = contestId });
-			await userContestRepository.SaveChangesAsync();
 			return true;
 		}
 
         public async Task Create(ContestCreateInputModel contestCreateInputModel)
 		{
-            var contest = contestCreateInputModel.To<Contest>();
+            Contest contest = contestCreateInputModel.To<Contest>();
 			await repository.AddAsync(contest);
-			await repository.SaveChangesAsync();
 		}
 
 		public IEnumerable<ActiveContestViewModel> GetActiveContests()
 		{
-			var contests = repository.All()
+            var contests = repository.All()
 				.Where(c => c.IsActive)
 				.To<ActiveContestViewModel>()
 				.ToList();
-			return contests;
+
+            return contests;
 		}
 
 		public async Task<T> GetById<T>(int contestId)
 		{
-            var contest = await repository.FindAsync(contestId);
+            Contest contest = await repository.FindAsync(contestId);
 			return contest.To<T>();
 		}
 
 		public IEnumerable<ContestBreifInfoViewModel> GetActiveAndFollowingContests()
 		{
-			var followingContests = this.repository.All()
+			var followingContests = repository.All()
 				.Where(c => c.EndTime > DateTime.Now)
 				.To<ContestBreifInfoViewModel>()
 				.ToList();
@@ -95,6 +95,7 @@ namespace JudgeSystem.Services.Data
 				.Where(c => c.EndTime < DateTime.Now && (DateTime.Now - c.EndTime).Days <= passedDays)
 				.To<PreviousContestViewModel>()
                 .ToList();
+
 			return contests;
 		}
 
@@ -105,15 +106,13 @@ namespace JudgeSystem.Services.Data
 			contest.StartTime = model.StartTime;
 			contest.EndTime = model.EndTime;
 
-			repository.Update(contest);
-			await repository.SaveChangesAsync();
+			await repository.UpdateAsync(contest);
 		}
 
 		public async Task Delete(int id)
 		{
             Contest contest = await repository.FindAsync(id);
-            repository.Delete(contest);
-			await repository.SaveChangesAsync();
+            await repository.DeleteAsync(contest);
 		}
 
 		public IEnumerable<ContestViewModel> GetAllConests(int page)
@@ -136,7 +135,7 @@ namespace JudgeSystem.Services.Data
 
 		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
 		{
-            var model = repository.All()
+            ContestAllResultsViewModel model = repository.All()
 				.Where(c => c.Id == contestId)
 				.Select(c => new ContestAllResultsViewModel()
 				{
@@ -176,45 +175,38 @@ namespace JudgeSystem.Services.Data
 				})
 				.FirstOrDefault();
 
-            if(model == null)
-            {
-                throw new EntityNotFoundException(nameof(Contest));
-            }
-
-            model.NumberOfPages = this.GetContestResultsPagesCount(contestId);
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(model, nameof(Contest));
+            model.NumberOfPages = GetContestResultsPagesCount(contestId);
             model.CurrentPage = page;
 
 			return model;
 		}
 
 		public int GetContestResultsPagesCount(int contestId)
-		{
-            if(!this.repository.All().Any(x => x.Id == contestId))
-            {
-                throw new EntityNotFoundException("contest");
-            }
+        {
+            ThrowEntityNotFoundExceptionIfContestDoesNotExist(contestId);
 
-			int count = repository.All()
-				.Include(c => c.UserContests)
-				.ThenInclude(uc => uc.User)
-				.FirstOrDefault(c => c.Id == contestId)
-				.UserContests
-				.Where(uc => uc.User.StudentId != null)
-				.Count();
+            int count = repository.All()
+                .Include(c => c.UserContests)
+                .ThenInclude(uc => uc.User)
+                .FirstOrDefault(c => c.Id == contestId)
+                .UserContests
+                .Where(uc => uc.User.StudentId != null)
+                .Count();
 
             return paginationService.CalculatePagesCount(count, ResultsPerPage);
-		}
+        }
 
         public async Task<int> GetLessonId(int contestId)
         {
-            var contest = await this.repository.FindAsync(contestId);
+            Contest contest = await repository.FindAsync(contestId);
             return contest.LessonId;
         }
 
         public async Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
         {
             int baseProblemId = 0;
-            int lessonId = await this.GetLessonId(contestId);
+            int lessonId = await GetLessonId(contestId);
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
@@ -224,12 +216,12 @@ namespace JudgeSystem.Services.Data
                 baseProblemId = lessonService.GetFirstProblemId(lessonId) ?? baseProblemId;
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
+            IEnumerable<SubmissionResult> submissions = submissionService.GetUserSubmissionsByProblemIdAndContestId(contestId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
 
             int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndContestId(baseProblemId, contestId, userId);
 
-            PaginationData paginationData = new PaginationData
+            var paginationData = new PaginationData
             {
                 CurrentPage = page,
                 NumberOfPages = paginationService.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionsPerPage),
@@ -243,9 +235,17 @@ namespace JudgeSystem.Services.Data
                 LessonId = lessonId,
                 UrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}",
                 PaginationData = paginationData
-            };
 
+            };
             return model;
+        }
+
+        private void ThrowEntityNotFoundExceptionIfContestDoesNotExist(int contestId)
+        {
+            if (!repository.All().Any(x => x.Id == contestId))
+            {
+                throw new EntityNotFoundException(nameof(Contest));
+            }
         }
     }
 }

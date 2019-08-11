@@ -39,7 +39,7 @@ namespace JudgeSystem.Services.Data
 		public async Task<StudentDto> Delete(string id)
 		{
             var student = await repository.FindAsync(id);
-            this.repository.Delete(student);
+            this.repository.DeleteAsync(student);
 			await this.repository.SaveChangesAsync();
             return student.To<StudentDto>();
 		}
@@ -115,7 +115,7 @@ namespace JudgeSystem.Services.Data
             var student = await repository.FindAsync(studentId);
             student.IsActivated = true;
 
-			repository.Update(student);
+			repository.UpdateAsync(student);
 			await repository.SaveChangesAsync();
 		}
 
@@ -127,7 +127,7 @@ namespace JudgeSystem.Services.Data
 			student.NumberInCalss = model.NumberInCalss;
 			student.SchoolClassId = model.SchoolClassId;
 
-			repository.Update(student);
+			repository.UpdateAsync(student);
 			await repository.SaveChangesAsync();
 
 			return student.To<StudentDto>();

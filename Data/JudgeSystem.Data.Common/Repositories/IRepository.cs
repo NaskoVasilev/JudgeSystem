@@ -13,9 +13,9 @@ namespace JudgeSystem.Data.Common.Repositories
 
         Task AddAsync(TEntity entity);
 
-        void Update(TEntity entity);
+        Task UpdateAsync(TEntity entity);
 
-        void Delete(TEntity entity);
+        Task DeleteAsync(TEntity entity);
 
         Task<TEntity> FindAsync(object id);
 

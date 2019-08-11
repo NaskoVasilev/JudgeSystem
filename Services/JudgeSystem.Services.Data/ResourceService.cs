@@ -58,7 +58,7 @@ namespace JudgeSystem.Services.Data
         {
             Resource resource = await repository.FindAsync(id);
 
-            repository.Delete(resource);
+            repository.DeleteAsync(resource);
             await repository.SaveChangesAsync();
 
             return resource.To<ResourceDto>();
@@ -73,7 +73,7 @@ namespace JudgeSystem.Services.Data
             }
 
             resource.Name = model.Name;
-            repository.Update(resource);
+            repository.UpdateAsync(resource);
 
             await repository.SaveChangesAsync();
         }
