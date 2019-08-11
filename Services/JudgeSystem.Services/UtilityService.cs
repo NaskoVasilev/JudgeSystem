@@ -59,24 +59,35 @@ namespace JudgeSystem.Services
 
         public  List<string> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
         {
-            List<string> filesData = new List<string>();
-
             using (ZipArchive zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
-                foreach (ZipArchiveEntry entry in zip.Entries)
+                return ExtractFilesFromZipArchive(allowedFilesExtensions, zip);
+            }
+        }
+
+        private List<string> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
+        {
+            List<string> filesData = new List<string>();
+
+            foreach (ZipArchiveEntry entry in zip.Entries)
+            {
+                if (allowedFilesExtensions.Any(extension => entry.Name.EndsWith(extension)))
                 {
-                    if (allowedFilesExtensions.Any(extension => entry.Name.EndsWith(extension)))
-                    {
-                        using (StreamReader reader = new StreamReader(entry.Open()))
-                        {
-                            string data = reader.ReadToEnd();
-                            filesData.Add(data);
-                        }
-                    }
+                    string data = ExtractDataFromZipArchiveEntry(entry);
+                    filesData.Add(data);
                 }
             }
 
             return filesData;
+        }
+
+        private string ExtractDataFromZipArchiveEntry(ZipArchiveEntry entry)
+        {
+            using (StreamReader reader = new StreamReader(entry.Open()))
+            {
+                string data = reader.ReadToEnd();
+                return data;
+            }
         }
 
         private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile)

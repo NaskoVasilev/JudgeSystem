@@ -179,7 +179,7 @@ namespace JudgeSystem.Services.Data
                 .Select(x => x.Code)
                 .FirstOrDefault();
 
-            if(code  == null)
+            if(code == null)
             {
                 throw new EntityNotFoundException(nameof(Submission));
             }
