@@ -47,7 +47,7 @@ namespace JudgeSystem.Services
         {
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
-            BlobContainerPermissions permissions = new BlobContainerPermissions
+            var permissions = new BlobContainerPermissions
             {
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };

@@ -27,10 +27,7 @@ namespace JudgeSystem.Services
             return bytes / kilobyteInBytes;
         }
 
-        public int ConvertMegaBytesToBytes(double megabytes)
-        {
-            return (int)(megabytes * 1000 * 1000);
-        }
+        public int ConvertMegaBytesToBytes(double megabytes) => (int)(megabytes * 1000 * 1000);
 
         public async Task<SubmissionCodeDto> ExtractSubmissionCode(string code, IFormFile submissionFile)
         {
@@ -57,9 +54,9 @@ namespace JudgeSystem.Services
             return submissionCodeDto;
         }
 
-        public  List<string> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
+        public List<string> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
         {
-            using (ZipArchive zip = new ZipArchive(stream, ZipArchiveMode.Read))
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 return ExtractFilesFromZipArchive(allowedFilesExtensions, zip);
             }
@@ -67,7 +64,7 @@ namespace JudgeSystem.Services
 
         private List<string> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
         {
-            List<string> filesData = new List<string>();
+            var filesData = new List<string>();
 
             foreach (ZipArchiveEntry entry in zip.Entries)
             {
@@ -83,7 +80,7 @@ namespace JudgeSystem.Services
 
         private string ExtractDataFromZipArchiveEntry(ZipArchiveEntry entry)
         {
-            using (StreamReader reader = new StreamReader(entry.Open()))
+            using (var reader = new StreamReader(entry.Open()))
             {
                 string data = reader.ReadToEnd();
                 return data;
@@ -92,7 +89,7 @@ namespace JudgeSystem.Services
 
         private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile)
         {
-            if (this.ConvertBytesToKiloBytes(submissionFile.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
+            if (ConvertBytesToKiloBytes(submissionFile.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
             {
                 throw new BadRequestException(ErrorMessages.TooBigSubmissionFile);
             }
@@ -103,7 +100,7 @@ namespace JudgeSystem.Services
                 return new SubmissionCodeDto
                 {
                     Content = stream.ToArray(),
-                    SourceCodes = this.ExtractZipFile(stream, new List<string> { GlobalConstants.cSharpFileExtension })
+                    SourceCodes = ExtractZipFile(stream, new List<string> { GlobalConstants.cSharpFileExtension })
                 };
             }
         }

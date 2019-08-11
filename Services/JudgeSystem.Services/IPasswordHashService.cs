@@ -1,7 +1,7 @@
 ﻿namespace JudgeSystem.Services
 {
-	public interface IPasswordHashService
-	{
-		string HashPassword(string password);
-	}
+    public interface IPasswordHashService
+    {
+        string HashPassword(string password);
+    }
 }

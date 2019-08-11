@@ -24,7 +24,7 @@ namespace JudgeSystem.Services
 
         public async Task<string> SendActivationEmail(string email)
         {
-            var activationKey = Guid.NewGuid().ToString();
+            string activationKey = Guid.NewGuid().ToString();
             string activationKeyPlaceholder = "@{activationKey}";
             string subject = GlobalConstants.StudentProfileActivationEmailSubject;
             string message = await ReadEmailTemplateAsync();
@@ -37,7 +37,7 @@ namespace JudgeSystem.Services
         private async Task<string> ReadEmailTemplateAsync()
         {
             string activationTemplateName = "StudentProfileActivation.html";
-            string path = Path.Combine(environment.WebRootPath, GlobalConstants.TemplatesFolder, 
+            string path = Path.Combine(environment.WebRootPath, GlobalConstants.TemplatesFolder,
                 GlobalConstants.EmailTemplatesFolder, activationTemplateName);
 
             string temaplte = await Task.Run(() => File.ReadAllText(path));

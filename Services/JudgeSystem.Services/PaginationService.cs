@@ -9,12 +9,12 @@ namespace JudgeSystem.Services
 
         public int CalculatePagesCount(int elementsCount, int elementsPerPage)
         {
-            if(elementsPerPage <= 0)
+            if (elementsPerPage <= 0)
             {
                 throw new ArgumentException(InvalidElementsPerPageErrorMessage);
             }
 
-            if(elementsCount < 0)
+            if (elementsCount < 0)
             {
                 throw new ArgumentException(InvalidElementsCountErrorMessage);
             }
