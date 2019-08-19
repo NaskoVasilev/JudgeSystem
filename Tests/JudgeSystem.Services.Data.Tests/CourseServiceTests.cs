@@ -7,6 +7,7 @@ using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.InputModels.Course;
+using JudgeSystem.Web.ViewModels.Course;
 
 using Moq;
 using Xunit;
@@ -18,7 +19,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Add_WithValidData_ShouldWorkCorrect()
         {
-            var courseService = await CreateCourseService(new List<Course>());
+            CourseService courseService = await CreateCourseService(new List<Course>());
             string name = "Ef core and unit testing";
             var course = new CourseInputModel { Name = name };
 
@@ -31,13 +32,13 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void All_With2Course_ShouldReturn2Courses()
         {
-            var testData = GetTestData();
-            var courseService = CreateCourseServiceWithMockedRepository(testData.AsQueryable());
+            List<Course> testData = GetTestData();
+            CourseService courseService = CreateCourseServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualData = courseService.All();
+            IEnumerable<CourseViewModel> actualData = courseService.All();
 
             Assert.Equal(testData.Count, actualData.Count());
-            foreach (var data in actualData)
+            foreach (CourseViewModel data in actualData)
             {
                 Assert.Contains(testData, d => d.Id == data.Id && d.Name == data.Name);
             }
@@ -48,7 +49,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             ICourseService courseService = CreateCourseServiceWithMockedRepository(Enumerable.Empty<Course>().AsQueryable());
 
-            var actualData = courseService.All();
+            IEnumerable<CourseViewModel> actualData = courseService.All();
 
             Assert.Empty(actualData);
         }
@@ -56,9 +57,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetName_WithValidDataAndValidId_ShouldReturnCorrectName()
         {
-            var courseService = CreateCourseServiceWithMockedRepository(GetTestData().AsQueryable());
+            CourseService courseService = CreateCourseServiceWithMockedRepository(GetTestData().AsQueryable());
 
-            var actualName = courseService.GetName(2);
+            string actualName = courseService.GetName(2);
 
             Assert.Equal("course2", actualName);
         }
@@ -66,7 +67,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetName_WithValidDataAndInvalidId_ShouldReturnNull()
         {
-            var courseService = CreateCourseServiceWithMockedRepository(GetTestData().AsQueryable());
+            CourseService courseService = CreateCourseServiceWithMockedRepository(GetTestData().AsQueryable());
 
             Assert.Null(courseService.GetName(5));
         }
@@ -74,7 +75,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetName_WithEmptyDatabase_ShouldReturnNull()
         {
-            var courseService = CreateCourseServiceWithMockedRepository(Enumerable.Empty<Course>().AsQueryable());
+            CourseService courseService = CreateCourseServiceWithMockedRepository(Enumerable.Empty<Course>().AsQueryable());
 
             Assert.Null(courseService.GetName(5));
         }
@@ -82,9 +83,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithValidDataAndValidId_ShouldReturnCorrectResult()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
-            var actualCourse = courseService.GetById<CourseEditModel>(2);
+            CourseEditModel actualCourse = courseService.GetById<CourseEditModel>(2);
 
             Assert.Equal("course2", actualCourse.Name);
             Assert.Equal(2, actualCourse.Id);
@@ -93,7 +94,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInvalidId_ShouldThrowArgumentException()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
             Assert.Throws<EntityNotFoundException>(() => courseService.GetById<CourseEditModel>(456));
         }
@@ -101,10 +102,10 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithValidData_ShouldWorkCorrect ()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
             await courseService.Updade(new CourseEditModel { Id = 1, Name = "edited" });
-            var editedCourse = this.context.Courses.Find(1);
+            Course editedCourse = context.Courses.Find(1);
 
             Assert.Equal("edited", editedCourse.Name);
         }
@@ -112,7 +113,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithInvalidId_ShouldThrowArgumentException()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => courseService
             .Updade(new CourseEditModel { Id = 5, Name = "fakeEdited" }));
@@ -121,7 +122,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
             await courseService.Delete(2);
 
@@ -131,16 +132,16 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithInvalidId_ShouldThrowArgumentException()
         {
-            var courseService = await CreateCourseService(GetTestData());
+            CourseService courseService = await CreateCourseService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => courseService.Delete(45));
         }
 
         private async Task<CourseService> CreateCourseService(List<Course> testData)
         {
-            await this.context.Courses.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IDeletableEntityRepository<Course> repository = new EfDeletableEntityRepository<Course>(this.context);
+            await context.Courses.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IDeletableEntityRepository<Course> repository = new EfDeletableEntityRepository<Course>(context);
             var service = new CourseService(repository);
             return service;
         }
@@ -154,12 +155,13 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Course> GetTestData()
         {
-            return new List<Course>()
+            var courses = new List<Course>()
             {
                 new Course{ Name = "course1", Id = 1 },
                 new Course{ Name = "coirse3", Id = 3 },
                 new Course{ Name = "course2", Id = 2 }
             };
+            return courses;
         }
     }
 }

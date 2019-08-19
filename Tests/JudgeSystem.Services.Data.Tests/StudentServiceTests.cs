@@ -9,6 +9,7 @@ using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
@@ -25,7 +26,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
-            var service = await CreateStudentService(new List<Student>());
+            StudentService service = await CreateStudentService(new List<Student>());
             string activationKey = Guid.NewGuid().ToString();
             var student = new StudentCreateInputModel
             {
@@ -34,32 +35,32 @@ namespace JudgeSystem.Services.Data.Tests
                 NumberInCalss = 12
             };
 
-            var actualStudent = await service.Create(student, activationKey);
+            StudentDto actualStudent = await service.Create(student, activationKey);
 
             Assert.NotNull(actualStudent.Id);
             Assert.False(actualStudent.IsActivated);
             Assert.Equal(hashService.HashPassword(activationKey), actualStudent.ActivationKeyHash);
-            Assert.Contains(this.context.Students, x => x.FullName == student.FullName &&
+            Assert.Contains(context.Students, x => x.FullName == student.FullName &&
             x.Email == student.Email && x.NumberInCalss == student.NumberInCalss);
         }
 
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
             string email = "student2@mail.bg";
-            var studentId = context.Students.First(x => x.Email == email).Id;
+            string studentId = context.Students.First(x => x.Email == email).Id;
 
             await service.Delete(studentId);
 
-            Assert.False(this.context.Students.Any(x => x.Email == "student2@mail.bg"));
+            Assert.False(context.Students.Any(x => x.Email == "student2@mail.bg"));
         }
 
         [Fact]
         public async Task Delete_WithNonExistingStudent_ShouldThrowError()
         {
-            var service = await CreateStudentService(new List<Student>());
+            StudentService service = await CreateStudentService(new List<Student>());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(Guid.NewGuid().ToString()));
         }
@@ -67,8 +68,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
             var student = new Student
             {
                 FullName = "mapping test",
@@ -83,7 +84,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Students.AddAsync(student);
             await context.SaveChangesAsync();
 
-            var actualData = await service.GetById<StudentProfileViewModel>(student.Id);
+            StudentProfileViewModel actualData = await service.GetById<StudentProfileViewModel>(student.Id);
 
             Assert.Equal(student.Email, actualData.Email);
             Assert.Equal(student.FullName, actualData.FullName);
@@ -95,8 +96,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<StudentDto>(Guid.NewGuid().ToString()));
         }
@@ -104,8 +105,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetStudentClass_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
             var student = new Student
             {
                 SchoolClass = new SchoolClass
@@ -117,7 +118,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Students.AddAsync(student);
             await context.SaveChangesAsync();
 
-            var actualData = await service.GetStudentClass(student.Id);
+            SchoolClassDto actualData = await service.GetStudentClass(student.Id);
 
             Assert.NotNull(actualData);
             Assert.Equal(12, actualData.ClassNumber);
@@ -127,8 +128,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetStudentClass_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetStudentClass(Guid.NewGuid().ToString()));
         }
@@ -136,8 +137,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetStudentProfileByActivationKey_WithValidActivationKey_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
             string activationKey = Guid.NewGuid().ToString();
             var student = new Student
             {
@@ -149,7 +150,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Students.AddAsync(student);
             await context.SaveChangesAsync();
 
-            var actualData = await service.GetStudentProfileByActivationKey(activationKey);
+            StudentDto actualData = await service.GetStudentProfileByActivationKey(activationKey);
 
             Assert.NotNull(actualData);
             Assert.Equal(student.Email, actualData.Email);
@@ -160,11 +161,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetStudentProfileByActivationKey_WithInvalidActivationKey_ShouldReturnNull()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
             string activationKey = Guid.NewGuid().ToString();
 
-            var actualData = await service.GetStudentProfileByActivationKey(activationKey);
+            StudentDto actualData = await service.GetStudentProfileByActivationKey(activationKey);
 
             Assert.Null(actualData);
         }
@@ -172,9 +173,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task SetStudentProfileAsActivated_WithValidUser_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
-            var student = this.context.Students.FirstOrDefault(x => x.FullName == "Student 4");
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
+            Student student = context.Students.FirstOrDefault(x => x.FullName == "Student 4");
 
             await service.SetStudentProfileAsActivated(student.Id);
 
@@ -184,8 +185,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task SetStudentProfileAsActivated_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.SetStudentProfileAsActivated(Guid.NewGuid().ToString() ));
         }
@@ -202,11 +203,11 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task SearchStudentsByClass_WithDifferentInputs_ShouldReturnDifferentOutputs(int? classNumber, 
             SchoolClassType? classType, string expectedIds)
         {
-            var testData = GetTestDataWithSchoolClasses();
-            var service = await CreateStudentService(testData);
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
 
-            var actualResult = service.SearchStudentsByClass(classNumber, classType);
-            var actualIds = actualResult.Select(x => x.Id);
+            IEnumerable<StudentProfileViewModel> actualResult = service.SearchStudentsByClass(classNumber, classType);
+            IEnumerable<string> actualIds = actualResult.Select(x => x.Id);
 
             Assert.Equal(expectedIds, string.Join(", ", actualIds));
         }
@@ -214,9 +215,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateStudentService(testData);
-            var id = this.context.Students.First().Id;
+            List<Student> testData = GetTestData();
+            StudentService service = await CreateStudentService(testData);
+            string id = context.Students.First().Id;
             var inputModel = new StudentEditInputModel
             {
                Id = id,
@@ -227,7 +228,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
 
             await service.Update(inputModel);
-            var actualStudent = context.Students.First(x => x.Id == inputModel.Id);
+            Student actualStudent = context.Students.First(x => x.Id == inputModel.Id);
 
             Assert.Equal(inputModel.Email, actualStudent.Email);
             Assert.Equal(inputModel.FullName, actualStudent.FullName);
@@ -246,17 +247,17 @@ namespace JudgeSystem.Services.Data.Tests
                 NumberInCalss = 10,
                 SchoolClassId = 12
             };
-            var service = await CreateStudentService(GetTestData());
+            StudentService service = await CreateStudentService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
         }
 
         private async Task<StudentService> CreateStudentService(List<Student> testData)
         {
-            await this.context.Students.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IRepository<Student> repository = new EfRepository<Student>(this.context);
-            var service = new StudentService(this.hashService, repository);
+            await context.Students.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IRepository<Student> repository = new EfRepository<Student>(context);
+            var service = new StudentService(hashService, repository);
             return service;
         }
 
@@ -264,12 +265,12 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IRepository<Student>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new StudentService(this.hashService, reposotiryMock.Object);
+            return new StudentService(hashService, reposotiryMock.Object);
         }
 
         private List<Student> GetTestData()
         {
-            return new List<Student>
+            var students = new List<Student>
             {
                 new Student { Email = "student1@mail.bg", FullName="Student 1" },
                 new Student { Email = "student2@mail.bg", FullName="Student 2" },
@@ -277,11 +278,12 @@ namespace JudgeSystem.Services.Data.Tests
                 new Student { Email = "student4@mail.bg", FullName="Student 4" },
                 new Student { Email = "student5@mail.bg", FullName="Student 5" },
             };
+            return students;
         }
 
         private List<Student> GetTestDataWithSchoolClasses()
         {
-            List<SchoolClass> classes = new List<SchoolClass>()
+            var classes = new List<SchoolClass>()
             {
                 new SchoolClass { ClassNumber = 10, ClassType = SchoolClassType.A },
                 new SchoolClass { ClassNumber = 11, ClassType = SchoolClassType.B },
@@ -302,7 +304,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new Student { Id = "id_2", Email = "student2@mail.bg", NumberInCalss= 15, SchoolClass = classes[0] },
             };
 
-            foreach (var student in students)
+            foreach (Student student in students)
             {
                 student.User = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = student.Email };
                 student.IsActivated = true;

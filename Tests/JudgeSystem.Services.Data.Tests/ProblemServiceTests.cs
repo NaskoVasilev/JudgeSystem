@@ -10,6 +10,8 @@ using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.InputModels.Problem;
+using JudgeSystem.Web.ViewModels.Search;
+using JudgeSystem.Web.ViewModels.Problem;
 
 using Moq;
 using Xunit;
@@ -21,7 +23,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldAddNewProblemToDatabase()
         {
-            var service = await CreateProblemService(new List<Problem>());
+            ProblemService service = await CreateProblemService(new List<Problem>());
             var model = new ProblemInputModel
             {
                 IsExtraTask = false,
@@ -30,9 +32,9 @@ namespace JudgeSystem.Services.Data.Tests
                 Name = "test"
             };
 
-            var actualProblem = await service.Create(model);
+            ProblemDto actualProblem = await service.Create(model);
 
-            Assert.True(this.context.Problems.Any(x => x.Name == "test"));
+            Assert.True(context.Problems.Any(x => x.Name == "test"));
             Assert.Equal(5, actualProblem.LessonId);
             Assert.Equal(100, actualProblem.MaxPoints);
             Assert.False(actualProblem.IsExtraTask);
@@ -43,18 +45,18 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var problemService = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService problemService = await CreateProblemService(testData);
 
             await problemService.Delete(2);
 
-            Assert.False(this.context.Lessons.Any(x => x.Id == 2));
+            Assert.False(context.Lessons.Any(x => x.Id == 2));
         }
 
         [Fact]
         public async Task Delete_WithNonExistingProblem_ShouldThrowError()
         {
-            var problemService = await CreateProblemService(new List<Problem>()); 
+            ProblemService problemService = await CreateProblemService(new List<Problem>()); 
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => problemService.Delete(54984));
         }
@@ -62,12 +64,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
 
             int id = 2;
-            var actualData = await service.GetById<ProblemDto>(id);
-            var expectedData = testData[id - 1];
+            ProblemDto actualData = await service.GetById<ProblemDto>(id);
+            Problem expectedData = testData[id - 1];
 
             Assert.Equal(actualData.Name, expectedData.Name);
             Assert.Equal(actualData.MaxPoints, expectedData.MaxPoints);
@@ -78,8 +80,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<ProblemEditInputModel>(165));
         }
@@ -90,9 +92,9 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(45, "")]
         public void LessonProblems_WithDifferentData_ShouldWorkCorrect(int lessonId, string expectedNames)
         {
-            var service = CreateProblemServiceWithMockedRepository(GetTestData().AsQueryable());
+            ProblemService service = CreateProblemServiceWithMockedRepository(GetTestData().AsQueryable());
 
-            var actualData = service.LessonProblems(lessonId);
+            IEnumerable<LessonProblemViewModel> actualData = service.LessonProblems(lessonId);
 
             Assert.Equal(expectedNames, string.Join(", ", actualData.Select(x => x.Name)));
         }
@@ -109,12 +111,12 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task SearchByName_WithDifferentInputs_ShouldWorkCorrect(string keyword, string expectedResult)
         {
             var lesson = new Lesson() { Id = 1, Name = "lesson1", Practice = new Practice() };
-            var data = GetTestData();
-            foreach (var problem in data)
+            List<Problem> data = GetTestData();
+            foreach (Problem problem in data)
             {
                 problem.Lesson = lesson;
             }
-            var service = await CreateProblemService(data);
+            ProblemService service = await CreateProblemService(data);
             await context.Problems.AddRangeAsync(new List<Problem>
             {
                 new Problem { Id = 5, Name = "programming basics", Lesson = lesson },
@@ -123,7 +125,7 @@ namespace JudgeSystem.Services.Data.Tests
             });
             await context.SaveChangesAsync();
 
-            var actualResult = service.SearchByName(keyword);
+            IEnumerable<SearchProblemViewModel> actualResult = service.SearchByName(keyword);
 
             Assert.Equal(expectedResult, string.Join(", ", actualResult.Select(x => x.Name)));
         }
@@ -133,18 +135,18 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(null)]
         public async Task SearchByName_WithDifferentInvalidInput_ShouldThrowBadRequestException(string keyword)
         {
-            var service = await CreateProblemService(GetTestData());
+            ProblemService service = await CreateProblemService(GetTestData());
             await context.SaveChangesAsync();
 
-            var exception = Assert.Throws<BadRequestException>(() => service.SearchByName(keyword));
+            BadRequestException exception = Assert.Throws<BadRequestException>(() => service.SearchByName(keyword));
             Assert.Equal(exception.Message, ErrorMessages.InvalidSearchKeyword);
         }
 
         [Fact]
         public async Task Update_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
             var inputModel = new ProblemEditInputModel
             {
                 Id = 3,
@@ -154,7 +156,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
 
             await service.Update(inputModel);
-            var actualProblem = context.Problems.First(x => x.Id == inputModel.Id);
+            Problem actualProblem = context.Problems.First(x => x.Id == inputModel.Id);
 
             Assert.Equal("edited", actualProblem.Name);
             Assert.True(actualProblem.IsExtraTask);
@@ -172,7 +174,7 @@ namespace JudgeSystem.Services.Data.Tests
                 MaxPoints = 220,
                 Name = "edited"
             };
-            var service = await CreateProblemService(GetTestData());
+            ProblemService service = await CreateProblemService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
         }
@@ -180,7 +182,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetLessonId_WithValidProblemId_ShouldReturnCorrectData()
         {
-            var service = await CreateProblemService(GetTestData());
+            ProblemService service = await CreateProblemService(GetTestData());
 
             int actualResult = await service.GetLessonId(4);
 
@@ -190,8 +192,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetLessonId_WithInValidId_ShouldReturnThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(161651));
         }
@@ -200,12 +202,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetProblemName_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
 
             int id = 2;
-            var problemName = service.GetProblemName(id);
-            var expectedName = testData[id - 1].Name;
+            string problemName = service.GetProblemName(id);
+            string expectedName = testData[id - 1].Name;
 
             Assert.Equal(expectedName, problemName);
         }
@@ -213,16 +215,16 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetProblemName_WithInValidId_ShouldReturnNull()
         {
-            var testData = GetTestData();
-            var service = await CreateProblemService(testData);
+            List<Problem> testData = GetTestData();
+            ProblemService service = await CreateProblemService(testData);
 
             Assert.Null(service.GetProblemName(321));
         }
 
         private async Task<ProblemService> CreateProblemService(List<Problem> testData)
         {
-            await this.context.Problems.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
+            await context.Problems.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
             IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(this.context);
             var service = new ProblemService(repository);
             return service;
@@ -237,13 +239,14 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Problem> GetTestData()
         {
-            return new List<Problem>
+            var problems = new List<Problem>
             {
                 new Problem { Id = 1, Name = "test1", LessonId = 1, IsExtraTask = false, MaxPoints = 100 },
                 new Problem { Id = 2, Name = "test2", LessonId = 2, IsExtraTask = false, MaxPoints = 50 },
                 new Problem { Id = 3, Name = "test3", LessonId = 3, IsExtraTask = true, MaxPoints = 100 },
                 new Problem { Id = 4, Name = "test4", LessonId = 2, IsExtraTask = false, MaxPoints = 200 },
             };
+            return problems;
         }
     }
 }

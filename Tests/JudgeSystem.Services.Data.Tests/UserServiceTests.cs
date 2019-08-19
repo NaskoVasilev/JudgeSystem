@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.ViewModels.User;
+
 using Moq;
 using Xunit;
 
@@ -15,15 +18,15 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetContestResults_WithValidData_ShouldWorkCorerct()
         {
-            var testData = GetContestResultsTestData();
-            var service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
+            List<ApplicationUser> testData = GetContestResultsTestData();
+            UserService service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualResults = service.GetContestResults("test_user");
+            List<UserCompeteResultViewModel> actualResults = service.GetContestResults("test_user");
             var expectedResult = testData.First().UserContests.Select(s => s.Contest).ToList();
 
             Assert.Equal(2, actualResults.Count);
-            var firstResult = actualResults[0];
-            var secondReslut = actualResults[1];
+            UserCompeteResultViewModel firstResult = actualResults[0];
+            UserCompeteResultViewModel secondReslut = actualResults[1];
             Assert.Equal(200, firstResult.MaxPoints);
             Assert.Equal(100, firstResult.ActualPoints);
             Assert.Equal("OOP Basics", firstResult.ContestName);
@@ -39,15 +42,15 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetPracticeResults_WithValidData_ShouldWorkCorerct()
         {
-            var testData = GetPracticeResultsTestData();
-            var service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
+            List<ApplicationUser> testData = GetPracticeResultsTestData();
+            UserService service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualResults = service.GetPracticeResults("test_user");
+            List<UserPracticeResultViewModel> actualResults = service.GetPracticeResults("test_user");
             var expectedResult = testData.First().UserPractices.Select(s => s.Practice).ToList();
 
             Assert.Equal(2, actualResults.Count);
-            var firstResult = actualResults[0];
-            var secondReslut = actualResults[1];
+            UserPracticeResultViewModel firstResult = actualResults[0];
+            UserPracticeResultViewModel secondReslut = actualResults[1];
             Assert.Equal(200, firstResult.MaxPoints);
             Assert.Equal(200, firstResult.ActualPoints);
             Assert.Equal(2, firstResult.LessonId);
@@ -64,14 +67,14 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetExamResluts_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetUserExamResultsTestData();
-            var service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
+            List<ApplicationUser> testData = GetUserExamResultsTestData();
+            UserService service = CreateUserServiceWithMockedRepository(testData.AsQueryable());
 
             var actualResult = service.GetUserExamResults("test_user").ToList();
 
             Assert.Equal(2, actualResult.Count);
-            var firstExamResult = actualResult[0];
-            var secondExamResult = actualResult[1];
+            UserCompeteResultViewModel firstExamResult = actualResult[0];
+            UserCompeteResultViewModel secondExamResult = actualResult[1];
             Assert.Equal(180, firstExamResult.ActualPoints);
             Assert.Equal(200, firstExamResult.MaxPoints);
             Assert.Equal(1, firstExamResult.LessonId);
@@ -87,7 +90,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(null)]
         public async Task DeleteUserData_WiithExistingUserId_ShouldDeleteAllUserDataInTheDatabase(string studentId)
         {
-            var user = GetUser();
+            ApplicationUser user = GetUser();
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
             IRepository<UserContest> userContestRepository = new EfRepository<UserContest>(context);
@@ -119,19 +122,19 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<ApplicationUser> GetContestResultsTestData()
         {
-            Problem sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
-            Problem helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
-            Problem multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
-            Problem interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
-            Problem inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
+            var sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
+            var helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
+            var multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
+            var interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
+            var inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
 
-            Lesson oopLesson = new Lesson
+            var oopLesson = new Lesson
             {
                 Id = 2,
                 Name = "OOP",
                 Problems = new List<Problem> { interfaces, inheritance }
             };
-            Lesson cSharpLesson = new Lesson
+            var cSharpLesson = new Lesson
             {
                 Id = 1,
                 Name = "C#",
@@ -193,19 +196,19 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<ApplicationUser> GetPracticeResultsTestData()
         {
-            Problem sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
-            Problem helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
-            Problem multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
-            Problem interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
-            Problem inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
+            var sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
+            var helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
+            var multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
+            var interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
+            var inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
 
-            Lesson oopLesson = new Lesson
+            var oopLesson = new Lesson
             {
                 Id = 2,
                 Name = "OOP",
                 Problems = new List<Problem> { interfaces, inheritance }
             };
-            Lesson cSharpLesson = new Lesson
+            var cSharpLesson = new Lesson
             {
                 Id = 1,
                 Name = "C#",
@@ -272,28 +275,28 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<ApplicationUser> GetUserExamResultsTestData()
         {
-            Problem sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
-            Problem helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
-            Problem multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
-            Problem interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
-            Problem inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
-            Problem examProblem = new Problem { Id = 6, Name = "Inheritance", IsExtraTask = false, MaxPoints = 300 };
+            var sumTwoNumbers = new Problem { Id = 1, Name = "Sum two numbers", IsExtraTask = true, MaxPoints = 100 };
+            var helloWorld = new Problem { Id = 2, Name = "Hello world", IsExtraTask = false, MaxPoints = 100 };
+            var multiply = new Problem { Id = 3, Name = "Multiply", IsExtraTask = false, MaxPoints = 100 };
+            var interfaces = new Problem { Id = 4, Name = "Interfaces", IsExtraTask = false, MaxPoints = 100 };
+            var inheritance = new Problem { Id = 5, Name = "Inheritance", IsExtraTask = false, MaxPoints = 100 };
+            var examProblem = new Problem { Id = 6, Name = "Inheritance", IsExtraTask = false, MaxPoints = 300 };
 
-            Lesson oopLesson = new Lesson
+            var oopLesson = new Lesson
             {
                 Id = 2,
                 Name = "OOP",
                 Problems = new List<Problem> { interfaces, inheritance },
                 Type = LessonType.Exercise
             };
-            Lesson cSharpLesson = new Lesson
+            var cSharpLesson = new Lesson
             {
                 Id = 1,
                 Name = "C#",
                 Problems = new List<Problem> { sumTwoNumbers, helloWorld, multiply },
                 Type = LessonType.Exam
             };
-            Lesson examLesson = new Lesson
+            var examLesson = new Lesson
             {
                 Id = 3,
                 Name = "C#",
@@ -372,7 +375,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         private ApplicationUser GetUser()
         {
-            return new ApplicationUser
+            var user = new ApplicationUser
             {
                 Id = "user_id",
                 Student = new Student() { Id = "student_id" },
@@ -399,6 +402,8 @@ namespace JudgeSystem.Services.Data.Tests
                     }
                 }
             };
+
+            return user;
         }
     }
 }

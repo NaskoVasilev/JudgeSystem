@@ -12,6 +12,9 @@ using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.InputModels.Submission;
+using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Web.Dtos.ExecutedTest;
+using JudgeSystem.Web.ViewModels.Submission;
 
 using Moq;
 using Xunit;
@@ -25,7 +28,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
-            var service = await CreateSubmissionService(new List<Submission>());
+            SubmissionService service = await CreateSubmissionService(new List<Submission>());
             string code = "using System;";
             string userId = "use_test_id";
             var submission = new SubmissionInputModel
@@ -36,17 +39,17 @@ namespace JudgeSystem.Services.Data.Tests
                 PracticeId = 12
             };
 
-            var actualSubmission = await service.Create(submission, userId);
+            SubmissionDto actualSubmission = await service.Create(submission, userId);
 
             Assert.Equal(Encoding.UTF8.GetString(actualSubmission.Code), code);
             Assert.Equal(actualSubmission.ProblemId, submission.ProblemId);
-            Assert.Contains(this.context.Submissions, x => x.Id == actualSubmission.Id);
+            Assert.Contains(context.Submissions, x => x.Id == actualSubmission.Id);
         }
 
         [Fact]
         public async Task Create_WithNotProvidedContestIdOrPracticeId_ShouldThrowBadRequestException()
         {
-            var service = await CreateSubmissionService(new List<Submission>());
+            SubmissionService service = await CreateSubmissionService(new List<Submission>());
             string code = "using System;";
             string userId = "use_test_id";
             var submission = new SubmissionInputModel
@@ -63,16 +66,16 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetSubmissionResult_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
-            var actualResult = service.GetSubmissionResult(3);
-            var expectedResult = testData.First(x => x.Id == 3);
+            SubmissionResult actualResult = service.GetSubmissionResult(3);
+            Submission expectedResult = testData.First(x => x.Id == 3);
 
             Assert.Equal(expectedResult.ActualPoints, actualResult.ActualPoints);
             Assert.True(actualResult.IsCompiledSuccessfully);
             Assert.Equal(actualResult.ExecutedTests.Count, expectedResult.ExecutedTests.Count);
-            foreach (var executedTest in actualResult.ExecutedTests)
+            foreach (ExecutedTestResult executedTest in actualResult.ExecutedTests)
             {
                 Assert.Contains(expectedResult.ExecutedTests, x => x.IsCorrect == executedTest.IsCorrect 
                 && x.ExecutionResultType.ToString() == executedTest.ExecutionResultType);
@@ -85,8 +88,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetSubmissionResult_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
             Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionResult(4894));
         }
@@ -100,10 +103,10 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task GetUserSubmissionsByProblemId_WithValidDataAndDifferentPages_ShouldReturnCorrectData(
             int problemId, string userId, int page, int submissionsPerPage, string expectedIds)
         {
-            var testData = PaginationTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = PaginationTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
-            var actualSubmissions = service.GetUserSubmissionsByProblemId(problemId, userId, page, submissionsPerPage);
+            IEnumerable<SubmissionResult> actualSubmissions = service.GetUserSubmissionsByProblemId(problemId, userId, page, submissionsPerPage);
 
             Assert.Equal(expectedIds, string.Join(", ", actualSubmissions.Select(x => x.Id)));
         }
@@ -115,7 +118,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetProblemSubmissionsCount_ShouldReturnDifferentValues_WithDiffernertData(int problemId, 
             string userId, int expectedCount)
         {
-            var service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
 
             int actualCount = service.GetProblemSubmissionsCount(problemId, userId);
 
@@ -128,7 +131,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetSubmissionsCountByProblemIdAndContestId_ShouldReturnDifferentValues_WithDiffernertData(int problemId,
           string userId, int contestId, int expectedCount)
         {
-            var service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
 
             int actualCount = service.GetSubmissionsCountByProblemIdAndContestId(problemId, contestId, userId);
 
@@ -138,11 +141,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetSubmissionDetails_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualSubmission = service.GetSubmissionDetails(1);
-            var expectedSubmission = testData.First(x => x.Id == 1);
+            SubmissionViewModel actualSubmission = service.GetSubmissionDetails(1);
+            Submission expectedSubmission = testData.First(x => x.Id == 1);
 
             Assert.Equal("using System", actualSubmission.Code);
             Assert.Equal(3, actualSubmission.ExecutedTests.Count);
@@ -154,11 +157,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetSubmissionDetails_WithValidIdAndCompilationErrorrs_IsCompiledSuccessfullyShoulBeFalse()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualSubmission = service.GetSubmissionDetails(2);
-            var expectedSubmission = testData.First(x => x.Id == 2);
+            SubmissionViewModel actualSubmission = service.GetSubmissionDetails(2);
+            Submission expectedSubmission = testData.First(x => x.Id == 2);
 
             Assert.False(actualSubmission.CompiledSucessfully);
             Assert.Equal("invalid operation", actualSubmission.CompilationErrors);
@@ -167,11 +170,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetSubmissionDetails_WithValidIdAndZipFileAsSubmissionType_MappedCodeShouldBeNull()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
-            var actualSubmission = service.GetSubmissionDetails(2);
-            var expectedSubmission = testData.First(x => x.Id == 2);
+            SubmissionViewModel actualSubmission = service.GetSubmissionDetails(2);
+            Submission expectedSubmission = testData.First(x => x.Id == 2);
 
             Assert.Empty(actualSubmission.Code);
             Assert.Equal(expectedSubmission.Problem.SubmissionType, actualSubmission.ProblemSubmissionType);
@@ -180,8 +183,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetSubmissionDetails_WithInValidId_ShouldReturnThrowEntityNullException()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
             Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionDetails(4));
         }
@@ -195,10 +198,10 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task GetUserSubmissionsByProblemIdAndContestId_WithValidDataAndDifferentPages_ShouldReturnCorrectData(
                    int contestId, int problemId, string userId, int page, int submissionsPerPage, string expectedIds)
         {
-            var testData = PaginationTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = PaginationTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
-            var actualSubmissions = service.GetUserSubmissionsByProblemIdAndContestId(contestId, problemId, userId, page, submissionsPerPage);
+            IEnumerable<SubmissionResult> actualSubmissions = service.GetUserSubmissionsByProblemIdAndContestId(contestId, problemId, userId, page, submissionsPerPage);
 
             Assert.Equal(expectedIds, string.Join(", ", actualSubmissions.Select(x => x.Id)));
         }
@@ -209,10 +212,10 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(3, 50)]
         public async Task CalculateActualPoints_InDifferentCases_ShouldWorkCorrect(int id, int expectedPoints)
         {
-            var service = await CreateSubmissionService(GetDetailedTestData());
+            SubmissionService service = await CreateSubmissionService(GetDetailedTestData());
 
             await service.CalculateActualPoints(id);
-            var actualPoints = this.context.Submissions.Find(id).ActualPoints;
+            int actualPoints = context.Submissions.Find(id).ActualPoints;
 
             Assert.Equal(expectedPoints, actualPoints);
         }
@@ -220,8 +223,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task CalculateActualPoints_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.CalculateActualPoints(4894));
         }
@@ -229,8 +232,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetSubmissionCodeById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetDetailedTestData();
-            var service = await CreateSubmissionService(testData);
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = await CreateSubmissionService(testData);
 
             Assert.Throws<EntityNotFoundException>(() => service.GetSubmissionCodeById(4894));
         }
@@ -238,12 +241,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetSubmissionCodeById_WithValidId_ShouldReturnCodeAsByteArray()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
             int id = 2;
 
-            var code = service.GetSubmissionCodeById(id);
-            var expectedCode = testData.First(x => x.Id == id).Code;
+            byte[] code = service.GetSubmissionCodeById(id);
+            byte[] expectedCode = testData.First(x => x.Id == id).Code;
 
             Assert.Equal(expectedCode, code);
         }
@@ -251,12 +254,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetProblemNameBySubmissionId_WithValidId_ShouldReturnCorrectName()
         {
-            var service = await CreateSubmissionService(new List<Submission>());
+            SubmissionService service = await CreateSubmissionService(new List<Submission>());
             var submission = new Submission { Id = 99, Problem = new Problem { Name = "Test_Problem" } };
-            await this.context.AddAsync(submission);
-            await this.context.SaveChangesAsync();
+            await context.AddAsync(submission);
+            await context.SaveChangesAsync();
 
-            var problemName = service.GetProblemNameBySubmissionId(99);
+            string problemName = service.GetProblemNameBySubmissionId(99);
 
             Assert.Equal("Test_Problem", problemName);
         }
@@ -264,18 +267,18 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetProblemNameBySubmissionId_WithInValidId_ShouldReturnNull()
         {
-            var testData = GetDetailedTestData();
-            var service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
+            List<Submission> testData = GetDetailedTestData();
+            SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
             Assert.Throws<EntityNotFoundException>(() => service.GetProblemNameBySubmissionId(999));
         }
 
         private async Task<SubmissionService> CreateSubmissionService(List<Submission> testData)
         {
-            await this.context.Submissions.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IRepository<Submission> repository = new EfRepository<Submission>(this.context);
-            var service = new SubmissionService(repository, this.estimator, null, null, null, null);
+            await context.Submissions.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IRepository<Submission> repository = new EfRepository<Submission>(context);
+            var service = new SubmissionService(repository, estimator, null, null, null, null);
             return service;
         }
 
@@ -283,7 +286,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IRepository<Submission>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new SubmissionService(reposotiryMock.Object, this.estimator, null, null, null, null);
+            return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null);
         }
 
         private List<Submission> GetDetailedTestData()

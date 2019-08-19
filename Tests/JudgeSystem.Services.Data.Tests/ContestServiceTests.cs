@@ -8,12 +8,14 @@ using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.InputModels.Contest;
-
-using Xunit;
-using Moq;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Common;
 using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Web.ViewModels.Contest;
+using JudgeSystem.Web.ViewModels.Problem;
+
+using Xunit;
+using Moq;
 
 namespace JudgeSystem.Services.Data.Tests
 {
@@ -25,7 +27,7 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
             var contest = new ContestCreateInputModel { Name = "testContest" };
-            var repository = new EfDeletableEntityRepository<Contest>(this.context);
+            var repository = new EfDeletableEntityRepository<Contest>(context);
             var contestService = new ContestService(repository, null, null, null, null, null);
 
             await contestService.Create(contest);
@@ -43,7 +45,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             context.AddRange(GetUserContestsTestData());
             await context.SaveChangesAsync();
-            var repository = new EfRepository<UserContest>(this.context);
+            var repository = new EfRepository<UserContest>(context);
             var contestService = new ContestService(null, repository, null, null, null, null);
 
             bool result = await contestService.AddUserToContestIfNotAdded(userId, contestId);
@@ -54,11 +56,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task UpdateContest_WithCorrectData_ShouldWorkCorrect()
         {
-            var contestService = await CreateContestService(GetContestsTestData());
+            ContestService contestService = await CreateContestService(GetContestsTestData());
             var inputModel = new ContestEditInputModel { Id = 1, Name = "editedcontest", StartTime = new DateTime(2019, 09, 20), EndTime = new DateTime(2019, 08, 20) };
 
             await contestService.Update(inputModel);
-            var actualResult = context.Contests.First(x => x.Id == 1);
+            Contest actualResult = context.Contests.First(x => x.Id == 1);
 
             Assert.Equal(inputModel.Name, actualResult.Name);
             Assert.Equal(inputModel.StartTime, actualResult.StartTime);
@@ -68,9 +70,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task DeleteContestById_WithValidData_ShouldWorkCorrectWithValidData()
         {
-            var contestService = await CreateContestService(GetContestsTestData());
+            ContestService contestService = await CreateContestService(GetContestsTestData());
 
-            var contest = context.Contests.FirstOrDefault(c => c.Id == 1);
+            Contest contest = context.Contests.FirstOrDefault(c => c.Id == 1);
             await contestService.Delete(1);
 
             Assert.True(contest.IsDeleted);
@@ -85,9 +87,9 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(20)]
         public void GetAllConests_WithNoData_ShouldReturnEmptyCollection(int page)
         {
-            var contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
 
-            var result = contestService.GetAllConests(page);
+            IEnumerable<ContestViewModel> result = contestService.GetAllConests(page);
 
             Assert.Empty(result);
         }
@@ -96,10 +98,10 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(1)]
         public void GetAllConests_WithValidData_ShouldReturnCorrectValues(int page)
         {
-            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
-            var actualContests = contestService.GetAllConests(page);
-            var expectedData = Enumerable.Range((page - 1) * GlobalConstants.ContestsPerPage, page * GlobalConstants.ContestsPerPage);
+            IEnumerable<ContestViewModel> actualContests = contestService.GetAllConests(page);
+            IEnumerable<int> expectedData = Enumerable.Range((page - 1) * GlobalConstants.ContestsPerPage, page * GlobalConstants.ContestsPerPage);
 
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
@@ -107,12 +109,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetAllConests_WithValidDataWithNotEnoughValues_ShouldReturnOnlyLastEntities()
         {
-            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
             int page = 50 / GlobalConstants.ContestsPerPage + 1;
             int expectedEntities = 50 % GlobalConstants.ContestsPerPage;
-            var actualContests = contestService.GetAllConests(page);
-            var expectedData = Enumerable.Range(50 - expectedEntities, expectedEntities);
+            IEnumerable<ContestViewModel> actualContests = contestService.GetAllConests(page);
+            IEnumerable<int> expectedData = Enumerable.Range(50 - expectedEntities, expectedEntities);
 
             Assert.Equal(actualContests.Select(c => c.Id), expectedData);
         }
@@ -120,9 +122,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetNumberOfPages_WithValidData_ShouldReturnCorrectResult()
         {
-            var contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
-            var actualResult = contestService.GetNumberOfPages();
+            int actualResult = contestService.GetNumberOfPages();
 
             Assert.Equal(5, actualResult);
         }
@@ -130,9 +132,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void GetNumberOfPages_WithNoData_ShouldReturnOne()
         {
-            var contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(Enumerable.Empty<Contest>().AsQueryable());
 
-            var actualResult = contestService.GetNumberOfPages();
+            int actualResult = contestService.GetNumberOfPages();
 
             Assert.Equal(0, actualResult);
         }
@@ -141,9 +143,9 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetNumberOfPages_WithOneEntity_ShouldReturnOne()
         {
             var contests = new List<Contest>() { new Contest() };
-            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
-            var actualResult = contestService.GetNumberOfPages();
+            int actualResult = contestService.GetNumberOfPages();
 
             Assert.Equal(1, actualResult);
         }
@@ -152,7 +154,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetById_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
             var contests = new List<Contest>() { new Contest() };
-            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.GetById<Contest>(999));
         }
@@ -161,7 +163,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void UpdateContest_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
             var contests = new List<Contest>() { new Contest() };
-            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.Update(new ContestEditInputModel { Id = 45 }));
         }
@@ -170,7 +172,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void DeleteContestById_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
             var contests = new List<Contest>() { new Contest() };
-            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.Delete(3));
         }
@@ -179,7 +181,7 @@ namespace JudgeSystem.Services.Data.Tests
         public void GetContestResultsPagesCount_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
             var contests = new List<Contest>() { new Contest() };
-            var contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
+            ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
             Assert.Throws<EntityNotFoundException>(() => contestService.GetContestResultsPagesCount(23));
         }
@@ -187,9 +189,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetActiveContests_WithDifferentData_ShouldReturnsOnlyActiveContests()
         {
-            var service = await CreateContestService(GetTestData());
+            ContestService service = await CreateContestService(GetTestData());
 
-            var actualData = service.GetActiveContests();
+            IEnumerable<ActiveContestViewModel> actualData = service.GetActiveContests();
 
             Assert.Equal(new List<int>() { 1, 3 }, actualData.Select(x => x.Id));
         }
@@ -197,9 +199,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetPreviousContests_WithDifferentData_ShouldReturnsOnlyPassedContests()
         {
-            var service = await CreateContestService(GetTestData());
+            ContestService service = await CreateContestService(GetTestData());
 
-            var actualData = service.GetPreviousContests(3);
+            IEnumerable<PreviousContestViewModel> actualData = service.GetPreviousContests(3);
 
             Assert.Equal(new List<string>() { "compete5" }, actualData.Select(x => x.Name));
         }
@@ -207,9 +209,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetActiveAndFollowingContests_WithDifferentData_ShouldReturnsOnlyActiveAndFollowingContests()
         {
-            var service = await CreateContestService(GetTestData());
+            ContestService service = await CreateContestService(GetTestData());
 
-            var actualData = service.GetActiveAndFollowingContests();
+            IEnumerable<ContestBreifInfoViewModel> actualData = service.GetActiveAndFollowingContests();
 
             Assert.Equal(new List<string>() { "compete1", "compete3", "compete4" }, actualData.Select(x => x.Name));
         }
@@ -217,11 +219,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetContestReults_WithValidContestId_ShouldWorkCorrect()
         {
-            var testData = GetContestReultsTestData();
-            var service = await CreateContestService(testData);
+            List<Contest> testData = GetContestReultsTestData();
+            ContestService service = await CreateContestService(testData);
 
-            var actualContest = service.GetContestReults(11, 1);
-            var expectedContest = testData.First();
+            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
+            Contest expectedContest = testData.First();
             var expectedProblems = expectedContest.Lesson.Problems.OrderBy(x => x.CreatedOn).ToList();
 
             Assert.Equal(expectedContest.Name, actualContest.Name);
@@ -230,14 +232,14 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expectedProblems.Count, actualContest.Problems.Count);
             for (int i = 0; i < actualContest.Problems.Count; i++)
             {
-                var actualProblem = actualContest.Problems[i];
-                var expectedProblem = expectedProblems[i];
+                ContestProblemViewModel actualProblem = actualContest.Problems[i];
+                Problem expectedProblem = expectedProblems[i];
                 Assert.Equal(expectedProblem.Name, actualProblem.Name);
                 Assert.Equal(expectedProblem.Id, actualProblem.Id);
                 Assert.Equal(expectedProblem.IsExtraTask, actualProblem.IsExtraTask);
             }
             Assert.Equal(2, actualContest.ContestResults.Count);
-            var naskoResults = actualContest.ContestResults[0];
+            ContestResultViewModel naskoResults = actualContest.ContestResults[0];
             Assert.Equal(50, naskoResults.PointsByProblem[1]);
             Assert.Equal(100, naskoResults.PointsByProblem[3]);
             Assert.Equal(150, naskoResults.Total);
@@ -245,7 +247,7 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal("A", naskoResults.Student.ClassType);
             Assert.Equal(2, naskoResults.Student.NumberInCalss);
             Assert.Equal("Atanas Vasilev", naskoResults.Student.FullName);
-            var martoResults = actualContest.ContestResults[1];
+            ContestResultViewModel martoResults = actualContest.ContestResults[1];
             Assert.Equal(60, martoResults.PointsByProblem[1]);
             Assert.Equal(100, martoResults.PointsByProblem[2]);
             Assert.Equal(70, martoResults.PointsByProblem[3]);
@@ -259,8 +261,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetContestReults_WithInvalidContestId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetContestReultsTestData();
-            var service = await CreateContestService(testData);
+            List<Contest> testData = GetContestReultsTestData();
+            ContestService service = await CreateContestService(testData);
 
             Assert.Throws<EntityNotFoundException>(() => service.GetContestReults(564, 12));
         }
@@ -271,11 +273,11 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(65)]
         public void GetNumberOfPages_WithDifferentData_ShouldWorkCorrect(int userContestsCount)
         {
-            var contest = GenerateContestForGetContestResultsPagesCount(userContestsCount);
+            Contest contest = GenerateContestForGetContestResultsPagesCount(userContestsCount);
             var testData = new List<Contest> { GenerateContestForGetContestResultsPagesCount(userContestsCount) };
-            var service = CreateContestServiceWithMockedRepository(testData.AsQueryable());
+            ContestService service = CreateContestServiceWithMockedRepository(testData.AsQueryable());
 
-            var expectedPages = service.GetContestResultsPagesCount(contest.Id);
+            int expectedPages = service.GetContestResultsPagesCount(contest.Id);
 
             Assert.Equal(paginationService.CalculatePagesCount(userContestsCount, ContestService.ResultsPerPage), expectedPages);
         }
@@ -283,7 +285,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetLessonId_WithInvalidId_ShouldThrowEntityNotFoundException()
         {
-            var contestService = await CreateContestService(GetTestData());
+            ContestService contestService = await CreateContestService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => contestService.GetLessonId(999));
         }
@@ -292,9 +294,9 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task GetLessonId_WithValidId_ShouldReturnCottectData()
         {
             var testData = new List<Contest> { new Contest { Id = 1, LessonId = 10 } };
-            var contestService = await CreateContestService(testData);
+            ContestService contestService = await CreateContestService(testData);
 
-            var expectedLessonId = await contestService.GetLessonId(1);
+            int expectedLessonId = await contestService.GetLessonId(1);
 
             Assert.Equal(10, expectedLessonId);
         }
@@ -343,7 +345,7 @@ namespace JudgeSystem.Services.Data.Tests
                 submissionServiceMock.Object, paginationServiceMock.Object);
 
             //Act
-            var actualModel = await service.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            ContestSubmissionsViewModel actualModel = await service.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
             string expecedUrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}";
             string expecedPaginationUrl = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}=" + "{0}";
 
@@ -359,17 +361,15 @@ namespace JudgeSystem.Services.Data.Tests
 
         private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
         {
-            await this.context.Contests.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(this.context);
+            await context.Contests.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(context);
             var service = new ContestService(repository, userContestRepository, null, null, null, paginationService);
             return service;
         }
 
-        private async Task<ContestService> CreateContestService(List<Contest> testData)
-        {
-            return await this.CreateContestService(testData, null);
-        }
+        private async Task<ContestService> CreateContestService(List<Contest> testData) => 
+            await CreateContestService(testData, null);
 
         private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData, IRepository<UserContest> userContestRepository)
         {
@@ -378,27 +378,27 @@ namespace JudgeSystem.Services.Data.Tests
             return new ContestService(reposotiryMock.Object, userContestRepository, null, null, null, paginationService);
         }
 
-        private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData)
-        {
-            return CreateContestServiceWithMockedRepository(testData, null);
-        }
+        private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData) => 
+            CreateContestServiceWithMockedRepository(testData, null);
 
         private List<UserContest> GetUserContestsTestData()
         {
-            return new List<UserContest>
+            var contests = new List<UserContest>
             {
                 new UserContest { ContestId = 1, UserId = "user_id_1" },
                 new UserContest { ContestId = 2, UserId = "user_id_20" },
             };
+            return contests;
         }
 
         private List<Contest> GetContestsTestData()
         {
-            return new List<Contest>
+            var contests = new List<Contest>
             {
                 new Contest{Id = 1, Name = "contest1", EndTime = new DateTime(2019, 12, 20), StartTime = new DateTime(2019, 07, 05)},
                 new Contest{Id = 2, Name = "contest2", EndTime = new DateTime(2019, 05, 20), StartTime = new DateTime(2019, 04, 05)},
             };
+            return contests;
         }
 
         private List<Contest> GetTestData()
@@ -512,7 +512,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         private Contest GenerateContestForGetContestResultsPagesCount(int userContestsCount)
         {
-            List<UserContest> userContests = new List<UserContest>();
+            var userContests = new List<UserContest>();
             for (int i = 0; i < userContestsCount; i++)
             {
                 userContests.Add(new UserContest

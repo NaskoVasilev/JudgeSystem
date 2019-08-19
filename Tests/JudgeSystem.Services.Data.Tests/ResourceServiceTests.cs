@@ -8,6 +8,7 @@ using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.Resource;
 using JudgeSystem.Web.InputModels.Resource;
+using JudgeSystem.Web.ViewModels.Resource;
 
 using Moq;
 using Xunit;
@@ -19,7 +20,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
-            var service = await CreateResourceService(new List<Resource>());
+            ResourceService service = await CreateResourceService(new List<Resource>());
             var resource = new ResourceInputModel
             {
                 LessonId = 15,
@@ -30,18 +31,18 @@ namespace JudgeSystem.Services.Data.Tests
 
             await service.CreateResource(resource, filePath);
 
-            Assert.Contains(this.context.Resources, x => x.Name == resource.Name &&
+            Assert.Contains(context.Resources, x => x.Name == resource.Name &&
             x.LessonId == resource.LessonId && x.Id == resource.Id && x.FilePath == filePath);
         }
 
         [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateResourceService(testData);
+            List<Resource> testData = GetTestData();
+            ResourceService service = await CreateResourceService(testData);
 
-            var actualData = await service.GetById<ResourceDto>(2);
-            var expectedResut = testData.First(x => x.Id == 2);
+            ResourceDto actualData = await service.GetById<ResourceDto>(2);
+            Resource expectedResut = testData.First(x => x.Id == 2);
 
             Assert.Equal(expectedResut.Name, actualData.Name);
             Assert.Equal(expectedResut.LessonId, actualData.LessonId);
@@ -51,8 +52,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInValidId_ShouldReturnNull()
         {
-            var testData = GetTestData();
-            var service = await CreateResourceService(testData);
+            List<Resource> testData = GetTestData();
+            ResourceService service = await CreateResourceService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<ResourceDto>(345));
         }
@@ -60,9 +61,9 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public void LessonResources_WithDataInDbContext_ShouldReturnValidResults()
         {
-            var service = CreateResourceServiceWithMockedRepository(GetTestData().AsQueryable());
+            ResourceService service = CreateResourceServiceWithMockedRepository(GetTestData().AsQueryable());
 
-            var actualResults = service.LessonResources(10);
+            IEnumerable<ResourceViewModel> actualResults = service.LessonResources(10);
 
             Assert.Equal("1, 3", string.Join(", ", actualResults.Select(x => x.Id)));
         }
@@ -70,18 +71,18 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateResourceService(testData);
+            List<Resource> testData = GetTestData();
+            ResourceService service = await CreateResourceService(testData);
 
             await service.Delete(1);
 
-            Assert.False(this.context.Resources.Any(x => x.Id == 1));
+            Assert.False(context.Resources.Any(x => x.Id == 1));
         }
 
         [Fact]
         public async Task Delete_WithNonExistingStudent_ShouldThrowError()
         {
-            var service = await CreateResourceService(GetTestData());
+            ResourceService service = await CreateResourceService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(45));
         }
@@ -89,8 +90,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithValidDataAndFilePath_ShouldWorkCorrectAndSetNewFilePath()
         {
-            var testData = GetTestData();
-            var service = await CreateResourceService(testData);
+            List<Resource> testData = GetTestData();
+            ResourceService service = await CreateResourceService(testData);
             string filePath = "test_file_path";
             var inputModel = new ResourceEditInputModel
             {
@@ -99,7 +100,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
 
             await service.Update(inputModel, filePath);
-            var actualResource = context.Resources.First(x => x.Id == inputModel.Id);
+            Resource actualResource = context.Resources.First(x => x.Id == inputModel.Id);
 
             Assert.Equal(inputModel.Name, actualResource.Name);
             Assert.Equal(filePath, actualResource.FilePath);
@@ -109,8 +110,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithValidDataAndNotSepcifiedFilePath_ShouldWorkCorrectAndNotSetNewFilePath()
         {
-            var testData = GetTestData();
-            var service = await CreateResourceService(testData);
+            List<Resource> testData = GetTestData();
+            ResourceService service = await CreateResourceService(testData);
             var inputModel = new ResourceEditInputModel
             {
                 Id = 1,
@@ -119,7 +120,7 @@ namespace JudgeSystem.Services.Data.Tests
 
             string filePath = context.Resources.First(x => x.Id == 1).FilePath;
             await service.Update(inputModel);
-            var actualResource = context.Resources.First(x => x.Id == inputModel.Id);
+            Resource actualResource = context.Resources.First(x => x.Id == inputModel.Id);
 
             Assert.Equal(inputModel.Name, actualResource.Name);
             Assert.Equal(filePath, actualResource.FilePath);
@@ -130,16 +131,16 @@ namespace JudgeSystem.Services.Data.Tests
         public async Task Update_WithNonExistingLesson_ShouldThrowArgumentEException()
         {
             var inputModel = new ResourceEditInputModel { Id = 854 };
-            var service = await CreateResourceService(GetTestData());
+            ResourceService service = await CreateResourceService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(inputModel));
         }
 
         private async Task<ResourceService> CreateResourceService(List<Resource> testData)
         {
-            await this.context.Resources.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IRepository<Resource> repository = new EfRepository<Resource>(this.context);
+            await context.Resources.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IRepository<Resource> repository = new EfRepository<Resource>(context);
             var service = new ResourceService(repository);
             return service;
         }
@@ -153,12 +154,13 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Resource> GetTestData()
         {
-            return new List<Resource>
+            var resources = new List<Resource>
             {
                 new Resource { Id = 1, Name = "Test1", FilePath = "filePath1", LessonId = 10 },
                 new Resource { Id = 2, Name = "Test2", FilePath = "filePath2", LessonId = 11 },
                 new Resource { Id = 3, Name = "Test3", FilePath = "filePath3", LessonId = 10 },
             };
+            return resources;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         public SingletonDbContextProvider(InMemoryDatabaseFactory factory)
         {
-            this.Context = factory.Context;
+            Context = factory.Context;
         }
     }
 }

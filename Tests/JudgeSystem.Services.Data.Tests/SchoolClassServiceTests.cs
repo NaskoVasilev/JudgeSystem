@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.SchoolClass;
+
 using Xunit;
 
 namespace JudgeSystem.Services.Data.Tests
@@ -19,7 +21,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(13, SchoolClassType.A, false)]
         public async Task ClassExists_WithDifferentData_ShouldReturnCorrectValues(int classNumber, SchoolClassType schoolClassType, bool expectedResult)
         {
-            var service = await CreateSchoolClassService(GetTestData());
+            SchoolClassService service = await CreateSchoolClassService(GetTestData());
 
             bool actualResult = service.ClassExists(classNumber, schoolClassType);
 
@@ -31,24 +33,24 @@ namespace JudgeSystem.Services.Data.Tests
         {
             int classNumber = 12;
             SchoolClassType classType = SchoolClassType.G;
-            var service = await CreateSchoolClassService(GetTestData());
+            SchoolClassService service = await CreateSchoolClassService(GetTestData());
 
-            var schoolClass = await service.Create(classNumber, classType);
+            SchoolClassDto schoolClass = await service.Create(classNumber, classType);
 
             Assert.Equal(classNumber, schoolClass.ClassNumber);
             Assert.Equal(classType, schoolClass.ClassType);
-            Assert.True(this.context.SchoolClasses.Any(x => x.ClassNumber == classNumber && x.Id == schoolClass.Id && x.ClassType == classType));
+            Assert.True(context.SchoolClasses.Any(x => x.ClassNumber == classNumber && x.Id == schoolClass.Id && x.ClassType == classType));
         }
 
         [Fact]
         public async Task GetAllClasses_WithData_ShouldReturnAllSchoolClasses()
         {
-            var testData = GetTestData();
-            var service = await CreateSchoolClassService(testData);
+            List<SchoolClass> testData = GetTestData();
+            SchoolClassService service = await CreateSchoolClassService(testData);
 
-            var actualResult = service.GetAllClasses();
+            IEnumerable<SchoolClassDto> actualResult = service.GetAllClasses();
 
-            foreach (var schoolClass in actualResult)
+            foreach (SchoolClassDto schoolClass in actualResult)
             {
                 Assert.Contains(testData, x => x.Id == schoolClass.Id && x.ClassNumber == schoolClass.ClassNumber && x.ClassType == schoolClass.ClassType);
             }
@@ -57,12 +59,12 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateSchoolClassService(testData);
+            List<SchoolClass> testData = GetTestData();
+            SchoolClassService service = await CreateSchoolClassService(testData);
 
             int id = 2;
-            var actualData = await service.GetById<SchoolClassDto>(id);
-            var expectedData = testData.First(x => x.Id == id);
+            SchoolClassDto actualData = await service.GetById<SchoolClassDto>(id);
+            SchoolClass expectedData = testData.First(x => x.Id == id);
 
             Assert.Equal(actualData.Name, expectedData.Name);
             Assert.Equal(actualData.ClassNumber, expectedData.ClassNumber);
@@ -72,24 +74,24 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInValidId_ShouldThrowEntityNotFoundException()
         {
-            var testData = GetTestData();
-            var service = await CreateSchoolClassService(testData);
+            List<SchoolClass> testData = GetTestData();
+            SchoolClassService service = await CreateSchoolClassService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<SchoolClassDto>(165));
         }
 
         private async Task<SchoolClassService> CreateSchoolClassService(List<SchoolClass> testData)
         {
-            await this.context.SchoolClasses.AddRangeAsync(testData);
-            await this.context.SaveChangesAsync();
-            IDeletableEntityRepository<SchoolClass> repository = new EfDeletableEntityRepository<SchoolClass>(this.context);
+            await context.SchoolClasses.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+            IDeletableEntityRepository<SchoolClass> repository = new EfDeletableEntityRepository<SchoolClass>(context);
             var service = new SchoolClassService(repository);
             return service;
         }
 
         private List<SchoolClass> GetTestData()
         {
-            return new List<SchoolClass>
+            var classes = new List<SchoolClass>
             {
                 new SchoolClass { Id = 2, ClassNumber = 10, ClassType = SchoolClassType.A },
                 new SchoolClass { Id = 3, ClassNumber = 10, ClassType = SchoolClassType.B },
@@ -97,6 +99,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new SchoolClass { Id = 5, ClassNumber = 11, ClassType = SchoolClassType.G },
                 new SchoolClass { Id = 6, ClassNumber = 12, ClassType = SchoolClassType.A },
             };
+            return classes;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         public TransientDbContextProvider()
         {
-            this.context = ApplicationDbContextFactory.CreateInMemoryDatabase();
+            context = ApplicationDbContextFactory.CreateInMemoryDatabase();
         }
     }
 }

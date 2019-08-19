@@ -20,46 +20,46 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Create_WithValidData_ShouldWorkCorrect()
         {
-            IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
-            ExecutedTestService service = new ExecutedTestService(repository);
+            IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(Context);
+            var service = new ExecutedTestService(repository);
 
-            int initialCount = this.Context.ExecutedTests.Count();
+            int initialCount = Context.ExecutedTests.Count();
             await service.Create(new ExecutedTest());
 
-            Assert.Equal(initialCount + 1, this.Context.ExecutedTests.Count());
+            Assert.Equal(initialCount + 1, Context.ExecutedTests.Count());
         }
 
         [Fact]
         public async Task DeleteExecutedTestsByTestId_WithCorrectTestId_ShouldWorkCorrect()
         {
-            await this.Context.ExecutedTests.AddRangeAsync(GetTestData());
-            await this.Context.SaveChangesAsync();
-            IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
-            ExecutedTestService service = new ExecutedTestService(repository);
+            await Context.ExecutedTests.AddRangeAsync(GetTestData());
+            await Context.SaveChangesAsync();
+            IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(Context);
+            var service = new ExecutedTestService(repository);
 
             await service.DeleteExecutedTestsByTestId(4);
 
-            Assert.True(this.Context.ExecutedTests.Count() > 0);
-            Assert.True(this.Context.ExecutedTests.Count(x => x.TestId == 4) == 0);
+            Assert.True(Context.ExecutedTests.Count() > 0);
+            Assert.True(Context.ExecutedTests.Count(x => x.TestId == 4) == 0);
         }
 
         [Fact]
         public async Task DeleteExecutedTestsByTestId_WithIncorrectTestId_ShouldDoNothing()
         {
-            var testData = GetTestData();
-            await this.Context.ExecutedTests.AddRangeAsync(testData);
-            await this.Context.SaveChangesAsync();
+            List<ExecutedTest> testData = GetTestData();
+            await Context.ExecutedTests.AddRangeAsync(testData);
+            await Context.SaveChangesAsync();
             IRepository<ExecutedTest> repository = new EfRepository<ExecutedTest>(this.Context);
-            ExecutedTestService service = new ExecutedTestService(repository);
+            var service = new ExecutedTestService(repository);
 
             await service.DeleteExecutedTestsByTestId(5);
 
-            Assert.True(this.Context.ExecutedTests.Count() == testData.Count());
+            Assert.True(Context.ExecutedTests.Count() == testData.Count());
         }
 
         private List<ExecutedTest> GetTestData()
         {
-            return new List<ExecutedTest>()
+            var executedTests = new List<ExecutedTest>()
             {
                 new ExecutedTest(){TestId = 4},
                 new ExecutedTest(){TestId = 4},
@@ -69,6 +69,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new ExecutedTest(){TestId = 4},
                 new ExecutedTest(){TestId = 3},
             };
+            return executedTests;
         }
     }
 }

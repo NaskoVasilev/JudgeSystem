@@ -8,6 +8,7 @@ using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
 using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.InputModels.Test;
+using JudgeSystem.Web.ViewModels.Test;
 
 using Moq;
 using Xunit;
@@ -19,11 +20,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Add_WithValidData_ShouldWorkCorrect()
         {
-            var service = await CreateTestService(new List<Test>());
+            TestService service = await CreateTestService(new List<Test>());
             var test = new TestInputModel { InputData = "123", OutputData = "321", IsTrialTest = false, ProblemId = 5 };
 
-            var createdTest = await service.Add(test);
-            var actualTest = context.Tests.FirstOrDefault(x => x.Id == createdTest.Id);
+            TestDto createdTest = await service.Add(test);
+            Test actualTest = context.Tests.FirstOrDefault(x => x.Id == createdTest.Id);
 
             Assert.NotNull(actualTest);
             Assert.Equal(test.InputData, actualTest.InputData);
@@ -40,7 +41,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new ExecutedTest { Id = 5 },
                 new ExecutedTest { Id = 3 }
             };
-            var service = await CreateTestService(new List<Test>(), executedTests);
+            TestService service = await CreateTestService(new List<Test>(), executedTests);
             var test = new Test
             {
                 Id = 1,
@@ -58,7 +59,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithNonExistingStudent_ShouldThrowError()
         {
-            var service = await CreateTestService(new List<Test>());
+            TestService service = await CreateTestService(new List<Test>());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Delete(999));
         }
@@ -66,11 +67,11 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
-            var testData = GetTestData();
-            var service = await CreateTestService(testData);
+            List<Test> testData = GetTestData();
+            TestService service = await CreateTestService(testData);
 
-            var actualData = await service.GetById<TestDto>(3);
-            var expectedData = testData.First(x => x.Id == 3);
+            TestDto actualData = await service.GetById<TestDto>(3);
+            Test expectedData = testData.First(x => x.Id == 3);
 
             Assert.Equal(expectedData.InputData, actualData.InputData);
             Assert.Equal(expectedData.OutputData, actualData.OutputData);
@@ -80,8 +81,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetById_WithInValidId_ShouldReturnNull()
         {
-            var testData = GetTestData();
-            var service = await CreateTestService(testData);
+            List<Test> testData = GetTestData();
+            TestService service = await CreateTestService(testData);
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetById<TestEditInputModel>(4875));
         }
@@ -91,9 +92,9 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(45, "")]
         public async Task GetTestsByProblemId_WithDifferntData_ShouldReturnDifferentResults(int problemId, string expectedIds)
         {
-            var service = await CreateTestService(GetTestData());
+            TestService service = await CreateTestService(GetTestData());
 
-            var results = service.GetTestsByProblemId(problemId);
+            IEnumerable<TestDataDto> results = service.GetTestsByProblemId(problemId);
 
             Assert.Equal(expectedIds, string.Join(", ", results.Select(x => x.Id)));
         }
@@ -103,9 +104,9 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(45, "")]
         public async Task GetTestsByProblemIdOrderedByIsTrialDescending_WithDifferntData_ShouldReturnDifferentResults(int problemId, string expectedIds)
         {
-            var service = await CreateTestService(GetTestData());
+            TestService service = await CreateTestService(GetTestData());
 
-            var results = service.GetTestsByProblemIdOrderedByIsTrialDescending(problemId);
+            IEnumerable<TestViewModel> results = service.GetTestsByProblemIdOrderedByIsTrialDescending(problemId);
 
             Assert.Equal(expectedIds, string.Join(", ", results.Select(x => x.Id)));
         }
@@ -113,8 +114,8 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithValidData_ShouldWorkCorrect()
         {
-            var testData = GetTestData();
-            var service = await CreateTestService(testData);
+            List<Test> testData = GetTestData();
+            TestService service = await CreateTestService(testData);
             var testInputModel = new TestEditInputModel
             {
                 Id = 3,
@@ -123,7 +124,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
 
             await service.Update(testInputModel);
-            var actualTest = context.Tests.First(x => x.Id == testInputModel.Id);
+            Test actualTest = context.Tests.First(x => x.Id == testInputModel.Id);
 
             Assert.Equal(actualTest.InputData, testInputModel.InputData);
             Assert.Equal(actualTest.OutputData, testInputModel.OutputData);
@@ -132,7 +133,7 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Update_WithNonExistingLesson_ShouldThrowArgumentEException()
         {
-            var service = await CreateTestService(GetTestData());
+            TestService service = await CreateTestService(GetTestData());
 
             await Assert.ThrowsAsync<EntityNotFoundException>(() => service.Update(new TestEditInputModel() { Id = 99 }));
         }
@@ -169,7 +170,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Test> GetTestData()
         {
-            return new List<Test>()
+            var tests = new List<Test>()
             {
                 new Test { Id = 1, InputData = "123", OutputData = "321", IsTrialTest= true, ProblemId = 5 },
                 new Test { Id = 2, InputData = "abc", OutputData = "bca", IsTrialTest= false, ProblemId = 5 },
@@ -177,6 +178,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new Test { Id = 4, InputData = "444", OutputData = "888", IsTrialTest= false, ProblemId = 4 },
                 new Test { Id = 5, InputData = "333", OutputData = "666", IsTrialTest= false, ProblemId = 4 },
             };
+            return tests;
         }
     }
 }

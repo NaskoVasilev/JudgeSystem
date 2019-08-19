@@ -11,12 +11,12 @@ namespace JudgeSystem.Services.Data.Tests.ClassFixtures
 
         public InMemoryDatabaseFactory()
         {
-            this.Context = ApplicationDbContextFactory.CreateInMemoryDatabase();
+            Context = ApplicationDbContextFactory.CreateInMemoryDatabase();
         }
 
         public void Dispose()
         {
-            this.Context.Dispose();
+            Context.Dispose();
         }
     }
 }
