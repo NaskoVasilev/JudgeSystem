@@ -12,9 +12,9 @@ namespace JudgeSystem.Data.Models
 	{
 		public Lesson()
 		{
-			this.Resources = new List<Resource>();
-			this.Problems = new List<Problem>();
-			this.Contests = new HashSet<Contest>();
+			Resources = new HashSet<Resource>();
+			Problems = new HashSet<Problem>();
+			Contests = new HashSet<Contest>();
 		}
 
 		[Required]

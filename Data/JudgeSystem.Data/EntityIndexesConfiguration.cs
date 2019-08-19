@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using JudgeSystem.Data.Common.Models;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace JudgeSystem.Data
 {
@@ -11,10 +13,10 @@ namespace JudgeSystem.Data
         public static void Configure(ModelBuilder modelBuilder)
         {
             // IDeletableEntity.IsDeleted index
-            var deletableEntityTypes = modelBuilder.Model
+            IEnumerable<IMutableEntityType> deletableEntityTypes = modelBuilder.Model
                 .GetEntityTypes()
                 .Where(et => et.ClrType != null && typeof(IDeletableEntity).IsAssignableFrom(et.ClrType));
-            foreach (var deletableEntityType in deletableEntityTypes)
+            foreach (IMutableEntityType deletableEntityType in deletableEntityTypes)
             {
                 modelBuilder.Entity(deletableEntityType.ClrType).HasIndex(nameof(IDeletableEntity.IsDeleted));
             }

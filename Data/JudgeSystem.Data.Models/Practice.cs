@@ -8,8 +8,8 @@ namespace JudgeSystem.Data.Models
     {
         public Practice()
         {
-            this.Submissions = new List<Submission>();
-            this.UserPractices = new List<UserPractice>();
+            Submissions = new HashSet<Submission>();
+            UserPractices = new HashSet<UserPractice>();
         }
 
         public int LessonId { get; set; }

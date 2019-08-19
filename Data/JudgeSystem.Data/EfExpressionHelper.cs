@@ -30,13 +30,13 @@ namespace JudgeSystem.Data
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var entityType = typeof(TEntity);
+            Type entityType = typeof(TEntity);
 
-            var entityParameter = Expression.Parameter(entityType, "e");
+            ParameterExpression entityParameter = Expression.Parameter(entityType, "e");
 
-            var keyProperties = dbContext.Model.FindEntityType(entityType).FindPrimaryKey().Properties;
+            IReadOnlyList<IProperty> keyProperties = dbContext.Model.FindEntityType(entityType).FindPrimaryKey().Properties;
 
-            var predicate = BuildPredicate(keyProperties, new ValueBuffer(id), entityParameter);
+            BinaryExpression predicate = BuildPredicate(keyProperties, new ValueBuffer(id), entityParameter);
 
             return Expression.Lambda<Func<TEntity, bool>>(predicate, entityParameter);
         }
@@ -46,13 +46,13 @@ namespace JudgeSystem.Data
             ValueBuffer keyValues,
             ParameterExpression entityParameter)
         {
-            var keyValuesConstant = Expression.Constant(keyValues);
+            ConstantExpression keyValuesConstant = Expression.Constant(keyValues);
 
             BinaryExpression predicate = null;
-            for (var i = 0; i < keyProperties.Count; i++)
+            for (int i = 0; i < keyProperties.Count; i++)
             {
-                var property = keyProperties[i];
-                var equalsExpression =
+                IProperty property = keyProperties[i];
+                BinaryExpression equalsExpression =
                     Expression.Equal(
                         Expression.Call(
                             EfPropertyMethod.MakeGenericMethod(property.ClrType),

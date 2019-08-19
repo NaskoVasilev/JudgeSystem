@@ -23,7 +23,7 @@ namespace JudgeSystem.Data.Seeding
 				return;
 			}
 
-			ApplicationUser user = new ApplicationUser
+			var user = new ApplicationUser
 			{
 				Name = adminSettings.Name,
 				Email = adminSettings.Email,

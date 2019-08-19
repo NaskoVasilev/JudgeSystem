@@ -10,7 +10,7 @@ namespace JudgeSystem.Data.Models
 	{
 		public Course()
 		{
-			this.Lessons = new List<Lesson>();
+			Lessons = new HashSet<Lesson>();
 		}
 
 		[Required]

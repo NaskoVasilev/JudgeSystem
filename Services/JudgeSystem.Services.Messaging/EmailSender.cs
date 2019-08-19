@@ -19,17 +19,15 @@ namespace JudgeSystem.Services.Messaging
 
         public BaseEmailOptions EmailOptions { get; }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(SendGridOptions.SendGridKey, subject, message, email);
-        }
+        public Task SendEmailAsync(string email, string subject, string message) => 
+            Execute(SendGridOptions.SendGridKey, subject, message, email);
 
         public Task Execute(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress(this.EmailOptions.Username, this.EmailOptions.Fullname),
+                From = new EmailAddress(EmailOptions.Username, EmailOptions.Fullname),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

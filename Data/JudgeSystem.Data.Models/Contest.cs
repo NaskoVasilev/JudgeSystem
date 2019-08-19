@@ -12,8 +12,8 @@ namespace JudgeSystem.Data.Models
 	{
 		public Contest()
 		{
-			this.UserContests = new HashSet<UserContest>();
-			this.Submissions = new HashSet<Submission>();
+			UserContests = new HashSet<UserContest>();
+			Submissions = new HashSet<Submission>();
 		}
 
 		[Required]

@@ -13,12 +13,12 @@ namespace JudgeSystem.Data.Models
     {
         public ApplicationUser()
         {
-            this.Id = Guid.NewGuid().ToString();
-            this.Roles = new HashSet<IdentityUserRole<string>>();
-            this.Claims = new HashSet<IdentityUserClaim<string>>();
-            this.Logins = new HashSet<IdentityUserLogin<string>>();
-			this.Submissions = new List<Submission>();
-			this.UserContests = new HashSet<UserContest>();
+            Id = Guid.NewGuid().ToString();
+            Roles = new HashSet<IdentityUserRole<string>>();
+            Claims = new HashSet<IdentityUserClaim<string>>();
+            Logins = new HashSet<IdentityUserLogin<string>>();
+			Submissions = new HashSet<Submission>();
+			UserContests = new HashSet<UserContest>();
         }
 
 		[MaxLength(ModelConstants.UserFirstNameMaxLength)]

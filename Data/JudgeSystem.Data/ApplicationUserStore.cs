@@ -23,10 +23,8 @@ namespace JudgeSystem.Data
         {
         }
 
-        protected override IdentityUserRole<string> CreateUserRole(ApplicationUser user, ApplicationRole role)
-        {
-            return new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id };
-        }
+        protected override IdentityUserRole<string> CreateUserRole(ApplicationUser user, ApplicationRole role) =>
+            new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id };
 
         protected override IdentityUserClaim<string> CreateUserClaim(ApplicationUser user, Claim claim)
         {

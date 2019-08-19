@@ -11,8 +11,8 @@ namespace JudgeSystem.Data.Models
     {
 		public Problem()
 		{
-			this.Tests = new HashSet<Test>();
-			this.Submissions = new HashSet<Submission>();
+			Tests = new HashSet<Test>();
+			Submissions = new HashSet<Submission>();
 		}
 
 		[Required]

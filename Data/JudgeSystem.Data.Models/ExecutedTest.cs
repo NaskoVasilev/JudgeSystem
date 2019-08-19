@@ -7,7 +7,7 @@ namespace JudgeSystem.Data.Models
 	{
 		public ExecutedTest()
 		{
-			this.IsCorrect = false;
+			IsCorrect = false;
 			ExecutionResultType = TestExecutionResultType.Success;
 		}
 

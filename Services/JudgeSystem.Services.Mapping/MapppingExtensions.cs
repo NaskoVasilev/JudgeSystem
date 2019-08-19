@@ -33,10 +33,6 @@ namespace JudgeSystem.Services.Mapping
             return source.ProjectTo<TDestination>(parameters);
         }
 
-		public static Destination To<Destination>(this object source)
-		{
-			var destination = Mapper.Map(source, source.GetType(), typeof(Destination));
-			return (Destination)destination;
-		}
-	}
+        public static Destination To<Destination>(this object source) => Mapper.Map<Destination>(source);
+    }
 }

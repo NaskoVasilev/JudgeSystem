@@ -8,6 +8,6 @@
 
         public string Surname { get; set; }
 
-        public string Fullname => $"{this.Name} {this.Surname}";
+        public string Fullname => $"{Name} {Surname}";
     }
 }

@@ -10,9 +10,9 @@ namespace JudgeSystem.Data.Models
 	{
 		public Submission()
 		{
-			this.SubmisionDate = DateTime.Now;
-			this.ExecutedTests = new HashSet<ExecutedTest>();
-			this.ActualPoints = 0;
+			SubmisionDate = DateTime.Now;
+			ExecutedTests = new HashSet<ExecutedTest>();
+			ActualPoints = 0;
 		}
 
 		[Required]

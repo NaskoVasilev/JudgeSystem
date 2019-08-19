@@ -8,7 +8,7 @@ namespace JudgeSystem.Data.Models
 		public Test()
 		{
 			IsTrialTest = false;
-			this.ExecutedTests = new HashSet<ExecutedTest>();
+			ExecutedTests = new HashSet<ExecutedTest>();
 		}
 
 		public int Id { get; set; }

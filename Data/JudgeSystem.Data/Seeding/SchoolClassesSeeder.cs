@@ -15,15 +15,15 @@ namespace JudgeSystem.Data.Seeding
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            using (var scope = serviceProvider.CreateScope())
+            using (IServiceScope scope = serviceProvider.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 IEnumerable<SchoolClassType> classTypes = Enum.GetValues(typeof(SchoolClassType)).Cast<SchoolClassType>();
 
                 for (int classNumber = GlobalConstants.MinClassNumber; classNumber <= GlobalConstants.MaxClassNumber; classNumber++)
                 {
-                    foreach (var classType in classTypes)
+                    foreach (SchoolClassType classType in classTypes)
                     {
                         await SeedSchoolClass(classNumber, classType, context);
                     }

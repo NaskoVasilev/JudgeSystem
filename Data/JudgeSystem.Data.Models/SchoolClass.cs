@@ -10,7 +10,7 @@ namespace JudgeSystem.Data.Models
 	{
 		public SchoolClass()
 		{
-			this.Students = new HashSet<Student>();
+			Students = new HashSet<Student>();
 		}
 
 		public int ClassNumber { get; set; }
