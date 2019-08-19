@@ -31,20 +31,20 @@ namespace JudgeSystem.Services.Data
 
         public List<RecommendedLessonViewModel> GetTopTenRecommendedLessons(string userId)
         {
-            var userPracticeIds = userPracticeRepository.All()
+            IQueryable<int> userPracticeIds = userPracticeRepository.All()
                 .Where(x => x.UserId == userId)
                 .Select(x => x.PracticeId);
             var userPraciceIdsSet = new HashSet<int>(userPracticeIds);
 
-            var lessons = this.lessonRepository.All()
+            var lessons = lessonRepository.All()
                 .Where(l => !userPraciceIdsSet.Contains(l.Practice.Id))
                 .To<RecommendedLessonViewModel>()
                 .ToList();
 
-            foreach (var lesson in lessons)
+            foreach (RecommendedLessonViewModel lesson in lessons)
             {
                 var userLesson = new UserLesson { LessonId = lesson.Id, UserId = userId };
-                var prediction = predictionEngine.Predict(userLesson);
+                UserLessonScore prediction = predictionEngine.Predict(userLesson);
                 lesson.Score = prediction.Score;
             }
 

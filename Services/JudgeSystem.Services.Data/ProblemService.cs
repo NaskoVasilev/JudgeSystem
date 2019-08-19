@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,27 +30,20 @@ namespace JudgeSystem.Services.Data
 		{
 			Problem problem = model.To<Problem>();
 			await problemRepository.AddAsync(problem);
-			await problemRepository.SaveChangesAsync();
 			return problem.To<ProblemDto>();
 		}
 
 		public async Task<ProblemDto> Delete(int id)
 		{
-            var problem = await problemRepository.FindAsync(id);
-
-			problemRepository.DeleteAsync(problem);
-			await problemRepository.SaveChangesAsync();
-
+            Problem problem = await problemRepository.FindAsync(id);
+			await problemRepository.DeleteAsync(problem);
             return problem.To<ProblemDto>();
 		}
 
 		public async Task<TDestination> GetById<TDestination>(int id)
 		{    
-            var problem = await problemRepository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
-            if (problem == null)
-            {
-                throw new EntityNotFoundException(nameof(problem));
-            }
+            TDestination problem = await problemRepository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(problem, nameof(Problem));
             return problem;
         }
 
@@ -63,18 +55,20 @@ namespace JudgeSystem.Services.Data
 
         public string GetProblemName(int id)
         {
-            return this.problemRepository.All()
+            string problemName = problemRepository.All()
                 .Where(x => x.Id == id)
                 .Select(x => x.Name)
                 .FirstOrDefault();
+            return problemName;
         }
 
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
-			return problemRepository.All()
+			var problems = problemRepository.All()
 				.Where(p => p.LessonId == lessonId)
 				.To<LessonProblemViewModel>()
 				.ToList();
+            return problems;
 		}
 
 		public IEnumerable<SearchProblemViewModel> SearchByName(string keyword)
@@ -95,7 +89,7 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<ProblemDto> Update(ProblemEditInputModel model)
 		{
-            var problem = await problemRepository.FindAsync(model.Id);
+            Problem problem = await problemRepository.FindAsync(model.Id);
 
 			problem.Name = model.Name;
 			problem.MaxPoints = model.MaxPoints;
@@ -104,8 +98,7 @@ namespace JudgeSystem.Services.Data
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
 
-            problemRepository.UpdateAsync(problem);
-			await problemRepository.SaveChangesAsync();
+            await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();
 		}
     }

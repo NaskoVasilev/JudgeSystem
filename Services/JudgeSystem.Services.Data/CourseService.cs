@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Mapping;
-using JudgeSystem.Web.Dtos.Course;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels.Course;
 
@@ -24,46 +23,32 @@ namespace JudgeSystem.Services.Data
 		public async Task Add(CourseInputModel model)
 		{
 			Course course = model.To<Course>();
-			await this.repository.AddAsync(course);
-			await this.repository.SaveChangesAsync();
+			await repository.AddAsync(course);
 		}
 
-		public IEnumerable<CourseViewModel> All()
-		{
-			return this.repository.All().To<CourseViewModel>().ToList();
-		}
+        public IEnumerable<CourseViewModel> All() => repository.All().To<CourseViewModel>().ToList();
 
-		public string GetName(int courseId)
-		{
-			return repository.All().FirstOrDefault(r => r.Id == courseId)?.Name;
-		}
+        public string GetName(int courseId) => repository.All().FirstOrDefault(r => r.Id == courseId)?.Name;
 
-		public TDestination GetById<TDestination>(int courseId)
+        public TDestination GetById<TDestination>(int courseId)
 		{
-            var course = repository.All().Where(x => x.Id == courseId).To<TDestination>().FirstOrDefault();
-            if (course == null)
-            {
-                throw new EntityNotFoundException("course");
-            }
+            TDestination course = repository.All().Where(x => x.Id == courseId).To<TDestination>().FirstOrDefault();
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(course, nameof(Course));
             return course;
         }
 
         public async Task Updade(CourseEditModel model)
 		{
-            var course = await repository.FindAsync(model.Id);
+            Course course = await repository.FindAsync(model.Id);
             course.Name = model.Name;
 
-            repository.UpdateAsync(course);
-			await repository.SaveChangesAsync();
+            await repository.UpdateAsync(course);
 		}
 
 		public async Task<CourseViewModel> Delete(int id)
 		{
-            var course = await repository.FindAsync(id);
-
-            repository.DeleteAsync(course);
-			await repository.SaveChangesAsync();
-
+            Course course = await repository.FindAsync(id);
+            await repository.DeleteAsync(course);
             return course.To<CourseViewModel>();
 		}
 	}

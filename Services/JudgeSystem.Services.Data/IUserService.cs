@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using JudgeSystem.Web.ViewModels.User;
 
 namespace JudgeSystem.Services.Data

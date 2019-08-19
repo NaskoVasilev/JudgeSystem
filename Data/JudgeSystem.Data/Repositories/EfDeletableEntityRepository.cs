@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -45,10 +46,25 @@ namespace JudgeSystem.Data.Repositories
 
         public override async Task DeleteAsync(TEntity entity)
         {
+            SetEntityAsDeleted(entity);
+            await UpdateAsync(entity);
+        }
+
+        public override async Task DeleteRangeAsync(IEnumerable<TEntity> entites)
+        {
+            foreach (TEntity entity in entites)
+            {
+                SetEntityAsDeleted(entity);
+                DbSet.Update(entity);
+            }
+
+            await SaveChangesAsync();
+        }
+
+        private static void SetEntityAsDeleted(TEntity entity)
+        {
             entity.IsDeleted = true;
             entity.DeletedOn = DateTime.UtcNow;
-
-            await UpdateAsync(entity);
         }
     }
 }

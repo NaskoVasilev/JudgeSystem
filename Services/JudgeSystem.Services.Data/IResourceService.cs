@@ -17,7 +17,6 @@ namespace JudgeSystem.Services.Data
 
 		Task Update(ResourceEditInputModel model, string filePath = null);
 
-
 		Task<ResourceDto> Delete(int id);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using JudgeSystem.Common.Exceptions;
+
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 
@@ -11,7 +11,9 @@ namespace JudgeSystem.Services.Data
         private readonly IDeletableEntityRepository<Practice> repository;
         private readonly IRepository<UserPractice> userPracticeRepository;
 
-        public PracticeService(IDeletableEntityRepository<Practice> repository, IRepository<UserPractice> userPracticeRepository)
+        public PracticeService(
+            IDeletableEntityRepository<Practice> repository, 
+            IRepository<UserPractice> userPracticeRepository)
         {
             this.repository = repository;
             this.userPracticeRepository = userPracticeRepository;
@@ -22,23 +24,19 @@ namespace JudgeSystem.Services.Data
             if (!userPracticeRepository.All().Any(x => x.UserId == userId && x.PracticeId == practiceId))
             {
                 await userPracticeRepository.AddAsync(new UserPractice { PracticeId = practiceId, UserId = userId });
-                await userPracticeRepository.SaveChangesAsync();
             }
         }
 
         public async Task<int> Create(int lessonId)
         {
-            Practice practice = new Practice { LessonId = lessonId };
-
+            var practice = new Practice { LessonId = lessonId };
             await repository.AddAsync(practice);
-            await repository.SaveChangesAsync();
-
             return practice.Id;
         }
 
         public async Task<int> GetLessonId(int practiceId)
         {
-            var practice = await repository.FindAsync(practiceId);
+            Practice practice = await repository.FindAsync(practiceId);
             return practice.LessonId;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@ namespace JudgeSystem.Data.Common.Repositories
         Task UpdateAsync(TEntity entity);
 
         Task DeleteAsync(TEntity entity);
+
+        Task DeleteRangeAsync(IEnumerable<TEntity> entites);
 
         Task<TEntity> FindAsync(object id);
 

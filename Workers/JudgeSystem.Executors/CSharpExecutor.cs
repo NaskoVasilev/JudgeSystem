@@ -25,7 +25,6 @@ namespace JudgeSystem.Executors
 				process.StartInfo.UseShellExecute = false;
 
 				process.Start();
-				process.PriorityClass = ProcessPriorityClass.High;
 				await process.StandardInput.WriteLineAsync(input);
 				await process.StandardInput.FlushAsync();
 				process.StandardInput.Close();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -56,8 +57,15 @@ namespace JudgeSystem.Data.Repositories
             await SaveChangesAsync();
         }
 
+        public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entites)
+        {
+            DbSet.RemoveRange(entites);
+            await SaveChangesAsync();
+        }
+
         public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
 
         public void Dispose() => Context.Dispose();
+
     }
 }

@@ -15,20 +15,12 @@ namespace JudgeSystem.Services.Data
 			this.repository = repository;
 		}
 
-		public async Task Create(ExecutedTest executedTest)
-		{
-			await repository.AddAsync(executedTest);
-			await repository.SaveChangesAsync();
-		}
+        public async Task Create(ExecutedTest executedTest) => await repository.AddAsync(executedTest);
 
-		public async Task DeleteExecutedTestsByTestId(int testId)
+        public async Task DeleteExecutedTestsByTestId(int testId)
 		{
-			foreach (var executedTest in repository.All().Where(t => t.TestId == testId).ToList())
-			{
-				repository.DeleteAsync(executedTest);
-			}
-
-			await repository.SaveChangesAsync();
+            var entities = repository.All().Where(t => t.TestId == testId).ToList();
+            await repository.DeleteRangeAsync(entities);
 		}
 	}
 }
