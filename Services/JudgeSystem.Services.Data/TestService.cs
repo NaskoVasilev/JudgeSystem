@@ -8,7 +8,7 @@ using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.ViewModels.Test;
 using JudgeSystem.Web.InputModels.Test;
-using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -29,25 +29,20 @@ namespace JudgeSystem.Services.Data
 		{
 			Test test = model.To<Test>();
 			await repository.AddAsync(test);
-			await repository.SaveChangesAsync();
 			return test.To<TestDto>();
 		}
 
 		public async Task Delete(int id)
 		{
-            var test = await repository.FindAsync(id);
+            Test test = await repository.FindAsync(id);
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);
-            repository.DeleteAsync(test);
-			await repository.SaveChangesAsync();
+            await repository.DeleteAsync(test);
 		}
 
 		public async Task<TDestination> GetById<TDestination>(int id)
 		{
-            var test = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
-            if(test == null)
-            {
-                throw new EntityNotFoundException();
-            }
+            TDestination test = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(test, nameof(Test));
             return test;
 		}
 
@@ -62,20 +57,20 @@ namespace JudgeSystem.Services.Data
 
 		public IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId)
 		{
-			return this.repository.All()
+			var tests = repository.All()
 				.Where(t => t.ProblemId == problemId)
 				.OrderByDescending(t => t.IsTrialTest)
 				.To<TestViewModel>()
 				.ToList();
+            return tests;
 		}
 
 		public async Task Update(TestEditInputModel model)
 		{
-            var test = await repository.FindAsync(model.Id);
+            Test test = await repository.FindAsync(model.Id);
             test.InputData = model.InputData.Trim();
             test.OutputData = model.OutputData.Trim();
-            repository.UpdateAsync(test);
-			await repository.SaveChangesAsync();
+            await repository.UpdateAsync(test);
 		}
 	}
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
@@ -11,6 +10,7 @@ using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
+using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -29,41 +29,33 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<StudentDto> Create(StudentCreateInputModel model, string activationKey)
 		{
-            var student = model.To<Student>();
+            Student student = model.To<Student>();
 			student.ActivationKeyHash = passwordHashService.HashPassword(activationKey);
 			await repository.AddAsync(student);
-			await repository.SaveChangesAsync();
 			return student.To<StudentDto>();
 		}
 
 		public async Task<StudentDto> Delete(string id)
 		{
-            var student = await repository.FindAsync(id);
-            this.repository.DeleteAsync(student);
-			await this.repository.SaveChangesAsync();
+            Student student = await repository.FindAsync(id);
+            await repository.DeleteAsync(student);
             return student.To<StudentDto>();
 		}
 
 		public async Task<T> GetById<T>(string id)
 		{
-            var student = await repository.All().Where(s => s.Id == id).To<T>().FirstOrDefaultAsync();
-            if(student == null)
-            {
-                throw new EntityNotFoundException();
-            }
+            T student = await repository.All().Where(s => s.Id == id).To<T>().FirstOrDefaultAsync();
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student, nameof(Student));
 			return student;
 		}
 
 		public async Task<SchoolClassDto> GetStudentClass(string id)
 		{
-			Student student = await this.repository.All()
+			Student student = await repository.All()
                 .Include(s => s.SchoolClass)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if(student == null)
-            {
-                throw new EntityNotFoundException();
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student);
 
             return student.SchoolClass.To<SchoolClassDto>();
 		}
@@ -112,24 +104,21 @@ namespace JudgeSystem.Services.Data
 
 		public async Task SetStudentProfileAsActivated(string studentId)
 		{
-            var student = await repository.FindAsync(studentId);
+            Student student = await repository.FindAsync(studentId);
             student.IsActivated = true;
-
-			repository.UpdateAsync(student);
-			await repository.SaveChangesAsync();
+			await repository.UpdateAsync(student);
 		}
 
 		public async Task<StudentDto> Update(StudentEditInputModel model)
 		{
             Student student = await repository.FindAsync(model.Id);
-			student.FullName = model.FullName;
+
+            student.FullName = model.FullName;
 			student.Email = model.Email;
 			student.NumberInCalss = model.NumberInCalss;
 			student.SchoolClassId = model.SchoolClassId;
 
-			repository.UpdateAsync(student);
-			await repository.SaveChangesAsync();
-
+			await repository.UpdateAsync(student);
 			return student.To<StudentDto>();
 		}
     }

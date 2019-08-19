@@ -62,7 +62,7 @@ namespace JudgeSystem.Services.Data
                 model.PracticeId = null;
             }
 
-            Submission submission = new Submission
+            var submission = new Submission
             {
                 Code = model.SubmissionContent,
                 ProblemId = model.ProblemId,
@@ -72,57 +72,46 @@ namespace JudgeSystem.Services.Data
             };
 
             await repository.AddAsync(submission);
-            await repository.SaveChangesAsync();
             return submission.To<SubmissionDto>();
         }
 
         public SubmissionResult GetSubmissionResult(int id)
         {
-            var submissioResult = repository.All()
+            SubmissionResult submissioResult = repository.All()
                 .Where(s => s.Id == id)
                 .Include(s => s.ExecutedTests)
                 .Include(s => s.Problem)
                 .Select(MapSubmissionToSubmissionResult)
                 .FirstOrDefault();
 
-            if(submissioResult == null)
-            {
-                throw new EntityNotFoundException(nameof(submissioResult));
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(submissioResult, nameof(Submission));
 
             return submissioResult;
         }
 
         public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemId(int problemId, string userId, int page, int submissionsPerPage)
         {
-            var submissionsFromDb = repository.All()
+            IQueryable<Submission> submissionsFromDb = repository.All()
                 .Where(s => s.ProblemId == problemId && s.UserId == userId);
 
-            var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
+            IEnumerable<SubmissionResult> submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
             return submissions;
         }
 
-        public int GetProblemSubmissionsCount(int problemId, string userId)
-        {
-            return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
-        }
+        public int GetProblemSubmissionsCount(int problemId, string userId) =>
+            repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId);
 
-        public int GetSubmissionsCountByProblemIdAndContestId(int problemId, int contestId, string userId)
-        {
-            return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.ContestId == contestId);
-        }
+        public int GetSubmissionsCountByProblemIdAndContestId(int problemId, int contestId, string userId) =>
+            repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.ContestId == contestId);
 
         public SubmissionViewModel GetSubmissionDetails(int id)
         {
-            var submission = this.repository.All()
+            SubmissionViewModel submission = repository.All()
                 .Where(s => s.Id == id)
                 .To<SubmissionViewModel>()
                 .FirstOrDefault();
 
-            if (submission == null)
-            {
-                throw new EntityNotFoundException(nameof(submission));
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(submission, nameof(Submission));
 
             submission.ExecutedTests = submission.ExecutedTests.OrderByDescending(t => t.TestIsTrialTest).ToList();
             return submission;
@@ -130,26 +119,24 @@ namespace JudgeSystem.Services.Data
 
         public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndContestId(int contestId, int problemId, string userId, int page, int submissionsPerPage)
         {
-            var submissionsFromDb = repository.All()
+            IQueryable<Submission> submissionsFromDb = repository.All()
                 .Where(s => s.ContestId == contestId && s.UserId == userId && s.ProblemId == problemId);
 
-            var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
+            IEnumerable<SubmissionResult> submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
             return submissions;
         }
 
         public async Task CalculateActualPoints(int submissionId)
         {
-            Submission submission = this.repository.All()
+            Submission submission = repository.All()
                 .Where(s => s.Id == submissionId)
                 .Include(s => s.Problem)
                 .Include(s => s.ExecutedTests)
                 .ThenInclude(e => e.Test)
                 .FirstOrDefault();
 
-            if(submission == null)
-            {
-                throw new EntityNotFoundException(nameof(submission));
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(submission);
+
             if (submission.CompilationErrors != null && submission.CompilationErrors.Length > 0)
             {
                 return;
@@ -168,61 +155,54 @@ namespace JudgeSystem.Services.Data
                 submission.ActualPoints = estimator.CalculteProblemPoints(executedTests, passedTests, maxPoints);
             }
 
-            repository.UpdateAsync(submission);
-            await repository.SaveChangesAsync();
+            await repository.UpdateAsync(submission);
         }
 
         public byte[] GetSubmissionCodeById(int id)
         {
-            var code = this.repository.All()
+            byte[] code = repository.All()
                 .Where(x => x.Id == id)
                 .Select(x => x.Code)
                 .FirstOrDefault();
 
-            if(code == null)
-            {
-                throw new EntityNotFoundException(nameof(Submission));
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(code, nameof(Submission));
 
             return code;
         }
 
         public string GetProblemNameBySubmissionId(int id)
         {
-            var problemName = this.repository.All()
+            string problemName = repository.All()
                 .Include(x => x.Problem)
                 .Where(x => x.Id == id)
                 .Select(x => x.Problem.Name)
                 .FirstOrDefault();
 
-            if(problemName == null)
-            {
-                throw new EntityNotFoundException(nameof(Submission));
-            }
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(problemName, nameof(Submission));
 
             return problemName;
         }
 
         public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndPracticeId(int practiceId, int problemId, string userId, int page, int submissionsPerPage)
         {
-            var submissionsFromDb = repository.All()
+            IQueryable<Submission> submissionsFromDb = repository.All()
                 .Where(s => s.PracticeId == practiceId && s.UserId == userId && s.ProblemId == problemId);
 
-            var submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
+            IEnumerable<SubmissionResult> submissions = GetSubmissionResults(submissionsFromDb, page, submissionsPerPage);
             return submissions;
         }
 
         public async Task ExecuteSubmission(int submissionId, List<string> sourceCodes)
         {
-            var submission = await repository.FindAsync(submissionId);
+            Submission submission = await repository.FindAsync(submissionId);
 
-            CSharpCompiler compiler = new CSharpCompiler();
+            var compiler = new CSharpCompiler();
             CompileResult compileResult = compiler.CreateAssembly(sourceCodes);
 
             if (!compileResult.IsCompiledSuccessfully)
             {
                 submission.CompilationErrors = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, compileResult.Errors));
-                await this.Update(submission);
+                await Update(submission);
             }
             else
             {
@@ -231,14 +211,12 @@ namespace JudgeSystem.Services.Data
             }
         }
 
-        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId)
-        {
-            return repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
-        }
+        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) => 
+            repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
 
         private SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
         {
-            SubmissionResult submissionResult = new SubmissionResult
+            var submissionResult = new SubmissionResult
             {
                 MaxPoints = submission.Problem.MaxPoints,
                 ActualPoints = submission.ActualPoints,
@@ -274,39 +252,40 @@ namespace JudgeSystem.Services.Data
 
         private async Task Update(Submission submission)
         {
-            if (!this.Exists(submission.Id))
-            {
-                throw new EntityNotFoundException();
-            }
+            ThrowEntityNotFoundExceptionIfEntityDoesNotExists(submission.Id);
 
-            repository.UpdateAsync(submission);
-            await repository.SaveChangesAsync();
+            await repository.UpdateAsync(submission);
         }
 
-        private bool Exists(int id)
+        private bool Exists(int id) => repository.All().Any(x => x.Id == id);
+
+        private void ThrowEntityNotFoundExceptionIfEntityDoesNotExists(int id)
         {
-            return this.repository.All().Any(x => x.Id == id);
+            if (!Exists(id))
+            {
+                throw new EntityNotFoundException(nameof(Submission));
+            }
         }
 
         private async Task RunTests(Submission submission, CompileResult compileResult)
         {
             var tests = testService.GetTestsByProblemId(submission.ProblemId).ToList();
-            var problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
+            ProblemConstraintsDto problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
             if (tests.Count == 0)
             {
                 return;
             }
 
-            CSharpChecker checker = new CSharpChecker();
-            var memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
-            var timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
+            var checker = new CSharpChecker();
+            int memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
+            int timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
 
-            foreach (var test in tests)
+            foreach (TestDataDto test in tests)
             {
                 CheckerResult checkerResult = await checker.Check(compileResult.OutputFile, test.InputData, test.OutputData, timeLimit, memoryLimit);
-                Enum.TryParse<TestExecutionResultType>(checkerResult.Type.ToString(), out var executionResultType);
+                Enum.TryParse<TestExecutionResultType>(checkerResult.Type.ToString(), out TestExecutionResultType executionResultType);
 
-                ExecutedTest executedTest = new ExecutedTest
+                var executedTest = new ExecutedTest
                 {
                     TestId = test.Id,
                     SubmissionId = submission.Id,

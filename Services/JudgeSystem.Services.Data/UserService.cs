@@ -12,19 +12,19 @@ namespace JudgeSystem.Services.Data
     public class UserService : IUserService
 	{
 		private readonly IDeletableEntityRepository<ApplicationUser> repository;
-        private readonly IRepository<UserPractice> userPracticeReository;
-        private readonly IRepository<UserContest> userContestReository;
+        private readonly IRepository<UserPractice> userPracticeRepository;
+        private readonly IRepository<UserContest> userContestRepository;
         private readonly IStudentService studentService;
 
         public UserService(
             IDeletableEntityRepository<ApplicationUser> repository,
-            IRepository<UserPractice> userPracticeReository,
-            IRepository<UserContest> userContestReository,
+            IRepository<UserPractice> userPracticeRepository,
+            IRepository<UserContest> userContestRepository,
             IStudentService studentService)
 		{
 			this.repository = repository;
-            this.userPracticeReository = userPracticeReository;
-            this.userContestReository = userContestReository;
+            this.userPracticeRepository = userPracticeRepository;
+            this.userContestRepository = userContestRepository;
             this.studentService = studentService;
         }
 
@@ -110,26 +110,14 @@ namespace JudgeSystem.Services.Data
 
         private async Task DeleteUserContests(string userId)
         {
-            var userContests = userContestReository.All().Where(x => x.UserId == userId).ToList();
-
-            foreach (var userContest in userContests)
-            {
-                userContestReository.DeleteAsync(userContest);
-            }
-
-            await userContestReository.SaveChangesAsync();
+            var userContests = userContestRepository.All().Where(x => x.UserId == userId).ToList();
+            await userContestRepository.DeleteRangeAsync(userContests);
         }
 
         private async Task DeleteUserPractices(string userId)
         {
-            var userPractices = userPracticeReository.All().Where(x => x.UserId == userId).ToList();
-
-            foreach (var userPractice in userPractices)
-            {
-                userPracticeReository.DeleteAsync(userPractice);
-            }
-
-            await userPracticeReository.SaveChangesAsync();
+            var userPractices = userPracticeRepository.All().Where(x => x.UserId == userId).ToList();
+            await userPracticeRepository.DeleteRangeAsync(userPractices);
         }
     }
 }

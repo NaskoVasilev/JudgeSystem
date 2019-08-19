@@ -8,7 +8,7 @@ using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.ViewModels.Resource;
 using JudgeSystem.Web.InputModels.Resource;
 using JudgeSystem.Web.Dtos.Resource;
-using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +25,7 @@ namespace JudgeSystem.Services.Data
 
         public async Task CreateResource(ResourceInputModel model, string filePath)
         {
-            Resource resource = new Resource
+            var resource = new Resource
             {
                 Name = model.Name,
                 FilePath = filePath,
@@ -33,34 +33,28 @@ namespace JudgeSystem.Services.Data
             };
 
             await repository.AddAsync(resource);
-            await repository.SaveChangesAsync();
         }
 
         public async Task<TDestination> GetById<TDestination>(int id)
         {
-            var resource = await this.repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
-            if(resource == null)
-            {
-                throw new EntityNotFoundException(nameof(resource));
-            }
+            TDestination resource = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(resource, nameof(Resource));
             return resource;
         }
 
         public IEnumerable<ResourceViewModel> LessonResources(int lessonId)
         {
-            return repository.All()
+            var resources = repository.All()
                 .Where(r => r.LessonId == lessonId)
                 .To<ResourceViewModel>()
                 .ToList();
+            return resources;
         }
 
         public async Task<ResourceDto> Delete(int id)
         {
             Resource resource = await repository.FindAsync(id);
-
-            repository.DeleteAsync(resource);
-            await repository.SaveChangesAsync();
-
+            await repository.DeleteAsync(resource);
             return resource.To<ResourceDto>();
         }
 
@@ -73,9 +67,7 @@ namespace JudgeSystem.Services.Data
             }
 
             resource.Name = model.Name;
-            repository.UpdateAsync(resource);
-
-            await repository.SaveChangesAsync();
+            await repository.UpdateAsync(resource);
         }
     }
 }
