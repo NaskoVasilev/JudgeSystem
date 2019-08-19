@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace JudgeSystem.Services.Tests
+﻿namespace JudgeSystem.Services.Tests
 {
     public static class ServiceTestsConstants
     {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Web.Dtos.Submission;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -65,7 +66,7 @@ namespace JudgeSystem.Services.Tests
         public async Task ExtractSubmissionCode_WithNotNullValidCodeAndNoFile_ShouldReturnCorrectsubmissionCodeDto()
         {
             string code = "using System;\r\nclass Test\r\n{\r\n}\r\n";
-            var submissionDto = await utilityService.ExtractSubmissionCode(code, null);
+            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, null);
 
             Assert.Equal(Encoding.UTF8.GetBytes(code), submissionDto.Content);
             Assert.Equal(submissionDto.SourceCodes, new List<string>() { code });
@@ -74,7 +75,7 @@ namespace JudgeSystem.Services.Tests
         [Fact]
         public async Task ExtractSubmissionCode_WithToBigCode_ShouldThrowBadrequestException()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             for (int i = 0; i < GlobalConstants.MaxSubmissionCodeLength + 1; i++)
             {
                 sb.Append("a");
@@ -89,12 +90,12 @@ namespace JudgeSystem.Services.Tests
             string firstClass = "using System;\r\nclass Test\r\n{\r\n}\r\n";
             string secondClass = "//smaple solution comes here\r\nusing System;\r\nclass Program\r\n{\r\n}\r\n\t";
 
-            using (var stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
             {
                 IFormFile file = new FormFile(stream, 0, stream.Length, "solution", "solution.zip");
-                var submissionDto = await utilityService.ExtractSubmissionCode(null, file);
+                SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(null, file);
 
-                using (MemoryStream ms = new MemoryStream())
+                using (var ms = new MemoryStream())
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                     stream.CopyTo(ms);
@@ -111,8 +112,8 @@ namespace JudgeSystem.Services.Tests
         [Fact]
         public async Task ExtractSubmissionCode_WithNullCodeArgumentAndTooBigFile_ShouldThrowBadRequestException()
         {
-            Random random = new Random(0);
-            int bytesCount = GlobalConstants.SubmissionFileMaxSizeInKb * 1000 + 10;
+            var random = new Random(0);
+            int bytesCount = (GlobalConstants.SubmissionFileMaxSizeInKb * 1000) + 10;
             byte[] buffer = new byte[bytesCount];
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -127,17 +128,15 @@ namespace JudgeSystem.Services.Tests
         }
 
         [Fact]
-        public async Task ExtractSubmissionCode_WithNullCodeArgumentAndNullFileArgumet_ShouldThrowBadRequestException()
-        {
+        public async Task ExtractSubmissionCode_WithNullCodeArgumentAndNullFileArgumet_ShouldThrowBadRequestException() => 
             await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, null));
-        }
 
         [Fact]
         public async Task ExtractSubmissionCode_WithNotNullCodeArgumentAndNotNullFileArgumet_ShouldGetSubmissionCodeFromCodeArgument()
         {
             IFormFile file = new FormFile(new MemoryStream(), 0, 0, "solution", "solution.zip");
             string code = "task code comes here";
-            var submissionDto = await utilityService.ExtractSubmissionCode(code, file);
+            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, file);
 
             Assert.Equal(Encoding.UTF8.GetBytes(code), submissionDto.Content);
             Assert.Equal(submissionDto.SourceCodes, new List<string>() { code });
@@ -151,9 +150,9 @@ namespace JudgeSystem.Services.Tests
             string thirdFileData = "let sum = (a, b) => a + b;\r\nlet multiply = (a, b) => a * b;";
             string fourthFileData = "//smaple solution comes here\r\nusing System;\r\nclass Program\r\n{\r\n}\r\n\t";
 
-            using (var stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
             {
-                var sourceCodes = utilityService.ExtractZipFile(stream, new List<string> { ".txt", ".cs", ".js" });
+                List<string> sourceCodes = utilityService.ExtractZipFile(stream, new List<string> { ".txt", ".cs", ".js" });
                 sourceCodes = sourceCodes.OrderBy(x => x.Length).ToList();
                 Assert.Equal(4, sourceCodes.Count);
                 Assert.Equal(firstFileData, sourceCodes[0]);

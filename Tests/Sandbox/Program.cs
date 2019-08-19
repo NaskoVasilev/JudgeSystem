@@ -26,14 +26,14 @@ namespace Sandbox
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider(true);
 
             // Seed data on application startup
-            using (var serviceScope = serviceProvider.CreateScope())
+            using (IServiceScope serviceScope = serviceProvider.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                ApplicationDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
-            using (var serviceScope = serviceProvider.CreateScope())
+            using (IServiceScope serviceScope = serviceProvider.CreateScope())
             {
                 serviceProvider = serviceScope.ServiceProvider;
 
@@ -43,14 +43,11 @@ namespace Sandbox
             }
         }
 
-        private static int SandboxCode(SandboxOptions options, IServiceProvider serviceProvider)
-        {
-            return 0;
-        }
+        private static int SandboxCode(SandboxOptions options, IServiceProvider serviceProvider) => 0;
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
                 .AddEnvironmentVariables()
                 .Build();

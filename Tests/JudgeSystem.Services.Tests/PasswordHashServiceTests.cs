@@ -8,7 +8,7 @@ namespace JudgeSystem.Services.Tests
 
         public PasswordHashServiceTests()
         {
-            this.passwordHashService = new PasswordHashService();
+            passwordHashService = new PasswordHashService();
         }
 
         [Fact]

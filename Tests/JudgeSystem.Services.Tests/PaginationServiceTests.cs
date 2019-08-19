@@ -10,7 +10,7 @@ namespace JudgeSystem.Services.Tests
 
         public PaginationServiceTests()
         {
-            this.paginationService = new PaginationService();
+            paginationService = new PaginationService();
         }
 
         [Theory]
@@ -27,21 +27,15 @@ namespace JudgeSystem.Services.Tests
         }
 
         [Fact]
-        public void CalculatePagesCount_WithNegativeElementsPerPage_ShouldThrowError()
-        {
+        public void CalculatePagesCount_WithNegativeElementsPerPage_ShouldThrowError() => 
             Assert.Throws<ArgumentException>(() => paginationService.CalculatePagesCount(10, -20));
-        }
 
         [Fact]
-        public void CalculatePagesCount_WithZeroElementsPerPage_ShouldThrowError()
-        {
+        public void CalculatePagesCount_WithZeroElementsPerPage_ShouldThrowError() => 
             Assert.Throws<ArgumentException>(() => paginationService.CalculatePagesCount(10, 0));
-        }
 
         [Fact]
-        public void CalculatePagesCount_WithNegativeElementsCount_ShouldThrowError()
-        {
+        public void CalculatePagesCount_WithNegativeElementsCount_ShouldThrowError() => 
             Assert.Throws<ArgumentException>(() => paginationService.CalculatePagesCount(10, -1));
-        }
     }
 }

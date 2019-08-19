@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+
+using JudgeSystem.Web.Dtos.Common;
 
 using Xunit;
 
@@ -10,7 +12,7 @@ namespace JudgeSystem.Services.Tests
 
         public EstimatorTests()
         {
-            this.estimator = new Estimator();
+            estimator = new Estimator();
         }
 
         [Fact]
@@ -18,7 +20,7 @@ namespace JudgeSystem.Services.Tests
         {
             DateTime endTime = DateTime.Now.AddDays(5).AddHours(2).AddMinutes(45).AddSeconds(12);
 
-            var remainingTime = estimator.CalculateRemainingTime(endTime);
+            TimeRemainingDto remainingTime = estimator.CalculateRemainingTime(endTime);
 
             Assert.Equal(5, remainingTime.Days);
             Assert.Equal(2, remainingTime.Hours);
@@ -31,7 +33,7 @@ namespace JudgeSystem.Services.Tests
         {
             DateTime endTime = DateTime.Now.AddDays(-5);
 
-            var remainingTime = estimator.CalculateRemainingTime(endTime);
+            TimeRemainingDto remainingTime = estimator.CalculateRemainingTime(endTime);
 
             Assert.Equal(0, remainingTime.Days);
             Assert.Equal(0, remainingTime.Hours);

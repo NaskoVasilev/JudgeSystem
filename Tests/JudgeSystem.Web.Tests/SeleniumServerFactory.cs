@@ -19,9 +19,9 @@ namespace JudgeSystem.Web.Tests
 
         public SeleniumServerFactory()
         {
-            this.ClientOptions.BaseAddress = new Uri("https://localhost"); // will follow redirects by default
+            ClientOptions.BaseAddress = new Uri("https://localhost"); // will follow redirects by default
 
-            this.process = new Process
+            process = new Process
                        {
                            StartInfo = new ProcessStartInfo
                                        {
@@ -30,7 +30,7 @@ namespace JudgeSystem.Web.Tests
                                            UseShellExecute = true,
                                        },
                        };
-            this.process.Start();
+            process.Start();
         }
 
         public string RootUri { get; set; } // Save this use by tests
@@ -38,9 +38,9 @@ namespace JudgeSystem.Web.Tests
         protected override TestServer CreateServer(IWebHostBuilder builder)
         {
             // Real TCP port
-            this.host = builder.Build();
-            this.host.Start();
-            this.RootUri = this.host.ServerFeatures.Get<IServerAddressesFeature>().Addresses.LastOrDefault(); // Last is https://localhost:5001!
+            host = builder.Build();
+            host.Start();
+            RootUri = host.ServerFeatures.Get<IServerAddressesFeature>().Addresses.LastOrDefault(); // Last is https://localhost:5001!
 
             // Fake Server we won't use...this is lame. Should be cleaner, or a utility class
             return new TestServer(new WebHostBuilder().UseStartup<FakeStartup>());
@@ -51,8 +51,8 @@ namespace JudgeSystem.Web.Tests
             base.Dispose(disposing);
             if (disposing)
             {
-                this.host.Dispose();
-                this.process.CloseMainWindow(); // Be sure to stop Selenium Standalone
+                host.Dispose();
+                process.CloseMainWindow(); // Be sure to stop Selenium Standalone
             }
         }
 

@@ -18,7 +18,7 @@ namespace JudgeSystem.Web.Tests
             var opts = new ChromeOptions();
             opts.AddArgument("--headless"); // Optional, comment this out if you want to SEE the browser window
             opts.AddArgument("no-sandbox");
-            this.browser = new RemoteWebDriver(opts);
+            browser = new RemoteWebDriver(opts);
         }
     }
 }

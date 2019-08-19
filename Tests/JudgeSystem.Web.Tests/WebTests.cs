@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -23,7 +24,7 @@ namespace JudgeSystem.Web.Tests
         [InlineData("/Course/All")]
         public async Task RequestToGivenUrlShoudReturnSuccessStatusCode(string url)
         {
-            var client = this.server.CreateClient();
+            HttpClient client = server.CreateClient();
             var response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
         }
@@ -40,8 +41,8 @@ namespace JudgeSystem.Web.Tests
         [InlineData("/Administration/Student/StudentsByClass")]
         public async Task AccessPageWithGivenUrlShoudRedirectToLoginPage(string url)
         {
-            var client = this.server.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-            var response = await client.GetAsync(url);
+            HttpClient client = server.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+            HttpResponseMessage response = await client.GetAsync(url);
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
             string expectedUrl = $"/Identity/Account/Login?ReturnUrl={WebUtility.UrlEncode(url)}";
             Assert.Contains(expectedUrl, response.Headers.Location.ToString());

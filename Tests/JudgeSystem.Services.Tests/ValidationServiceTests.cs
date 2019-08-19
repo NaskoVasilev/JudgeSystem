@@ -18,7 +18,7 @@ namespace JudgeSystem.Services.Tests
         [Fact]
         public void IsValidFileExtension_WithValidFileNames_ShoudReturnTrue()
         {
-            foreach (var fileExtension in GlobalConstants.AllowedFileExtensoins)
+            foreach (string fileExtension in GlobalConstants.AllowedFileExtensoins)
             {
                 string fileName = $"{Guid.NewGuid()}{fileExtension}";
 
@@ -32,9 +32,7 @@ namespace JudgeSystem.Services.Tests
         [InlineData("name.exe")]
         [InlineData("withoutExtension")]
         [InlineData("name.exe.bat.txt.dll")]
-        public void IsValidFileExtension_WithInvalidFileNames_ShoudReturnFalse(string fileName)
-        {
+        public void IsValidFileExtension_WithInvalidFileNames_ShoudReturnFalse(string fileName) => 
             Assert.False(validationService.IsValidFileExtension(fileName));
-        }
     }
 }
