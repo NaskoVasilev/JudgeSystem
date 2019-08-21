@@ -27,13 +27,13 @@ namespace JudgeSystem.Web.Controllers
 
 		public async Task<IActionResult> Download(int id)
 		{
-			var resource = await resourceService.GetById<ResourceDto>(id);
-			var mimeType = GlobalConstants.OctetStreamMimeType; 
+            ResourceDto resource = await resourceService.GetById<ResourceDto>(id);
+            string mimeType = GlobalConstants.OctetStreamMimeType;
 
-			using(var stream = new MemoryStream())
+            using(var stream = new MemoryStream())
             {
                 await azureStorageService.Download(resource.FilePath, stream);
-		    	return File(stream.ToArray(), mimeType, resource.Name + System.IO.Path.GetExtension(resource.FilePath)); 
+		    	return File(stream.ToArray(), mimeType, resource.Name + Path.GetExtension(resource.FilePath)); 
             }
 		}
 	}

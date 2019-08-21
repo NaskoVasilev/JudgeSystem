@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 
@@ -41,71 +42,71 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-            this.Username = user.UserName;
-            this.IsEmailConfirmed = user.EmailConfirmed;
+            ApplicationUser user = await userManager.GetUserAsync(User);
+            Username = user.UserName;
+            IsEmailConfirmed = user.EmailConfirmed;
 
-            this.Input = new InputModel
+            Input = new InputModel
             {
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
             };
 
-            return this.Page();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.Page();
+                return Page();
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            if (this.Input.Email != user.Email)
+            ApplicationUser user = await userManager.GetUserAsync(User);
+            if (Input.Email != user.Email)
             {
-                var setEmailResult = await this.userManager.SetEmailAsync(user, this.Input.Email);
+                IdentityResult setEmailResult = await userManager.SetEmailAsync(user, Input.Email);
                 if (!setEmailResult.Succeeded)
                 {
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
             }
 
-            if (this.Input.PhoneNumber != user.PhoneNumber)
+            if (Input.PhoneNumber != user.PhoneNumber)
             {
-                var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
+                IdentityResult setPhoneResult = await userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
 
-            await this.signInManager.RefreshSignInAsync(user);
-            this.StatusMessage = InfoMessages.SuccessfullyUpdatedProfile;
-            return this.RedirectToPage();
+            await signInManager.RefreshSignInAsync(user);
+            StatusMessage = InfoMessages.SuccessfullyUpdatedProfile;
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.Page();
+                return Page();
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+            ApplicationUser user = await userManager.GetUserAsync(User);
+            string code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var callbackUrl = this.Url.Page(
+            string callbackUrl = Url.Page(
                 ConfirmationPageUrl,
                 pageHandler: null,
                 values: new { userId = user.Id, code },
-                protocol: this.Request.Scheme);
+                protocol: Request.Scheme);
 
             string message = string.Format(GlobalConstants.EmailConfirmationMessage, HtmlEncoder.Default.Encode(callbackUrl));
-            await this.emailSender.SendEmailAsync(user.Email, GlobalConstants.ConfirmEmailSubject, message);
+            await emailSender.SendEmailAsync(user.Email, GlobalConstants.ConfirmEmailSubject, message);
 
-            this.StatusMessage = InfoMessages.VerificationEmailSentMessage;
-            return this.RedirectToPage();
+            StatusMessage = InfoMessages.VerificationEmailSentMessage;
+            return RedirectToPage();
         }
 
         public class InputModel

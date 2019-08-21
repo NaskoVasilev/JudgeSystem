@@ -16,7 +16,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public IActionResult Results(string userId)
         {
-            UserResultsViewModel userResults = new UserResultsViewModel
+            var userResults = new UserResultsViewModel
             {
                 ContestResults = userService.GetContestResults(userId),
                 PracticeResults = userService.GetPracticeResults(userId),

@@ -12,24 +12,26 @@ namespace JudgeSystem.Web.Utilites
 	{
 		public static IEnumerable<SelectListItem> GetSelectListItems<T>()
 		{
-			return EnumExtensions.GetEnumValuesAsString<T>()
+			var items = EnumExtensions.GetEnumValuesAsString<T>()
 				.Select(t => new SelectListItem
 				{
 					Value = t,
 					Text = t
 				})
 				.ToList();
+            return items;
 		}
 
         public static IEnumerable<SelectListItem> GetFormatedSelectListItems<T>()
         {
-            return EnumExtensions.GetEnumValuesAsString<T>()
+            var items = EnumExtensions.GetEnumValuesAsString<T>()
                 .Select(t => new SelectListItem
                 {
                     Value = t,
                     Text = t.InsertSpaceBeforeUppercaseLetter()
                 })
                 .ToList();
+            return items;
         }
 
         public static string GetLessonName(string lessonBaseName, LessonType lessonType)

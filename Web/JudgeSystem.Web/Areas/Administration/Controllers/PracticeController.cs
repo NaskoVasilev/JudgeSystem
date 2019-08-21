@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Practice;
 
@@ -47,12 +49,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 baseProblemId = lessonService.GetFirstProblemId(lessonId) ?? baseProblemId;
             }
 
-            var submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
+            IEnumerable<SubmissionResult> submissions = submissionService.GetUserSubmissionsByProblemIdAndPracticeId(practiceId, baseProblemId, userId, page, GlobalConstants.SubmissionsPerPage);
             string problemName = problemService.GetProblemName(baseProblemId);
             string baseUrl = GetBaseUrl(userId, practiceId);
             int submissionsCount = submissionService.GetSubmissionsCountByProblemIdAndPracticeId(baseProblemId, practiceId, userId);
 
-            PaginationData paginationData = new PaginationData
+            var paginationData = new PaginationData
             {
                 CurrentPage = page,
                 NumberOfPages = paginationHelper.CalculatePagesCount(submissionsCount, GlobalConstants.SubmissionsPerPage),
@@ -71,14 +73,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             return View(model);
         }
 
-        private static string GetFullUrl(int baseProblemId, string baseUrl)
-        {
-            return baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}" + "={0}";
-        }
+        private static string GetFullUrl(int baseProblemId, string baseUrl) => 
+            baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}={baseProblemId}{GlobalConstants.QueryStringDelimiter}{GlobalConstants.PageKey}" + "={0}";
 
-        private string GetBaseUrl(string userId, int practiceId)
-        {
-            return $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(Submissions)}?practiceId={practiceId}{GlobalConstants.QueryStringDelimiter}userId={userId}";
-        }
+        private string GetBaseUrl(string userId, int practiceId) => 
+            $"/{GlobalConstants.AdministrationArea}/Practice/{nameof(Submissions)}?practiceId={practiceId}{GlobalConstants.QueryStringDelimiter}userId={userId}";
     }
 }

@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
-using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
-using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.ViewModels.Problem;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.InputModels.Problem;
+using JudgeSystem.Web.Dtos.Problem;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,25 +16,19 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	{
 		private readonly IProblemService problemService;
 		private readonly ITestService testService;
-        private readonly IPracticeService practiceService;
         private readonly ILessonService lessonService;
 
         public ProblemController(
             IProblemService problemService, 
             ITestService testService, 
-            IPracticeService practiceService,
             ILessonService lessonService)
 		{
 			this.problemService = problemService;
 			this.testService = testService;
-            this.practiceService = practiceService;
             this.lessonService = lessonService;
         }
 
-		public IActionResult Create()
-		{
-			return View(new ProblemInputModel());
-		}
+        public IActionResult Create() => View(new ProblemInputModel());
 
         [ValidateAntiForgeryToken]
 		[HttpPost]
@@ -46,7 +39,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				return View(model);
 			}
 
-			var problem = await problemService.Create(model);
+            ProblemDto problem = await problemService.Create(model);
 			return RedirectToAction(nameof(AddTest), "Problem",
 				new { area = GlobalConstants.AdministrationArea, problemId = problem.Id });
 		}
@@ -66,7 +59,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Edit(int id)
 		{
-			var model = await problemService.GetById<ProblemEditInputModel>(id);
+            ProblemEditInputModel model = await problemService.GetById<ProblemEditInputModel>(id);
 			return View(model);
 		}
 
@@ -79,14 +72,14 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				return View(model);
 			}
 
-			var problem = await problemService.Update(model);
+            ProblemDto problem = await problemService.Update(model);
 			return RedirectToAction(nameof(All), "Problem",
 				new { area = GlobalConstants.AdministrationArea, problem.LessonId });
 		}
 
 		public async Task<IActionResult> Delete(int id)
 		{
-			var model = await problemService.GetById<ProblemViewModel>(id);
+            ProblemViewModel model = await problemService.GetById<ProblemViewModel>(id);
 			return View(model);
 		}
 
@@ -95,7 +88,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [ActionName(nameof(Delete))]
 		public async Task<IActionResult> DeletePost(int id)
 		{
-			var problem = await problemService.Delete(id);
+            ProblemDto problem = await problemService.Delete(id);
 
             return RedirectToAction(nameof(All), "Problem",
                 new { area = GlobalConstants.AdministrationArea, problem.LessonId });

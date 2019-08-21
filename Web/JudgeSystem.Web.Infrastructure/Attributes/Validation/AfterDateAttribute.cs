@@ -17,14 +17,14 @@ namespace JudgeSystem.Web.Infrastructure.Attributes.Validation
 
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
-			DateTime targetProperyValue = (DateTime)validationContext.ObjectType.GetProperty(targetProperyName)
+			var targetProperyValue = (DateTime)validationContext.ObjectType.GetProperty(targetProperyName)
 				.GetValue(validationContext.ObjectInstance);
 
 			if((DateTime)value > targetProperyValue)
 			{
 				return ValidationResult.Success;
 			}
-			return new ValidationResult(this.errorMessage);
+			return new ValidationResult(errorMessage);
 		}
 	}
 }

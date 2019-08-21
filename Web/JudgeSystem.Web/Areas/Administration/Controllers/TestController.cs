@@ -4,9 +4,9 @@ using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.Filters;
+using JudgeSystem.Web.ViewModels.Test;
 
 using Microsoft.AspNetCore.Mvc;
-using JudgeSystem.Web.ViewModels.Test;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {

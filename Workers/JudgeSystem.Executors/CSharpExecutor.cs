@@ -12,9 +12,9 @@ namespace JudgeSystem.Executors
 		public async Task<ExecutionResult> ProcessExecutionResult(string dllFilePath, string input, int timeLimit, int memoryLimit)
 		{
 			string commandPromptArgument = @"/C dotnet " + dllFilePath;
-			ExecutionResult executionResult = new ExecutionResult();
+			var executionResult = new ExecutionResult();
 
-			using (Process process = new Process())
+			using (var process = new Process())
 			{
 				process.StartInfo.FileName = "cmd.exe";
 				process.StartInfo.Arguments = commandPromptArgument;

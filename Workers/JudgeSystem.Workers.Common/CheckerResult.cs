@@ -4,14 +4,14 @@
 	{
 		public CheckerResult(ExecutionResult executionResult)
 		{
-			this.Error = executionResult.Error;
-			this.Output = executionResult.Output;
-			this.ExitCode = executionResult.ExitCode;
-			this.MemoryUsed = executionResult.MemoryUsed;
-			this.PrivilegedProcessorTime = executionResult.PrivilegedProcessorTime;
-			this.TimeWorked = executionResult.TimeWorked;
-			this.Type = executionResult.Type;
-			this.UserProcessorTime = executionResult.UserProcessorTime;
+			Error = executionResult.Error;
+			Output = executionResult.Output;
+			ExitCode = executionResult.ExitCode;
+			MemoryUsed = executionResult.MemoryUsed;
+			PrivilegedProcessorTime = executionResult.PrivilegedProcessorTime;
+			TimeWorked = executionResult.TimeWorked;
+			Type = executionResult.Type;
+			UserProcessorTime = executionResult.UserProcessorTime;
 		}
 
 		public bool IsCorrect { get; set; }

@@ -11,13 +11,13 @@ namespace JudgeSystem.Checkers
 
 		public CSharpChecker()
 		{
-			this.cSharpExecutor = new CSharpExecutor();
+            cSharpExecutor = new CSharpExecutor();
 		}
 
 		public async Task<CheckerResult> Check(string dllFilePath, string input, string expectedOutput, int timeLimit, int memoryLimit)
 		{
 			ExecutionResult executionResult = await cSharpExecutor.ProcessExecutionResult(dllFilePath, input, timeLimit, memoryLimit);
-			CheckerResult checkerResult = new CheckerResult(executionResult);
+			var checkerResult = new CheckerResult(executionResult);
 			if (!executionResult.IsSuccesfull)
 			{
 				checkerResult.IsCorrect = false;

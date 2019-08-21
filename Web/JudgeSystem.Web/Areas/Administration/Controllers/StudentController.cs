@@ -29,10 +29,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.studentProfileService = studentProfileService;
         }
 
-		public IActionResult Create()
-		{
-			return View();
-		}
+        public IActionResult Create() => View();
 
         [ValidateAntiForgeryToken]
 		[HttpPost]
@@ -44,7 +41,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
 
             string activationKey = await studentProfileService.SendActivationEmail(model.Email);
-			var student = await studentService.Create(model, activationKey);
+            StudentDto student = await studentService.Create(model, activationKey);
             return await RedirectToStudentsByClass(student.SchoolClassId);
 		}
 
@@ -56,7 +53,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Edit(string id)
 		{
-			var model = await studentService.GetById<StudentEditInputModel>(id);
+            StudentEditInputModel model = await studentService.GetById<StudentEditInputModel>(id);
 			return View(model);
 		}
 
@@ -69,13 +66,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				return View(model);
 			}
 
-			var student = await studentService.Update(model);
+            StudentDto student = await studentService.Update(model);
             return await RedirectToStudentsByClass(student.SchoolClassId);
 		}
 
 		public async Task<IActionResult> Delete(string id)
 		{
-			var model = await studentService.GetById<StudentProfileViewModel>(id);
+            StudentProfileViewModel model = await studentService.GetById<StudentProfileViewModel>(id);
 			return View(model);
 		}
 
@@ -90,7 +87,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         private async Task<IActionResult> RedirectToStudentsByClass(int schoolClassId)
         {
-            var schoolClass = await schoolClassService.GetById<SchoolClassDto>(schoolClassId);
+            SchoolClassDto schoolClass = await schoolClassService.GetById<SchoolClassDto>(schoolClassId);
             return RedirectToAction(nameof(StudentsByClass),
                 new { classNumber = schoolClass.ClassNumber, classType = schoolClass.ClassType });
         }

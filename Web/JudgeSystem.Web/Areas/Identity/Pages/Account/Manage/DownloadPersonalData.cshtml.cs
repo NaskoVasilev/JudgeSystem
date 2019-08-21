@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 
@@ -29,14 +31,14 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-            this.logger.LogInformation($"User with ID '{user.Id}' asked for their personal data.");
+            ApplicationUser user = await userManager.GetUserAsync(User);
+            logger.LogInformation($"User with ID '{user.Id}' asked for their personal data.");
 
             var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(ApplicationUser).GetProperties().Where(
+            IEnumerable<PropertyInfo> personalDataProps = typeof(ApplicationUser).GetProperties().Where(
                             prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
 
-            foreach (var property in personalDataProps)
+            foreach (PropertyInfo property in personalDataProps)
             {
                 personalData.Add(property.Name, property.GetValue(user)?.ToString() ?? "null");
             }

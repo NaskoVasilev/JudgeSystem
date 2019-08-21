@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace JudgeSystem.Web.Infrastructure.Extensions
+﻿namespace JudgeSystem.Web.Infrastructure.Extensions
 {
-	public static class StringExtensions
+    public static class StringExtensions
 	{
         public static string InsertSpaceBeforeUppercaseLetter(this string text)
         {

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Contest;
 using JudgeSystem.Web.ViewModels.Contest;
@@ -29,12 +28,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			this.lessonService = lessonService;
         }
 
-		public IActionResult Create()
-		{
-			return View();
-		}
+        public IActionResult Create() => View();
 
-		[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(ContestCreateInputModel model)
 		{
@@ -51,7 +47,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [EndpointExceptionFilter]
 		public IActionResult GetLessons(int courseId, LessonType lessonType)
 		{
-			var lessons = lessonService.GetCourseLesosns(courseId, lessonType);
+            IEnumerable<ContestLessonDto> lessons = lessonService.GetCourseLesosns(courseId, lessonType);
 			return Json(lessons);
 		}
 
@@ -105,28 +101,26 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		{
 			IEnumerable<ContestViewModel> contests = contestService.GetAllConests(page);
             int numberOfPages = contestService.GetNumberOfPages();
-			ContestAllViewModel model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page };
+			var model = new ContestAllViewModel { Contests = contests, NumberOfPages = numberOfPages, CurrentPage = page };
 			return View(model);
 		}
 
 		public IActionResult Results(int id, int page = DefaultPage)
 		{
-            var model = contestService.GetContestReults(id, page);
+            ContestAllResultsViewModel model = contestService.GetContestReults(id, page);
             return View(model);
         }
 
         [EndpointExceptionFilter]
-		[HttpGet("/Contest/Results/{contestId}/PagesCount")]
-		public int GetContestResultPagesCount(int contestId)
-		{
-			return contestService.GetContestResultsPagesCount(contestId);
-		}
+        [HttpGet("/Contest/Results/{contestId}/PagesCount")]
+        public int GetContestResultPagesCount(int contestId) => 
+            contestService.GetContestResultsPagesCount(contestId);
 
         public async Task<IActionResult> Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/{nameof(Submissions)}?contestId={contestId}&userId={userId}";
 
-            var model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            ContestSubmissionsViewModel model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View(model);
         }

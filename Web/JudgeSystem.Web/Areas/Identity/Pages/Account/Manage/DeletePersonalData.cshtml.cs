@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -35,24 +38,24 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-            if (!await this.userManager.CheckPasswordAsync(user, this.Input.Password))
+            ApplicationUser user = await userManager.GetUserAsync(User);
+            if (!await userManager.CheckPasswordAsync(user, Input.Password))
             {
-                this.ModelState.AddModelError(nameof(InputModel.Password), ErrorMessages.InvalidPassword);
-                return this.Page();
+                ModelState.AddModelError(nameof(InputModel.Password), ErrorMessages.InvalidPassword);
+                return Page();
             }
 
-            var userRoles = await userManager.GetRolesAsync(user);
+            IList<string> userRoles = await userManager.GetRolesAsync(user);
             await userManager.RemoveFromRolesAsync(user, userRoles);
             await userService.DeleteUserData(user.Id, user.StudentId);
-            var result = await this.userManager.DeleteAsync(user);
+            IdentityResult result = await userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
 
-            await this.signInManager.SignOutAsync();
-            return this.Redirect("~/");
+            await signInManager.SignOutAsync();
+            return Redirect("~/");
         }
 
         public class InputModel

@@ -28,10 +28,10 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
-            await this.signInManager.SignOutAsync();
-            this.logger.LogInformation("User logged out.");
-            return this.LocalRedirect(returnUrl);
+            returnUrl = returnUrl ?? Url.Content("~/");
+            await signInManager.SignOutAsync();
+            logger.LogInformation("User logged out.");
+            return LocalRedirect(returnUrl);
         }
     }
 }

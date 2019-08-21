@@ -6,12 +6,12 @@ namespace JudgeSystem.Workers.Common
 	{
 		public ExecutionResult()
 		{
-			this.Output = string.Empty;
-			this.Error = string.Empty;
-			this.ExitCode = 0;
-			this.Type = ProcessExecutionResultType.Success;
-			this.TimeWorked = default(TimeSpan);
-			this.MemoryUsed = 0;
+			Output = string.Empty;
+			Error = string.Empty;
+			ExitCode = 0;
+			Type = ProcessExecutionResultType.Success;
+			TimeWorked = default;
+			MemoryUsed = 0;
 		}
 
 		public string Output { get; set; }
@@ -32,6 +32,6 @@ namespace JudgeSystem.Workers.Common
 
 		public long MemoryUsed { get; set; }
 
-		public TimeSpan TotalProcessorTime => this.PrivilegedProcessorTime + this.UserProcessorTime;
+		public TimeSpan TotalProcessorTime => PrivilegedProcessorTime + UserProcessorTime;
 	}
 }

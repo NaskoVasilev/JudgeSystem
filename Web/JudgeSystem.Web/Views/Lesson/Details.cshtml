@@ -3,7 +3,7 @@
 @{
     this.ViewData["Title"] = Model.Name;
     int problemNumber = 0;
-    var firstProblem = Model.Problems.FirstOrDefault();
+    ProblemViewModel firstProblem = Model.Problems.FirstOrDefault();
     string administrationArea = GlobalConstants.AdministrationArea;
 }
 

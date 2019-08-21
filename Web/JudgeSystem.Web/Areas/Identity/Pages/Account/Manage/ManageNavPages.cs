@@ -20,7 +20,7 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {
-            var activePage = viewContext.ViewData[IdentityAreaConstants.ActivePageKey] as string
+            string activePage = viewContext.ViewData[IdentityAreaConstants.ActivePageKey] as string
                 ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
             return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) ? IdentityAreaConstants.ActivePageCssClass : null;
         }

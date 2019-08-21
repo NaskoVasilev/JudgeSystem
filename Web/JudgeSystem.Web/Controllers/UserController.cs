@@ -22,8 +22,8 @@ namespace JudgeSystem.Web.Controllers
 		[Authorize]
 		public IActionResult MyResults()
 		{
-			string userId = userManager.GetUserId(this.User);
-            UserResultsViewModel userResults = new UserResultsViewModel
+            string userId = userManager.GetUserId(User);
+            var userResults = new UserResultsViewModel
             {
                 ContestResults = userService.GetContestResults(userId),
                 PracticeResults = userService.GetPracticeResults(userId)

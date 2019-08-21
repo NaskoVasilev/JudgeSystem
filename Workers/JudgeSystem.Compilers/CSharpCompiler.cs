@@ -20,31 +20,28 @@ namespace JudgeSystem.Compilers
 
 		public CSharpCompiler()
 		{
-			this.assemblyName = Guid.NewGuid().ToString();
+            assemblyName = Guid.NewGuid().ToString();
 		}
 
-		public CompileResult CreateAssembly(string sourceCode)
-		{
-			return CreateAssembly(new List<string>() { sourceCode });
-		}
+        public CompileResult CreateAssembly(string sourceCode) => CreateAssembly(new List<string>() { sourceCode });
 
-		public CompileResult CreateAssembly(List<string> sourceCodeFiles)
+        public CompileResult CreateAssembly(List<string> sourceCodeFiles)
 		{
-			List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+			var syntaxTrees = new List<SyntaxTree>();
 			foreach (var sourceCode in sourceCodeFiles)
 			{
 				SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sourceCode);
 				syntaxTrees.Add(syntaxTree);
 			}
-			CSharpCompilation compilation = this.BuildCSharpCompilation(syntaxTrees);
+			CSharpCompilation compilation = BuildCSharpCompilation(syntaxTrees);
 
             string outputDllPath = GetOutputDllPath();
 			EmitResult emitResult = compilation.Emit(outputDllPath);
 
 			if(!emitResult.Success)
 			{
-				List<string> errors = new List<string>();
-				foreach (var diagnsotic in emitResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error))
+				var errors = new List<string>();
+				foreach (Diagnostic diagnsotic in emitResult.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error))
 				{
 					errors.Add(diagnsotic.GetMessage());
 				}
@@ -74,7 +71,7 @@ namespace JudgeSystem.Compilers
 
         private CSharpCompilation BuildCSharpCompilation(List<SyntaxTree> syntaxTrees)
 		{
-			CSharpCompilation compilation = CSharpCompilation.Create(this.assemblyName)
+			CSharpCompilation compilation = CSharpCompilation.Create(assemblyName)
 						.WithOptions(new CSharpCompilationOptions(OutputKind.ConsoleApplication))
 						.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
 						.AddSyntaxTrees(syntaxTrees);
@@ -83,7 +80,7 @@ namespace JudgeSystem.Compilers
 			compilation = compilation.AddReferences(MetadataReference.CreateFromFile(netStandardAssembly.Location));
 			AssemblyName[] netStandardAssemblies = netStandardAssembly.GetReferencedAssemblies();
 
-			foreach (var assembly in netStandardAssemblies)
+			foreach (AssemblyName assembly in netStandardAssemblies)
 			{
 				string assemblyLocation = Assembly.Load(assembly).Location;
 				compilation = compilation.AddReferences(MetadataReference.CreateFromFile(assemblyLocation));

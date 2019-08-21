@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using JudgeSystem.Services.Data;
 
@@ -19,7 +20,7 @@ namespace JudgeSystem.Web.Components
 
         public IViewComponentResult Invoke(int id)
         {
-            var schoolClasses = schoolClassService.GetAllClasses()
+            IEnumerable<SelectListItem> schoolClasses = schoolClassService.GetAllClasses()
                 .Select(c => new SelectListItem
                 {
                     Text = $"{c.ClassNumber} {c.ClassType}",

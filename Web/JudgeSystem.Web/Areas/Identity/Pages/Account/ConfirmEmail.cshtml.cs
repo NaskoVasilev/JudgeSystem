@@ -24,16 +24,16 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return this.RedirectToPage("/Index");
+                return RedirectToPage("/Index");
             }
 
-            var user = await this.userManager.FindByIdAsync(userId);
+            ApplicationUser user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load user with ID '{userId}'.");
             }
 
-            var result = await this.userManager.ConfirmEmailAsync(user, code);
+            IdentityResult result = await userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");

@@ -16,9 +16,6 @@ namespace JudgeSystem.Web.Infrastructure.Attributes.Validation
 		{
 		}
 
-		public override bool IsValid(object value)
-		{
-			return ((DateTime)value).Ticks > DateTime.Now.Ticks;
-		}
-	}
+        public override bool IsValid(object value) => ((DateTime)value).Ticks > DateTime.Now.Ticks;
+    }
 }

@@ -4,6 +4,7 @@ using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Course;
+using JudgeSystem.Web.ViewModels.Course;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.courseService = courseService;
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -39,7 +37,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public IActionResult Edit(int id)
         {
-            var course = courseService.GetById<CourseEditModel>(id);
+            CourseEditModel course = courseService.GetById<CourseEditModel>(id);
             return View(course);
         }
 
@@ -61,7 +59,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var course =  await courseService.Delete(id);
+            CourseViewModel course =  await courseService.Delete(id);
             return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, course.Name));
         }
     }

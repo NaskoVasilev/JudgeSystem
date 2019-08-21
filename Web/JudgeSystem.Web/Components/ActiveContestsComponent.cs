@@ -20,7 +20,7 @@ namespace JudgeSystem.Web.Components
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-            IEnumerable<ActiveContestViewModel> activeContests = await Task.Run(() => contestService.GetActiveContests());
+            var activeContests = await Task.Run(() => contestService.GetActiveContests());
             return View(activeContests);
         }
 	}

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Lesson;
-using JudgeSystem.Services;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Dtos.Lesson;
+using JudgeSystem.Common.Exceptions;
 
 using Microsoft.AspNetCore.Mvc;
-using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -26,10 +24,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.practiceService = practiceService;
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -40,7 +35,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var lesson = await lessonService.Create(model);
+            LessonDto lesson = await lessonService.Create(model);
             int practiceId = await practiceService.Create(lesson.Id);
 
             return RedirectToAction("Details", "Lesson", new { id = lesson.Id, PracticeId = practiceId });
@@ -48,7 +43,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var lesson = await lessonService.GetById<LessonEditInputModel>(id);
+            LessonEditInputModel lesson = await lessonService.GetById<LessonEditInputModel>(id);
             return View(lesson);
         }
 
@@ -61,15 +56,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var lesson = await lessonService.Update(model);
+            LessonDto lesson = await lessonService.Update(model);
 
             return RedirectToAction("Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
         }
 
-        public IActionResult AddPassword()
-        {
-            return View();
-        }
+        public IActionResult AddPassword() => View();
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -80,13 +72,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var lesson = await lessonService.GetById<LessonDto>(model.Id);
+            LessonDto lesson = await lessonService.GetById<LessonDto>(model.Id);
 
             try
             {
                 await lessonService.SetPassword(model.Id, model.LessonPassword);
                 string infoMessage = string.Format(InfoMessages.AddLessonPasswordSuccessfully, lesson.Name);
-                return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (BadRequestException ex)
             {
@@ -94,10 +86,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
         }
 
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
+        public IActionResult ChangePassword() => View();
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -110,13 +99,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             try
             {
-                var lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, model.NewPassword);
+                LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, model.NewPassword);
                 string infoMessage = string.Format(InfoMessages.ChangeLessonPasswordSuccessfully, lesson.Name);
-                return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (BadRequestException ex)
             {
-                this.ModelState.AddModelError(nameof(LessonChangePasswordInputModel.OldPassword), ex.Message);
+                ModelState.AddModelError(nameof(LessonChangePasswordInputModel.OldPassword), ex.Message);
                 return View(model);
             }
         }
@@ -125,14 +114,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var lessonName = await lessonService.Delete(id);
+            string lessonName = await lessonService.Delete(id);
             return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
         }
 
-        public IActionResult RemovePassword()
-        {
-            return View();
-        }
+        public IActionResult RemovePassword() => View();
 
         [HttpPost]
         public async Task<IActionResult> RemovePassword(LessonRemovePasswordInputModel model)
@@ -141,11 +127,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             {
                 LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, null);
                 string infoMessage = string.Format(InfoMessages.LessonPasswordRemoved, lesson.Name);
-                return this.ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
             }
             catch (BadRequestException ex)
             {
-                this.ModelState.AddModelError(nameof(LessonRemovePasswordInputModel.OldPassword), ex.Message);
+                ModelState.AddModelError(nameof(LessonRemovePasswordInputModel.OldPassword), ex.Message);
                 return View();
             }
         }

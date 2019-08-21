@@ -17,7 +17,7 @@ namespace JudgeSystem.Web.Components
 			this.courseService = courseService;
 		}
 
-		public IViewComponentResult Invoke(string className)
+		public IViewComponentResult Invoke()
 		{
             var model = new AllCoursesViewModel
             {

@@ -5,6 +5,5 @@
         public const string ActivePageKey = "ActivePage";
 
         public const string ActivePageCssClass = "active";
-
     }
 }

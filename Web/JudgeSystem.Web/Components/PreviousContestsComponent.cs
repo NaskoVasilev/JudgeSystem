@@ -21,7 +21,7 @@ namespace JudgeSystem.Web.Components
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			IEnumerable<PreviousContestViewModel> previousContests = await Task.Run(() => 
+			var previousContests = await Task.Run(() => 
             contestService.GetPreviousContests(PassedDaysFromContestEndTime));
 			return View(previousContests);
 		}

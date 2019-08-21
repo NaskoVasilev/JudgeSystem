@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 
@@ -34,38 +35,38 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(this.ErrorMessage))
+            if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
+                ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
-            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            this.ReturnUrl = returnUrl;
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/");
 
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var result = await this.signInManager.PasswordSignInAsync(this.Input.Username, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
+                Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User logged in.");
-                    return this.LocalRedirect(returnUrl);
+                    logger.LogInformation("User logged in.");
+                    return LocalRedirect(returnUrl);
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLoginAttempt);
-                    return this.Page();
+                    ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLoginAttempt);
+                    return Page();
                 }
             }
 
-            return this.Page();
+            return Page();
         }
 
         public class InputModel

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 
@@ -37,51 +38,48 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public void OnGet(string returnUrl = null)
-        {
-            this.ReturnUrl = returnUrl;
-        }
+        public void OnGet(string returnUrl = null) => this.ReturnUrl = returnUrl;
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
-            if (this.ModelState.IsValid)
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
 				{
-					UserName = this.Input.Username,
-					Email = this.Input.Email,
-					Name = this.Input.Name,
-					Surname = this.Input.Surname,
+					UserName = Input.Username,
+					Email = Input.Email,
+					Name = Input.Name,
+					Surname = Input.Surname,
 				};
 
-                var result = await this.userManager.CreateAsync(user, this.Input.Password);
+                IdentityResult result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User created a new account with password.");
+                    logger.LogInformation("User created a new account with password.");
 
                     await userManager.AddToRoleAsync(user, GlobalConstants.BaseRoleName);
-                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = this.Url.Page(
+                    string code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    string callbackUrl = Url.Page(
                         EmailConfirmationUrl,
                         pageHandler: null,
                         values: new { userId = user.Id, code },
-                        protocol: this.Request.Scheme);
+                        protocol: Request.Scheme);
 
                     string message = string.Format(GlobalConstants.EmailConfirmationMessage, HtmlEncoder.Default.Encode(callbackUrl));
-                    await this.emailSender.SendEmailAsync(this.Input.Email, GlobalConstants.ConfirmEmailSubject, message);
+                    await emailSender.SendEmailAsync(Input.Email, GlobalConstants.ConfirmEmailSubject, message);
 
-                    this.TempData[GlobalConstants.InfoKey] = InfoMessages.VerificationEmailSentMessage;
-                    return this.LocalRedirect(returnUrl);
+                    TempData[GlobalConstants.InfoKey] = InfoMessages.VerificationEmailSentMessage;
+                    return LocalRedirect(returnUrl);
                 }
 
-                foreach (var error in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
-                    this.ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            return this.Page();
+            return Page();
         }
 
         public class InputModel

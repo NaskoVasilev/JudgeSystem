@@ -44,14 +44,14 @@ namespace JudgeSystem.Web.Controllers
             byte[] submissionCode = submissionService.GetSubmissionCodeById(id);
             string problemName = submissionService.GetProblemNameBySubmissionId(id);
 
-            return this.File(submissionCode, GlobalConstants.OctetStreamMimeType, $"{problemName}.zip");
+            return File(submissionCode, GlobalConstants.OctetStreamMimeType, $"{problemName}.zip");
         }
 
         [EndpointExceptionFilter]
         public IActionResult GetProblemSubmissions(int problemId, int page = 1,
             int submissionsPerPage = GlobalConstants.SubmissionsPerPage, int? contestId = null)
         {
-            string userId = userManager.GetUserId(this.User);
+            string userId = userManager.GetUserId(User);
             IEnumerable<SubmissionResult> submissionResults = new List<SubmissionResult>();
             if (contestId.HasValue)
             {
@@ -89,7 +89,7 @@ namespace JudgeSystem.Web.Controllers
         {
             SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File);
 
-            string userId = userManager.GetUserId(this.User);
+            string userId = userManager.GetUserId(User);
             model.SubmissionContent = submissionCode.Content;
             SubmissionDto submission = await submissionService.Create(model, userId);
 

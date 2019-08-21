@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
-using System;
 
 using JudgeSystem.Common;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Web.ViewModels.Lesson;
+using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Web.Dtos.Lesson;
@@ -12,8 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using JudgeSystem.Web.ViewModels.Lesson;
-using JudgeSystem.Common.Exceptions;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -47,7 +46,7 @@ namespace JudgeSystem.Web.Controllers
                 return Redirect("/");
             }
 
-            var lesson = await lessonService.GetLessonInfo(id);
+            LessonViewModel lesson = await lessonService.GetLessonInfo(id);
             lesson.ContestId = contestId;
             await AddUserToContestOrPracticeIfNotAdded(contestId, practiceId);
 
@@ -59,20 +58,17 @@ namespace JudgeSystem.Web.Controllers
             return View(lesson);
         }
 
-        public IActionResult EnterPassword()
-        {
-            return View();
-        }
+        public IActionResult EnterPassword() => View();
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
         {
-            var lesson = await lessonService.GetById<LessonDto>(model.Id);
+            LessonDto lesson = await lessonService.GetById<LessonDto>(model.Id);
 
             if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
             {
-                this.HttpContext.Session.SetString(lesson.Id.ToString(), this.User.Identity.Name);
+                HttpContext.Session.SetString(lesson.Id.ToString(), User.Identity.Name);
                 if(model.ContestId.HasValue)
                 {
                     return RedirectToAction(nameof(Details), new { id = lesson.Id, contestId = model.ContestId.Value });
@@ -86,7 +82,7 @@ namespace JudgeSystem.Web.Controllers
 
         private async Task AddUserToContestOrPracticeIfNotAdded(int? contestId, int? practiceId)
         {
-            string userId = userManager.GetUserId(this.User);
+            string userId = userManager.GetUserId(User);
             if (contestId.HasValue)
             {
                 await contestService.AddUserToContestIfNotAdded(userId, contestId.Value);
@@ -105,7 +101,7 @@ namespace JudgeSystem.Web.Controllers
         {
             string sessionValue = HttpContext.Session.GetString(lesson.Id.ToString());
 
-            if (sessionValue != null && sessionValue == this.User.Identity.Name)
+            if (sessionValue != null && sessionValue == User.Identity.Name)
             {
                 return View(lesson);
             }

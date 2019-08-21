@@ -4,7 +4,7 @@
     ViewData["Title"] = "All contests";
     int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
     string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
-    PaginationData paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
+    var paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
 <h2 class="text-center mb-4">Results for @Model.Name</h2>

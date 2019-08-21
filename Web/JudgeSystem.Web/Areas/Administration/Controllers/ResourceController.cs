@@ -32,10 +32,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.validationService = validationService;
         }
 
-		public IActionResult Create()
-		{
-			return View();
-		}
+        public IActionResult Create() => View();
 
         [ValidateAntiForgeryToken]
 		[HttpPost]
@@ -52,7 +49,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            using(var stream = model.File.OpenReadStream())
+            using(System.IO.Stream stream = model.File.OpenReadStream())
             {
                 string filePath = await azureStorageService.Upload(stream, model.File.FileName, model.Name);
                 await resourceService.CreateResource(model, filePath);
@@ -70,7 +67,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Edit(int id)
 		{
-			var model = await resourceService.GetById<ResourceEditInputModel>(id);
+            ResourceEditInputModel model = await resourceService.GetById<ResourceEditInputModel>(id);
 			return View(model);
 		}
 
@@ -89,11 +86,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var resource = await resourceService.GetById<ResourceDto>(model.Id);
+            ResourceDto resource = await resourceService.GetById<ResourceDto>(model.Id);
 
 			if(model.File != null)
 			{
-                using(var stream = model.File.OpenReadStream())
+                using(System.IO.Stream stream = model.File.OpenReadStream())
                 {
                     string filePath = await azureStorageService.Upload(stream, model.File.FileName, resource.Name);
                     await azureStorageService.Delete(resource.FilePath);
@@ -113,7 +110,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var resource = await resourceService.Delete(id);
+            ResourceDto resource = await resourceService.Delete(id);
             await azureStorageService.Delete(resource.FilePath);
 
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, resource.Name));

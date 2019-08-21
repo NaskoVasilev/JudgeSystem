@@ -35,28 +35,28 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!this.ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.Page();
+                return Page();
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
+            ApplicationUser user = await userManager.GetUserAsync(User);
 
-            var changePasswordResult = await this.userManager.ChangePasswordAsync(user, this.Input.OldPassword, this.Input.NewPassword);
+            IdentityResult changePasswordResult = await userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
-                foreach (var error in changePasswordResult.Errors)
+                foreach (IdentityError error in changePasswordResult.Errors)
                 {
-                    this.ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
 
-                return this.Page();
+                return Page();
             }
 
-            await this.signInManager.RefreshSignInAsync(user);
-            this.StatusMessage = InfoMessages.ChangeUserPasswordSuccessfully;
+            await signInManager.RefreshSignInAsync(user);
+            StatusMessage = InfoMessages.ChangeUserPasswordSuccessfully;
 
-            return this.RedirectToPage();
+            return RedirectToPage();
         }
 
         public class InputModel

@@ -6,7 +6,7 @@ namespace JudgeSystem.Workers.Common
 	{
 		public CompileResult(ICollection<string> errors)
 		{
-			this.Errors = errors;
+			Errors = errors;
 		}
 
 		public CompileResult(string outputFile)
@@ -18,6 +18,6 @@ namespace JudgeSystem.Workers.Common
 
 		public ICollection<string> Errors { get; set; }
 
-		public bool IsCompiledSuccessfully => this.Errors == null || this.Errors.Count == 0;
+		public bool IsCompiledSuccessfully => Errors == null || Errors.Count == 0;
 	}
 }

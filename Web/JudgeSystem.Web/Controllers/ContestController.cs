@@ -4,7 +4,7 @@ using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
-using JudgeSystem.Web.Utilites;
+using JudgeSystem.Web.ViewModels.Contest;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -38,10 +38,10 @@ namespace JudgeSystem.Web.Controllers
         [Authorize]
         public async Task<IActionResult> MyResults(int contestId, int? problemId, int page = DefaultPage)
         {
-            string userId = userManager.GetUserId(this.User);
+            string userId = userManager.GetUserId(User);
             string baseUrl = $"/Contest/MyResults?contestId={contestId}";
 
-            var model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
+            ContestSubmissionsViewModel model = await contestService.GetContestSubmissions(contestId, userId, problemId, page, baseUrl);
 
             return View($"Areas/{GlobalConstants.AdministrationArea}/Views/Contest/Submissions.cshtml", model);
         }

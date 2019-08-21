@@ -1,15 +1,12 @@
-﻿namespace JudgeSystem.Web.Controllers
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
+namespace JudgeSystem.Web.Controllers
+{
     public class HomeController : BaseController
     {
-        public IActionResult Index()
-        {
-            return this.View();
-        }
+        public IActionResult Index() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => this.View();
+        public IActionResult Error() => View();
     }
 }

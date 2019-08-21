@@ -33,28 +33,28 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var user = await this.userManager.FindByEmailAsync(this.Input.Email);
+                ApplicationUser user = await userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !user.EmailConfirmed)
                 {
-                    return this.RedirectToPage(ForgotPasswordConfirmationPageRoute);
+                    return RedirectToPage(ForgotPasswordConfirmationPageRoute);
                 }
 
-                var code = await this.userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = this.Url.Page(
+                string code = await userManager.GeneratePasswordResetTokenAsync(user);
+                string callbackUrl = Url.Page(
                     ResetPasswordPageUrl,
                     pageHandler: null,
                     values: new { code },
-                    protocol: this.Request.Scheme);
+                    protocol: Request.Scheme);
 
                 string message = string.Format(GlobalConstants.PasswordResetMessage, HtmlEncoder.Default.Encode(callbackUrl));
-                await this.emailSender.SendEmailAsync(Input.Email, GlobalConstants.ResetPasswordEmailSubject, message);
+                await emailSender.SendEmailAsync(Input.Email, GlobalConstants.ResetPasswordEmailSubject, message);
 
-                return this.RedirectToPage(ForgotPasswordConfirmationPageRoute);
+                return RedirectToPage(ForgotPasswordConfirmationPageRoute);
             }
 
-            return this.Page();
+            return Page();
         }
 
         public class InputModel

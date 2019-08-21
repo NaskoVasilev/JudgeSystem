@@ -11,10 +11,10 @@ namespace JudgeSystem.Web.IocConfiguration
     {
         public static IServiceCollection AddEmailSendingService(this IServiceCollection services, IConfiguration configuration)
         {
-            var sendGridSection = configuration.GetSection(AppSettingsSections.SendGridSection);
+            IConfigurationSection sendGridSection = configuration.GetSection(AppSettingsSections.SendGridSection);
             services.Configure<SendGridOptions>(sendGridSection);
 
-            var emailSection = configuration.GetSection(AppSettingsSections.EmailSection);
+            IConfigurationSection emailSection = configuration.GetSection(AppSettingsSections.EmailSection);
             services.Configure<BaseEmailOptions>(emailSection);
 
             services.AddTransient<IEmailSender, EmailSender>();

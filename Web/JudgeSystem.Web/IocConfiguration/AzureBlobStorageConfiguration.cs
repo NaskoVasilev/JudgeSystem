@@ -12,7 +12,7 @@ namespace JudgeSystem.Web.IocConfiguration
     {
         public static IServiceCollection ConfigureAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
         {
-            AzureBlobSettings azureBlobSettings =configuration.GetSection(AppSettingsSections.AzureBlobSection).Get<AzureBlobSettings>();
+            AzureBlobSettings azureBlobSettings = configuration.GetSection(AppSettingsSections.AzureBlobSection).Get<AzureBlobSettings>();
 
             var storageAccount = CloudStorageAccount.Parse(azureBlobSettings.StorageConnectionString);
             services.AddSingleton(storageAccount);

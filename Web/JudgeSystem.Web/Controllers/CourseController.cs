@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Services.Data;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Services.Data;
 using JudgeSystem.Web.ViewModels.Course;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +20,13 @@ namespace JudgeSystem.Web.Controllers
 
 		public IActionResult Details(int id)
 		{
-			var model = courseService.GetById<CourseViewModel>(id);
-			return this.View(model);
+            CourseViewModel model = courseService.GetById<CourseViewModel>(id);
+			return View(model);
 		}
 
 		public IActionResult All()
 		{
-			var courses = courseService.All();
+            IEnumerable<CourseViewModel> courses = courseService.All();
 			return View(courses);
 		}
 

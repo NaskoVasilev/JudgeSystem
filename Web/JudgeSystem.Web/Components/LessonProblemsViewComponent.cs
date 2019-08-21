@@ -20,7 +20,7 @@ namespace JudgeSystem.Web.Components
 
         public async Task<IViewComponentResult> InvokeAsync(int lessonId, string url)
         {
-            IEnumerable<LessonProblemViewModel> problems = await Task.Run(() => problemService.LessonProblems(lessonId));
+            var problems = await Task.Run(() => problemService.LessonProblems(lessonId));
             var model = new LessonProblemsViewComponentModel { Problems = problems, UrlPlaceholder = url };
             return View(model);
         }
