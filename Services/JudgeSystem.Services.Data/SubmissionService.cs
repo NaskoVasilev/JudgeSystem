@@ -135,7 +135,7 @@ namespace JudgeSystem.Services.Data
                 .ThenInclude(e => e.Test)
                 .FirstOrDefault();
 
-            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(submission);
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(submission, nameof(Submission));
 
             if (submission.CompilationErrors != null && submission.CompilationErrors.Length > 0)
             {

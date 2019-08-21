@@ -55,7 +55,7 @@ namespace JudgeSystem.Services.Data
                 .Include(s => s.SchoolClass)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student);
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student, nameof(Student));
 
             return student.SchoolClass.To<SchoolClassDto>();
 		}

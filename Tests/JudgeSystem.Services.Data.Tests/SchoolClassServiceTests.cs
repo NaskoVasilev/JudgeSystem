@@ -33,7 +33,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             int classNumber = 12;
             SchoolClassType classType = SchoolClassType.G;
-            SchoolClassService service = await CreateSchoolClassService(GetTestData());
+            SchoolClassService service = await CreateSchoolClassService(new List<SchoolClass>());
 
             SchoolClassDto schoolClass = await service.Create(classNumber, classType);
 

@@ -11,10 +11,5 @@ namespace JudgeSystem.Common
                 throw new EntityNotFoundException(name);
             }
         }
-
-        public static void ThrowEntityNotFoundExceptionIfEntityIsNull(object entity)
-        {
-            ThrowEntityNotFoundExceptionIfEntityIsNull(entity, entity.GetType().Name);
-        }
     }
 }
