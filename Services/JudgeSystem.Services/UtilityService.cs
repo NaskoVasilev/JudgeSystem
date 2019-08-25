@@ -100,7 +100,7 @@ namespace JudgeSystem.Services
                 return new SubmissionCodeDto
                 {
                     Content = stream.ToArray(),
-                    SourceCodes = ExtractZipFile(stream, new List<string> { GlobalConstants.cSharpFileExtension })
+                    SourceCodes = ExtractZipFile(stream, new List<string> { GlobalConstants.CSharpFileExtension })
                 };
             }
         }

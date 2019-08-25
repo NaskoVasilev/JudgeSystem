@@ -14,28 +14,19 @@ using Newtonsoft.Json.Serialization;
 
 namespace JudgeSystem.Compilers
 {
-	public class CSharpCompiler : ICompiler
+    public class CSharpCompiler : ICompiler
 	{
-		private string assemblyName;
-
-		public CSharpCompiler()
-		{
-            assemblyName = Guid.NewGuid().ToString();
-		}
-
-        public CompileResult CreateAssembly(string sourceCode) => CreateAssembly(new List<string>() { sourceCode });
-
-        public CompileResult CreateAssembly(List<string> sourceCodeFiles)
+        public CompileResult Compile(string fileName, string workingDirectory, IEnumerable<string> sources)
 		{
 			var syntaxTrees = new List<SyntaxTree>();
-			foreach (var sourceCode in sourceCodeFiles)
+			foreach (string sourceCode in sources)
 			{
 				SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sourceCode);
 				syntaxTrees.Add(syntaxTree);
 			}
-			CSharpCompilation compilation = BuildCSharpCompilation(syntaxTrees);
+			CSharpCompilation compilation = BuildCSharpCompilation(fileName, syntaxTrees);
 
-            string outputDllPath = GetOutputDllPath();
+            string outputDllPath = GetOutputDllPath(fileName, workingDirectory);
 			EmitResult emitResult = compilation.Emit(outputDllPath);
 
 			if(!emitResult.Success)
@@ -46,32 +37,23 @@ namespace JudgeSystem.Compilers
 					errors.Add(diagnsotic.GetMessage());
 				}
 
-				return new CompileResult(errors);
+				return new CompileResult(string.Join(Environment.NewLine, errors));
 			}
 
 			string runtimeConfigJsonFileContent = GenerateRuntimeConfigJsonFile();
-            string runtimeConfigJsonFilePath = GetRuntimeConfigJsonFilePath();
+            string runtimeConfigJsonFilePath = GetRuntimeConfigJsonFilePath(fileName, workingDirectory);
 			File.WriteAllText(runtimeConfigJsonFilePath, runtimeConfigJsonFileContent);
 
-			return new CompileResult(outputDllPath);
+			return new CompileResult() { OutputFilePath = outputDllPath };
 		}
 
-        public void DeleteGeneratedFiles()
-        {
-            string outputDllPath = GetOutputDllPath();
-            File.Delete(outputDllPath);
-            string runtimeConfigJsonFilePath = GetRuntimeConfigJsonFilePath();
-            File.Delete(runtimeConfigJsonFilePath);
-        }
+        private string GetOutputDllPath(string fileName, string workingDirectory) => workingDirectory + fileName + CompilationSettings.CSharpOutputFileExtension;
 
-        private string GetOutputDllPath() => CompilationSettings.WorkingDirectoryPath + assemblyName + ".dll";
+        private string GetRuntimeConfigJsonFilePath(string fileName, string workingDirectory) =>  workingDirectory  + fileName + CompilationSettings.RunTimeConfigJsonFileName;
 
-        private string GetRuntimeConfigJsonFilePath() => CompilationSettings.WorkingDirectoryPath + assemblyName + CompilationSettings.RunTimeConfigJsonFileName;
-
-
-        private CSharpCompilation BuildCSharpCompilation(List<SyntaxTree> syntaxTrees)
+        private CSharpCompilation BuildCSharpCompilation(string fileName, List<SyntaxTree> syntaxTrees)
 		{
-			CSharpCompilation compilation = CSharpCompilation.Create(assemblyName)
+			CSharpCompilation compilation = CSharpCompilation.Create(fileName)
 						.WithOptions(new CSharpCompilationOptions(OutputKind.ConsoleApplication))
 						.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
 						.AddSyntaxTrees(syntaxTrees);
@@ -115,5 +97,5 @@ namespace JudgeSystem.Compilers
 
 			return runtimeConfigJsonFileContent;
 		}
-	}
+    }
 }

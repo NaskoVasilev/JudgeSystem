@@ -54,7 +54,10 @@ namespace JudgeSystem.Common
         #endregion
 
         #region Submissions and problems related constants
-        public const string cSharpFileExtension = ".cs";
+        public static string CompilationDirectoryPath = $"{Environment.CurrentDirectory}\\";
+        public const string CSharpFileExtension = ".cs";
+        public const string JavaFileExtension = ".java";
+        public const string CppFileExtension = ".cpp";
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
         public const int MaxSubmissionCodeLength = 10000;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -197,7 +198,9 @@ namespace JudgeSystem.Services.Data
             Submission submission = await repository.FindAsync(submissionId);
 
             var compiler = new CSharpCompiler();
-            CompileResult compileResult = compiler.CreateAssembly(sourceCodes);
+            string fileName = Path.GetRandomFileName();
+            string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}\\";
+            CompileResult compileResult = compiler.Compile(fileName, workingDirectory, sourceCodes);
 
             if (!compileResult.IsCompiledSuccessfully)
             {
@@ -207,7 +210,7 @@ namespace JudgeSystem.Services.Data
             else
             {
                 await RunTests(submission, compileResult);
-                compiler.DeleteGeneratedFiles();
+                Directory.Delete(workingDirectory);
             }
         }
 
@@ -282,7 +285,7 @@ namespace JudgeSystem.Services.Data
 
             foreach (TestDataDto test in tests)
             {
-                CheckerResult checkerResult = await checker.Check(compileResult.OutputFile, test.InputData, test.OutputData, timeLimit, memoryLimit);
+                CheckerResult checkerResult = await checker.Check(compileResult.OutputFilePath, test.InputData, test.OutputData, timeLimit, memoryLimit);
                 Enum.TryParse<TestExecutionResultType>(checkerResult.Type.ToString(), out TestExecutionResultType executionResultType);
 
                 var executedTest = new ExecutedTest

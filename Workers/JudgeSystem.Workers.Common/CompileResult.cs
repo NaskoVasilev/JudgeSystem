@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-
-namespace JudgeSystem.Workers.Common
+﻿namespace JudgeSystem.Workers.Common
 {
-	public class CompileResult
+    public class CompileResult
 	{
-		public CompileResult(ICollection<string> errors)
+        public CompileResult()
+        {
+        }
+
+		public CompileResult(string errors)
 		{
 			Errors = errors;
 		}
 
-		public CompileResult(string outputFile)
-		{
-			OutputFile = outputFile;
-		}
+		public string OutputFilePath { get; set; }
 
-		public string OutputFile { get; set; }
+		public string Errors { get; private set; }
 
-		public ICollection<string> Errors { get; set; }
-
-		public bool IsCompiledSuccessfully => Errors == null || Errors.Count == 0;
+		public bool IsCompiledSuccessfully => string.IsNullOrEmpty(Errors);
 	}
 }

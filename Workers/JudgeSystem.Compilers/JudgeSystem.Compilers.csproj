@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\JudgeSystem.Common\JudgeSystem.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
   </ItemGroup>
 
