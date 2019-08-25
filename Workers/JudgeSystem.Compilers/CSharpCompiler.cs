@@ -14,7 +14,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace JudgeSystem.Compilers
 {
-	public class CSharpCompiler
+	public class CSharpCompiler : ICompiler
 	{
 		private string assemblyName;
 

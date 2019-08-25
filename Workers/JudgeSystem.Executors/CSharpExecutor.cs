@@ -5,7 +5,7 @@ using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Executors
 {
-	public class CSharpExecutor
+	public class CSharpExecutor : IExecutor
 	{
 		private const int ProcessMaxRunningTime = 1000;
 
