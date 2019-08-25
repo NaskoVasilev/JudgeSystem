@@ -5,18 +5,18 @@ using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Checkers
 {
-	public class CSharpChecker
+	public class Checker
 	{
-		private readonly CSharpExecutor cSharpExecutor;
+		private readonly IExecutor executor;
 
-		public CSharpChecker()
+		public Checker(IExecutor executor)
 		{
-            cSharpExecutor = new CSharpExecutor();
+            this.executor = executor;
 		}
 
-		public async Task<CheckerResult> Check(string dllFilePath, string input, string expectedOutput, int timeLimit, int memoryLimit)
+		public async Task<CheckerResult> Check(string filePath, string input, string expectedOutput, int timeLimit, int memoryLimit)
 		{
-			ExecutionResult executionResult = await cSharpExecutor.ProcessExecutionResult(dllFilePath, input, timeLimit, memoryLimit);
+			ExecutionResult executionResult = await executor.Execute(filePath, input, timeLimit, memoryLimit);
 			var checkerResult = new CheckerResult(executionResult);
 			if (!executionResult.IsSuccesfull)
 			{

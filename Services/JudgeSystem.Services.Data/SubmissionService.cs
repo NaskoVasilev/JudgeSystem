@@ -279,7 +279,7 @@ namespace JudgeSystem.Services.Data
                 return;
             }
 
-            var checker = new CSharpChecker();
+            var checker = new Checker();
             int memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
             int timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
 
