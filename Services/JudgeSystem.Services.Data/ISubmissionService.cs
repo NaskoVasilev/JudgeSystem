@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JudgeSystem.Web.InputModels.Submission;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.ViewModels.Submission;
+using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Services.Data
 {
@@ -33,6 +34,6 @@ namespace JudgeSystem.Services.Data
 
         int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId);
 
-        Task ExecuteSubmission(int submissionId, List<string> sourceCodes);
+        Task ExecuteSubmission(int submissionId, List<string> sourceCodes, ProgrammingLanguage programmingLanguage);
     }
 }

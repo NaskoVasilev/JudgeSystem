@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Services;
+﻿using JudgeSystem.Compilers;
+using JudgeSystem.Executors;
+using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Utilites;
 
@@ -30,6 +32,10 @@ namespace JudgeSystem.Web.IocConfiguration
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IStudentProfileService, StudentProfileService>();
             services.AddTransient<IUtilityService, UtilityService>();
+            services.AddTransient<IChecker, Checker>();
+
+            services.AddTransient<ICompilerFactory, CompilerFactory>();
+            services.AddTransient<IExecutorFactory, ExecutorFactory>();
 
             return services;
         }

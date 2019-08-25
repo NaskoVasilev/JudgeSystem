@@ -31,7 +31,7 @@ namespace JudgeSystem.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString(GlobalConstants.DefaultConnectionStringName)));
+                options => options.UseSqlServer(configuration.GetConnectionString(GlobalConstants.DefaultConnectionStringName)));
 
             services.AddPredictionEnginePool<UserLesson, UserLessonScore>()
                 .FromFile(GlobalConstants.LessonsRrecommendationMlModelPath);
@@ -40,9 +40,9 @@ namespace JudgeSystem.Web
                 .ConfigureSession()
                 .ConfigureMvc()
                 .ConfigureCookies()
-                .ConfigureSettings(this.configuration)
-                .AddEmailSendingService(this.configuration)
-                .ConfigureAzureBlobStorage(this.configuration)
+                .ConfigureSettings(configuration)
+                .AddEmailSendingService(configuration)
+                .ConfigureAzureBlobStorage(configuration)
                 .AddRepositories()
                 .AddBusinessLogicServices();
         }
@@ -52,9 +52,9 @@ namespace JudgeSystem.Web
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly, 
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
 
-			using (var serviceScope = app.ApplicationServices.CreateScope())
+			using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                ApplicationDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 if (env.IsDevelopment())
                 {

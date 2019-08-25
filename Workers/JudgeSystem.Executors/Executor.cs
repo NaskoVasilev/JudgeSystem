@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 using JudgeSystem.Workers.Common;
@@ -24,15 +26,45 @@ namespace JudgeSystem.Executors
                 process.StartInfo.UseShellExecute = false;
 
                 process.Start();
-                if(!string.IsNullOrEmpty(input))
+
+                const int TimeIntervalBetweenTwoMemoryConsumptionRequests = 45;
+                var memoryTaskCancellationToken = new CancellationTokenSource();
+                var memoryTask = Task.Run(
+                    () =>
+                    {
+                        while (true)
+                        {
+                            try
+                            {
+                                if (process.HasExited)
+                                {
+                                    return;
+                                }
+                                executionResult.MemoryUsed = Math.Max(executionResult.MemoryUsed, process.PeakWorkingSet64);
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                return;
+                            }
+
+                            if (memoryTaskCancellationToken.IsCancellationRequested)
+                            {
+                                return;
+                            }
+
+                            Thread.Sleep(TimeIntervalBetweenTwoMemoryConsumptionRequests);
+                        }
+                    },
+                    memoryTaskCancellationToken.Token);
+
+                if (!string.IsNullOrEmpty(input))
                 {
                     await process.StandardInput.WriteLineAsync(input);
                     await process.StandardInput.FlushAsync();
                     process.StandardInput.Close();
                 }
-                executionResult.MemoryUsed = process.PrivateMemorySize64;
-                bool exited = process.WaitForExit(ProcessMaxRunningTime);
 
+                bool exited = process.WaitForExit(ProcessMaxRunningTime);
                 if (!exited)
                 {
                     if (!process.HasExited)
@@ -41,6 +73,9 @@ namespace JudgeSystem.Executors
                     }
                     executionResult.Type = ProcessExecutionResultType.TimeLimit;
                 }
+
+                // Close the memory consumption check thread
+                memoryTaskCancellationToken.Cancel();
 
                 string output = await process.StandardOutput.ReadToEndAsync();
                 string error = await process.StandardError.ReadToEndAsync();

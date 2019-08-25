@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using JudgeSystem.Checkers;
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Compilers;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Executors;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.ExecutedTest;
 using JudgeSystem.Web.Dtos.Problem;
@@ -34,6 +34,9 @@ namespace JudgeSystem.Services.Data
         private readonly ITestService testService;
         private readonly IExecutedTestService executedTestService;
         private readonly IUtilityService utilityService;
+        private readonly ICompilerFactory compilerFactory;
+        private readonly IExecutorFactory executorFactory;
+        private readonly IChecker checker;
 
         public SubmissionService(
             IRepository<Submission> repository,
@@ -41,7 +44,10 @@ namespace JudgeSystem.Services.Data
             IProblemService problemService,
             ITestService testService,
             IExecutedTestService executedTestService,
-            IUtilityService utilityService)
+            IUtilityService utilityService,
+            ICompilerFactory compilerFactory,
+            IExecutorFactory executorFactory,
+            IChecker checker)
         {
             this.repository = repository;
             this.estimator = estimator;
@@ -49,6 +55,9 @@ namespace JudgeSystem.Services.Data
             this.testService = testService;
             this.executedTestService = executedTestService;
             this.utilityService = utilityService;
+            this.compilerFactory = compilerFactory;
+            this.executorFactory = executorFactory;
+            this.checker = checker;
         }
 
         public async Task<SubmissionDto> Create(SubmissionInputModel model, string userId)
@@ -193,28 +202,45 @@ namespace JudgeSystem.Services.Data
             return submissions;
         }
 
-        public async Task ExecuteSubmission(int submissionId, List<string> sourceCodes)
+        public async Task ExecuteSubmission(int submissionId, List<string> sourceCodes, ProgrammingLanguage programmingLanguage)
         {
             Submission submission = await repository.FindAsync(submissionId);
 
-            var compiler = new CSharpCompiler();
             string fileName = Path.GetRandomFileName();
+            string sourceCode = sourceCodes.First();
+            if(programmingLanguage == ProgrammingLanguage.Java)
+            {
+                fileName = utilityService.GetJavaClassName(sourceCode);
+            }
             string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}\\";
-            CompileResult compileResult = compiler.Compile(fileName, workingDirectory, sourceCodes);
+            Directory.CreateDirectory(workingDirectory);
+
+            ICompiler compiler = compilerFactory.CreateCompiler(programmingLanguage);
+            CompileResult compileResult;
+
+            if (programmingLanguage != ProgrammingLanguage.CSharp)
+            {
+                utilityService.CreateLanguageSpecificFiles(programmingLanguage, sourceCode, fileName, workingDirectory);
+                compileResult = compiler.Compile(fileName, workingDirectory);
+            }
+            else
+            {
+                compileResult = compiler.Compile(fileName, workingDirectory, sourceCodes);
+            }
 
             if (!compileResult.IsCompiledSuccessfully)
             {
-                submission.CompilationErrors = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, compileResult.Errors));
+                submission.CompilationErrors = Encoding.UTF8.GetBytes(compileResult.Errors);
                 await Update(submission);
             }
             else
             {
-                await RunTests(submission, compileResult);
-                Directory.Delete(workingDirectory);
+                await RunTests(submission, compileResult, programmingLanguage);
+                utilityService.DeleteDirectory(workingDirectory);
             }
         }
 
-        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) => 
+        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>
             repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
 
         private SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
@@ -270,7 +296,7 @@ namespace JudgeSystem.Services.Data
             }
         }
 
-        private async Task RunTests(Submission submission, CompileResult compileResult)
+        private async Task RunTests(Submission submission, CompileResult compileResult, ProgrammingLanguage programmingLanguage)
         {
             var tests = testService.GetTestsByProblemId(submission.ProblemId).ToList();
             ProblemConstraintsDto problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
@@ -279,14 +305,16 @@ namespace JudgeSystem.Services.Data
                 return;
             }
 
-            var checker = new Checker();
             int memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
             int timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
 
+            IExecutor executor = executorFactory.CreateExecutor(programmingLanguage);
+
             foreach (TestDataDto test in tests)
             {
-                CheckerResult checkerResult = await checker.Check(compileResult.OutputFilePath, test.InputData, test.OutputData, timeLimit, memoryLimit);
-                Enum.TryParse<TestExecutionResultType>(checkerResult.Type.ToString(), out TestExecutionResultType executionResultType);
+                ExecutionResult executionResult = await executor.Execute(compileResult.OutputFilePath, test.InputData, timeLimit, memoryLimit);
+                CheckerResult checkerResult = checker.Check(executionResult, test.OutputData);
+                Enum.TryParse(checkerResult.Type.ToString(), out TestExecutionResultType executionResultType);
 
                 var executedTest = new ExecutedTest
                 {

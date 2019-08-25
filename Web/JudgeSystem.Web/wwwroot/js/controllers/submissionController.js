@@ -81,8 +81,10 @@ $('#submit-btn').on('click', () => {
     let submissionType = $('.active-problem')[0].dataset.type;
     let contestId = $('#submit-btn')[0].dataset.contestid;
     let practiceId = $('#submit-btn')[0].dataset.practiceid;
+    let programmingLanguage = $("#programmingLanguage > select").children("option:selected").val();
 
     var formData = new FormData();
+    formData.append('programmingLanguage', programmingLanguage);
     formData.append('ProblemId', problemId);
 
     if (submissionType === zipFileSubmissionType) {

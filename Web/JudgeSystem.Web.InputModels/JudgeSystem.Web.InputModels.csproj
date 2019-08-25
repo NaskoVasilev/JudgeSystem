@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\JudgeSystem.Data.Models\JudgeSystem.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.Infrastructure\JudgeSystem.Web.Infrastructure.csproj" />
   </ItemGroup>
 

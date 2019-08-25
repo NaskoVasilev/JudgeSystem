@@ -5,6 +5,7 @@
     int problemNumber = 0;
     ProblemViewModel firstProblem = Model.Problems.FirstOrDefault();
     string administrationArea = GlobalConstants.AdministrationArea;
+    IEnumerable<SelectListItem> programmingLangueages = Utility.GetSelectListOfProgrammingLangugages();
 }
 
 <h2 class="text-secondary text-center">@Model.Name</h2>
@@ -99,17 +100,22 @@
             <textarea class="d-none" name="code" id="code-holder"></textarea>
         </div>
 
-        <div class="mt-3">
-            <p class="my-1">
-                <span class="font-weight-bold">Allowed working time: </span>
-                <span class="font-italic allowed-time">@firstProblem.AllowedTimeInMilliseconds</span>
-                <span class="font-italic">ms</span>
-            </p>
-            <p class="my-1">
-                <span class="font-weight-bold">Allowed memory: </span>
-                <span class="font-italic allowed-memory">@firstProblem.AllowedMemoryInMegaBytes</span>
-                <span class="font-italic">MB</span>
-            </p>
+        <div class="d-flex justify-content-between">
+            <div class="mt-3">
+                <p class="my-1">
+                    <span class="font-weight-bold">Allowed working time: </span>
+                    <span class="font-italic allowed-time">@firstProblem.AllowedTimeInMilliseconds</span>
+                    <span class="font-italic">ms</span>
+                </p>
+                <p class="my-1">
+                    <span class="font-weight-bold">Allowed memory: </span>
+                    <span class="font-italic allowed-memory">@firstProblem.AllowedMemoryInMegaBytes</span>
+                    <span class="font-italic">MB</span>
+                </p>
+            </div>
+            <div class="w-25 form-group mt-4" id="programmingLanguage">
+                <select class="form-control" asp-items="programmingLangueages"></select>
+            </div>
         </div>
 
         <div class="button-holder">

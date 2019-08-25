@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using JudgeSystem.Common;
+using JudgeSystem.Workers.Common;
 
 using Microsoft.AspNetCore.Http;
 
@@ -11,7 +12,9 @@ namespace JudgeSystem.Web.InputModels.Submission
         [MinLength(GlobalConstants.MinSubmissionCodeLength)]
 		public string Code { get; set; }
 
-		public int ProblemId { get; set; }
+        public ProgrammingLanguage ProgrammingLanguage { get; set; }
+
+        public int ProblemId { get; set; }
 
 		public int? ContestId { get; set; }
 

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.Dtos\JudgeSystem.Web.Dtos.csproj" />
+    <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
   </ItemGroup>
 
 </Project>

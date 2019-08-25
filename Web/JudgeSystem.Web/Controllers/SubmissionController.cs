@@ -93,7 +93,7 @@ namespace JudgeSystem.Web.Controllers
             model.SubmissionContent = submissionCode.Content;
             SubmissionDto submission = await submissionService.Create(model, userId);
 
-            await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes);
+            await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes, model.ProgrammingLanguage);
             await submissionService.CalculateActualPoints(submission.Id);
 
             SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);
