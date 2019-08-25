@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace JudgeSystem.Compilers
+namespace JudgeSystem.Workers.Common
 {
-	internal static class CompilationSettings
-	{
-		public const string RunTimeConfigJsonFileName = ".runtimeconfig.json";
+    public static class CompilationSettings
+    {
+        public const string RunTimeConfigJsonFileName = ".runtimeconfig.json";
 
         public const string CSharpOutputFileExtension = ".dll";
 
