@@ -202,16 +202,20 @@ namespace JudgeSystem.Services.Data
             return submissions;
         }
 
-        public async Task ExecuteSubmission(int submissionId, List<string> sourceCodes, ProgrammingLanguage programmingLanguage)
+        public async Task ExecuteSubmission(int submissionId, List<CodeFile> codeFiles, ProgrammingLanguage programmingLanguage)
         {
             Submission submission = await repository.FindAsync(submissionId);
-
-            string fileName = Path.GetRandomFileName();
-            string sourceCode = sourceCodes.First();
-            if(programmingLanguage == ProgrammingLanguage.Java)
+            var sourceCodes = codeFiles.Select(x => x.Code).ToList();
+            string fileName = codeFiles.First().Name;
+            if (programmingLanguage == ProgrammingLanguage.Java)
             {
-                fileName = utilityService.GetJavaClassName(sourceCode);
+                fileName = GetJavaFileName(sourceCodes);
+                if(codeFiles.Count == 1)
+                {
+                    codeFiles.First().Name = fileName;
+                }
             }
+
             string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}\\";
             Directory.CreateDirectory(workingDirectory);
 
@@ -220,7 +224,7 @@ namespace JudgeSystem.Services.Data
 
             if (programmingLanguage != ProgrammingLanguage.CSharp)
             {
-                utilityService.CreateLanguageSpecificFiles(programmingLanguage, sourceCode, fileName, workingDirectory);
+                utilityService.CreateLanguageSpecificFiles(programmingLanguage, codeFiles, workingDirectory);
                 compileResult = compiler.Compile(fileName, workingDirectory);
             }
             else
@@ -238,6 +242,18 @@ namespace JudgeSystem.Services.Data
                 await RunTests(submission, compileResult, programmingLanguage);
                 utilityService.DeleteDirectory(workingDirectory);
             }
+        }
+
+        private string GetJavaFileName(List<string> sourceCodes)
+        {
+            string javaMainClass = utilityService.GetJavaMainClass(sourceCodes);
+
+            if (string.IsNullOrEmpty(javaMainClass))
+            {
+                throw new BadRequestException(ErrorMessages.InvalidMainJavaClass);
+            }
+
+            return utilityService.GetJavaClassName(javaMainClass);
         }
 
         public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>

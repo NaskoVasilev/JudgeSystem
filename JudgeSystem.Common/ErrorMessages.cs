@@ -41,5 +41,11 @@
         public const string InvalidLoginAttempt = "Invalid login attempt.";
 
         public const string ContestsAccessibleOnlyForStudents = "Contests are accessible only for students.";
+
+        public static string UnsuportedZipSubmission = "{0} zip submission is unsupported.";
+
+        public const string InvalidMainJavaClass = "Please provide valid class with main method to your solution.";
+
+        public const string EmptyArchiveSubmitted = "Submitted archive should contains at least one file.";
     }
 }

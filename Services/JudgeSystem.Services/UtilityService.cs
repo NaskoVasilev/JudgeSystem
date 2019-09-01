@@ -33,7 +33,7 @@ namespace JudgeSystem.Services
 
         public int ConvertMegaBytesToBytes(double megabytes) => (int)(megabytes * 1000 * 1000);
 
-        public async Task<SubmissionCodeDto> ExtractSubmissionCode(string code, IFormFile submissionFile)
+        public async Task<SubmissionCodeDto> ExtractSubmissionCode(string code, IFormFile submissionFile, ProgrammingLanguage programmingLanguage)
         {
             var submissionCodeDto = new SubmissionCodeDto();
 
@@ -43,12 +43,15 @@ namespace JudgeSystem.Services
                 {
                     throw new BadRequestException(ErrorMessages.TooLongSubmissionCode);
                 }
-                submissionCodeDto.SourceCodes = new List<string> { code };
+                submissionCodeDto.SourceCodes = new List<CodeFile>
+                {
+                    new CodeFile { Name = Path.GetRandomFileName(), Code = code }
+                };
                 submissionCodeDto.Content = Encoding.UTF8.GetBytes(code);
             }
             else if (submissionFile != null)
             {
-                submissionCodeDto = await ExtractSubmissionCodeDtoFromSubmissionFile(submissionFile);
+                submissionCodeDto = await ExtractSubmissionCodeDtoFromSubmissionFile(submissionFile, programmingLanguage);
             }
             else
             {
@@ -58,7 +61,7 @@ namespace JudgeSystem.Services
             return submissionCodeDto;
         }
 
-        public List<string> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
+        public List<CodeFile> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
         {
             using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
@@ -66,63 +69,13 @@ namespace JudgeSystem.Services
             }
         }
 
-        private List<string> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
+        public void CreateLanguageSpecificFiles(ProgrammingLanguage programmingLanguage, IEnumerable<CodeFile> codeFiles, string workingDirectory)
         {
-            var filesData = new List<string>();
-
-            foreach (ZipArchiveEntry entry in zip.Entries)
+            string fileExtension = GetFileExtension(programmingLanguage);
+            foreach (CodeFile codeFile in codeFiles)
             {
-                if (allowedFilesExtensions.Any(extension => entry.Name.EndsWith(extension)))
-                {
-                    string data = ExtractDataFromZipArchiveEntry(entry);
-                    filesData.Add(data);
-                }
-            }
-
-            return filesData;
-        }
-
-        private string ExtractDataFromZipArchiveEntry(ZipArchiveEntry entry)
-        {
-            using (var reader = new StreamReader(entry.Open()))
-            {
-                string data = reader.ReadToEnd();
-                return data;
-            }
-        }
-
-        private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile)
-        {
-            if (ConvertBytesToKiloBytes(submissionFile.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
-            {
-                throw new BadRequestException(ErrorMessages.TooBigSubmissionFile);
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                await submissionFile.CopyToAsync(stream);
-                return new SubmissionCodeDto
-                {
-                    Content = stream.ToArray(),
-                    SourceCodes = ExtractZipFile(stream, new List<string> { GlobalConstants.CSharpFileExtension })
-                };
-            }
-        }
-
-        public void CreateLanguageSpecificFiles(ProgrammingLanguage programmingLanguage, string sourceCode, string fileName, string workingDirectory)
-        {
-            if (programmingLanguage == ProgrammingLanguage.CPlusPlus)
-            {
-                string cppFile = workingDirectory + fileName + GlobalConstants.CppFileExtension;
-                File.WriteAllText(cppFile, sourceCode);
-            }
-            else if (programmingLanguage == ProgrammingLanguage.Java)
-            {
-                string javaPolicy = workingDirectory + fileName + ".policy";
-                File.WriteAllText(javaPolicy, "grant {};");
-
-                string javaFile = workingDirectory + fileName + GlobalConstants.JavaFileExtension;
-                File.WriteAllText(javaFile, sourceCode);
+                string file = workingDirectory + codeFile.Name + fileExtension;
+                File.WriteAllText(file, codeFile.Code);
             }
         }
 
@@ -136,9 +89,24 @@ namespace JudgeSystem.Services
             Directory.Delete(workingDirectory);
         }
 
+        public string GetJavaMainClass(IEnumerable<string> sourceCodes)
+        {
+            string mainMethodRegexPattern = @"static void main\s*\([^)]*\)";
+            var mainMethodRegex = new Regex(mainMethodRegexPattern);
+
+            foreach (string sourceCode in sourceCodes)
+            {
+                if (mainMethodRegex.IsMatch(sourceCode))
+                {
+                    return sourceCode;
+                }
+            }
+            return null;
+        }
+
         public string GetJavaClassName(string sourceCode)
         {
-            string pattern = @"class ([^\s\n]+)(\s+|\n)";
+            string pattern = @"class ([^\s\n{]+)";
             var regex = new Regex(pattern);
             if (!regex.IsMatch(sourceCode))
             {
@@ -147,6 +115,93 @@ namespace JudgeSystem.Services
 
             Match match = regex.Match(sourceCode);
             return match.Groups[1].Value;
+        }
+
+        private List<CodeFile> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
+        {
+            var filesData = new List<CodeFile>();
+
+            foreach (ZipArchiveEntry entry in zip.Entries)
+            {
+                if (allowedFilesExtensions.Any(extension => entry.Name.EndsWith(extension)))
+                {
+                    CodeFile codeFile = ExtractDataFromZipArchiveEntry(entry);
+                    filesData.Add(codeFile);
+                }
+            }
+
+            return filesData;
+        }
+
+        private CodeFile ExtractDataFromZipArchiveEntry(ZipArchiveEntry entry)
+        {
+            using (var reader = new StreamReader(entry.Open()))
+            {
+                var codeFile = new CodeFile() { Name = Path.GetFileNameWithoutExtension(entry.Name), Code = reader.ReadToEnd() };
+                return codeFile;
+            }
+        }
+
+        private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile, ProgrammingLanguage programmingLanguage)
+        {
+            if (ConvertBytesToKiloBytes(submissionFile.Length) > GlobalConstants.SubmissionFileMaxSizeInKb)
+            {
+                throw new BadRequestException(ErrorMessages.TooBigSubmissionFile);
+            }
+            if (programmingLanguage != ProgrammingLanguage.CSharp && programmingLanguage != ProgrammingLanguage.Java)
+            {
+                throw new BadRequestException(string.Format(ErrorMessages.UnsuportedZipSubmission, GetProgrammingLanguageDisplayName(programmingLanguage)));
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                await submissionFile.CopyToAsync(stream);
+                var fileExtensions = new List<string> { GetFileExtension(programmingLanguage) };
+
+                List<CodeFile> sourceCodes = ExtractZipFile(stream, fileExtensions);
+                if (sourceCodes.Count == 0)
+                {
+                    throw new BadRequestException(ErrorMessages.EmptyArchiveSubmitted);
+                }
+
+                return new SubmissionCodeDto
+                {
+                    Content = stream.ToArray(),
+                    SourceCodes = sourceCodes
+                };
+            }
+        }
+
+        private string GetFileExtension(ProgrammingLanguage programmingLanguage)
+        {
+            if (programmingLanguage == ProgrammingLanguage.CSharp)
+            {
+                return GlobalConstants.CSharpFileExtension;
+            }
+            else if (programmingLanguage == ProgrammingLanguage.Java)
+            {
+                return GlobalConstants.JavaFileExtension;
+            }
+            else if (programmingLanguage == ProgrammingLanguage.CPlusPlus)
+            {
+                return GlobalConstants.CppFileExtension;
+            }
+
+            return null;
+        }
+
+        private string GetProgrammingLanguageDisplayName(ProgrammingLanguage programmingLanguage)
+        {
+            switch (programmingLanguage)
+            {
+                case ProgrammingLanguage.CSharp:
+                    return "C#";
+                case ProgrammingLanguage.Java:
+                    return "Java";
+                case ProgrammingLanguage.CPlusPlus:
+                    return "C++";
+                default: return null;
+            }
         }
     }
 }

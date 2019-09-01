@@ -4,7 +4,7 @@ namespace JudgeSystem.Web.Dtos.Submission
 {
     public class SubmissionCodeDto
     {
-        public List<string> SourceCodes { get; set; }
+        public List<CodeFile> SourceCodes { get; set; }
 
         public byte[] Content { get; set; }
     }

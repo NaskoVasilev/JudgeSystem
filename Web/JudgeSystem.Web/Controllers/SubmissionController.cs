@@ -87,7 +87,7 @@ namespace JudgeSystem.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SubmissionInputModel model)
         {
-            SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File);
+            SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
 
             string userId = userManager.GetUserId(User);
             model.SubmissionContent = submissionCode.Content;

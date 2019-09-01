@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Web.Dtos.Submission;
-
+using JudgeSystem.Workers.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Xunit;
@@ -66,10 +66,11 @@ namespace JudgeSystem.Services.Tests
         public async Task ExtractSubmissionCode_WithNotNullValidCodeAndNoFile_ShouldReturnCorrectsubmissionCodeDto()
         {
             string code = "using System;\r\nclass Test\r\n{\r\n}\r\n";
-            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, null);
+            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, null, ProgrammingLanguage.CSharp);
 
             Assert.Equal(Encoding.UTF8.GetBytes(code), submissionDto.Content);
-            Assert.Equal(submissionDto.SourceCodes, new List<string>() { code });
+            Assert.Equal(submissionDto.SourceCodes.Select(x => x.Code), new List<string>() { code });
+            Assert.False(string.IsNullOrEmpty(submissionDto.SourceCodes.First().Name));
         }
 
         [Fact]
@@ -81,7 +82,7 @@ namespace JudgeSystem.Services.Tests
                 sb.Append("a");
             }
 
-            await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(sb.ToString(), null));
+            await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(sb.ToString(), null, ProgrammingLanguage.CSharp));
         }
 
         [Fact]
@@ -93,7 +94,7 @@ namespace JudgeSystem.Services.Tests
             using (FileStream stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
             {
                 IFormFile file = new FormFile(stream, 0, stream.Length, "solution", "solution.zip");
-                SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(null, file);
+                SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(null, file, ProgrammingLanguage.CSharp);
 
                 using (var ms = new MemoryStream())
                 {
@@ -103,9 +104,11 @@ namespace JudgeSystem.Services.Tests
                 }
 
                 Assert.Equal(2, submissionDto.SourceCodes.Count);
-                var sourceCodes = submissionDto.SourceCodes.OrderBy(x => x.Length).ToList();
-                Assert.Equal(firstClass, sourceCodes[0]);
-                Assert.Equal(secondClass, sourceCodes[1]);
+                var sourceCodes = submissionDto.SourceCodes.OrderBy(x => x.Code.Length).ToList();
+                Assert.Equal(firstClass, sourceCodes[0].Code);
+                Assert.Equal(secondClass, sourceCodes[1].Code);
+                Assert.Equal("solution", sourceCodes[0].Name);
+                Assert.Equal("sampleSolution", sourceCodes[1].Name);
             }
         }
 
@@ -123,23 +126,23 @@ namespace JudgeSystem.Services.Tests
             using (var stream = new MemoryStream(buffer))
             {
                 IFormFile file = new FormFile(stream, 0, stream.Length, "solution", "solution.zip");
-                await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, file));
+                await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, file, ProgrammingLanguage.CSharp));
             }
         }
 
         [Fact]
         public async Task ExtractSubmissionCode_WithNullCodeArgumentAndNullFileArgumet_ShouldThrowBadRequestException() => 
-            await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, null));
+            await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, null, ProgrammingLanguage.Java));
 
         [Fact]
         public async Task ExtractSubmissionCode_WithNotNullCodeArgumentAndNotNullFileArgumet_ShouldGetSubmissionCodeFromCodeArgument()
         {
             IFormFile file = new FormFile(new MemoryStream(), 0, 0, "solution", "solution.zip");
             string code = "task code comes here";
-            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, file);
+            SubmissionCodeDto submissionDto = await utilityService.ExtractSubmissionCode(code, file, ProgrammingLanguage.CPlusPlus);
 
             Assert.Equal(Encoding.UTF8.GetBytes(code), submissionDto.Content);
-            Assert.Equal(submissionDto.SourceCodes, new List<string>() { code });
+            Assert.Equal(submissionDto.SourceCodes.Select(x => x.Code), new List<string>() { code });
         }
 
         [Fact]
@@ -152,14 +155,63 @@ namespace JudgeSystem.Services.Tests
 
             using (FileStream stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
             {
-                List<string> sourceCodes = utilityService.ExtractZipFile(stream, new List<string> { ".txt", ".cs", ".js" });
-                sourceCodes = sourceCodes.OrderBy(x => x.Length).ToList();
+                List<CodeFile> sourceCodes = utilityService.ExtractZipFile(stream, new List<string> { ".txt", ".cs", ".js" });
+
+                sourceCodes = sourceCodes.OrderBy(x => x.Code.Length).ToList();
                 Assert.Equal(4, sourceCodes.Count);
-                Assert.Equal(firstFileData, sourceCodes[0]);
-                Assert.Equal(secondFileData, sourceCodes[1]);
-                Assert.Equal(thirdFileData, sourceCodes[2]);
-                Assert.Equal(fourthFileData, sourceCodes[3]);
+                Assert.Equal(firstFileData, sourceCodes[0].Code);
+                Assert.Equal(secondFileData, sourceCodes[1].Code);
+                Assert.Equal(thirdFileData, sourceCodes[2].Code);
+                Assert.Equal(fourthFileData, sourceCodes[3].Code);
             }
         }
+
+        [Fact]
+        public void DeleteDirectory_WithExistingPath_ShouldDeleteTheDirectoryAndAllFilesInIt()
+        {
+            string directoryName = "testDirectory";
+            DirectoryInfo directoryInfo =  Directory.CreateDirectory(directoryName);
+            File.WriteAllText(Path.Combine(directoryInfo.FullName, "test.txt"), "This is test file with should be deleted!");
+
+            utilityService.DeleteDirectory(directoryName);
+
+            Assert.False(Directory.Exists(directoryInfo.FullName));
+        }
+
+        [Theory]
+        [InlineData("static void main(String[] args){\n")]
+        [InlineData("static void main (String[] startUpArgs) {\n")]
+        [InlineData("static void main()")]
+        public void GetJavaMainClass_WithValidCode_ShouldExtractOnlyTheJavaClassName(string code)
+        {
+            string actualName = utilityService.GetJavaMainClass(new List<string> { code });
+
+            Assert.Equal(actualName, code);
+        }
+
+        [Theory]
+        [InlineData("static void mai()")]
+        public void GetJavaMainClass_WithInvalidCode_ShouldReturnNull(string code)
+        {
+            string actualName = utilityService.GetJavaMainClass(new List<string> { code });
+
+            Assert.Null(actualName);
+        }
+
+        [Theory]
+        [InlineData("class Test{\n", "Test")]
+        [InlineData("class Test123 {\n", "Test123")]
+        [InlineData("class Test123", "Test123")]
+        public void GetJavaClassName_WithValidCode_ShouldExtractOnlyTheJavaClassName(string code, string expectedName)
+        {
+            string actualName = utilityService.GetJavaClassName(code);
+
+            Assert.Equal(expectedName, actualName);
+        }
+
+        [Theory]
+        [InlineData("clas Test")]
+        public void GetJavaClassName_WithInvalidCode_ShouldThrowBadRequestException(string code) => 
+            Assert.Throws<BadRequestException>(() => utilityService.GetJavaClassName(code));
     }
 }

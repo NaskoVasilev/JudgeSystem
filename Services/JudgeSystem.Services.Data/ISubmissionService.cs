@@ -34,6 +34,6 @@ namespace JudgeSystem.Services.Data
 
         int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId);
 
-        Task ExecuteSubmission(int submissionId, List<string> sourceCodes, ProgrammingLanguage programmingLanguage);
+        Task ExecuteSubmission(int submissionId, List<CodeFile> codeFiles, ProgrammingLanguage programmingLanguage);
     }
 }
