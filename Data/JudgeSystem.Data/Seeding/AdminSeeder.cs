@@ -29,6 +29,7 @@ namespace JudgeSystem.Data.Seeding
 				Email = adminSettings.Email,
 				UserName = adminSettings.Username,
 				Surname = adminSettings.Surname,
+                EmailConfirmed = true
 			};
 
 			await userManager.CreateAsync(user, adminSettings.Password);
