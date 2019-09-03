@@ -15,6 +15,11 @@ using JudgeSystem.Web.InputModels.Submission;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Dtos.ExecutedTest;
 using JudgeSystem.Web.ViewModels.Submission;
+using JudgeSystem.Compilers;
+using JudgeSystem.Workers.Common;
+using JudgeSystem.Executors;
+using JudgeSystem.Web.Dtos.Test;
+using JudgeSystem.Web.Dtos.Problem;
 
 using Moq;
 using Xunit;
@@ -77,11 +82,11 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(actualResult.ExecutedTests.Count, expectedResult.ExecutedTests.Count);
             foreach (ExecutedTestResult executedTest in actualResult.ExecutedTests)
             {
-                Assert.Contains(expectedResult.ExecutedTests, x => x.IsCorrect == executedTest.IsCorrect 
+                Assert.Contains(expectedResult.ExecutedTests, x => x.IsCorrect == executedTest.IsCorrect
                 && x.ExecutionResultType.ToString() == executedTest.ExecutionResultType);
             }
             Assert.Equal(expectedResult.Problem.MaxPoints, actualResult.MaxPoints);
-            Assert.Equal(expectedResult.SubmisionDate.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture), 
+            Assert.Equal(expectedResult.SubmisionDate.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture),
                 actualResult.SubmissionDate);
         }
 
@@ -115,7 +120,7 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(3, "me", 2)]
         [InlineData(4, "me", 0)]
         [InlineData(2, "me123", 0)]
-        public void GetProblemSubmissionsCount_ShouldReturnDifferentValues_WithDiffernertData(int problemId, 
+        public void GetProblemSubmissionsCount_ShouldReturnDifferentValues_WithDiffernertData(int problemId,
             string userId, int expectedCount)
         {
             SubmissionService service = CreateSubmissionServiceWithMockedRepository(PaginationTestData().AsQueryable());
@@ -271,6 +276,170 @@ namespace JudgeSystem.Services.Data.Tests
             SubmissionService service = CreateSubmissionServiceWithMockedRepository(testData.AsQueryable());
 
             Assert.Throws<EntityNotFoundException>(() => service.GetProblemNameBySubmissionId(999));
+        }
+
+        [Fact]
+        public async Task ExecuteSubmission_WithCodeThatNotCompilesCorrect_ShouldAddCompilationErrorsToSubmission()
+        {
+            //Arrange
+            string fileName = "test.cs";
+            var codeFiles = new List<CodeFile>
+            {
+                new CodeFile() { Code = "test", Name = fileName }
+            };
+            var submission = new Submission() { Id = 12 };
+            string errors = "; expected";
+            ProgrammingLanguage programmingLanguage = ProgrammingLanguage.CSharp;
+
+            var compileResult = new CompileResult(errors);
+            ICompiler compiler = CreateCompiler(fileName, compileResult);
+            ICompilerFactory compilerFactory = CreateCompilerFactory(compiler, programmingLanguage);
+
+            await AddSubmission(submission);
+            SubmissionService submissionService = CreateSubmissionService(compilerFactory, null);
+
+            //Act
+            await submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage);
+
+            //Assert
+            Assert.True(context.Submissions.Any(x => x.Id == submission.Id && Encoding.UTF8.GetString(x.CompilationErrors) == errors));
+        }
+
+        [Theory]
+        [InlineData(true, ProcessExecutionResultType.Success, true)]
+        [InlineData(false, ProcessExecutionResultType.Success, false)]
+        [InlineData(true, ProcessExecutionResultType.MemoryLimit, false)]
+        [InlineData(false, ProcessExecutionResultType.RunTimeError, false)]
+        [InlineData(true, ProcessExecutionResultType.TimeLimit, false)]
+        public async Task ExecuteSubmission_WithValidCode_ShouldExecuteTests(bool isCorret, ProcessExecutionResultType processExecutionResult, bool expectedResult)
+        {
+            //Arrange
+            string fileName = "test.cs";
+            var codeFiles = new List<CodeFile>
+            {
+                new CodeFile() { Code = "test", Name = fileName }
+            };
+            var submission = new Submission() { Id = 12, PracticeId = 10 };
+            ProgrammingLanguage programmingLanguage = ProgrammingLanguage.CSharp;
+
+            var compileResult = new CompileResult() { OutputFilePath = "test" };
+            ICompiler compiler = CreateCompiler(fileName, compileResult);
+            ICompilerFactory compilerFactory = CreateCompilerFactory(compiler, programmingLanguage);
+
+            await AddSubmission(submission);
+
+            string expectedOutput = "321";
+            var tests = new List<TestDataDto>
+            {
+                new TestDataDto { Id = 12, InputData = "123", OutputData = expectedOutput }
+            };
+            var testServiceMock = new Mock<ITestService>();
+            testServiceMock.Setup(x => x.GetTestsByProblemId(submission.ProblemId)).Returns(tests);
+
+            var submissionRepository = new EfRepository<Submission>(context);
+
+            var problemServiceMock = new Mock<IProblemService>();
+            var problemConstraintsDto = new ProblemConstraintsDto
+            {
+                AllowedMemoryInMegaBytes = 10,
+                AllowedTimeInMilliseconds = 200
+            };
+            problemServiceMock.Setup(x => x.GetById<ProblemConstraintsDto>(submission.ProblemId)).Returns(Task.FromResult(problemConstraintsDto));
+            var utilityServiceMock = new Mock<IUtilityService>();
+            var executedTestServiceMock = new Mock<IExecutedTestService>();
+            executedTestServiceMock.Setup(x => x.Create(It.IsAny<ExecutedTest>()));
+
+            var checkerMock = new Mock<IChecker>();
+            var executionResult = new ExecutionResult
+            {
+                Output = expectedOutput,
+                Type = processExecutionResult
+            };
+            var checkerResult = new CheckerResult(executionResult)
+            {
+                IsCorrect = isCorret
+            };
+            checkerMock.Setup(x => x.Check(executionResult, expectedOutput)).Returns(checkerResult);
+
+            IExecutor executor = CreateExecutor(executionResult);
+            IExecutorFactory executorFactory = CreateExecutorFactory(programmingLanguage, executor);
+
+            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
+                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+
+            //Act
+            await submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage);
+
+            //Assert
+            executedTestServiceMock.Verify(x => x.Create(It.Is<ExecutedTest>(t => t.IsCorrect == expectedResult && t.Output == expectedOutput)));
+        }
+
+        [Fact]
+        public async Task ExecuteSubmission_WithInvalidJavaFile_ShouldThrowBadRequestException()
+        {
+            //Arrange
+            string fileName = "test.cs";
+            var codeFiles = new List<CodeFile>
+            {
+                new CodeFile() { Code = "test", Name = fileName }
+            };
+            var submission = new Submission() { Id = 12, PracticeId = 10 };
+            ProgrammingLanguage programmingLanguage = ProgrammingLanguage.Java;
+
+            await AddSubmission(submission);
+            SubmissionService submissionService = CreateSubmissionService(null, null);
+
+            //Act, Assert
+            await Assert.ThrowsAsync<BadRequestException>(() => submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage));
+        }
+
+        private async Task AddSubmission(Submission submission)
+        {
+            await context.Submissions.AddAsync(submission);
+            await context.SaveChangesAsync();
+        }
+
+        private SubmissionService CreateSubmissionService(ICompilerFactory compilerFactory, IExecutorFactory executorFactory)
+        {
+            var submissionRepository = new EfRepository<Submission>(context);
+            var problemServiceMock = new Mock<IProblemService>();
+            var utilityServiceMock = new Mock<IUtilityService>();
+            var executedTestServiceMock = new Mock<IExecutedTestService>();
+            var checkerMock = new Mock<IChecker>();
+            var testServiceMock = new Mock<ITestService>();
+
+            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
+                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+            return submissionService;
+        }
+
+        private IExecutor CreateExecutor(ExecutionResult executionResult)
+        {
+            var executorMock = new Mock<IExecutor>();
+            executorMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(Task.FromResult(executionResult));
+            return executorMock.Object;
+        }
+
+        private IExecutorFactory CreateExecutorFactory(ProgrammingLanguage programmingLanguage, IExecutor executor)
+        {
+            var executorFactoryMock = new Mock<IExecutorFactory>();
+            executorFactoryMock.Setup(x => x.CreateExecutor(programmingLanguage)).Returns(executor);
+            return executorFactoryMock.Object;
+        }
+
+        private ICompilerFactory CreateCompilerFactory(ICompiler compiler, ProgrammingLanguage programmingLanguage)
+        {
+            var compilerFactoryMock = new Mock<ICompilerFactory>();
+            compilerFactoryMock.Setup(x => x.CreateCompiler(programmingLanguage)).Returns(compiler);
+            return compilerFactoryMock.Object;
+        }
+
+        private ICompiler CreateCompiler(string fileName, CompileResult compileResult)
+        {
+            var compilerMock = new Mock<ICompiler>();
+            compilerMock.Setup(x => x.Compile(fileName, It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(compileResult);
+            return compilerMock.Object;
         }
 
         private async Task<SubmissionService> CreateSubmissionService(List<Submission> testData)

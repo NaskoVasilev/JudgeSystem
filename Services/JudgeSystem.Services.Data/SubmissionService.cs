@@ -210,7 +210,7 @@ namespace JudgeSystem.Services.Data
             if (programmingLanguage == ProgrammingLanguage.Java)
             {
                 fileName = GetJavaFileName(sourceCodes);
-                if(codeFiles.Count == 1)
+                if (codeFiles.Count == 1)
                 {
                     codeFiles.First().Name = fileName;
                 }
@@ -240,9 +240,13 @@ namespace JudgeSystem.Services.Data
             else
             {
                 await RunTests(submission, compileResult, programmingLanguage);
-                utilityService.DeleteDirectory(workingDirectory);
             }
+
+            utilityService.DeleteDirectory(workingDirectory);
         }
+
+        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>
+            repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
 
         private string GetJavaFileName(List<string> sourceCodes)
         {
@@ -255,9 +259,6 @@ namespace JudgeSystem.Services.Data
 
             return utilityService.GetJavaClassName(javaMainClass);
         }
-
-        public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>
-            repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
 
         private SubmissionResult MapSubmissionToSubmissionResult(Submission submission)
         {
