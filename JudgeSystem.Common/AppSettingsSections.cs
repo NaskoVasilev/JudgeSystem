@@ -9,5 +9,7 @@
         public const string EmailSection = "Email";
 
         public const string SendGridSection = "SendGrid";
+
+        public const string CompilersSection = "Compilers";
     }
 }

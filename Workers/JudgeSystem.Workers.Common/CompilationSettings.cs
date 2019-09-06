@@ -12,8 +12,8 @@ namespace JudgeSystem.Workers.Common
 
         public const string JavaOutputFileExtension = ".jar";
 
-        public const string CppCompilerPath = "C:\\MinGW\\bin";
+        public static string CppCompilerPath { get; set; }
 
-        public const string JavaCompilerPath = "C:\\Program Files\\Java\\jdk1.8.0_181\\bin";
+        public static string JavaCompilerPath { get; set; }
     }
 }
