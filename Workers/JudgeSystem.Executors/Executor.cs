@@ -17,7 +17,7 @@ namespace JudgeSystem.Executors
 
             using (var process = new Process())
             {
-                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.FileName = CompilationSettings.ConsoleFile;
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.RedirectStandardOutput = true;

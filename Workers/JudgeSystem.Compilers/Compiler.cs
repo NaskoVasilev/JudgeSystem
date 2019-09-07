@@ -12,7 +12,7 @@ namespace JudgeSystem.Compilers
             var info = new ProcessStartInfo
             {
                 Arguments = arguments,
-                FileName = "cmd.exe",
+                FileName = CompilationSettings.ConsoleFile,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 CreateNoWindow = true

@@ -9,7 +9,7 @@ namespace JudgeSystem.Executors
     {
         public Task<ExecutionResult> Execute(string filePath, string input, int timeLimit, int memoryLimit)
         {
-            string arguments = @"/C dotnet " + filePath;
+            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} dotnet {filePath}";
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);
         }
