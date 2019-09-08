@@ -45,12 +45,17 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
+            int problemId = 2;
             List<Problem> testData = GetTestData();
-            ProblemService problemService = await CreateProblemService(testData);
+            await AddData(testData);
+            var submissionServiceMock = new Mock<ISubmissionService>();
+            submissionServiceMock.Setup(x => x.DeleteSubmissionsByProblemId(problemId));
+            ProblemService problemService = CreateProblemService(submissionServiceMock.Object);
 
-            await problemService.Delete(2);
+            await problemService.Delete(problemId);
 
-            Assert.False(context.Lessons.Any(x => x.Id == 2));
+            Assert.False(context.Problems.Any(x => x.Id == problemId));
+            submissionServiceMock.Verify(x => x.DeleteSubmissionsByProblemId(problemId), Times.Once);
         }
 
         [Fact]
@@ -225,8 +230,21 @@ namespace JudgeSystem.Services.Data.Tests
         {
             await context.Problems.AddRangeAsync(testData);
             await context.SaveChangesAsync();
-            IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(this.context);
-            var service = new ProblemService(repository);
+            IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(context);
+            var service = new ProblemService(repository, null);
+            return service;
+        }
+
+        private async Task AddData(IEnumerable<Problem> testData)
+        {
+            await context.Problems.AddRangeAsync(testData);
+            await context.SaveChangesAsync();
+        }
+
+        private ProblemService CreateProblemService(ISubmissionService submissionService)
+        {
+            IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(context);
+            var service = new ProblemService(repository, submissionService);
             return service;
         }
 
@@ -234,7 +252,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Problem>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new ProblemService(reposotiryMock.Object);
+            return new ProblemService(reposotiryMock.Object, null);
         }
 
         private List<Problem> GetTestData()

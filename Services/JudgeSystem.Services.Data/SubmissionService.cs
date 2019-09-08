@@ -28,7 +28,7 @@ namespace JudgeSystem.Services.Data
 {
     public class SubmissionService : ISubmissionService
     {
-        private readonly IRepository<Submission> repository;
+        private readonly IDeletableEntityRepository<Submission> repository;
         private readonly IEstimator estimator;
         private readonly IProblemService problemService;
         private readonly ITestService testService;
@@ -39,7 +39,7 @@ namespace JudgeSystem.Services.Data
         private readonly IChecker checker;
 
         public SubmissionService(
-            IRepository<Submission> repository,
+            IDeletableEntityRepository<Submission> repository,
             IEstimator estimator,
             IProblemService problemService,
             ITestService testService,
@@ -347,6 +347,12 @@ namespace JudgeSystem.Services.Data
 
                 await executedTestService.Create(executedTest);
             }
+        }
+
+        public async Task DeleteSubmissionsByProblemId(int problemId)
+        {
+            var submissions = repository.All().Where(x => x.ProblemId == problemId).ToList();
+            await repository.DeleteRangeAsync(submissions);
         }
     }
 }

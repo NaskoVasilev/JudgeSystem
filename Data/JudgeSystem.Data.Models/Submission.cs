@@ -6,7 +6,7 @@ using JudgeSystem.Data.Common.Models;
 
 namespace JudgeSystem.Data.Models
 {
-	public class Submission : BaseModel<int>
+	public class Submission : BaseDeletableModel<int>
 	{
 		public Submission()
 		{

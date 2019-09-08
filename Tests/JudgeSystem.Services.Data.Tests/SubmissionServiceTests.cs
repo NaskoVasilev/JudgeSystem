@@ -336,7 +336,7 @@ namespace JudgeSystem.Services.Data.Tests
             var testServiceMock = new Mock<ITestService>();
             testServiceMock.Setup(x => x.GetTestsByProblemId(submission.ProblemId)).Returns(tests);
 
-            var submissionRepository = new EfRepository<Submission>(context);
+            var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
 
             var problemServiceMock = new Mock<IProblemService>();
             var problemConstraintsDto = new ProblemConstraintsDto
@@ -393,6 +393,17 @@ namespace JudgeSystem.Services.Data.Tests
             await Assert.ThrowsAsync<BadRequestException>(() => submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage));
         }
 
+        [Fact]
+        public async Task DeleteSubmissionsByProblemId_WithValidProblemId_ShouldDeleteAllSubmissionCascadingForThatProblem()
+        {
+            Submission submission = GetSubmission();
+            SubmissionService submissionService = await CreateSubmissionService(new List<Submission> { submission });
+
+            await submissionService.DeleteSubmissionsByProblemId(submission.ProblemId);
+
+            Assert.Empty(context.Submissions.Where(x => x.ProblemId == submission.ProblemId));
+        }
+
         private async Task AddSubmission(Submission submission)
         {
             await context.Submissions.AddAsync(submission);
@@ -401,7 +412,7 @@ namespace JudgeSystem.Services.Data.Tests
 
         private SubmissionService CreateSubmissionService(ICompilerFactory compilerFactory, IExecutorFactory executorFactory)
         {
-            var submissionRepository = new EfRepository<Submission>(context);
+            var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
             var problemServiceMock = new Mock<IProblemService>();
             var utilityServiceMock = new Mock<IUtilityService>();
             var executedTestServiceMock = new Mock<IExecutedTestService>();
@@ -446,16 +457,32 @@ namespace JudgeSystem.Services.Data.Tests
         {
             await context.Submissions.AddRangeAsync(testData);
             await context.SaveChangesAsync();
-            IRepository<Submission> repository = new EfRepository<Submission>(context);
+            IDeletableEntityRepository<Submission> repository = new EfDeletableEntityRepository<Submission>(context);
             var service = new SubmissionService(repository, estimator, null, null, null, null, null, null, null);
             return service;
         }
 
         private SubmissionService CreateSubmissionServiceWithMockedRepository(IQueryable<Submission> testData)
         {
-            var reposotiryMock = new Mock<IRepository<Submission>>();
+            var reposotiryMock = new Mock<IDeletableEntityRepository<Submission>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
             return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null, null, null, null);
+        }
+
+        private Submission GetSubmission()
+        {
+            var submisison = new Submission
+            {
+                Id = 1,
+                ExecutedTests = new List<ExecutedTest>
+                {
+                    new ExecutedTest{ Id =  1, SubmissionId = 1 },
+                    new ExecutedTest{ Id =  2, SubmissionId = 1 }
+                },
+                ProblemId = 99,
+            };
+
+            return submisison;
         }
 
         private List<Submission> GetDetailedTestData()

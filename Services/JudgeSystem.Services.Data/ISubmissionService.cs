@@ -35,5 +35,7 @@ namespace JudgeSystem.Services.Data
         int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId);
 
         Task ExecuteSubmission(int submissionId, List<CodeFile> codeFiles, ProgrammingLanguage programmingLanguage);
+
+        Task DeleteSubmissionsByProblemId(int problemId);
     }
 }
