@@ -85,14 +85,16 @@ else
     <script src="~/lib/codemirror/mode/clike/clike.min.js"></script>
     <script>
         let codeTextarea = document.getElementById('source-code');
-        var editor = CodeMirror.fromTextArea(codeTextarea,
+        if (codeTextarea) {
+             var editor = CodeMirror.fromTextArea(codeTextarea,
             {
                 lineNumbers: true,
                 matchBrackets: true,
                 mode: "text/x-c++src",
                 readOnly: 'cursor'
             });
-        editor.setValue(codeTextarea.innerText);
+            editor.setValue(codeTextarea.innerText);
+        }
 
         let editors = [];
         let elements = [];
