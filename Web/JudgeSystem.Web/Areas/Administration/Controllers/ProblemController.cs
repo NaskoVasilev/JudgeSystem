@@ -17,15 +17,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		private readonly IProblemService problemService;
 		private readonly ITestService testService;
         private readonly ILessonService lessonService;
+        private readonly ISubmissionService submissionService;
 
         public ProblemController(
             IProblemService problemService, 
             ITestService testService, 
-            ILessonService lessonService)
+            ILessonService lessonService,
+            ISubmissionService submissionService)
 		{
 			this.problemService = problemService;
 			this.testService = testService;
             this.lessonService = lessonService;
+            this.submissionService = submissionService;
         }
 
         public IActionResult Create() => View(new ProblemInputModel());
@@ -89,6 +92,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		public async Task<IActionResult> DeletePost(int id)
 		{
             ProblemDto problem = await problemService.Delete(id);
+            //Delete all submissions for current problem becuase when we make reports - submission for some deleted problems 
+            //exists in the database and they are also included in the report results which is incorrect behaviour
+            await submissionService.DeleteSubmissionsByProblemId(id);
 
             return RedirectToAction(nameof(All), "Problem",
                 new { area = GlobalConstants.AdministrationArea, problem.LessonId });

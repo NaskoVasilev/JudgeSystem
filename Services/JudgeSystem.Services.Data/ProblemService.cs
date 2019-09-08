@@ -19,12 +19,10 @@ namespace JudgeSystem.Services.Data
     public class ProblemService : IProblemService
 	{
 		private readonly IDeletableEntityRepository<Problem> problemRepository;
-        private readonly ISubmissionService submissionService;
 
-        public ProblemService(IDeletableEntityRepository<Problem> problemRepository, ISubmissionService submissionService)
+        public ProblemService(IDeletableEntityRepository<Problem> problemRepository)
 		{
 			this.problemRepository = problemRepository;
-            this.submissionService = submissionService;
         }
 
 		public async Task<ProblemDto> Create(ProblemInputModel model)
@@ -37,10 +35,7 @@ namespace JudgeSystem.Services.Data
 		public async Task<ProblemDto> Delete(int id)
 		{
             Problem problem = await problemRepository.FindAsync(id);
-
-            await submissionService.DeleteSubmissionsByProblemId(id);
 			await problemRepository.DeleteAsync(problem);
-
             return problem.To<ProblemDto>();
 		}
 

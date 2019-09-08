@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace JudgeSystem.Common
 {
@@ -11,6 +12,8 @@ namespace JudgeSystem.Common
         public const string BaseRoleName = "User";
         public const string AdministrationArea = "Administration";
         public const string LessonsRrecommendationMlModelPath = "MLModels/JudgeSystemLessonsModel.zip";
+        public const string CurrentCultureInfo = "bg-BG";
+        public static string DefaultDateTimeFormat = CultureInfo.GetCultureInfo(CurrentCultureInfo).DateTimeFormat.FullDateTimePattern;
         #endregion
 
         #region Keys

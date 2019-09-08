@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.IocConfiguration
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ISchoolClassService, SchoolClassService>();
             services.AddTransient<IPracticeService, PracticeService>();
+
             services.AddTransient<IEstimator, Estimator>();
             services.AddTransient<IPasswordHashService, PasswordHashService>();
             services.AddTransient<IPaginationService, PaginationService>();

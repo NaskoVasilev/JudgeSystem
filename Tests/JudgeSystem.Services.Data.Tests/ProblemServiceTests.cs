@@ -47,15 +47,11 @@ namespace JudgeSystem.Services.Data.Tests
         {
             int problemId = 2;
             List<Problem> testData = GetTestData();
-            await AddData(testData);
-            var submissionServiceMock = new Mock<ISubmissionService>();
-            submissionServiceMock.Setup(x => x.DeleteSubmissionsByProblemId(problemId));
-            ProblemService problemService = CreateProblemService(submissionServiceMock.Object);
+            ProblemService problemService = await CreateProblemService(testData);
 
             await problemService.Delete(problemId);
 
             Assert.False(context.Problems.Any(x => x.Id == problemId));
-            submissionServiceMock.Verify(x => x.DeleteSubmissionsByProblemId(problemId), Times.Once);
         }
 
         [Fact]
@@ -231,7 +227,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Problems.AddRangeAsync(testData);
             await context.SaveChangesAsync();
             IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(context);
-            var service = new ProblemService(repository, null);
+            var service = new ProblemService(repository);
             return service;
         }
 
@@ -241,18 +237,11 @@ namespace JudgeSystem.Services.Data.Tests
             await context.SaveChangesAsync();
         }
 
-        private ProblemService CreateProblemService(ISubmissionService submissionService)
-        {
-            IDeletableEntityRepository<Problem> repository = new EfDeletableEntityRepository<Problem>(context);
-            var service = new ProblemService(repository, submissionService);
-            return service;
-        }
-
         private ProblemService CreateProblemServiceWithMockedRepository(IQueryable<Problem> testData)
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Problem>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new ProblemService(reposotiryMock.Object, null);
+            return new ProblemService(reposotiryMock.Object);
         }
 
         private List<Problem> GetTestData()
