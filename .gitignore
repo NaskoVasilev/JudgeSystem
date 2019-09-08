@@ -14,6 +14,9 @@ appsettings.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Client side libraries
+**/wwwroot/lib/**
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
