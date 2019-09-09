@@ -11,7 +11,7 @@ namespace JudgeSystem.Executors
         {
             string fileName = Path.GetFileName(filePath);
             string workingDirectory = Path.GetDirectoryName(filePath);
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & set PATH=%PATH%;{CompilationSettings.CppCompilerPath}; & {fileName}";
+            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & {fileName}";
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);
         }

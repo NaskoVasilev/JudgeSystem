@@ -13,7 +13,7 @@ namespace JudgeSystem.Compilers
             string outputFile = $"{fileName}{CompilationSettings.ExeFileExtension}";
             string outputFilePath = workingDirectory + outputFile;
             string sourceFile = $"{fileName}{GlobalConstants.CppFileExtension}";
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & set PATH=%PATH%;{CompilationSettings.CppCompilerPath}; & g++ {sourceFile} -o {outputFile}";
+            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & g++ {sourceFile} -o {outputFile}";
 
             var compiler = new Compiler();
             CompileResult result = compiler.Compile(arguments);

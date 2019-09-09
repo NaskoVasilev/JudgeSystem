@@ -16,7 +16,7 @@ namespace JudgeSystem.Executors
             string workingDirectory = Path.GetDirectoryName(filePath);
             string fileName = Path.GetFileName(filePath);
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & set PATH=%PATH%;{CompilationSettings.JavaCompilerPath}; & java {fileNameWithoutExtension} -Xmx128m";
+            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & java {fileNameWithoutExtension} -Xmx128m";
 
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);

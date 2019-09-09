@@ -17,7 +17,8 @@ namespace JudgeSystem.Compilers
             string outputFile = $"{fileName}{GlobalConstants.JavaFileExtension}";
             string outputFilePath = workingDirectory + outputFile;
             string sourceFile = $"{fileName}{GlobalConstants.JavaFileExtension}";
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & set PATH=%PATH%;{CompilationSettings.JavaCompilerPath}; & javac {sourceFile}";
+
+            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory} & javac {sourceFile}";
 
             var compiler = new Compiler();
             CompileResult result = compiler.Compile(arguments);
