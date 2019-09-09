@@ -56,11 +56,11 @@ namespace JudgeSystem.Workers.Common
 
         public const string SetCompilerPathCommand = " & set PATH=%PATH%;";
 
-        public static string SetCPlusPlusCompilerPathCommand => GetCompilePathCommand(CppCompilerPath);
+        public static string SetCPlusPlusCompilerPathCommand => GetCompilerPathCommand(CppCompilerPath);
 
-        public static string SetJavaCompilerPathCommand => GetCompilePathCommand(JavaCompilerPath);
+        public static string SetJavaCompilerPathCommand => GetCompilerPathCommand(JavaCompilerPath);
 
-        public static string GetCompilePathCommand(string compilerPath)
+        public static string GetCompilerPathCommand(string compilerPath)
         {
             if (!string.IsNullOrEmpty(compilerPath))
             {
