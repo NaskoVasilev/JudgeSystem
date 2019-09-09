@@ -24,11 +24,11 @@ namespace JudgeSystem.Workers.Common
         {
             get
             {
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     return "cmd.exe";
                 }
-                else if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     return "/bin/bash";
                 }
@@ -52,6 +52,21 @@ namespace JudgeSystem.Workers.Common
                     return "/c";
                 }
             }
+        }
+
+        public const string SetCompilerPathCommand = " & set PATH=%PATH%;";
+
+        public static string SetCPlusPlusCompilerPathCommand => GetCompilePathCommand(CppCompilerPath);
+
+        public static string SetJavaCompilerPathCommand => GetCompilePathCommand(JavaCompilerPath);
+
+        public static string GetCompilePathCommand(string compilerPath)
+        {
+            if (!string.IsNullOrEmpty(compilerPath))
+            {
+                return $"{SetCompilerPathCommand}{compilerPath};";
+            }
+            return "";
         }
     }
 }
