@@ -9,10 +9,13 @@
 
   <PropertyGroup>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <ApplicationInsightsResourceId>/subscriptions/a2c2a11a-909f-4cf3-9b61-41225bd1f8b0/resourcegroups/JudgeSystemResourcesLinux/providers/microsoft.insights/components/ApplicationInsights-judge-scale</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/a2c2a11a-909f-4cf3-9b61-41225bd1f8b0/resourcegroups/JudgeSystemResourcesLinux/providers/microsoft.insights/components/ApplicationInsights-judge-scale</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.8.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="10.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.8.0" />
@@ -43,5 +46,9 @@
     <None Update="MLModels\JudgeSystemLessonsModel.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>
