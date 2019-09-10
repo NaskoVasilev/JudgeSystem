@@ -1,5 +1,4 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-@{
+﻿@{
 	string error = string.Empty;
 	string info = string.Empty;
 
@@ -36,7 +35,6 @@
         <link href="~/lib/codemirror/codemirror.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <header class="mb-3">
