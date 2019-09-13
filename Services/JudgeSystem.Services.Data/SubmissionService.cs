@@ -216,33 +216,43 @@ namespace JudgeSystem.Services.Data
                 }
             }
 
-            string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}\\";
+            string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}/";
             Directory.CreateDirectory(workingDirectory);
 
-            ICompiler compiler = compilerFactory.CreateCompiler(programmingLanguage);
-            CompileResult compileResult;
+            //Created directory above will be deleted even if some of the code below throws exception beacuse we use finally block
+            try
+            {
+                ICompiler compiler = compilerFactory.CreateCompiler(programmingLanguage);
+                CompileResult compileResult;
 
-            if (programmingLanguage != ProgrammingLanguage.CSharp)
-            {
-                utilityService.CreateLanguageSpecificFiles(programmingLanguage, codeFiles, workingDirectory);
-                compileResult = compiler.Compile(fileName, workingDirectory);
-            }
-            else
-            {
-                compileResult = compiler.Compile(fileName, workingDirectory, sourceCodes);
-            }
+                if (programmingLanguage != ProgrammingLanguage.CSharp)
+                {
+                    utilityService.CreateLanguageSpecificFiles(programmingLanguage, codeFiles, workingDirectory);
+                    compileResult = compiler.Compile(fileName, workingDirectory);
+                }
+                else
+                {
+                    compileResult = compiler.Compile(fileName, workingDirectory, sourceCodes);
+                }
 
-            if (!compileResult.IsCompiledSuccessfully)
-            {
-                submission.CompilationErrors = Encoding.UTF8.GetBytes(compileResult.Errors);
-                await Update(submission);
+                if (!compileResult.IsCompiledSuccessfully)
+                {
+                    submission.CompilationErrors = Encoding.UTF8.GetBytes(compileResult.Errors);
+                    await Update(submission);
+                }
+                else
+                {
+                    await RunTests(submission, compileResult, programmingLanguage);
+                }
             }
-            else
+            catch
             {
-                await RunTests(submission, compileResult, programmingLanguage);
+                throw;
             }
-
-            utilityService.DeleteDirectory(workingDirectory);
+            finally
+            {
+                utilityService.DeleteDirectory(workingDirectory);
+            }
         }
 
         public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>
