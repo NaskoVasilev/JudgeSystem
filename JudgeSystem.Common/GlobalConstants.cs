@@ -57,7 +57,7 @@ namespace JudgeSystem.Common
         #endregion
 
         #region Submissions and problems related constants
-        public static string CompilationDirectoryPath = $"{Environment.CurrentDirectory}/";
+        public static string CompilationDirectoryPath = $"{Environment.GetEnvironmentVariable("TMP")}/";
         public const string CSharpFileExtension = ".cs";
         public const string JavaFileExtension = ".java";
         public const string CppFileExtension = ".cpp";
