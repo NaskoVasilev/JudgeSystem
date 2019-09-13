@@ -216,7 +216,7 @@ namespace JudgeSystem.Services.Data
                 }
             }
 
-            string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Guid.NewGuid().ToString()}/";
+            string workingDirectory = $"{GlobalConstants.CompilationDirectoryPath}{Path.GetRandomFileName()}/";
             Directory.CreateDirectory(workingDirectory);
 
             //Created directory above will be deleted even if some of the code below throws exception beacuse we use finally block
