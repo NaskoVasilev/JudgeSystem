@@ -1,16 +1,18 @@
-﻿@{
-	string error = string.Empty;
-	string info = string.Empty;
+﻿@inject JavaScriptSnippet JavaScriptSnippet
 
-	if (this.TempData[GlobalConstants.ErrorKey] != null)
-	{
-		error = this.TempData[GlobalConstants.ErrorKey].ToString();
-	}
+@{
+    string error = string.Empty;
+    string info = string.Empty;
 
-	if (this.TempData[GlobalConstants.InfoKey] != null)
-	{
-		info = this.TempData[GlobalConstants.InfoKey].ToString();
-	}
+    if (this.TempData[GlobalConstants.ErrorKey] != null)
+    {
+        error = this.TempData[GlobalConstants.ErrorKey].ToString();
+    }
+
+    if (this.TempData[GlobalConstants.InfoKey] != null)
+    {
+        info = this.TempData[GlobalConstants.InfoKey].ToString();
+    }
 }
 
 <!DOCTYPE html>
@@ -35,6 +37,7 @@
         <link href="~/lib/codemirror/codemirror.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet" asp-append-version="true" />
     </environment>
+    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <header class="mb-3">
@@ -104,11 +107,11 @@
         </main>
     </div>
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; @DateTime.Now.Year - JudgeSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-		</div>
-	</footer>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - JudgeSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
@@ -130,6 +133,6 @@
 
     </environment>
 
-	@this.RenderSection("Scripts", required: false)
+    @this.RenderSection("Scripts", required: false)
 </body>
 </html>
