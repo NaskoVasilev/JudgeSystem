@@ -83,7 +83,7 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output;
                 executionResult.ExitCode = process.ExitCode;
-                executionResult.TimeWorked = process.ExitTime - process.StartTime;
+                //executionResult.TimeWorked = process.ExitTime - process.StartTime;
                 executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
                 executionResult.UserProcessorTime = process.UserProcessorTime;
 
