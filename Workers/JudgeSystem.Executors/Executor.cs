@@ -83,9 +83,9 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output;
                 executionResult.ExitCode = process.ExitCode;
-                //executionResult.TimeWorked = process.ExitTime - process.StartTime;
-                //executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
-                //executionResult.UserProcessorTime = process.UserProcessorTime;
+                executionResult.TimeWorked = process.ExitTime - process.StartTime;
+                executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
+                executionResult.UserProcessorTime = process.UserProcessorTime;
 
                 if (executionResult.TotalProcessorTime.TotalMilliseconds > timeLimit)
                 {
