@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<software-distribution project="MinGW" home="http://mingw.org" issue="2018123101">
+
+  <!-- File: mingw32-zlib.xml -->
+
+  <package-collection subsystem="mingw32">
+    <download-host uri="http://osdn.net/dl/mingw/%F" />
+
+    <package name="mingw32-zlib" alias="zlib">
+      <description lang="en" title="A Massively Spiffy Yet Delicately Unobtrusive Compression Library">
+        <paragraph>The zlib compression library provides in-memory compression
+          and decompression functions, including integrity checks of the
+          uncompressed data.
+        </paragraph>
+      </description>
+      <affiliate group="MinGW Standard Libraries"/>
+
+      <licence tarname="zlib-%-mingw32-%-lic.tar.%" />
+      <source tarname="zlib-%-mingw32-%-src.tar.%" />
+
+      <component class="doc">
+        <release tarname="zlib-1.2.11-1-mingw32-doc.tar.xz" />
+        <release tarname="zlib-1.2.8-2-mingw32-doc.tar.xz" />
+      </component>
+
+      <component class="lic">
+        <release tarname="zlib-1.2.11-1-mingw32-lic.tar.xz" />
+        <release tarname="zlib-1.2.8-2-mingw32-lic.tar.xz" />
+      </component>
+
+      <component class="man">
+        <release tarname="zlib-1.2.11-1-mingw32-man.tar.xz" />
+        <release tarname="zlib-1.2.8-2-mingw32-man.tar.xz" />
+      </component>
+    </package>
+
+    <package name="mingw32-libz" alias="libz">
+      <description lang="en" title="A Massively Spiffy Yet Delicately Unobtrusive Compression Library">
+        <paragraph>The zlib compression library provides in-memory compression
+          and decompression functions, including integrity checks of the
+          uncompressed data. The libz package provides the runtime and
+          development files related to the ZLib library. The associated zlib
+          package provides documentation.
+        </paragraph>
+      </description>
+      <affiliate group="MinGW Standard Libraries"/>
+
+      <licence tarname="zlib-%-mingw32-%-lic.tar.%" />
+      <source tarname="zlib-%-mingw32-%-src.tar.%" />
+
+      <component class="dll">
+        <release tarname="libz-1.2.11-1-mingw32-dll-1.tar.xz" />
+        <release tarname="libz-1.2.8-2-mingw32-dll-1.tar.xz" />
+      </component>
+
+      <component class="dev">
+        <requires eq="mingw32-libz-%-mingw32-%-dll-1.tar" />
+        <release tarname="libz-1.2.11-1-mingw32-dev.tar.xz" />
+        <release tarname="libz-1.2.8-2-mingw32-dev.tar.xz" />
+      </component>
+    </package>
+
+    <package name="mingw32-minizip" alias="minizip">
+      <description lang="en" title="Simple ZIP support from zlib">
+        <paragraph>NOTE: This program was not delivered with the zlib-1.2.8
+          release. This decision was made due to the number of downloads for
+          the package as well as a belief that the zip and unzip packages are
+          already minimal enough.  It is therefore considered obsolete and
+          should be removed from your systems.
+        </paragraph>
+        <paragraph>The minizip package provides two simple ZIP archive
+          manipulation tools, based on the minizip library from zlib.  More
+          sophisticated needs are met by the unzip and zip packages.
+        </paragraph>
+        <paragraph>The libminizip library provides zlib-based support for
+          manipulating ZIP archives. It is suitable for clients that need only
+          create, inspect, and unpack such archives; more demanding needs may be
+          met by the libarchive package.
+        </paragraph>
+      </description>
+      <affiliate group="MinGW Deprecated Packages" />
+
+      <licence tarname="zlib-%-mingw32-%-lic.tar.%" />
+      <source tarname="zlib-%-mingw32-%-src.tar.%" />
+
+      <component class="bin">
+        <requires eq="mingw32-libgcc-*-mingw32-dll-1.tar" />
+        <requires eq="mingw32-libminizip-%-mingw32-dll-1.tar" />
+        <release tarname="minizip-1.2.7-1-mingw32-bin.tar.lzma" />
+      </component>
+    </package>
+
+    <package name="mingw32-libminizip" alias="libminizip">
+      <description lang="en" title="Simple ZIP support from zlib">
+        <paragraph>NOTE: This program was not delivered with the zlib-1.2.8
+          release. This decision was made due to the number of downloads for the
+          package as well as a belief that the libarchive package is already
+          minimal enough.  It is therefore considered obsolete and should be
+          removed from your system.
+        </paragraph>
+        <paragraph>The minizip library provides zlib-based support for
+          manipulating ZIP archives. It is suitable for clients that need only
+          create, inspect, and unpack such archives; more demanding needs may be
+          met by the libarchive package.
+        </paragraph>
+        <paragraph>This distribution also provides two simple utility programs:
+          minizip and miniunzip. Again, more sophisticated needs are met by the
+          unzip and zip packages.
+        </paragraph>
+      </description>
+
+      <licence tarname="zlib-%-mingw32-%-lic.tar.%" />
+      <source tarname="zlib-%-mingw32-%-src.tar.%" />
+
+      <component class="dll">
+        <requires eq="mingw32-libgcc-*-mingw32-dll-1.tar" />
+        <requires eq="mingw32-libz-%-mingw32-dll-1.tar" />
+        <release tarname="libminizip-1.2.7-1-mingw32-dll-1.tar.lzma" />
+      </component>
+
+      <component class="dev">
+        <requires eq="mingw32-libz-%-mingw32-dev.tar" />
+        <requires eq="mingw32-libminizip-%-mingw32-dll-1.tar" />
+        <release tarname="libminizip-1.2.7-1-mingw32-dev.tar.lzma" />
+      </component>
+    </package>
+
+  </package-collection>
+</software-distribution>
+
+<!-- vim: set nocompatible expandtab showcmd tabstop=2 shiftwidth=2: -->
+<!-- vim: set fileformat=unix textwidth=80: -->

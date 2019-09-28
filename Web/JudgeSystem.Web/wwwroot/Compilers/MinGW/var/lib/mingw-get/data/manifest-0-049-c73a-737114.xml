@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-049-c73a-737114">
+    <release tarname="mingw-get-0.6.3-mingw32-pre-20170905-1-gui.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <file path="libexec/mingw-get/guimain.exe" />
+    </manifest>
+</package>

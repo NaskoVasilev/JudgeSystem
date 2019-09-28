@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-049-24bc-1d1fd2">
+    <release tarname="mingw-get-0.6.3-mingw32-pre-20170905-1-bin.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <dir path="bin" />
+        <file path="bin/mingw-get.exe" />
+        <dir path="libexec" />
+        <dir path="libexec/mingw-get" />
+        <file path="libexec/mingw-get/mingw-get-0.dll" />
+        <file path="libexec/mingw-get/setup.lua" />
+        <file path="libexec/mingw-get/guistub.exe" />
+        <file path="libexec/mingw-get/lastrites.exe" />
+        <file path="libexec/mingw-get/unlink.js" />
+        <file path="libexec/mingw-get/shlink.js" />
+        <dir path="var" />
+        <dir path="var/lib" />
+        <dir path="var/lib/mingw-get" />
+        <dir path="var/lib/mingw-get/data" />
+        <file path="var/lib/mingw-get/data/defaults.xml" />
+    </manifest>
+</package>

@@ -334,4 +334,5 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-!wwwroot/Compilers/*
+!**/wwwroot/Compilers/**
+
