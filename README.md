@@ -8,6 +8,67 @@ Aims of this platform are to be used in school. It can make work of our teachers
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
 
+# Getting Started
+### Prerequisites
+You will need the following tools:
+
+* [Visual Studio](https://www.visualstudio.com/downloads/)
+* [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+* [.NET Core SDK 2.2](https://www.microsoft.com/net/download/dotnet-core/2.2)
+
+### Setup
+Follow these steps to set up your development environmet:
+
+  1. Clone the repository
+  2. Create your own * [Send Grid](https://www.microsoft.com/net/download/dotnet-core/2.2) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
+  4. If you have some account in * [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but finctinality about uploading files will not work.
+  5. If you want to test java code, install * [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
+  6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
+     ```
+     {
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "SendGrid": {
+    "SendGridKey": "your API Key ID from SendGrid",
+    "SendGridUser": "your ApiKey Name from Send Grid"
+  },
+  "AzureBlob": {
+    "StorageConnectionString": "azure storage connection string",
+    "AccountKey": "azure storage api key",
+    "AccountName": "azure storage acount name",
+    "ContainerName": "azure storage container name"
+  },
+  "Email": {
+    "Name": "your first name",
+    "Surname": "your last name",
+    "Username": "your email"
+  },
+  "App": {
+    "Name": "Judge System"
+  },
+  "Admin": {
+    "Username": "admin name",
+    "Password": "admin password",
+    "Email": "admin email",
+    "Name": "admin first name",
+    "Surname": "admin last name"
+  },
+  "Compilers": {
+    "Java": "javac.exe and java.exe path. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
+    "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
+  }
+}
+  7. Open JudgeSystem.sln file and go to package manager console and run the following command: ```update-database```
+  8. Press Ctrl + F5
+
+
 ## Functionality
 ### Guest Users
  - Login, Register
