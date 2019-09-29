@@ -1,4 +1,4 @@
-# JudgeSystem
+# Judge System
 "C# MVC Frameworks - ASP.NET Core - June 2019" final Project
 
 ## Description
@@ -8,7 +8,7 @@ Aims of this platform are to be used in school. It can make work of our teachers
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
 
-# Getting Started
+## Getting Started
 ### Prerequisites
 You will need the following tools:
 
@@ -69,9 +69,16 @@ Follow these steps to set up your development environmet:
       } 
        ```
 
-  8. Open package manager console, choose as Defaut project: JudgeSystem.Data and run the following command: ```update-database```
+  7. Open package manager console, choose as Defaut project: JudgeSystem.Data and run the following command: ```update-database```
   8. Press Ctrl + F5
 
+## Technologies
+* .NET Core 2.2
+* ASP.NET Core 2.2
+* ASP.NET Core MVC
+* Entity Framework Core 2.2
+* xUnit
+* Automapper, SendGrid, jQuery, Bootstrap
 
 ## Functionality
 ### Guest Users
