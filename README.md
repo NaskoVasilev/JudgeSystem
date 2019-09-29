@@ -20,9 +20,9 @@ You will need the following tools:
 Follow these steps to set up your development environmet:
 
   1. Clone the repository
-  2. Create your own * [Send Grid](https://www.microsoft.com/net/download/dotnet-core/2.2) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
-  4. If you have some account in * [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but finctinality about uploading files will not work.
-  5. If you want to test java code, install * [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
+  2. Create your own [Send Grid](https://www.microsoft.com/net/download/dotnet-core/2.2) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
+  4. If you have some account in [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but finctinality about uploading files will not work.
+  5. If you want to test java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
   6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
      ```{
           "ConnectionStrings": {
@@ -64,7 +64,7 @@ Follow these steps to set up your development environmet:
             "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
           }
       } 
-```
+       ```
 
   7. Open JudgeSystem.sln file and go to package manager console and run the following command: ```update-database```
   8. Press Ctrl + F5
