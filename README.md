@@ -26,40 +26,40 @@ Follow these steps to set up your development environmet:
   6. Open JudgeSystem.sln file right click on JudgeSystem.Web -> Add -> New Item. In the search bar search for `app settings` and then add ```App Settings File```. Replce its content with the following one and then replcae each value which starts with ```your```.
      ```
      {
-          "ConnectionStrings": {
-            "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
+        "ConnectionStrings": {
+          "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
+        },
+        "Logging": {
+            "IncludeScopes": false,
+             "LogLevel": {
+                  "Default": "Warning"
+             }
           },
-          "Logging": {
-              "IncludeScopes": false,
-               "LogLevel": {
-                    "Default": "Warning"
-               }
-            },
-            "SendGrid": {
-              "SendGridKey": "your API Key ID from SendGrid",
-              "SendGridUser": "your ApiKey Name from Send Grid"
-            },
-            "AzureBlob": {
-                "StorageConnectionString": "azure storage connection string",
-                "AccountKey": " your azure storage api key",
-                "AccountName": "yourazure storage acount name",
-                "ContainerName": "your azure storage container name"
-            },
-            "Email": {
-              "Name": "your first name",
-              "Surname": "your last name",
-              "Username": "your email"
-            },
-            "App": {
-              "Name": "Judge System"
-            },
-            "Admin": {
-              "Username": "your admin name",
-              "Password": "your admin password",
-              "Email": "your admin email",
-              "Name": "your admin first name",
-              "Surname": "your admin last name"
-            },
+          "SendGrid": {
+            "SendGridKey": "your API Key ID from SendGrid",
+            "SendGridUser": "your ApiKey Name from Send Grid"
+          },
+          "AzureBlob": {
+              "StorageConnectionString": "azure storage connection string",
+              "AccountKey": " your azure storage api key",
+              "AccountName": "yourazure storage acount name",
+              "ContainerName": "your azure storage container name"
+          },
+          "Email": {
+            "Name": "your first name",
+            "Surname": "your last name",
+            "Username": "your email"
+          },
+          "App": {
+            "Name": "Judge System"
+          },
+          "Admin": {
+            "Username": "your admin name",
+            "Password": "your admin password",
+            "Email": "your admin email",
+            "Name": "your admin first name",
+            "Surname": "your admin last name"
+          },
           "Compilers": {
             "Java": "your path to javac.exe and java.exe. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
             "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
