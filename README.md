@@ -24,9 +24,8 @@ Follow these steps to set up your development environmet:
   4. If you have some account in * [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but finctinality about uploading files will not work.
   5. If you want to test java code, install * [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
   6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
-     ```
-     {
-  "ConnectionStrings": {
+     ```{```
+  ```"ConnectionStrings": {
     "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
   },
   "Logging": {
@@ -64,7 +63,9 @@ Follow these steps to set up your development environmet:
     "Java": "javac.exe and java.exe path. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
     "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
   }
-}
+} 
+```
+
   7. Open JudgeSystem.sln file and go to package manager console and run the following command: ```update-database```
   8. Press Ctrl + F5
 
