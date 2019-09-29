@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-035-c9cf-f3e68f">
+    <release tarname="libssp-8.2.0-4-mingw32-dll-0.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <file path="bin/libssp-0.dll" />
+    </manifest>
+</package>

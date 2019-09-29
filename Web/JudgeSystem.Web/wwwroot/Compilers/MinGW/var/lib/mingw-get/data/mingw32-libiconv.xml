@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<software-distribution project="MinGW" home="http://mingw.org" issue="2018122800">
+
+  <!-- File: mingw32-libiconv.xml -->
+
+  <package-collection subsystem="mingw32">
+    <download-host uri="http://osdn.net/dl/mingw/%F" />
+
+    <package name="mingw32-libiconv" alias="libiconv">
+      <affiliate group="MinGW Autotools" />
+      <affiliate group="MinGW Standard Libraries" />
+      <description lang="en" title="GNU libraries and utilities for character set conversion" >
+        <paragraph>GNU libiconv provides an implementation of the iconv()
+          function which is used to convert between various character
+          representations for different locales.  This function is provided
+          for use on systems which don't already have iconv(), or whose
+          implementation cannot convert from/to Unicode.  This package also
+          provides a tool, iconv(1), which can be used to convert character
+          sets from the command line. The associated libcharset provides a
+          mechanism to determine the canonical character set name of the
+          current locale.
+        </paragraph>
+      </description>
+
+      <licence tarname="libiconv-%-mingw32-%-lic.tar.%" />
+      <source tarname="libiconv-%-mingw32-%-src.tar.%" />
+
+      <component class="bin">
+        <requires eq="mingw32-libgcc-*-mingw32-dll-1.tar" />
+        <requires ge="mingw32-libintl-0.18.1.1-2-mingw32-*-dll-8.tar" />
+        <requires eq="mingw32-libiconv-%-mingw32-%-dll-2.tar" />
+
+        <release tarname="libiconv-1.14-4-mingw32-bin.tar.xz" />
+      </component>
+
+      <component class="doc">
+        <description lang="en">
+          <paragraph>This "doc" component package has never actually provided
+            documentation; effectively, it has always provided a rather useless
+            subset the source package content!  From the libiconv-1.14-4 release
+            onward this component package has been withdrawn; it now provides no
+            content, and may safely be removed.
+          </paragraph>
+          <paragraph>Actual documentation may be found in the "man" and "html"
+            component packages; if you require the content originally provided
+            in the "doc" component package, please download the source package.
+          </paragraph>
+        </description>
+        <release tarname="libiconv-1.14-4-mingw32-doc.tar.meta">
+          <download tarname="none" />
+        </release>
+      </component>
+
+      <component class="lic">
+        <release tarname="libiconv-1.14-4-mingw32-lic.tar.xz" />
+      </component>
+
+      <component class="dev">
+        <release tarname="libiconv-1.14-4-mingw32-dev.tar.xz" />
+        <requires eq="mingw32-libiconv-%-mingw32-%-dll-2.tar" />
+      </component>
+
+      <component class="dll">
+        <release tarname="libiconv-1.14-4-mingw32-dll-2.tar.xz" />
+        <requires eq="mingw32-libgcc-*-mingw32-dll-1.tar" />
+      </component>
+
+      <component class="html">
+        <release tarname="libiconv-1.14-4-mingw32-html.tar.xz" />
+      </component>
+
+      <component class="man">
+        <release tarname="libiconv-1.14-4-mingw32-man.tar.xz" />
+      </component>
+
+      <component class="lang">
+        <release tarname="libiconv-1.14-4-mingw32-lang.tar.xz" />
+      </component>
+
+    </package>
+
+    <package name="mingw32-libcharset" alias="libcharset">
+      <affiliate group="MinGW Autotools" />
+      <affiliate group="MinGW Standard Libraries" />
+      <description lang="en" title="GNU libraries and utilities for character set conversion" >
+        <paragraph>GNU libiconv provides an implementation of the iconv()
+          function which is used to convert between various character
+          representations for different locales.  This function is provided
+          for use on systems which don't already have iconv(), or whose
+          implementation cannot convert from/to Unicode. This package also
+          provides a tool, iconv(1), which can be used to convert character
+          sets from the command line.  The associated libcharset provides a
+          mechanism to determine the canonical character set name of the
+          current locale.
+        </paragraph>
+      </description>
+
+      <licence tarname="libiconv-%-mingw32-%-lic.tar.%" />
+      <source tarname="libiconv-%-mingw32-%-src.tar.%" />
+
+      <component class="dll">
+        <requires eq="mingw32-libgcc-*-mingw32-dll-1.tar" />
+        <release tarname="libcharset-1.14-4-mingw32-dll-1.tar.xz" />
+      </component>
+    </package>
+
+  </package-collection>
+</software-distribution>
+
+<!-- vim: set nocompatible expandtab showcmd tabstop=2 shiftwidth=2: -->
+<!-- vim: set fileformat=unix textwidth=80: -->

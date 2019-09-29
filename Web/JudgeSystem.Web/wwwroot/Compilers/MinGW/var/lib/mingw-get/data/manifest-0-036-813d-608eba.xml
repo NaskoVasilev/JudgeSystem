@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-036-813d-608eba">
+    <release tarname="libgomp-8.2.0-4-mingw32-dll-1.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <file path="bin/libgomp-1.dll" />
+    </manifest>
+</package>

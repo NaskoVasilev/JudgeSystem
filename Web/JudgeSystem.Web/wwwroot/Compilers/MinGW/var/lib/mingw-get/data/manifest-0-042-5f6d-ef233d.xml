@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<package id="manifest-0-042-5f6d-ef233d">
+    <release tarname="wsl-features-20190122-1-mingw32-cfg.tar.xz" />
+    <references>
+        <sysroot id="sysroot-0-002-a7c6-d7dbb5" />
+    </references>
+    <manifest>
+        <dir path="include" />
+        <dir path="var" />
+        <dir path="var/lib" />
+        <dir path="var/lib/wsl" />
+        <file path="var/lib/wsl/features.lua" />
+        <dir path="var/lib/wsl/include" />
+        <file path="var/lib/wsl/include/features.h" />
+    </manifest>
+</package>

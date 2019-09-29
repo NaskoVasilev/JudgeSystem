@@ -1,12 +1,84 @@
-# JudgeSystem
+# Judge System
 "C# MVC Frameworks - ASP.NET Core - June 2019" final Project
 
 ## Description
 This is a judge system, similar to SoftUni judge but a bit more simple.
-It can evaluate user' programming code automatically.
+It can evaluate user's programming code automatically.
 Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
+
+## Getting Started
+### Prerequisites
+You will need the following tools:
+
+* [Visual Studio](https://www.visualstudio.com/downloads/)
+* [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+* [.NET Core SDK 2.2](https://www.microsoft.com/net/download/dotnet-core/2.2)
+
+### Setup
+Follow these steps to set up your development environmet:
+
+  1. Clone the repository
+  2. Create your own [Send Grid](https://sendgrid.com/) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
+  4. If you have some account in [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. 
+  If you do not want to create storage account in azure ```open StartUp.cs and commnent method ConfigureAzureBlobStorage```.
+  You just will not be able to upload files.
+  5. If you want to submit java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
+  6. Open JudgeSystem.sln file right click on JudgeSystem.Web -> Add -> New Item. In the search bar search for `app settings` and then add ```App Settings File```. Replce its content with the following one and then replcae each value which starts with ```your```.
+     ```
+     {
+        "ConnectionStrings": {
+          "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
+        },
+        "Logging": {
+            "IncludeScopes": false,
+             "LogLevel": {
+                  "Default": "Warning"
+             }
+          },
+          "SendGrid": {
+            "SendGridKey": "your API Key ID from SendGrid",
+            "SendGridUser": "your ApiKey Name from Send Grid"
+          },
+          "AzureBlob": {
+              "StorageConnectionString": "azure storage connection string",
+              "AccountKey": " your azure storage api key",
+              "AccountName": "yourazure storage acount name",
+              "ContainerName": "your azure storage container name"
+          },
+          "Email": {
+            "Name": "your first name",
+            "Surname": "your last name",
+            "Username": "your email"
+          },
+          "App": {
+            "Name": "Judge System"
+          },
+          "Admin": {
+            "Username": "your admin name",
+            "Password": "your admin password",
+            "Email": "your admin email",
+            "Name": "your admin first name",
+            "Surname": "your admin last name"
+          },
+          "Compilers": {
+            "Java": "your path to javac.exe and java.exe. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
+            "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
+          }
+      } 
+       ```
+
+  7. Open package manager console, choose as Defaut project: JudgeSystem.Data and run the following command: ```update-database```
+  8. Press Ctrl + F5
+
+## Technologies
+* .NET Core 2.2
+* ASP.NET Core 2.2
+* ASP.NET Core MVC
+* Entity Framework Core 2.2
+* xUnit
+* Automapper, SendGrid, jQuery, Bootstrap
 
 ## Functionality
 ### Guest Users
