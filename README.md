@@ -20,7 +20,7 @@ You will need the following tools:
 Follow these steps to set up your development environmet:
 
   1. Clone the repository
-  2. Create your own [Send Grid](https://www.microsoft.com/net/download/dotnet-core/2.2) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
+  2. Create your own [Send Grid](https://sendgrid.com/) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
   4. If you have some account in [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but functinality about uploading files will not work.
   5. If you want to test java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
   6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
