@@ -13,6 +13,7 @@ using JudgeSystem.Web.ViewModels.Student;
 using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace JudgeSystem.Services.Data
 {
@@ -42,7 +43,10 @@ namespace JudgeSystem.Services.Data
             return student.To<StudentDto>();
 		}
 
-		public async Task<T> GetById<T>(string id)
+        public bool ExistsByEmail(string email) => 
+            repository.All().Any(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+
+        public async Task<T> GetById<T>(string id)
 		{
             T student = await repository.All().Where(s => s.Id == id).To<T>().FirstOrDefaultAsync();
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student, nameof(Student));

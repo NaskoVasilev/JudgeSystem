@@ -26,5 +26,7 @@ namespace JudgeSystem.Services.Data
 		Task<SchoolClassDto> GetStudentClass(string id);
 
         Task<StudentDto> Update(StudentEditInputModel model);
+
+        bool ExistsByEmail(string email);
     }
 }
