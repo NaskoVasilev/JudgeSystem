@@ -3,7 +3,7 @@
 
 ## Description
 This is a judge system, similar to SoftUni judge but a bit more simple.
-It can evaluate user' programming code automatically.
+It can evaluate user's programming code automatically.
 Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
@@ -22,9 +22,9 @@ Follow these steps to set up your development environmet:
   1. Clone the repository
   2. Create your own [Send Grid](https://sendgrid.com/) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
   4. If you have some account in [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. 
-  If you do not to create storage account in azure ```open StartUp.cs and commnent method ConfigureAzureBlobStorage```
+  If you do not want to create storage account in azure ```open StartUp.cs and commnent method ConfigureAzureBlobStorage```.
   You just will not be able to upload files.
-  5. If you want to test java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
+  5. If you want to submit java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
   6. Open JudgeSystem.sln file right click on JudgeSystem.Web -> Add -> New Item. In the search bar search for `app settings` and then add ```App Settings File```. Replce its content with the following one and then replcae each value which starts with ```your```.
      ```
      {
