@@ -47,5 +47,7 @@
         public const string InvalidMainJavaClass = "Please provide valid class with main method to your solution.";
 
         public const string EmptyArchiveSubmitted = "Submitted archive should contains at least one file.";
+
+        public const string UserWithTheSameEmailAlreadyExists = "User with the same email already exists.";
     }
 }
