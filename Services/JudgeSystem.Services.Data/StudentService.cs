@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,6 @@ using JudgeSystem.Web.ViewModels.Student;
 using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace JudgeSystem.Services.Data
 {
