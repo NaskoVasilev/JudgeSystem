@@ -1,6 +1,8 @@
 # Judge System
 "C# MVC Frameworks - ASP.NET Core - June 2019" final Project
 
+[![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-Windows-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=3&branchName=develop)
+
 ## Description
 This is a judge system, similar to SoftUni judge but a bit more simple.
 It can evaluate user's programming code automatically.
