@@ -23,7 +23,7 @@ Follow these steps to set up your development environmet:
   2. Create your own [Send Grid](https://sendgrid.com/) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
   4. If you have some account in [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but functinality about uploading files will not work.
   5. If you want to test java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
-  6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
+  6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content and each value which starts with ```your```.
      ```{
           "ConnectionStrings": {
             "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
@@ -40,9 +40,9 @@ Follow these steps to set up your development environmet:
             },
             "AzureBlob": {
                 "StorageConnectionString": "azure storage connection string",
-                "AccountKey": "azure storage api key",
-                "AccountName": "azure storage acount name",
-                "ContainerName": "azure storage container name"
+                "AccountKey": " your azure storage api key",
+                "AccountName": "yourazure storage acount name",
+                "ContainerName": "your azure storage container name"
             },
             "Email": {
               "Name": "your first name",
@@ -53,14 +53,14 @@ Follow these steps to set up your development environmet:
               "Name": "Judge System"
             },
             "Admin": {
-              "Username": "admin name",
-              "Password": "admin password",
-              "Email": "admin email",
-              "Name": "admin first name",
-              "Surname": "admin last name"
+              "Username": "your admin name",
+              "Password": "your admin password",
+              "Email": "your admin email",
+              "Name": "your admin first name",
+              "Surname": "your admin last name"
             },
           "Compilers": {
-            "Java": "javac.exe and java.exe path. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
+            "Java": "your path to javac.exe and java.exe. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
             "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
           }
       } 
