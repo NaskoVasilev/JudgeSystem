@@ -24,46 +24,46 @@ Follow these steps to set up your development environmet:
   4. If you have some account in * [Microsoft Azure](https://azure.microsoft.com/en-us/) create storge account. If you do not follow this step you will be able to set up the application but finctinality about uploading files will not work.
   5. If you want to test java code, install * [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
   6. Go to Web/JudgeSystem.Web folder and add appsettings.json file with the following content:
-     ```{```
-  ```"ConnectionStrings": {
-    "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
-  },
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Warning"
-    }
-  },
-  "SendGrid": {
-    "SendGridKey": "your API Key ID from SendGrid",
-    "SendGridUser": "your ApiKey Name from Send Grid"
-  },
-  "AzureBlob": {
-    "StorageConnectionString": "azure storage connection string",
-    "AccountKey": "azure storage api key",
-    "AccountName": "azure storage acount name",
-    "ContainerName": "azure storage container name"
-  },
-  "Email": {
-    "Name": "your first name",
-    "Surname": "your last name",
-    "Username": "your email"
-  },
-  "App": {
-    "Name": "Judge System"
-  },
-  "Admin": {
-    "Username": "admin name",
-    "Password": "admin password",
-    "Email": "admin email",
-    "Name": "admin first name",
-    "Surname": "admin last name"
-  },
-  "Compilers": {
-    "Java": "javac.exe and java.exe path. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
-    "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
-  }
-} 
+     ```{
+          "ConnectionStrings": {
+            "DefaultConnection": "Server=your server name;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true"
+          },
+          "Logging": {
+              "IncludeScopes": false,
+               "LogLevel": {
+                    "Default": "Warning"
+               }
+            },
+            "SendGrid": {
+              "SendGridKey": "your API Key ID from SendGrid",
+              "SendGridUser": "your ApiKey Name from Send Grid"
+            },
+            "AzureBlob": {
+                "StorageConnectionString": "azure storage connection string",
+                "AccountKey": "azure storage api key",
+                "AccountName": "azure storage acount name",
+                "ContainerName": "azure storage container name"
+            },
+            "Email": {
+              "Name": "your first name",
+              "Surname": "your last name",
+              "Username": "your email"
+            },
+            "App": {
+              "Name": "Judge System"
+            },
+            "Admin": {
+              "Username": "admin name",
+              "Password": "admin password",
+              "Email": "admin email",
+              "Name": "admin first name",
+              "Surname": "admin last name"
+            },
+          "Compilers": {
+            "Java": "javac.exe and java.exe path. For exmaple C:\\Program Files\\Java\\jdk1.8.0_181\\bin",
+            "CPlusPlus": "C:\\Users\\Nasko\\Desktop\\JudgeSystem\\Web\\JudgeSystem.Web\\wwwroot\\Compilers\\MinGW\\bin"
+          }
+      } 
 ```
 
   7. Open JudgeSystem.sln file and go to package manager console and run the following command: ```update-database```
