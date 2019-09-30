@@ -213,6 +213,39 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
+        public async Task ExistsByEmail_WithStudentWithTheSameEmail_ShouldReturnTrue()
+        {
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
+
+            bool result = service.ExistsByEmail("student1@mail.bg");
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ExistsByEmail_WithStudentWithEmailCaseInsensitiveEqualToProvidedEmail_ShouldReturnTrue()
+        {
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
+
+            bool result = service.ExistsByEmail("STUDENT1@mail.bg");
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ExistsByEmail_WithoutStudentWithProvidedEmail_ShouldReturnFalse()
+        {
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
+
+            bool result = service.ExistsByEmail("Pesho@mail.com");
+
+            Assert.False(result);
+        }
+
+        [Fact]
         public async Task Update_WithValidData_ShouldWorkCorrect()
         {
             List<Student> testData = GetTestData();

@@ -38,10 +38,15 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public void OnGet(string returnUrl = null) => this.ReturnUrl = returnUrl;
+        public void OnGet(string returnUrl = null) => ReturnUrl = returnUrl;
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            if (await userManager.FindByEmailAsync(Input.Email) != null)
+            {
+                ModelState.AddModelError(nameof(Input.Email), ErrorMessages.UserWithTheSameEmailAlreadyExists);
+            }
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {

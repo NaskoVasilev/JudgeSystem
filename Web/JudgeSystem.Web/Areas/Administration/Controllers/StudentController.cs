@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using JudgeSystem.Common;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
@@ -35,6 +35,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(StudentCreateInputModel model)
 		{
+            if (studentService.ExistsByEmail(model.Email))
+            {
+                ModelState.AddModelError(nameof(model.Email), ErrorMessages.StudentWithTheSameEmailAlreadyExists);
+            }
+
 			if (!ModelState.IsValid)
 			{
 				return View(model);

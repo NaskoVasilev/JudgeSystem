@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,7 +43,10 @@ namespace JudgeSystem.Services.Data
             return student.To<StudentDto>();
 		}
 
-		public async Task<T> GetById<T>(string id)
+        public bool ExistsByEmail(string email) => 
+            repository.All().Any(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+
+        public async Task<T> GetById<T>(string id)
 		{
             T student = await repository.All().Where(s => s.Id == id).To<T>().FirstOrDefaultAsync();
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(student, nameof(Student));
@@ -94,7 +98,6 @@ namespace JudgeSystem.Services.Data
 			}
 			
 			return students
-                .Where(s => s.IsActivated)
 				.OrderBy(s => s.SchoolClass.ClassNumber)
 				.ThenBy(s => s.SchoolClass.ClassType)
 				.ThenBy(s => s.NumberInCalss)
