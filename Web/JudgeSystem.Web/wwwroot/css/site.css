@@ -336,6 +336,10 @@ input[type=file] {
     font-size: 20px;
 }
 
+.font-size-30 {
+    font-size: 30px;
+}
+
 .loader{
     font-size: 20px;
 }

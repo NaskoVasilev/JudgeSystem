@@ -73,7 +73,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
                                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="All">All contests</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass">Students</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass" asp-route-classType="@SchoolClassType.A">Students</a>
                                 </div>
                             </li>
                         }
