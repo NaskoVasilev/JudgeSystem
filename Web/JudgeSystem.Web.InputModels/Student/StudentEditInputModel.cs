@@ -26,5 +26,7 @@ namespace JudgeSystem.Web.InputModels.Student
 
         [Display(Name = ModelConstants.StudentSchoolClassIdDisplayName)]
         public int SchoolClassId { get; set; }
-	}
+
+        public bool IsActivated { get; set; }
+    }
 }

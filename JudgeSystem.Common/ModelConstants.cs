@@ -63,7 +63,7 @@
         public const int StudentEmailMaxLength = 30;
         public const string StudentActivationKeyDisplayName = "Activation key";
         public const string StudentFullNameDisplayName = "Full name";
-        public const string StudentSchoolClassIdDisplayName = "Class";
+        public const string StudentSchoolClassIdDisplayName = "Grade";
         public const string StudentNumberInClassDisplayName = "Number in class";
 
         #endregion
