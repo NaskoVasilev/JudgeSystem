@@ -159,7 +159,7 @@ namespace JudgeSystem.Services.Data.Tests
             await service.Update(testInputModel);
             Test actualTest = context.Tests.First(x => x.Id == testInputModel.Id);
 
-            Assert.Equal("321tset0", testInputModel.OutputData);
+            Assert.Equal("321tset0", actualTest.OutputData);
         }
 
         [Fact]
