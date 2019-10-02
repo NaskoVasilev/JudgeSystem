@@ -29,7 +29,7 @@ namespace JudgeSystem.Common
         public const string EmailTemplatesFolder = "EmailTemplates";
         public const string JsonContentType = "text/json";
         public const string PersonalDataFileName = "JudgePersonalData.json";
-        public static string[] AllowedFileExtensoins = new string[] { ".ppt", ".pptx", ".doc", ".docx", ".xls", ".cs", ".zip", ".json", ".xml", ".mp4", ".avi", ".txt" };
+        public static string[] AllowedFileExtensoins = new string[] { ".ppt", ".pptx", ".doc", ".docx", ".xls", ".cs", ".zip", ".json", ".xml", ".mp4", ".avi", ".txt", ".html", ".pdf" };
         #endregion
 
         #region Student and class related constants
@@ -64,12 +64,12 @@ namespace JudgeSystem.Common
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
         public const int MaxSubmissionCodeLength = 10000;
-        public const double DefaultAllowedMemoryInMegaBytes = 30;
-        public const int DefaultAllowedTimeInMilliseconds = 200;
+        public const double DefaultAllowedMemoryInMegaBytes = 50;
+        public const int DefaultAllowedTimeInMilliseconds = 1500;
         public const int MinAllowedMemoryInMegaBytes = 10;
-        public const int MaxAllowedMemoryInMegaBytes = 100;
+        public const int MaxAllowedMemoryInMegaBytes = 200;
         public const int MinAllowedTimeInMilliseconds = 50;
-        public const int MaxAllowedTimeInMilliseconds = 1000;
+        public const int MaxAllowedTimeInMilliseconds = 5000;
         public const int DefaultMaxPoints = 100;
         #endregion
 

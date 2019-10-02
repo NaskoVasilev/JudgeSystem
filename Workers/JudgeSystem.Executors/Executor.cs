@@ -81,7 +81,7 @@ namespace JudgeSystem.Executors
                 string error = await process.StandardError.ReadToEndAsync();
 
                 executionResult.Error = error;
-                executionResult.Output = output;
+                executionResult.Output = output.Trim();
                 executionResult.ExitCode = process.ExitCode;
                 executionResult.TimeWorked = process.ExitTime - process.StartTime;
                 executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;

@@ -28,6 +28,7 @@ namespace JudgeSystem.Services.Data
 		public async Task<TestDto> Add(TestInputModel model)
 		{
 			Test test = model.To<Test>();
+            model.OutputData = model.OutputData.Trim();
 			await repository.AddAsync(test);
 			return test.To<TestDto>();
 		}
@@ -68,7 +69,6 @@ namespace JudgeSystem.Services.Data
 		public async Task Update(TestEditInputModel model)
 		{
             Test test = await repository.FindAsync(model.Id);
-            test.InputData = model.InputData.Trim();
             test.OutputData = model.OutputData.Trim();
             await repository.UpdateAsync(test);
 		}

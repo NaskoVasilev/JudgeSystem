@@ -13,7 +13,7 @@ namespace JudgeSystem.Services
                 return checkerResult;
             }
 
-            if (executionResult.Output.Trim() == expectedOutput.Trim())
+            if (executionResult.Output == expectedOutput)
             {
                 checkerResult.IsCorrect = true;
             }
