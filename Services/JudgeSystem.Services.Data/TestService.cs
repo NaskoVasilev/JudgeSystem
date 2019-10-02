@@ -28,7 +28,7 @@ namespace JudgeSystem.Services.Data
 		public async Task<TestDto> Add(TestInputModel model)
 		{
 			Test test = model.To<Test>();
-            model.OutputData = model.OutputData.Trim();
+            test.OutputData = test.OutputData.Trim();
 			await repository.AddAsync(test);
 			return test.To<TestDto>();
 		}
