@@ -5,6 +5,7 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.ViewModels.Test;
+using JudgeSystem.Web.Utilites;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(TestEditInputModel model)
 		{
+            if(!ModelState.IsValid)
+            {
+                string errors = Utility.ExtractModelStateErrors(ModelState, " ");
+                return BadRequest(errors);
+            }
+
 			await testService.Update(model);
 			return Content(string.Format(InfoMessages.SuccessfullyEditMessage, "test"));
 		}

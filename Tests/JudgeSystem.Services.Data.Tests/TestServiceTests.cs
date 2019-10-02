@@ -34,6 +34,19 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
+        public async Task Add_WithValidData_ShouldTrimExpectedOutput()
+        {
+            TestService service = await CreateTestService(new List<Test>());
+            var test = new TestInputModel { InputData = "123", OutputData = "321   \n ", IsTrialTest = false, ProblemId = 5 };
+
+            TestDto createdTest = await service.Add(test);
+            Test actualTest = context.Tests.FirstOrDefault(x => x.Id == createdTest.Id);
+
+            Assert.NotNull(actualTest);
+            Assert.Equal("321", actualTest.OutputData);
+        }
+
+        [Fact]
         public async Task Delete_WithValidData_ShouldWorkCorrect()
         {
             var executedTests = new List<ExecutedTest>
@@ -128,6 +141,25 @@ namespace JudgeSystem.Services.Data.Tests
 
             Assert.Equal(actualTest.InputData, testInputModel.InputData);
             Assert.Equal(actualTest.OutputData, testInputModel.OutputData);
+        }
+
+
+        [Fact]
+        public async Task Update_WithValidData_ShouldWorkCorrectAndTrimExpectedOutput()
+        {
+            List<Test> testData = GetTestData();
+            TestService service = await CreateTestService(testData);
+            var testInputModel = new TestEditInputModel
+            {
+                Id = 3,
+                InputData = "test123",
+                OutputData = "321tset0   \n  ",
+            };
+
+            await service.Update(testInputModel);
+            Test actualTest = context.Tests.First(x => x.Id == testInputModel.Id);
+
+            Assert.Equal("321tset0", actualTest.OutputData);
         }
 
         [Fact]
