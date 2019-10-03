@@ -69,6 +69,7 @@ namespace JudgeSystem.Services.Data
 		public async Task Update(TestEditInputModel model)
 		{
             Test test = await repository.FindAsync(model.Id);
+            test.InputData = model.InputData;
             test.OutputData = model.OutputData.Trim();
             await repository.UpdateAsync(test);
 		}
