@@ -1,0 +1,25 @@
+﻿@model LessonEditInputModel
+
+@{
+    ViewData["Title"] = "Delete lesson";
+}
+
+<h1 class="text-center mb-4">@ViewData["Title"] <span class="text-danger">"@Model.Name"</span></h1>
+<div class="row">
+    <div class="col-md-5 mx-auto">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Type"></label>
+                <input asp-for="Type" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

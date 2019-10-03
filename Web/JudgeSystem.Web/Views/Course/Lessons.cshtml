@@ -43,7 +43,8 @@
                         <td>
                             <a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
                                asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
-                            <button class="btn btn-danger lessonDeleteBtn" data-id="@lesson.Id">Delete</button>
+                            <a class="btn btn-danger" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                               asp-action="Delete" asp-route-id="@lesson.Id">Delete</a>
                         </td>
                     }
                 </tr>
@@ -51,9 +52,3 @@
         </tbody>
     </table>
 </div>
-
-
-@section Scripts{
-    <script src="~/js/notification.js"></script>
-    <script src="~/js/controllers/lessonController.js"></script>
-}

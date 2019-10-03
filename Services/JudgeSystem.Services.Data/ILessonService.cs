@@ -21,7 +21,7 @@ namespace JudgeSystem.Services.Data
 
 		Task<LessonDto> Update(LessonEditInputModel model);
 
-		Task<string> Delete(int id);
+		Task<LessonDto> Delete(int id);
 
 		IEnumerable<ContestLessonDto> GetCourseLesosns(int courseId, LessonType lesosnType);
 
