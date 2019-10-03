@@ -61,6 +61,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             return View(course);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [ActionName(nameof(Delete))]
         public async Task<IActionResult> DeleteConfirm(int id)

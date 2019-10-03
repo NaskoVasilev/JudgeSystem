@@ -55,11 +55,11 @@ namespace JudgeSystem.Services.Data
             return lesson.To<LessonDto>();
         }
 
-        public async Task<string> Delete(int id)
+        public async Task<LessonDto> Delete(int id)
         {
             Lesson lesson = await repository.FindAsync(id);
             await repository.DeleteAsync(lesson);
-            return lesson.Name;
+            return lesson.To<LessonDto>();
         }
 
         public async Task<TDestination> GetById<TDestination>(int id)
