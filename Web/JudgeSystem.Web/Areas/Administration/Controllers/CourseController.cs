@@ -55,12 +55,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             return RedirectToAction("All", "Course");
         }
 
-        [EndpointExceptionFilter]
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            CourseViewModel course =  await courseService.Delete(id);
-            return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, course.Name));
+            CourseViewModel course = courseService.GetById<CourseViewModel>(id);
+            return View(course);
+        }
+
+        [HttpPost]
+        [ActionName(nameof(Delete))]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            await courseService.Delete(id);
+            return RedirectToAction("All", "Course");
         }
     }
 }
