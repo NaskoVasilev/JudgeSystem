@@ -1,56 +1,61 @@
 ﻿@model CourseViewModel
 
 @{
-	this.ViewData["Title"] = Model.Name;
-	string administrationArea = GlobalConstants.AdministrationArea;
-	IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
+    this.ViewData["Title"] = Model.Name;
+    string administrationArea = GlobalConstants.AdministrationArea;
+    IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
 }
 
 <div class="row">
-	<div class="all-courses col-4">
-		<vc:courses-tree></vc:courses-tree>
-	</div>
-	<div class="col-8">
-		<h2 class="text-secondary text-center">@Model.Name</h2>
-		<table class="table table-striped w-100">
-			@foreach (var lessonType in lessonTypes)
-			{
-				<tr>
-					<td>
-						<a class="text-decoration-none text-dark"
-						   asp-area=""
-						   asp-controller="Course"
-						   asp-action="Lessons"
-						   asp-route-courseId="@Model.Id"
-						   asp-route-lessonType="@lessonType">
-							@($"{Model.Name} - {lessonType}s")
-						</a>
-					</td>
-				</tr>
-			}
-		</table>
+    <div class="all-courses col-4">
+        <vc:courses-tree></vc:courses-tree>
+    </div>
+    <div class="col-8">
+        <h2 class="text-secondary text-center">@Model.Name</h2>
+        <table class="table table-striped w-100">
+            @foreach (var lessonType in lessonTypes)
+            {
+                <tr>
+                    <td>
+                        <a class="text-decoration-none text-dark"
+                           asp-area=""
+                           asp-controller="Course"
+                           asp-action="Lessons"
+                           asp-route-courseId="@Model.Id"
+                           asp-route-lessonType="@lessonType">
+                            @($"{Model.Name} - {lessonType}s")
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
 
-		@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-		{
-			<div class="admin-buttons-holder">
-				<a class="btn btn-success"
-				   asp-area="@administrationArea" asp-controller="Lesson"
-				   asp-action="Create" asp-route-courseId="@Model.Id">
-					Add Lesson
-				</a>
-				<a class="btn btn-secondary"
-				   asp-area="@administrationArea" asp-controller="Course"
-				   asp-action="Edit" asp-route-id="@Model.Id">
-					Edit
-				</a>
-			</div>
-		}
-	</div>
+        @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+        {
+            <div class="admin-buttons-holder">
+                <a class="btn btn-success"
+                   asp-area="@administrationArea" asp-controller="Lesson"
+                   asp-action="Create" asp-route-courseId="@Model.Id">
+                    Add Lesson
+                </a>
+                <a class="btn btn-secondary"
+                   asp-area="@administrationArea" asp-controller="Course"
+                   asp-action="Edit" asp-route-id="@Model.Id">
+                    Edit
+                </a>
+                <a class="btn btn-danger"
+                   asp-area="@GlobalConstants.AdministrationArea"
+                   asp-controller="Course"
+                   asp-action="Delete"
+                   asp-route-id="@Model.Id">Delete</a>
+            </div>
+        }
+    </div>
 </div>
 
 
 
 @section Scripts{
-	<script src="~/js/notification.js"></script>
-	<script src="~/js/controllers/courseController.js"></script>
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/courseController.js"></script>
 }

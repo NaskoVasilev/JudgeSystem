@@ -51,7 +51,8 @@ namespace JudgeSystem.Services.Data
 		{
 			var tests = repository.All()
 				.Where(t => t.ProblemId == problemId)
-				.To<TestDataDto>()
+                .OrderByDescending(x => x.IsTrialTest)
+                .To<TestDataDto>()
 				.ToList();
 			return tests;
 		}
@@ -69,6 +70,7 @@ namespace JudgeSystem.Services.Data
 		public async Task Update(TestEditInputModel model)
 		{
             Test test = await repository.FindAsync(model.Id);
+            test.InputData = model.InputData;
             test.OutputData = model.OutputData.Trim();
             await repository.UpdateAsync(test);
 		}

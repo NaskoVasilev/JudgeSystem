@@ -50,7 +50,7 @@ namespace JudgeSystem.Web.Controllers
             lesson.ContestId = contestId;
             await AddUserToContestOrPracticeIfNotAdded(contestId, practiceId);
 
-            if (lesson.IsLocked)
+            if (!User.IsInRole(GlobalConstants.AdministratorRoleName) && lesson.IsLocked)
             {
                 return GetDetailsViewOrRedirectToEnterPasswordPage(lesson);
             }

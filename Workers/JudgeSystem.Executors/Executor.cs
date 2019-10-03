@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace JudgeSystem.Executors
     internal class Executor
     {
         private const int ProcessMaxRunningTime = 1000;
+        private const string ReadingDataFromConsoleIsRequired = "You should read some data from console in your application.";
 
         public async Task<ExecutionResult> Execute(string arguments, string input, int timeLimit, int memoryLimit)
         {
@@ -57,11 +59,19 @@ namespace JudgeSystem.Executors
                     },
                     memoryTaskCancellationToken.Token);
 
+                string error = string.Empty;
                 if (!string.IsNullOrEmpty(input))
                 {
-                    await process.StandardInput.WriteLineAsync(input);
-                    await process.StandardInput.FlushAsync();
-                    process.StandardInput.Close();
+                    try
+                    {
+                        await process.StandardInput.WriteLineAsync(input);
+                        await process.StandardInput.FlushAsync();
+                        process.StandardInput.Close();
+                    }
+                    catch (IOException)
+                    {
+                        error = ReadingDataFromConsoleIsRequired;
+                    }
                 }
 
                 bool exited = process.WaitForExit(ProcessMaxRunningTime);
@@ -78,7 +88,7 @@ namespace JudgeSystem.Executors
                 memoryTaskCancellationToken.Cancel();
 
                 string output = await process.StandardOutput.ReadToEndAsync();
-                string error = await process.StandardError.ReadToEndAsync();
+                error += await process.StandardError.ReadToEndAsync();
 
                 executionResult.Error = error;
                 executionResult.Output = output.Trim();

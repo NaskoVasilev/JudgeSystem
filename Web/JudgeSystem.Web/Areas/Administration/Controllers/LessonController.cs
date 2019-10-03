@@ -3,7 +3,6 @@
 using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Lesson;
-using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Common.Exceptions;
 
@@ -110,12 +109,19 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
         }
 
-        [EndpointExceptionFilter]
-        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            string lessonName = await lessonService.Delete(id);
-            return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, lessonName));
+            LessonEditInputModel lesson = await lessonService.GetById<LessonEditInputModel>(id);
+            return View(lesson);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [ActionName(nameof(Delete))]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            LessonDto lesson = await lessonService.Delete(id);
+            return Redirect($"/Course/Lessons?courseId={lesson.CourseId}&lessonType={lesson.Type}");
         }
 
         public IActionResult RemovePassword() => View();
