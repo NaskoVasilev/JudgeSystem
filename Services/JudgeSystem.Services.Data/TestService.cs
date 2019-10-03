@@ -51,7 +51,8 @@ namespace JudgeSystem.Services.Data
 		{
 			var tests = repository.All()
 				.Where(t => t.ProblemId == problemId)
-				.To<TestDataDto>()
+                .OrderByDescending(x => x.IsTrialTest)
+                .To<TestDataDto>()
 				.ToList();
 			return tests;
 		}
