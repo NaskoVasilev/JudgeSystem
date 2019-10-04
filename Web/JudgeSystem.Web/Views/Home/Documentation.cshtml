@@ -1,0 +1,112 @@
+﻿@{
+    this.ViewData["Title"] = "Documentation";
+}
+
+<h4 class="text-center">How users can work with the system?</h4>
+<hr class="mb-4">
+<div class="container d-flex">
+    <div class="col-md-6 mr-4">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/FbM2rhNMFVs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="col-md-6 ml-4">
+        <p>What you will learn form the video?</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item class">
+                <i class="fas fa-check text-success mr-2"></i>
+                How to submit solutions and see results from them.
+            </li>
+            <li class="list-group-item class">
+                <i class="fas fa-check text-success mr-2"></i>
+                How to see information about submisison's trial tests.
+            </li>
+            <li class="list-group-item class">
+                <i class="fas fa-check text-success mr-2"></i>
+                How can you participate in contests.
+            </li>
+            <li class="list-group-item class">
+                <i class="fas fa-check text-success mr-2"></i>
+                How can you track your results and progress.
+            </li>
+            <li class="list-group-item class">
+                <i class="fas fa-check text-success mr-2"></i>
+                How can you activate your student profile.
+            </li>
+        </ul>
+    </div>
+</div>
+<hr class="my-4" />
+<h4 class="text-center">More information about the project and author.</h4>
+<hr class="mb-4">
+<div class="container d-flex">
+    <div class="col-md-6 mr-4">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                My name is <a href="https://github.com/NaskoVasilev">Atanas Vasilev</a> and I am developing this system.
+            </li>
+            <li class="list-group-item">
+                My personal email: <span class="text-primary">nasko01vasilev@gmail.com</span>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex justify-content-around">
+                    <a href="https://www.linkedin.com/in/atanas-vasilev-54385418b/"> <i class="fab fa-linkedin font-size-30 text-primary"></i></a>
+                    <a href="https://github.com/NaskoVasilev" class="text-dark"><i class="fab fa-github font-size-30"></i></a>
+                    <a href="https://www.facebook.com/atanas.vasilev.9480"><i class="fab fa-facebook font-size-30 text-primary"></i></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 ml-4">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                The project is open source and you can find the repository <a href="https://github.com/NaskoVasilev/JudgeSystem">here</a>.
+            </li>
+            <li class="list-group-item">
+                Contact with me if you would like to contribute.
+            </li>
+            <li class="list-group-item">
+                If you find some problems do not hesitate to send some feedback or even create an issue in github.
+            </li>
+        </ul>
+    </div>
+</div>
+
+@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <hr class="my-4" />
+    <h4 class="text-center">How admins can work with the system?</h4>
+    <hr class="mb-4">
+    <div class="container d-flex">
+        <div class="col-md-6 mr-4">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/JjZ8iy4g0K0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="col-md-6 ml-4">
+            <p>What you will learn form the video?</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to manage courses, lessons, problems and tests.
+                </li>
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to add new problems and create tests for them.
+                </li>
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to add students and contests to the system.
+                </li>
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to add contests to the system.
+                </li>
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to track users' contest and exam results.
+                </li>
+                <li class="list-group-item class">
+                    <i class="fas fa-check text-success mr-2"></i>
+                    How to see details for users' submissions.
+                </li>
+            </ul>
+        </div>
+    </div>
+}
