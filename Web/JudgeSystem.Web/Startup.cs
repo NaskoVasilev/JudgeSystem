@@ -54,18 +54,14 @@ namespace JudgeSystem.Web
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly, 
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
 
-			using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+            using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
             {
                 ApplicationDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (env.IsDevelopment())
-                {
-                    dbContext.Database.Migrate();
-                }
-
+                dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
@@ -84,7 +80,7 @@ namespace JudgeSystem.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
-			app.UseSession();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

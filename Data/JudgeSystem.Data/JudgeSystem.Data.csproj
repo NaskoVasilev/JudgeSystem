@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20190622151223_AddNameAndSurnameToSuer.Designer.cs" />
     <Compile Remove="Migrations\20190802202727_AddAllowedTimeAndAlowedMemoryColumnsToProblem.cs" />
     <Compile Remove="Migrations\20190802202727_AddAllowedTimeAndAlowedMemoryColumnsToProblem.Designer.cs" />
+    <Compile Remove="Migrations\20191004141819_FeedbackSenderRequired.cs" />
+    <Compile Remove="Migrations\20191004141819_FeedbackSenderRequired.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

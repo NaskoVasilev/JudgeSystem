@@ -40,6 +40,7 @@ namespace JudgeSystem.Data
 		public DbSet<SchoolClass> SchoolClasses { get; set; }
         public DbSet<Practice> Practices { get; set; }
         public DbSet<UserPractice> UserPractices { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         public override int SaveChanges() => SaveChanges(true);
 

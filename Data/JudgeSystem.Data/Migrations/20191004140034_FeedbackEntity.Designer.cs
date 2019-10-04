@@ -4,14 +4,16 @@ using JudgeSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JudgeSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191004140034_FeedbackEntity")]
+    partial class FeedbackEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,8 +240,7 @@ namespace JudgeSystem.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("SenderId")
-                        .IsRequired();
+                    b.Property<string>("SenderId");
 
                     b.HasKey("Id");
 
@@ -645,8 +646,7 @@ namespace JudgeSystem.Data.Migrations
                 {
                     b.HasOne("JudgeSystem.Data.Models.ApplicationUser", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("JudgeSystem.Data.Models.Lesson", b =>

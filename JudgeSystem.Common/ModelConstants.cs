@@ -75,5 +75,10 @@
         public const string TestOutputDataDisplayName = "Expected output";
         public const string TestIsTrialTestDisplayName = "Trial test";
         #endregion
+
+        #region Feedback models constants
+        public const int FeedbackContentMaxLength = 1500;
+        public const int FeedbackContentMinLength = 5;
+        #endregion
     }
 }
