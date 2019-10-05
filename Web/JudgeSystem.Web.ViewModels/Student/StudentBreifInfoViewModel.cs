@@ -12,6 +12,6 @@ namespace JudgeSystem.Web.ViewModels.Student
 
 		public string FullName { get; set; }
 
-		public string ClassName => $"{ClassNumber} {ClassType}";
+        public string ClassName => $"{ClassNumber} {ClassType}";
 	}
 }

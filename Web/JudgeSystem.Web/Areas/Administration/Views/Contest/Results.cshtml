@@ -34,7 +34,16 @@
             <tr>
                 <td class="text-center">@contestResult.Student.NumberInCalss</td>
                 <td class="text-center">@contestResult.Student.ClassName</td>
-                <td class="text-center">@contestResult.Student.FullName</td>
+                <td class="text-center">
+                    <a target="_blank" class="text-dark"
+                      asp-area="@GlobalConstants.AdministrationArea"
+                      asp-controller="Contest"
+                      asp-action="Submissions"
+                      asp-route-contestId="@Model.Id"
+                      asp-route-userId="@contestResult.UserId">
+                        @contestResult.Student.FullName
+                    </a>
+                </td>
                 @foreach (var problemId in problemIds)
                 {
                     int points = 0;

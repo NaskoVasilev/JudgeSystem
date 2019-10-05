@@ -154,6 +154,7 @@ namespace JudgeSystem.Services.Data
 					.Where(u => u.User.StudentId != null)
 					.Select(uc => new ContestResultViewModel
 					{
+                        UserId = uc.User.Id,
 						Student = new StudentBreifInfoViewModel
 						{
 							ClassNumber = uc.User.Student.SchoolClass.ClassNumber,
