@@ -46,6 +46,7 @@ namespace JudgeSystem.Common
         public const string ProblemIdKey = "problemId";
         public const string PageKey = "page";
         public const int ContestsPerPage = 10;
+        public const int FeedbacksPerPage = 6;
         #endregion
 
         #region Email constants
