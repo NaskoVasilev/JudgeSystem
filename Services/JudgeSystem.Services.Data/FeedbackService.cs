@@ -13,7 +13,7 @@ namespace JudgeSystem.Services.Data
 {
     public class FeedbackService : IFeedbackService
     {
-        private IDeletableEntityRepository<Feedback> repository;
+        private readonly IDeletableEntityRepository<Feedback> repository;
 
         public FeedbackService(IDeletableEntityRepository<Feedback> repository)
         {
@@ -23,10 +23,17 @@ namespace JudgeSystem.Services.Data
         public IEnumerable<FeedbackAllViewModel> All(int page, int feedbacksPerPage)
         {
             var feedbacks =  repository.All()
+                .OrderByDescending(x => x.CreatedOn)
                 .GetPage(page, feedbacksPerPage)
                 .To<FeedbackAllViewModel>()
                 .ToList();
             return feedbacks;
+        }
+
+        public async Task Archive(int id)
+        {
+            Feedback feedback = await repository.FindAsync(id);
+            await repository.DeleteAsync(feedback);
         }
 
         public async Task Create(FeedbackCreateInputModel feedbackInputModel, string senderId)
@@ -35,5 +42,7 @@ namespace JudgeSystem.Services.Data
             feedback.SenderId = senderId;
             await repository.AddAsync(feedback);
         }
+
+        public int FeedbacksCount() => repository.All().Count();
     }
 }

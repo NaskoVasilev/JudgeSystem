@@ -11,5 +11,9 @@ namespace JudgeSystem.Services.Data
         Task Create(FeedbackCreateInputModel feedback, string senderId);
 
         IEnumerable<FeedbackAllViewModel> All(int page, int feedbacksPerPage);
+
+        int FeedbacksCount();
+
+        Task Archive(int id);
     }
 }
