@@ -88,6 +88,9 @@
                         }
 
                         <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Documentation">Documentation</a>
+                        </li>
+                        <li class="nav-item">
                             <form method="get" class="form-inline ml-lg-3 my-lg-0" asp-area="" asp-controller="Search" asp-action="Results">
                                 <input class="form-control mr-sm-2" type="search" name="keyword" id="keyword" placeholder="Search" aria-label="Search">
                                 <button class="btn btn-secondary text-white te my-2 my-sm-0" type="submit">Search</button>
@@ -110,16 +113,13 @@
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
-
-
-
             @this.RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - JudgeSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - JudgeSystem. <a href="https://github.com/NaskoVasilev/JudgeSystem">Open source project</a>
         </div>
     </footer>
 
