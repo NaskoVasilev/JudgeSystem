@@ -299,6 +299,7 @@ namespace JudgeSystem.Services.Data
             var submissions = submissionsFromDb
                 .Include(s => s.ExecutedTests)
                 .Include(s => s.Problem)
+                .Where(x => x.ExecutedTests.Count > 0 || x.CompilationErrors != null)
                 .OrderByDescending(s => s.SubmisionDate)
                 .Skip((page - 1) * submissionsPerPage)
                 .Take(submissionsPerPage)
