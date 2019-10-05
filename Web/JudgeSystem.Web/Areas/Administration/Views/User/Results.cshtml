@@ -4,6 +4,11 @@
     ViewData["Title"] = "Results";
 }
 
+<h3 class="text-center mb-4">
+    <span class="text-info">
+        <vc:user-names user-id="@Model.UserId"></vc:user-names>
+    </span> contest and practice results.
+</h3>
 <nav class="mb-3">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active" id="nav-contest-results-tab" data-toggle="tab" href="#nav-contest-results" role="tab" aria-controls="nav-contest-results" aria-selected="true">Contest results</a>
@@ -24,13 +29,13 @@
                 {
                     <tr class="row">
                         <td class="col-sm-9">
-                            <a class="text-decoration-none" 
-                               asp-action="Submissions" 
-                               asp-area="@GlobalConstants.AdministrationArea" 
-                               asp-controller="Contest" 
+                            <a class="text-decoration-none"
+                               asp-action="Submissions"
+                               asp-area="@GlobalConstants.AdministrationArea"
+                               asp-controller="Contest"
                                asp-route-contestId="@contestResult.ContestId"
                                asp-route-userId="@Model.UserId">
-                               @contestResult.ContestName
+                                @contestResult.ContestName
                             </a>
                         </td>
                         <td class="col-sm-3">@contestResult.ActualPoints / @contestResult.MaxPoints</td>
@@ -59,7 +64,7 @@
                                asp-action="Submissions"
                                asp-route-userId="@Model.UserId"
                                asp-route-practiceId="@practiceResult.PracticeId">
-                               @practiceResult.LessonName
+                                @practiceResult.LessonName
                             </a>
                         </td>
                         <td class="col-sm-3">@practiceResult.ActualPoints / @practiceResult.MaxPoints</td>

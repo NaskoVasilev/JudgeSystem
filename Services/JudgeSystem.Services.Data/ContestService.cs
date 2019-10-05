@@ -206,7 +206,8 @@ namespace JudgeSystem.Services.Data
         public async Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl)
         {
             int baseProblemId = 0;
-            int lessonId = await GetLessonId(contestId);
+            Contest contest = await repository.FindAsync(contestId);
+            int lessonId = contest.LessonId;
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
@@ -234,8 +235,9 @@ namespace JudgeSystem.Services.Data
                 Submissions = submissions,
                 LessonId = lessonId,
                 UrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}",
-                PaginationData = paginationData
-
+                PaginationData = paginationData,
+                ContestName = contest.Name,
+                UserId = userId
             };
             return model;
         }

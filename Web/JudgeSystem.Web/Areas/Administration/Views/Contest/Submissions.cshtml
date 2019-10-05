@@ -1,5 +1,11 @@
 ﻿@model ContestSubmissionsViewModel
 
+<h4 class="text-center mb-3">
+    <span class="text-info">
+        <vc:user-names user-id="@Model.UserId"></vc:user-names>
+    </span>
+    submissions for contest "@Model.ContestName"
+</h4>
 <div class="border p-3 bg-light mb-3">
     <div class="ul-holder mt-0">
         <vc:lesson-problems lesson-id="@Model.LessonId" url="@Model.UrlPlaceholder"></vc:lesson-problems>
