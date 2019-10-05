@@ -1,0 +1,37 @@
+﻿@model AllFeedbacksViewModel
+
+@{
+    ViewData["Title"] = "Feedbacks";
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<div class="row">
+    <table class="table">
+        <tbody>
+            @foreach (var feedback in Model.Feedbacks)
+            {
+                <tr>
+                    <td class="a-holder col-md-11">
+                        <div class="font-size-20 mb-3 text-break">@feedback.Content</div>
+                        <div class="d-flex justify-content-start mb-0 pb-0">
+                            <div>Sent on: <span class="font-italic font-weight-bold">@feedback.CreatedOn.ToLocalTime()</span></div>
+                            <div class="mx-3 ">Sent by: <span class="font-italic font-weight-bold">@feedback.SenderUsername</span></div>
+                            <div>Sender email: <span class="font-italic font-weight-bold">@feedback.SenderEmail</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <i class="fas fa-trash-alt text-danger font-size-20 feedback-delete-btn" data-id="@feedback.Id"></i>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+</div>
+
+<partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
+
+@section Scripts{
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/feedbackController.js"></script>
+}

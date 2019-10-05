@@ -76,7 +76,17 @@
                                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass" asp-route-classType="@SchoolClassType.A">Students</a>
                                 </div>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Feedback" asp-action="All">Feedbacks</a>
+                            </li>
                         }
+                        else if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Feedback" asp-action="Send">Feedback</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-controller="Home" asp-action="Documentation">Documentation</a>
                         </li>
