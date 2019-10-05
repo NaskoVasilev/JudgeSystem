@@ -1,8 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Dtos.Lesson;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Services.Data
 {
@@ -34,10 +39,15 @@ namespace JudgeSystem.Services.Data
             return practice.Id;
         }
 
-        public async Task<int> GetLessonId(int practiceId)
+        public async Task<LessonDto> GetLesson(int practiceId)
         {
-            Practice practice = await repository.FindAsync(practiceId);
-            return practice.LessonId;
+            Practice practice = await repository.All()
+                .Include(x => x.Lesson)
+                .FirstOrDefaultAsync(x => x.Id == practiceId);
+
+            Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(practice, nameof(Practice));
+
+            return practice.Lesson.To<LessonDto>();
         }
     }
 }

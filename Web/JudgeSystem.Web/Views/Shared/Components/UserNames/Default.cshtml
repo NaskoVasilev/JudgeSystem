@@ -1,0 +1,10 @@
+﻿@model UserNamesViewModel
+
+@if (!string.IsNullOrEmpty(Model.StudentFullName))
+{
+    <text>@Model.StudentFullName (@Model.UserName)</text>
+}
+else
+{
+    <text>@Model.UserName</text>
+}
