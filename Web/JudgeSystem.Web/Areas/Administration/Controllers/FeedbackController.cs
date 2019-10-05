@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
@@ -6,10 +7,9 @@ using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Feedback;
 using JudgeSystem.Web.Infrastructure.Extensions;
+using JudgeSystem.Services;
 
 using Microsoft.AspNetCore.Mvc;
-using JudgeSystem.Services;
-using System.Threading.Tasks;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {

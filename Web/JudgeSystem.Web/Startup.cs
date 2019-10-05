@@ -61,7 +61,10 @@ namespace JudgeSystem.Web
             {
                 ApplicationDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                dbContext.Database.Migrate();
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 

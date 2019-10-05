@@ -1,5 +1,6 @@
-﻿using JudgeSystem.Web.Infrastructure.Pagination;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Web.Infrastructure.Pagination;
 
 namespace JudgeSystem.Web.ViewModels.Feedback
 {
