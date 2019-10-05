@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Dtos.SchoolClass;
 
 namespace JudgeSystem.Services.Data
 {
-	public interface ISchoolClassService
+    public interface ISchoolClassService
 	{
 		IEnumerable<SchoolClassDto> GetAllClasses();
 
@@ -16,5 +15,7 @@ namespace JudgeSystem.Services.Data
 		Task<SchoolClassDto> Create(int classNumber, SchoolClassType classType);
 
         Task<T> GetById<T>(int id);
+
+        Task<string> GetGrade(int id);
  	}
 }

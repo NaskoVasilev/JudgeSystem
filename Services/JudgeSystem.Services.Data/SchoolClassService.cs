@@ -48,5 +48,11 @@ namespace JudgeSystem.Services.Data
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(schoolClass, nameof(SchoolClass));
             return schoolClass;
         }
+
+        public async Task<string> GetGrade(int id)
+        {
+            SchoolClassDto grade = await GetById<SchoolClassDto>(id);
+            return $"{grade.ClassNumber} {grade.ClassType}";
+        }
     }
 }

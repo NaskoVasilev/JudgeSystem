@@ -18,7 +18,9 @@ namespace JudgeSystem.Web.ViewModels.Student
 
         public string SchoolClassName { get; set; }
 
-		public void CreateMappings(IProfileExpression configuration)
+        public bool IsActivated { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
 		{
 			configuration.CreateMap<Data.Models.Student, StudentProfileViewModel>()
 				.ForMember(x => x.SchoolClassName, y => y.MapFrom(s => $"{s.SchoolClass.ClassNumber} {s.SchoolClass.ClassType}"));

@@ -51,5 +51,7 @@
         public const string UserWithTheSameEmailAlreadyExists = "User with the same email already exists.";
 
         public const string StudentWithTheSameEmailAlreadyExists = "Student with the same email already exists.";
+
+        public const string StudentWithTheSameNumberInClassExists = "Student with the same number exists in {0} class.";
     }
 }

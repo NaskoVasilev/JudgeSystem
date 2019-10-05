@@ -57,6 +57,17 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
+        public async Task GetGrade_WithValidData_ShouldReturnCorrectGrade()
+        {
+            List<SchoolClass> testData = GetTestData();
+            SchoolClassService service = await CreateSchoolClassService(testData);
+
+            string actualResult = await service.GetGrade(2);
+
+            Assert.Equal("10 A", actualResult);
+        }
+
+        [Fact]
         public async Task GetById_WithValidId_ShouldReturnCorrectData()
         {
             List<SchoolClass> testData = GetTestData();
