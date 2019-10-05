@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 
+using JudgeSystem.Web.Dtos.Lesson;
+
 namespace JudgeSystem.Services.Data
 {
     public interface IPracticeService
@@ -8,6 +10,6 @@ namespace JudgeSystem.Services.Data
 
         Task AddUserToPracticeIfNotAdded(string userId, int value);
 
-        Task<int> GetLessonId(int practiceId);
+        Task<LessonDto> GetLesson(int practiceId);
     }
 }

@@ -1,5 +1,12 @@
 ﻿@model PracticeSubmissionsViewModel
 
+<h4 class="text-center mb-3">
+    <span class="text-info">
+        <vc:user-names user-id="@Model.UserId"></vc:user-names>
+    </span>
+    submissions for practice "@Model.LessonName"
+</h4>
+
 <div class="border p-3 bg-light mb-3">
     <div class="ul-holder mt-0">
         <vc:lesson-problems lesson-id="@Model.LessonId" url="@Model.UrlPlaceholder"></vc:lesson-problems>
@@ -7,7 +14,7 @@
 
     <h3 class="mt-3 text-secondary">@Model.ProblemName</h3>
 
-    <partial name="SubmissionsList" model="Model.Submissions"/>
+    <partial name="SubmissionsList" model="Model.Submissions" />
 </div>
 
 <partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />

@@ -6,6 +6,7 @@ using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Repositories;
+using JudgeSystem.Web.Dtos.Lesson;
 
 using Xunit;
 
@@ -47,28 +48,29 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetLessonId_WithValidData_ShouldWorkCorrect()
+        public async Task GetLesson_WithValidData_ShouldWorkCorrect()
         {
             PracticeService service = await CreatePracticeService(GetTestData(), null);
 
-            int actualId =  await service.GetLessonId(2);
+            LessonDto lesson =  await service.GetLesson(2);
 
-            Assert.Equal(45, actualId);
+            Assert.Equal(45, lesson.Id);
+            Assert.Equal("Test", lesson.Name);
         }
 
         [Fact]
-        public async Task GetLessonId_WithInValidData_ShouldThrowEntityNotFoundException()
+        public async Task GetLesson_WithInValidData_ShouldThrowEntityNotFoundException()
         {
             PracticeService service = await CreatePracticeService(GetTestData(), null);
 
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLessonId(22));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => service.GetLesson(22));
         }
 
         private async Task<PracticeService> CreatePracticeService(List<Practice> testData, IRepository<UserPractice> userPracticeRepository)
         {
             await context.Practices.AddRangeAsync(testData);
             await context.SaveChangesAsync();
-            IDeletableEntityRepository<Practice> repository = new EfDeletableEntityRepository<Practice>(this.context);
+            IDeletableEntityRepository<Practice> repository = new EfDeletableEntityRepository<Practice>(context);
             var service = new PracticeService(repository, userPracticeRepository);
             return service;
         }
@@ -77,9 +79,9 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var practices = new List<Practice>
             {
-                new Practice{ Id = 1, LessonId = 1 },
-                new Practice{ Id = 2, LessonId = 45 },
-                new Practice{ Id = 3, LessonId = 3 },
+                new Practice{ Id = 1, Lesson = new Lesson{ Name = "Test123", Id = 1 } },
+                new Practice{ Id = 2, Lesson = new Lesson{ Name = "Test", Id = 45 } },
+                new Practice{ Id = 3, Lesson = new Lesson{ Name = "Test321", Id = 3 } },
             };
             return practices;
         }
