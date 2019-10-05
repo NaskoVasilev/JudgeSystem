@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.ViewModels.User;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Services.Data
 {
@@ -118,6 +121,15 @@ namespace JudgeSystem.Services.Data
         {
             var userPractices = userPracticeRepository.All().Where(x => x.UserId == userId).ToList();
             await userPracticeRepository.DeleteRangeAsync(userPractices);
+        }
+
+        public async Task<UserNamesViewModel> GetUserNames(string userId)
+        {
+            UserNamesViewModel userNamesDto =await repository.All()
+                .Where(x => x.Id == userId)
+                .To<UserNamesViewModel>()
+                .FirstOrDefaultAsync();
+            return userNamesDto;
         }
     }
 }

@@ -9,6 +9,8 @@ namespace JudgeSystem.Web.ViewModels.Practice
     {
         public IEnumerable<SubmissionResult> Submissions { get; set; }
 
+        public string UserId { get; set; }
+
         public string ProblemName { get; set; }
 
         public int LessonId { get; set; }
@@ -16,5 +18,7 @@ namespace JudgeSystem.Web.ViewModels.Practice
         public string UrlPlaceholder { get; set; }
 
         public PaginationData PaginationData { get; set; }
+
+        public string LessonName { get; set; }
     }
 }

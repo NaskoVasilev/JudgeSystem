@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Practice;
@@ -39,7 +40,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         public async Task<IActionResult> Submissions(string userId, int practiceId, int? problemId, int page = DefaultPage)
         {
             int baseProblemId = 0;
-            int lessonId = await practiceService.GetLessonId(practiceId);
+            LessonDto lesson = await practiceService.GetLesson(practiceId);
+            int lessonId = lesson.Id;
             if (problemId.HasValue)
             {
                 baseProblemId = problemId.Value;
@@ -67,7 +69,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 Submissions = submissions,
                 LessonId = lessonId,
                 UrlPlaceholder = baseUrl + $"{GlobalConstants.QueryStringDelimiter}{GlobalConstants.ProblemIdKey}=" + "{0}",
-                PaginationData = paginationData
+                PaginationData = paginationData,
+                UserId = userId,
+                LessonName = lesson.Name
             };
 
             return View(model);
