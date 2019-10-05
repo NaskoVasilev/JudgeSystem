@@ -206,10 +206,44 @@ namespace JudgeSystem.Services.Data.Tests
             List<Student> testData = GetTestDataWithSchoolClasses();
             StudentService service = await CreateStudentService(testData);
 
-            IEnumerable<StudentProfileViewModel> actualResult = service.SearchStudentsByClass(classNumber, classType);
+            IEnumerable<StudentProfileViewModel> actualResult = service.SearchStudentsByClass(classNumber, classType, 1, 20);
             IEnumerable<string> actualIds = actualResult.Select(x => x.Id);
 
             Assert.Equal(expectedIds, string.Join(", ", actualIds));
+        }
+
+        [Theory]
+        [InlineData(10, SchoolClassType.A, 3)]
+        [InlineData(10, SchoolClassType.G, 0)]
+        [InlineData(8, SchoolClassType.A, 0)]
+        [InlineData(10, null, 5)]
+        [InlineData(11, null, 2)]
+        [InlineData(null, SchoolClassType.A, 3)]
+        [InlineData(null, SchoolClassType.B, 6)]
+        [InlineData(null, null, 0)]
+        public async Task StudentsByClassCount_WithDifferentInputs_ShouldReturnDifferentOutputs(int? classNumber,
+           SchoolClassType? classType, int expectedCount)
+        {
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
+
+            int actualCount = service.StudentsByClassCount(classNumber, classType);
+
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(25, false)]
+        public async Task ExistsByClassAndNumber_WithDifferentData_ShouldReturnCorrectResults(int numberInClass, bool expectedResult)
+        {
+            List<Student> testData = GetTestDataWithSchoolClasses();
+            StudentService service = await CreateStudentService(testData);
+            int schoolClassId = context.SchoolClasses.First(x => x.ClassNumber == 10 && x.ClassType == SchoolClassType.A).Id;
+
+            bool actualResult = service.ExistsByClassAndNumber(schoolClassId, numberInClass);
+
+            Assert.True(actualResult == expectedResult);
         }
 
         [Fact]

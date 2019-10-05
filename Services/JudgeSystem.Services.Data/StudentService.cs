@@ -12,6 +12,7 @@ using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
 using JudgeSystem.Common;
+using JudgeSystem.Common.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -73,46 +74,29 @@ namespace JudgeSystem.Services.Data
                 .FirstOrDefaultAsync();
 		}
 
-		public IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType)
-		{
-			IQueryable<Student> students = null;
-
-			if (classNumber.HasValue && classType.HasValue)
-			{
-				students = repository.All()
-					.Where(s => s.SchoolClass.ClassNumber == classNumber.Value && s.SchoolClass.ClassType == classType.Value);
-			}
-			else if(classNumber.HasValue)
-			{
-				students = repository.All()
-					.Where(s => s.SchoolClass.ClassNumber == classNumber.Value);
-			}
-			else if(classType.HasValue)
-			{
-				students = repository.All()
-					.Where(s => s.SchoolClass.ClassType == classType.Value);
-			}
-			else
-			{
-				return new List<StudentProfileViewModel>();
-			}
-			
-			return students
-				.OrderBy(s => s.SchoolClass.ClassNumber)
-				.ThenBy(s => s.SchoolClass.ClassType)
-				.ThenBy(s => s.NumberInCalss)
-				.To<StudentProfileViewModel>()
+        public IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType, int page, int studentsPerPage)
+        {
+            var students = FilterStudentsByClass(classNumber, classType)
+                .OrderBy(s => s.SchoolClass.ClassNumber)
+                .ThenBy(s => s.SchoolClass.ClassType)
+                .ThenBy(s => s.NumberInCalss)
+                .GetPage(page, studentsPerPage)
+                .To<StudentProfileViewModel>()
                 .ToList();
-		}
 
-		public async Task SetStudentProfileAsActivated(string studentId)
+            return students;
+        }
+
+        public async Task SetStudentProfileAsActivated(string studentId)
 		{
             Student student = await repository.FindAsync(studentId);
             student.IsActivated = true;
 			await repository.UpdateAsync(student);
 		}
 
-		public async Task<StudentDto> Update(StudentEditInputModel model)
+        public int StudentsByClassCount(int? classNumber, SchoolClassType? classType) => FilterStudentsByClass(classNumber, classType).Count();
+
+        public async Task<StudentDto> Update(StudentEditInputModel model)
 		{
             Student student = await repository.FindAsync(model.Id);
 
@@ -124,5 +108,35 @@ namespace JudgeSystem.Services.Data
 			await repository.UpdateAsync(student);
 			return student.To<StudentDto>();
 		}
+
+        public bool ExistsByClassAndNumber(int schoolClassId, int numberInCalss) => 
+            repository.All().Any(x => x.SchoolClassId == schoolClassId && x.NumberInCalss == numberInCalss);
+
+        private IQueryable<Student> FilterStudentsByClass(int? classNumber, SchoolClassType? classType)
+        {
+            IQueryable<Student> students = null;
+
+            if (classNumber.HasValue && classType.HasValue)
+            {
+                students = repository.All()
+                    .Where(s => s.SchoolClass.ClassNumber == classNumber.Value && s.SchoolClass.ClassType == classType.Value);
+            }
+            else if (classNumber.HasValue)
+            {
+                students = repository.All()
+                    .Where(s => s.SchoolClass.ClassNumber == classNumber.Value);
+            }
+            else if (classType.HasValue)
+            {
+                students = repository.All()
+                    .Where(s => s.SchoolClass.ClassType == classType.Value);
+            }
+            else
+            {
+                return new List<Student>().AsQueryable();
+            }
+
+            return students;
+        }
     }
 }

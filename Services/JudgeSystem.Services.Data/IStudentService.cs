@@ -17,7 +17,7 @@ namespace JudgeSystem.Services.Data
 
 		Task SetStudentProfileAsActivated(string id);
 
-		IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType);
+		IEnumerable<StudentProfileViewModel> SearchStudentsByClass(int? classNumber, SchoolClassType? classType, int page, int studentsPerPage);
 
 		Task<T> GetById<T>(string id);
 
@@ -28,5 +28,9 @@ namespace JudgeSystem.Services.Data
         Task<StudentDto> Update(StudentEditInputModel model);
 
         bool ExistsByEmail(string email);
+
+        int StudentsByClassCount(int? classNumber, SchoolClassType? classType);
+
+        bool ExistsByClassAndNumber(int schoolClassId, int numberInCalss);
     }
 }

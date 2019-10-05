@@ -1,6 +1,6 @@
 ﻿@using JudgeSystem.Web.Infrastructure.Extensions
 @using JudgeSystem.Data.Models.Enums
-@model IEnumerable<StudentProfileViewModel>
+@model StudentsByClassViewModel
 
 @{
     ViewData["Title"] = "Students";
@@ -32,7 +32,7 @@
     </form>
 </div>
 <div>
-    @if (!Model.Any())
+    @if (!Model.Students.Any())
     {
         <hr class="bg-info cm-hr" />
         <div class="text-secondary font-size-30 text-center mt-4">There are no students.</div>
@@ -51,18 +51,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var student in Model)
+                @foreach (var student in Model.Students)
                 {
                     <tr class="row">
                         <td class="col-md-1">@student.NumberInCalss</td>
                         <td class="col-md-1">@student.SchoolClassName</td>
                         <td class="col-md-4">
-                            <a asp-area="@GlobalConstants.AdministrationArea"
-                               asp-action="Results"
-                               asp-controller="User"
-                               asp-route-userId="@student.UserId">
-                                @student.FullName
-                            </a>
+                            @if (student.IsActivated)
+                            {
+                                <a asp-area="@GlobalConstants.AdministrationArea"
+                                   asp-action="Results"
+                                   asp-controller="User"
+                                   asp-route-userId="@student.UserId">
+                                    @student.FullName
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="text-primary student-name">
+                                    @student.FullName
+                                </a>
+                            }
                         </td>
                         <td class="col-md-4">@student.Email</td>
                         <td class="col-md-2">
@@ -78,5 +87,18 @@
                 }
             </tbody>
         </table>
+        <div>
+            <partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
+        </div>
     }
 </div>
+
+@section Scripts{
+    <script>
+        $('.student-name').tooltip({
+            placement: 'top',
+            title: 'Student profile is not activated',
+            trigger: 'hover'
+        })
+    </script>
+}

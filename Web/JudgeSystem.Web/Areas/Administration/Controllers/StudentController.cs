@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.Dtos.Student;
+using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.ViewModels.Student;
+using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,15 +21,21 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		private readonly IStudentService studentService;
 		private readonly ISchoolClassService schoolClassService;
         private readonly IStudentProfileService studentProfileService;
+        private readonly IPaginationService paginationService;
+        private readonly IRouteBuilder routeBuilder;
 
-		public StudentController(
+        public StudentController(
             IStudentService studentService, 
             ISchoolClassService schoolClassService,
-            IStudentProfileService studentProfileService)
+            IStudentProfileService studentProfileService,
+            IPaginationService paginationService,
+            IRouteBuilder routeBuilder)
 		{
 			this.studentService = studentService;
 			this.schoolClassService = schoolClassService;
             this.studentProfileService = studentProfileService;
+            this.paginationService = paginationService;
+            this.routeBuilder = routeBuilder;
         }
 
         public IActionResult Create() => View();
@@ -39,6 +48,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             {
                 ModelState.AddModelError(nameof(model.Email), ErrorMessages.StudentWithTheSameEmailAlreadyExists);
             }
+            if (studentService.ExistsByClassAndNumber(model.SchoolClassId, model.NumberInCalss))
+            {
+                string grade = await schoolClassService.GetGrade(model.SchoolClassId);
+                ModelState.AddModelError(nameof(model.NumberInCalss), string.Format(ErrorMessages.StudentWithTheSameNumberInClassExists, grade));
+            }
 
 			if (!ModelState.IsValid)
 			{
@@ -50,13 +64,26 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             return await RedirectToStudentsByClass(student.SchoolClassId);
 		}
 
-		public IActionResult StudentsByClass(int? classNumber, SchoolClassType? classType)
-		{
-			IEnumerable<StudentProfileViewModel> students = studentService.SearchStudentsByClass(classNumber, classType);
-			return View(students);
-		}
+		public IActionResult StudentsByClass(int? classNumber, SchoolClassType? classType, int page = 1)
+        {
+            IEnumerable<StudentProfileViewModel> students = studentService.SearchStudentsByClass(classNumber, classType, page, GlobalConstants.StudentsPerPage);
 
-		public async Task<IActionResult> Edit(string id)
+            var paginationData = new PaginationData
+            {
+                CurrentPage = page,
+                NumberOfPages = paginationService.CalculatePagesCount(studentService.StudentsByClassCount(classNumber, classType), GlobalConstants.StudentsPerPage),
+                Url = routeBuilder.BuildStudentByClassRoute(classNumber, classType, nameof(StudentsByClass))
+            };
+
+            var model = new StudentsByClassViewModel
+            {
+                PaginationData = paginationData,
+                Students = students
+            };
+            return View(model);
+        }
+
+        public async Task<IActionResult> Edit(string id)
 		{
             StudentEditInputModel model = await studentService.GetById<StudentEditInputModel>(id);
 			return View(model);
