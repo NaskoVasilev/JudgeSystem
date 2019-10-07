@@ -20,10 +20,16 @@ namespace JudgeSystem.Common.Extensions
             if (_isWindows)
             {
                 RunProcessAndWaitForExit(
-                    "taskkill",
-                    $"/T /F /PID {process.Id}",
+                    "cmd.exe",
+                    $"kill -TERM {process.Id}",
                     timeout,
                     out stdout);
+
+                //RunProcessAndWaitForExit(
+                //    "taskkill",
+                //    $"/T /F /PID {process.Id}",
+                //    timeout,
+                //    out stdout);
             }
             else
             {
