@@ -4,13 +4,15 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common.Extensions;
 using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Executors
 {
     internal class Executor
     {
-        private const int ProcessMaxRunningTime = 1000;
+        private const int TimeIntervalBetweenTwoMemoryConsumptionRequests = 45;
+        private const int TimeLimitMultiplier = 3;
         private const string ReadingDataFromConsoleIsRequired = "You should read some data from console in your application.";
 
         public async Task<ExecutionResult> Execute(string arguments, string input, int timeLimit, int memoryLimit)
@@ -29,7 +31,6 @@ namespace JudgeSystem.Executors
 
                 process.Start();
 
-                const int TimeIntervalBetweenTwoMemoryConsumptionRequests = 45;
                 var memoryTaskCancellationToken = new CancellationTokenSource();
                 var memoryTask = Task.Run(
                     () =>
@@ -74,14 +75,19 @@ namespace JudgeSystem.Executors
                     }
                 }
 
-                bool exited = process.WaitForExit(ProcessMaxRunningTime);
+                bool exited = process.WaitForExit(timeLimit * TimeLimitMultiplier);
+
                 if (!exited)
                 {
                     if (!process.HasExited)
                     {
-                        process.Kill();
+                        process.KillTree();
                     }
+
+                    memoryTaskCancellationToken.Cancel();
                     executionResult.Type = ProcessExecutionResultType.TimeLimit;
+                    executionResult.UserProcessorTime = TimeSpan.FromMilliseconds(timeLimit * TimeLimitMultiplier);
+                    return executionResult;
                 }
 
                 // Close the memory consumption check thread
