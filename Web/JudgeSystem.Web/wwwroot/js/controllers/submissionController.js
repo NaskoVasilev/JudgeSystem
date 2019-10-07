@@ -156,7 +156,8 @@ $('#submit-btn').on('click', () => {
 				});
 		})
 		.fail((error) => {
-            showError(error.responseText);
+            //showError(error.responseText);
+            console.log(error.responseText);
             hideLoader();
 		});
 });
