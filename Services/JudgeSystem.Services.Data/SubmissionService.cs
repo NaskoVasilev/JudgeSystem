@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -251,7 +252,38 @@ namespace JudgeSystem.Services.Data
             }
             finally
             {
-                utilityService.DeleteDirectory(workingDirectory);
+                try
+                {
+                    utilityService.DeleteDirectory(workingDirectory);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                   var deleteDirectoryTaskCancellationToken = new CancellationTokenSource(20000);
+                   var deleteDirectoryTask = Task.Run(
+                   () =>
+                   {
+                       while (true)
+                       {
+                           try
+                           {
+                               utilityService.DeleteDirectory(workingDirectory);
+                               deleteDirectoryTaskCancellationToken.Cancel();
+                               break;
+                           }
+                           catch (UnauthorizedAccessException)
+                           {
+                               Thread.Sleep(3000);
+                           }
+
+                           if (deleteDirectoryTaskCancellationToken.IsCancellationRequested)
+                           {
+                               break;
+                           }
+                       }
+                   },
+                   deleteDirectoryTaskCancellationToken.Token);
+                }
+
             }
         }
 
