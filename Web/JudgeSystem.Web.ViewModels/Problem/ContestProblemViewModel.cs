@@ -9,6 +9,8 @@ namespace JudgeSystem.Web.ViewModels.Problem
 
 		public string Name { get; set; }
 
+        public int MaxPoints { get; set; }
+
         public bool IsExtraTask { get; set; }
     }
 }
