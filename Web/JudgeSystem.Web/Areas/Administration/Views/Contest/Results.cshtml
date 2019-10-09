@@ -36,24 +36,25 @@
                 <td class="text-center">@contestResult.Student.ClassName</td>
                 <td class="text-center">
                     <a target="_blank" class="text-dark"
-                      asp-area="@GlobalConstants.AdministrationArea"
-                      asp-controller="Contest"
-                      asp-action="Submissions"
-                      asp-route-contestId="@Model.Id"
-                      asp-route-userId="@contestResult.UserId">
+                       asp-area="@GlobalConstants.AdministrationArea"
+                       asp-controller="Contest"
+                       asp-action="Submissions"
+                       asp-route-contestId="@Model.Id"
+                       asp-route-userId="@contestResult.UserId">
                         @contestResult.Student.FullName
                     </a>
                 </td>
                 @foreach (var problemId in problemIds)
                 {
                     int points = 0;
+                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
                     if (contestResult.PointsByProblem.ContainsKey(problemId))
                     {
                         points = contestResult.PointsByProblem[problemId];
                     }
-                    <td class="text-center w-auto">@points</td>
+                    <td class="text-center w-auto">@points/@maxPoints</td>
                 }
-                <td class="text-center">@contestResult.Total</td>
+                <td class="text-center">@contestResult.Total/@Model.Problems.Sum(x => x.MaxPoints)</td>
             </tr>
         }
     </tbody>

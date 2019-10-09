@@ -11,27 +11,33 @@
             @foreach (var lesson in Model.Lessons)
             {
                 <tr>
-                    <td class="a-holder">
-                        <a asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">@lesson.Name</a>
-                    </td>
+                    <td>@lesson.Name</td>
                     @if (User.IsInRole(GlobalConstants.AdministratorRoleName) || User.IsInRole(GlobalConstants.StudentRoleName))
                     {
                         <td>
                             @if (lesson.Contests.Any())
                             {
-                                <div class="dropdown">
-                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Compete
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @foreach (var contest in lesson.Contests)
-                                        {
-                                            <a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
-                                               asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
-                                        }
+                                if (lesson.Contests.Count == 1)
+                                {
+                                    <a class="btn btn-success mr-4" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id" asp-route-contestId="@lesson.Contests[0].Id">Compete</a>
+                                }
+                                else
+                                {
+                                    <div class="dropdown mr-4 d-inline-block">
+                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Compete
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            @foreach (var contest in lesson.Contests)
+                                            {
+                                                <a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
+                                                   asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
+                                            }
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             }
+                            <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">Practice</a>
                         </td>
                     }
                     <td>

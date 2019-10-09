@@ -147,7 +147,8 @@ namespace JudgeSystem.Services.Data
 					{
 						Id = p.Id,
 						Name = p.Name,
-                        IsExtraTask = p.IsExtraTask
+                        IsExtraTask = p.IsExtraTask,
+                        MaxPoints = p.MaxPoints
 					})
 					.ToList(),
 					ContestResults = c.UserContests
