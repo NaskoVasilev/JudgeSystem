@@ -69,8 +69,8 @@
         #endregion
 
         #region Test models consatnts
-        public const int TestInputDataMaxLength = 10000;
-        public const int TestOutputDataMaxLength = 10000;
+        public const int TestInputDataMaxLength = 1000000;
+        public const int TestOutputDataMaxLength = 1000000;
         public const string TestInputDataDisplayName = "Input";
         public const string TestOutputDataDisplayName = "Expected output";
         public const string TestIsTrialTestDisplayName = "Trial test";
