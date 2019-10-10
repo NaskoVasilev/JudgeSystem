@@ -66,12 +66,12 @@ namespace JudgeSystem.Common
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
         public const int MaxSubmissionCodeLength = 10000;
-        public const double DefaultAllowedMemoryInMegaBytes = 50;
-        public const int DefaultAllowedTimeInMilliseconds = 1500;
+        public const double DefaultAllowedMemoryInMegaBytes = 500;
+        public const int DefaultAllowedTimeInMilliseconds = 10000;
         public const int MinAllowedMemoryInMegaBytes = 10;
-        public const int MaxAllowedMemoryInMegaBytes = 200;
+        public const int MaxAllowedMemoryInMegaBytes = 5000;
         public const int MinAllowedTimeInMilliseconds = 50;
-        public const int MaxAllowedTimeInMilliseconds = 5000;
+        public const int MaxAllowedTimeInMilliseconds = 50000;
         public const int DefaultMaxPoints = 100;
         #endregion
 

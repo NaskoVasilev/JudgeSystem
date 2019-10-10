@@ -12,9 +12,9 @@
             {
                 <tr>
                     <td>@lesson.Name</td>
-                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName) || User.IsInRole(GlobalConstants.StudentRoleName))
-                    {
-                        <td>
+                    <td>
+                        @if (User.IsInRole(GlobalConstants.AdministratorRoleName) || User.IsInRole(GlobalConstants.StudentRoleName))
+                        {
                             @if (lesson.Contests.Any())
                             {
                                 if (lesson.Contests.Count == 1)
@@ -37,9 +37,9 @@
                                     </div>
                                 }
                             }
-                            <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">Practice</a>
-                        </td>
-                    }
+                        }
+                        <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">Practice</a>
+                    </td>
                     <td>
                         <i class="fas fa-file"></i>
                         @lesson.ProblemsCount
