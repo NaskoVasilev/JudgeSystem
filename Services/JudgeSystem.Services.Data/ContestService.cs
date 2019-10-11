@@ -21,7 +21,7 @@ namespace JudgeSystem.Services.Data
 {
     public class ContestService : IContestService
 	{
-		public const int ResultsPerPage = 5;
+		public const int ResultsPerPage = 15;
 
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
@@ -168,8 +168,9 @@ namespace JudgeSystem.Services.Data
 						.GroupBy(s => s.ProblemId)
 						.ToDictionary(s => s.Key, x => x.Max(s => s.ActualPoints))
 					})
-					.OrderBy(cr => cr.Student.ClassNumber)
-					.ThenBy(cr => cr.Student.ClassType)
+					.OrderBy(cr => cr.Total)
+                    .ThenBy(cr => cr.Student.ClassNumber)
+                    .ThenBy(cr => cr.Student.ClassType)
 					.ThenBy(cr => cr.Student.NumberInCalss)
 					.Skip((page - 1) * ResultsPerPage)
 					.Take(ResultsPerPage)
