@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Controllers
 {
+    [Authorize]
     public class ContestController : BaseController
 	{
         private const int DefaultPage = 1;
@@ -28,14 +29,12 @@ namespace JudgeSystem.Web.Controllers
         }
 
         [EndpointExceptionFilter]
-		[Authorize]
 		public int GetNumberOfPages()
 		{
 			int pagesNumber = contestService.GetNumberOfPages();
 			return pagesNumber;
 		}
 
-        [Authorize]
         public async Task<IActionResult> MyResults(int contestId, int? problemId, int page = DefaultPage)
         {
             string userId = userManager.GetUserId(User);
@@ -45,5 +44,11 @@ namespace JudgeSystem.Web.Controllers
 
             return View($"Areas/{GlobalConstants.AdministrationArea}/Views/Contest/Submissions.cshtml", model);
         }
-	}
+
+        public IActionResult Results(int id, int page = DefaultPage)
+        {
+            ContestAllResultsViewModel model = contestService.GetContestReults(id, page);
+            return View(model);
+        }
+    }
 }
