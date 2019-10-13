@@ -168,7 +168,7 @@ namespace JudgeSystem.Services.Data
 						.GroupBy(s => s.ProblemId)
 						.ToDictionary(s => s.Key, x => x.Max(s => s.ActualPoints))
 					})
-					.OrderBy(cr => cr.Total)
+					.OrderByDescending(cr => cr.Total)
                     .ThenBy(cr => cr.Student.ClassNumber)
                     .ThenBy(cr => cr.Student.ClassType)
 					.ThenBy(cr => cr.Student.NumberInCalss)
