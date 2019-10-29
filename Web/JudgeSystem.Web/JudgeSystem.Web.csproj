@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <AllowUntrustedCertificate>True</AllowUntrustedCertificate>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-JudgeSystem-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
-	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -20,7 +21,7 @@
     <PackageReference Include="Microsoft.ML.Recommender" Version="0.14.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
-    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />
+    <!--<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />-->
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0" />
   </ItemGroup>

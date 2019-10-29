@@ -83,7 +83,7 @@ namespace JudgeSystem.Web.Controllers
             return Json(submissionsCount);
         }
 
-        [EndpointExceptionFilter]
+        //[EndpointExceptionFilter]
         [HttpPost]
         public async Task<IActionResult> Create(SubmissionInputModel model)
         {

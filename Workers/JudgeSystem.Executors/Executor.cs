@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -81,8 +82,7 @@ namespace JudgeSystem.Executors
                 {
                     if (!process.HasExited)
                     {
-                        process.Kill();
-                        //process.KillTree();
+                        process.KillTree();
                     }
 
                     memoryTaskCancellationToken.Cancel();

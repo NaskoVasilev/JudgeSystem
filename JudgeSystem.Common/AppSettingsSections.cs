@@ -11,5 +11,7 @@
         public const string SendGridSection = "SendGrid";
 
         public const string CompilersSection = "Compilers";
+
+        public const string WorkingDirectory = "WorkingDirectory";
     }
 }
