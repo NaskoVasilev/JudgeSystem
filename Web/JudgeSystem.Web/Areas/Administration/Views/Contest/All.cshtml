@@ -2,7 +2,6 @@
 
 @{
 	ViewData["Title"] = "All contests";
-	string administrationArea = GlobalConstants.AdministrationArea;
 	string url = $"/{GlobalConstants.AdministrationArea}/Contest/All?{GlobalConstants.PageKey}=" + "{0}"; 
 	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
@@ -21,7 +20,7 @@
 		{
 			<tr class="row">
 				<td class="col-md-7">
-					<a class="text-decoration-none text-secondary" asp-area="@administrationArea"
+					<a class="text-decoration-none text-secondary"
 					   asp-controller="Contest" asp-action="Results" asp-route-id="@contest.Id">@contest.Name</a>
 				</td>
 				<td class="col-md-5">

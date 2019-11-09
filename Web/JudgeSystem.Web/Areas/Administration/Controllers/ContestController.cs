@@ -105,12 +105,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-		public IActionResult Results(int id, int page = DefaultPage)
-		{
-            ContestAllResultsViewModel model = contestService.GetContestReults(id, page);
-            return View(model);
-        }
-
         [EndpointExceptionFilter]
         [HttpGet("/Contest/Results/{contestId}/PagesCount")]
         public int GetContestResultPagesCount(int contestId) => 

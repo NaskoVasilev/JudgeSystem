@@ -81,8 +81,7 @@ namespace JudgeSystem.Executors
                 {
                     if (!process.HasExited)
                     {
-                        process.Kill();
-                        //process.KillTree();
+                        process.KillTree();
                     }
 
                     memoryTaskCancellationToken.Cancel();

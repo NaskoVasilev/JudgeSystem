@@ -1,0 +1,80 @@
+﻿@model ContestAllResultsViewModel
+
+@{
+    ViewData["Title"] = "All contests";
+    int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
+    string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
+    var paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
+}
+
+<h2 class="text-center mb-4">Results for contest "@Model.Name"</h2>
+
+<table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
+    <thead>
+        <tr>
+            <th class="text-center">&#8470;</th>
+            <th class="text-center">Class</th>
+            <th class="text-center">Full name</th>
+            @foreach (var problem in Model.Problems)
+            {
+                <th class="text-center">
+                    @problem.Name
+                    @if (problem.IsExtraTask)
+                    {
+                        <span class="text-success ml-2 font-size-10"><i class="fas fa-star"></i></span>
+                    }
+                </th>
+            }
+            <th class="text-center">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contestResult in Model.ContestResults)
+        {
+            <tr>
+                <td class="text-center">@contestResult.Student.NumberInCalss</td>
+                <td class="text-center">@contestResult.Student.ClassName</td>
+                <td class="text-center">
+                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a target="_blank" class="text-dark"
+                           asp-area="@GlobalConstants.AdministrationArea"
+                           asp-controller="Contest"
+                           asp-action="Submissions"
+                           asp-route-contestId="@Model.Id"
+                           asp-route-userId="@contestResult.UserId">
+                            @contestResult.Student.FullName
+                        </a>
+                    }
+                    else
+                    {
+                        @contestResult.Student.FullName
+                    }
+                </td>
+                @foreach (var problemId in problemIds)
+                {
+                    int points = 0;
+                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
+                    if (contestResult.PointsByProblem.ContainsKey(problemId))
+                    {
+                        points = contestResult.PointsByProblem[problemId];
+                    }
+                    <td class="text-center w-auto">@points/@maxPoints</td>
+                }
+                <td class="text-center">@contestResult.Total/@Model.Problems.Sum(x => x.MaxPoints)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_ServerSidePaginationPartial" model="paginationData" />
+
+@section Scripts{
+    <script src="~/js/pagination.js"></script>
+    <script>
+		let url = "@paginationUrl";
+		let numberOfPagesUrl = "/Contest/Results/@Model.Id/PagesCount";
+		InitializePaginationList(url, numberOfPagesUrl)
+    </script>
+}
+

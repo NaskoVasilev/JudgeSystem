@@ -252,38 +252,7 @@ namespace JudgeSystem.Services.Data
             }
             finally
             {
-                try
-                {
-                    utilityService.DeleteDirectory(workingDirectory);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                   var deleteDirectoryTaskCancellationToken = new CancellationTokenSource(20000);
-                   var deleteDirectoryTask = Task.Run(
-                   () =>
-                   {
-                       while (true)
-                       {
-                           try
-                           {
-                               utilityService.DeleteDirectory(workingDirectory);
-                               deleteDirectoryTaskCancellationToken.Cancel();
-                               break;
-                           }
-                           catch (UnauthorizedAccessException)
-                           {
-                               Thread.Sleep(3000);
-                           }
-
-                           if (deleteDirectoryTaskCancellationToken.IsCancellationRequested)
-                           {
-                               break;
-                           }
-                       }
-                   },
-                   deleteDirectoryTaskCancellationToken.Token);
-                }
-
+                utilityService.DeleteDirectory(workingDirectory);
             }
         }
 
