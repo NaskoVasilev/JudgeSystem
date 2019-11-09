@@ -2,7 +2,6 @@
 
 @{
 	ViewData["Title"] = "All contests";
-	string administrationArea = GlobalConstants.AdministrationArea;
 	string url = $"/{GlobalConstants.AdministrationArea}/Contest/All?{GlobalConstants.PageKey}=" + "{0}"; 
 	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }

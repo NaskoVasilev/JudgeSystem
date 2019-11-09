@@ -23,6 +23,16 @@ namespace JudgeSystem.Web.IocConfiguration
 
             CompilationSettings.JavaCompilerPath = compilersSection[nameof(ProgrammingLanguage.Java)];
             CompilationSettings.CppCompilerPath = compilersSection[nameof(ProgrammingLanguage.CPlusPlus)];
+            SetWorkingDirectory(configuration);
+        }
+
+        private static void SetWorkingDirectory(IConfiguration configuration)
+        {
+            string workingDirectory = configuration[AppSettingsSections.WorkingDirectory];
+            if (!string.IsNullOrEmpty(workingDirectory))
+            {
+                GlobalConstants.CompilationDirectoryPath = workingDirectory;
+            }
         }
     }
 }
