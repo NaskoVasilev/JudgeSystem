@@ -67,9 +67,9 @@
                                     Administration
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Course" asp-action="Create">Add Course</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Contest">Add Contest</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Student">Add Student</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Course" asp-action="Create">Add course</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Contest">Add contest</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Student">Add student</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
                                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="All">All contests</a>
@@ -80,7 +80,7 @@
                                 <a class="nav-link text-white" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Feedback" asp-action="All">Feedbacks</a>
                             </li>
                         }
-                        else if(User.Identity.IsAuthenticated)
+                        else if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-controller="Feedback" asp-action="Send">Feedback</a>
