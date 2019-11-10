@@ -327,6 +327,11 @@ input[type=file] {
     font-size: 30px;
 }
 
+#settings-icon {
+    color: white;
+    font-size: 30px;
+}
+
 #student-profile {
     font-size: 50px;
     color: orange;

@@ -23,11 +23,13 @@ namespace JudgeSystem.Data.Models
 
 		[MaxLength(ModelConstants.UserFirstNameMaxLength)]
 		[Required]
-		public string Name { get; set; }
+        [ProtectedPersonalData]
+        public string Name { get; set; }
 
 		[MaxLength(ModelConstants.UserSurnameMaxLength)]
 		[Required]
-		public string Surname { get; set; }
+        [ProtectedPersonalData]
+        public string Surname { get; set; }
 
 		public string StudentId { get; set; }
 		public Student Student { get; set; }
