@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Common;
 using JudgeSystem.Common.Settings;
 using JudgeSystem.Workers.Common;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +29,7 @@ namespace JudgeSystem.Web.IocConfiguration
 
         private static void SetWorkingDirectory(IConfiguration configuration)
         {
-            string workingDirectory = configuration[AppSettingsSections.WorkingDirectory];
+            string workingDirectory = configuration[AppSettingsSections.WorkingDirectory];  
             if (!string.IsNullOrEmpty(workingDirectory))
             {
                 GlobalConstants.CompilationDirectoryPath = workingDirectory;

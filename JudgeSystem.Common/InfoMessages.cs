@@ -19,5 +19,9 @@
         public const string VerificationEmailSentMessage = "Verification email sent. Please check your email";
 
         public const string SuccessfullyConfirmedEmail = "Your email was successfully confirmed.";
+
+        public const string AddAdministrator = "{0} was successfully added as adminstrator";
+
+        public const string RemoveAdministrator = "{0} was successfully removed as adminstrator";
     }
 }

@@ -19,11 +19,11 @@ namespace JudgeSystem.Data.Seeding
 			ApplicationUser userFromDb = await userManager.FindByNameAsync(adminSettings.Username);
 
             if (userFromDb != null)
-			{
-				return;
-			}
+            {
+                return;
+            }
 
-			var user = new ApplicationUser
+            var user = new ApplicationUser
 			{
 				Name = adminSettings.Name,
 				Email = adminSettings.Email,
@@ -34,6 +34,7 @@ namespace JudgeSystem.Data.Seeding
 
 			await userManager.CreateAsync(user, adminSettings.Password);
 			await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
-		}
-	}
+			await userManager.AddToRoleAsync(user, GlobalConstants.OwnerRoleName);
+        }
+    }
 }

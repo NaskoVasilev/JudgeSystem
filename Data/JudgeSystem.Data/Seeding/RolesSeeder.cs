@@ -18,6 +18,7 @@ namespace JudgeSystem.Data.Seeding
 
             await SeedRoleAsync(roleManager, GlobalConstants.BaseRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.AdministratorRoleName);
+            await SeedRoleAsync(roleManager, GlobalConstants.OwnerRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.StudentRoleName);
         }
 

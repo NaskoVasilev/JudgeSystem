@@ -53,5 +53,7 @@
         public const string StudentWithTheSameEmailAlreadyExists = "Student with the same email already exists.";
 
         public const string StudentWithTheSameNumberInClassExists = "Student with the same number exists in {0} class.";
+
+        public const string UserNotFound = "User with provided credentials was not found!";
     }
 }

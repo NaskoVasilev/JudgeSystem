@@ -7,6 +7,7 @@ namespace JudgeSystem.Common
     {
         #region Application Constants
         public const string DefaultConnectionStringName = "DefaultConnection";
+        public const string OwnerRoleName = "Owner";
         public const string AdministratorRoleName = "Administrator";
         public const string StudentRoleName = "Student";
         public const string BaseRoleName = "User";
