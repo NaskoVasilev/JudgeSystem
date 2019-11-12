@@ -13,7 +13,7 @@
         public const int UserPasswordMaxLength = 50;
         public const string UserNewPasswordDisplayName = "New password";
         public const string UserOldPasswordDisplayName = "Current password";
-        public const string UserConfirmPasswordDisplayName = "Confirm new password";
+        public const string UserConfirmPasswordDisplayName = "Confirm password";
         public const string UserPhoneNumberDisplayName = "Phone number";
         public const string UserLoginRememeberMeDisplayName = "Remember me?";
         #endregion
@@ -69,8 +69,8 @@
         #endregion
 
         #region Test models consatnts
-        public const int TestInputDataMaxLength = 1000000;
-        public const int TestOutputDataMaxLength = 1000000;
+        public const int TestInputDataMaxLength = 2000000000;
+        public const int TestOutputDataMaxLength = 2000000000;
         public const string TestInputDataDisplayName = "Input";
         public const string TestOutputDataDisplayName = "Expected output";
         public const string TestIsTrialTestDisplayName = "Trial test";
