@@ -18,9 +18,6 @@
             return tempText;
         }
 
-        public static string ToControllerName(this string controller)
-        {
-            return controller.Replace("Controller", "");
-        }
-	}
+        public static string ToControllerName(this string controller) => controller.Replace("Controller", "");
+    }
 }
