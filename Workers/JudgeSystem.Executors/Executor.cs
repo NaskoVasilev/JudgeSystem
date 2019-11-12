@@ -12,7 +12,7 @@ namespace JudgeSystem.Executors
     internal class Executor
     {
         private const int TimeIntervalBetweenTwoMemoryConsumptionRequests = 45;
-        private const int TimeLimitMultiplier = 3;
+        private const double TimeLimitMultiplier = 1.5;
         private const string ReadingDataFromConsoleIsRequired = "You should read some data from console in your application.";
 
         public async Task<ExecutionResult> Execute(string arguments, string input, int timeLimit, int memoryLimit)
@@ -75,7 +75,8 @@ namespace JudgeSystem.Executors
                     }
                 }
 
-                bool exited = process.WaitForExit(timeLimit * TimeLimitMultiplier);
+                int timeout = (int)(timeLimit * TimeLimitMultiplier);
+                bool exited = process.WaitForExit(timeout);
 
                 if (!exited)
                 {
@@ -86,7 +87,7 @@ namespace JudgeSystem.Executors
 
                     memoryTaskCancellationToken.Cancel();
                     executionResult.Type = ProcessExecutionResultType.TimeLimit;
-                    executionResult.UserProcessorTime = TimeSpan.FromMilliseconds(timeLimit * TimeLimitMultiplier);
+                    executionResult.TimeWorked = TimeSpan.FromMilliseconds(timeout);
                     return executionResult;
                 }
 
@@ -103,7 +104,7 @@ namespace JudgeSystem.Executors
                 executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
                 executionResult.UserProcessorTime = process.UserProcessorTime;
 
-                if (executionResult.TotalProcessorTime.TotalMilliseconds > timeLimit)
+                if (executionResult.TimeWorked.TotalMilliseconds > timeLimit)
                 {
                     executionResult.Type = ProcessExecutionResultType.TimeLimit;
                 }

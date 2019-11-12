@@ -336,8 +336,8 @@ namespace JudgeSystem.Services.Data
                 return;
             }
 
-            int memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes) / tests.Count;
-            int timeLimit = problemConstraints.AllowedTimeInMilliseconds / tests.Count;
+            int memoryLimit = utilityService.ConvertMegaBytesToBytes(problemConstraints.AllowedMemoryInMegaBytes);
+            int timeLimit = problemConstraints.AllowedTimeInMilliseconds;
 
             IExecutor executor = executorFactory.CreateExecutor(programmingLanguage);
 
@@ -352,7 +352,7 @@ namespace JudgeSystem.Services.Data
                     TestId = test.Id,
                     SubmissionId = submission.Id,
                     ExecutionResultType = executionResultType,
-                    TimeUsed = checkerResult.TotalProcessorTime.TotalSeconds,
+                    TimeUsed = checkerResult.TimeWorked.TotalSeconds,
                     Output = checkerResult.Output,
                     Error = checkerResult.Error,
                     MemoryUsed = utilityService.ConvertBytesToMegaBytes(checkerResult.MemoryUsed),

@@ -32,6 +32,6 @@ namespace JudgeSystem.Workers.Common
 
 		public long MemoryUsed { get; set; }
 
-		public TimeSpan TotalProcessorTime => PrivilegedProcessorTime + UserProcessorTime;
+        public TimeSpan TotalProcessorTime => PrivilegedProcessorTime + UserProcessorTime;
 	}
 }
