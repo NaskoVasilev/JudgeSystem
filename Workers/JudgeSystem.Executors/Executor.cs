@@ -104,8 +104,6 @@ namespace JudgeSystem.Executors
                 executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
                 executionResult.UserProcessorTime = process.UserProcessorTime;
 
-                File.AppendAllText("F:\\JudgeSystem\\WorkingDirectory\\test.txt", $"{executionResult.TimeWorked.Milliseconds}\n");
-
                 if (executionResult.TimeWorked.TotalMilliseconds > timeLimit)
                 {
                     executionResult.Type = ProcessExecutionResultType.TimeLimit;
