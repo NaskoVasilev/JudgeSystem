@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="admin-buttons-holder">
-			<button class="btn btn-warning testEditBtn" data-id="@test.Id">Edit</button>
+			<a class="btn btn-warning testEditBtn" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Test" asp-action="Edit" asp-route-id="@test.Id">Edit</a>
 			<button class="btn btn-danger testDeleteBtn" data-id="@test.Id">Delete</button>
 		</div>
 		<hr />
