@@ -1,5 +1,6 @@
 # Judge System
-"C# MVC Frameworks - ASP.NET Core - June 2019" final Project
+An open-source judge system for evaluating programmming code and managing tasks and competitions.
+This was my final project for "C# MVC Frameworks - ASP.NET Core - June 2019" course in SoftUni.
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-Windows-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=3&branchName=develop)
 
