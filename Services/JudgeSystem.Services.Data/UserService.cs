@@ -131,5 +131,12 @@ namespace JudgeSystem.Services.Data
                 .FirstOrDefaultAsync();
             return userNamesDto;
         }
+
+        public IEnumerable<UserViewModel> All() => 
+            repository.All()
+            .To<UserViewModel>()
+            .OrderBy(x => x.Name)
+            .ThenBy(x => x.Surname)
+            .ToList();
     }
 }
