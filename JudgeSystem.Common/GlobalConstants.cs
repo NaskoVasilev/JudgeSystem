@@ -66,11 +66,11 @@ namespace JudgeSystem.Common
         public const string CppFileExtension = ".cpp";
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
-        public const int MaxSubmissionCodeLength = 10000;
-        public const double DefaultAllowedMemoryInMegaBytes = 500;
+        public const int MaxSubmissionCodeLength = 100000;
+        public const double DefaultAllowedMemoryInMegaBytes = 30;
         public const int DefaultAllowedTimeInMilliseconds = 500;
-        public const int MinAllowedMemoryInMegaBytes = 10;
-        public const int MaxAllowedMemoryInMegaBytes = 25;
+        public const int MinAllowedMemoryInMegaBytes = 5;
+        public const int MaxAllowedMemoryInMegaBytes = 500;
         public const int MinAllowedTimeInMilliseconds = 50;
         public const int MaxAllowedTimeInMilliseconds = 50000;
         public const int DefaultMaxPoints = 100;
