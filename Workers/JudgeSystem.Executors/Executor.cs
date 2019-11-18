@@ -13,6 +13,8 @@ namespace JudgeSystem.Executors
     {
         private const int TimeIntervalBetweenTwoMemoryConsumptionRequests = 45;
         private const double TimeLimitMultiplier = 1.5;
+        // We need to wait the proccess to exit at least 2500 ms beacuse if there is some runtime error the proccess working between 2000 and 2500 ms
+        private const int MinWorkingTimeForProcessInMilliseconds = 2500;
         private const string ReadingDataFromConsoleIsRequired = "You should read some data from console in your application.";
 
         public async Task<ExecutionResult> Execute(string arguments, string input, int timeLimit, int memoryLimit)
@@ -75,7 +77,7 @@ namespace JudgeSystem.Executors
                     }
                 }
 
-                int timeout = (int)(timeLimit * TimeLimitMultiplier);
+                int timeout = GetTimeout(timeLimit);
                 bool exited = process.WaitForExit(timeout);
 
                 if (!exited)
@@ -104,23 +106,34 @@ namespace JudgeSystem.Executors
                 executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
                 executionResult.UserProcessorTime = process.UserProcessorTime;
 
-                if (executionResult.TimeWorked.TotalMilliseconds > timeLimit)
-                {
-                    executionResult.Type = ProcessExecutionResultType.TimeLimit;
-                }
-
+                //We need to check first if there is runtime error because it is with more priority
                 if (!string.IsNullOrEmpty(executionResult.Error))
                 {
                     executionResult.Type = ProcessExecutionResultType.RunTimeError;
                 }
-
-                if (executionResult.MemoryUsed > memoryLimit)
+                else if (executionResult.TimeWorked.TotalMilliseconds > timeLimit)
+                {
+                    executionResult.Type = ProcessExecutionResultType.TimeLimit;
+                }
+                else if (executionResult.MemoryUsed > memoryLimit)
                 {
                     executionResult.Type = ProcessExecutionResultType.MemoryLimit;
                 }
 
                 return executionResult;
             }
+        }
+
+        private int GetTimeout(int timeLimit)
+        {
+            int timeout = (int)(timeLimit * TimeLimitMultiplier);
+
+            if(timeout < MinWorkingTimeForProcessInMilliseconds)
+            {
+                timeout = MinWorkingTimeForProcessInMilliseconds;
+            }
+
+            return timeout;
         }
     }
 }
