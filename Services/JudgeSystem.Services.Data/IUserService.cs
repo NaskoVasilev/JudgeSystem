@@ -15,5 +15,7 @@ namespace JudgeSystem.Services.Data
         Task DeleteUserData(string userId, string studentId);
 
         Task<UserNamesViewModel> GetUserNames(string userId);
+
+        IEnumerable<UserViewModel> All();
     }
 }

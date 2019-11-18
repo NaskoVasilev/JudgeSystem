@@ -1,0 +1,44 @@
+﻿@model IEnumerable<UserViewModel>
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<table class="table">
+    <thead>
+        <tr class="row">
+            <th class="col-lg-3 col-md-3 col-sm-2">Username</th>
+            <th class="col-lg-3 col-md-2 col-sm-2">First name</th>
+            <th class="col-lg-3 col-md-2 col-sm-2">Last name</th>
+            <th class="col-lg-3 col-md-4 col-sm-6">Email</th>
+        </tr>
+        <tr class="row inputs">
+            <th class="col-sm-3">
+                <input type="text" id="username" class="form-control" placeholder="Filter by username">
+            </th>
+            <th class="col-sm-3">
+                <input type="text" id="first-name" class="form-control" placeholder="Filter by first name">
+            </th>
+            <th class="col-sm-3">
+                <input type="text" id="last-name" class="form-control" placeholder="Filter by last name">
+            </th>
+            <th class="col-sm-3">
+                <input type="text" id="email" class="form-control" placeholder="Filter by email">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr class="row data-row">
+                <td class="col-lg-3 col-md-3 col-sm-2">@user.Username</td>
+                <td class="col-lg-3 col-md-2 col-sm-2">@user.Name</td>
+                <td class="col-lg-3 col-md-2 col-sm-2">@user.Surname</td>
+                <td class="col-lg-3 col-md-4 col-sm-6">@user.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script src="~/js/controllers/userController.js"></script>
+}
