@@ -336,3 +336,4 @@ ASALocalRun/
 
 !**/wwwroot/Compilers/**
 
+/Web/JudgeSystem.Web/appsettings.Stage.json
