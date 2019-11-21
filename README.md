@@ -84,7 +84,7 @@ Follow these steps to set up your development environmet:
 * Automapper, SendGrid, jQuery, Bootstrap
 
 ## Project Architecture
-* Data access layer - works with the database using Entity Franework Core 2.2, this layer is independent from the others. It consists of two other layers
+* Data access layer - works with the database using Entity Franework Core 2.2, this layer is independent from the others. It consists of two other layers:
   * Domain Layer - contains all entities, enums. Classes which represent tables in the database
   * Persistence Layer - contains database context, all configurations, migrations and data seeding logic. It is responsible for data persistance. Here is implmented Repository desing pattern which help us to accomplish more abstraction between data access logic and business logic. As a result we can our database provider without making so many changes to the code. For example we can chnage MS SQL with MongoDB without changing some business logic.
 * Business Layer - main logic of the appliaction. It depends only on Data access layer but it uses repositories to access data so the coupling is very loose. It can be reuced in multiple appliactions. For example if we want to create some mobile version of the system, can reuse logic in this layer and we should also implement the new user intreface.
@@ -93,7 +93,7 @@ Follow these steps to set up your development environmet:
 * Common Layer - contains all the logic which is shared in the application. Contains global constants, custom exceptions and extension methods.
 * Workers - .NET Standard class libraries which contains some more complicated logic. They are used by the business layer in order to keep the code simple there. The most compilacted logic in the appllication is related to complication and execution of submissions. So this logic is implemented here in two differnet projects.
 * Tests - the system is tested with a lot of automated tests - unit tests and integration tests. We use libraries like Moq, xUnit and Microsoft.EntityFrameworkCore.InMemory to the all the logic in business layer.
-* Code quality - project follows SOLID principles and all other principles of high quality code. Also there are .editorconfig file in which are defained all code styles and conventions in order the code of the project to be consistent.
+* Code quality - project follows SOLID principles and all other principles of high quality code. Also there are ```.editorconfig``` file in which are defained all code styles and conventions in order the code of the project to be consistent.
 
 ## Functionality
 ### Guest Users
