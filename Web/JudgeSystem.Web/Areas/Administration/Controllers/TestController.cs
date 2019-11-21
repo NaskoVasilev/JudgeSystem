@@ -5,7 +5,7 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.ViewModels.Test;
-using JudgeSystem.Web.Utilites;
+using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,19 +32,24 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-        [EndpointExceptionFilter]
-		[HttpPost]
-		public async Task<IActionResult> Edit(TestEditInputModel model)
-		{
-            if(!ModelState.IsValid)
+        public async Task<IActionResult> Edit(int id)
+        {
+            TestEditInputModel model = await testService.GetById<TestEditInputModel>(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TestEditInputModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                string errors = Utility.ExtractModelStateErrors(ModelState, " ");
-                return BadRequest(errors);
+                return View(model);
             }
 
-			await testService.Update(model);
-			return Content(string.Format(InfoMessages.SuccessfullyEditMessage, "test"));
-		}
+            await testService.Update(model);
+
+            return RedirectToAction(nameof(ProblemTests), new { problemId = model.ProblemId });
+        }
 
         [EndpointExceptionFilter]
 		[HttpPost]

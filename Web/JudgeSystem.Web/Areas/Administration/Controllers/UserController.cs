@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Services.Data;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Services.Data;
 using JudgeSystem.Web.ViewModels.User;
 
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 UserId = userId
             };
             return View(userResults);
+        }
+
+        public IActionResult All()
+        {
+            IEnumerable<UserViewModel> users = userService.All();
+            return View(users);
         }
     }
 }

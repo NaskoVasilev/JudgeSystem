@@ -23,7 +23,7 @@
 {
     <div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
         <h4 class="mb-3 mt-0">Downlaod resources</h4>
-        <ul class="list-group d-flex flex-md-row flex-wrap">
+        <ul class="list-group d-flex flex-sm-row flex-wrap">
             @foreach (var resource in Model.Resources)
             {
                 <li class="list-group-item a-holder">
@@ -46,7 +46,7 @@
 }
 <div class="border p-3 bg-light">
     <div class="ul-holder mt-0">
-        <ul class="list-group d-flex flex-md-row">
+        <ul class="list-group d-flex flex-wrap flex-sm-row">
             @foreach (var problem in Model.Problems)
             {
                 <li class="list-group-item problem-name" data-type="@problem.SubmissionType" data-id="@problem.Id">

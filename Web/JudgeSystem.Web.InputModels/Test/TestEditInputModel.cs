@@ -17,5 +17,12 @@ namespace JudgeSystem.Web.InputModels.Test
         [MaxLength(ModelConstants.TestOutputDataMaxLength)]
         [Display(Name = ModelConstants.TestOutputDataDisplayName)]
         public string OutputData { get; set; }
-	}
+
+        [Display(Name = ModelConstants.TestIsTrialTestDisplayName)]
+        public bool IsTrialTest { get; set; }
+
+        public string ProblemName { get; set; }
+
+        public int ProblemId { get; set; }
+    }
 }
