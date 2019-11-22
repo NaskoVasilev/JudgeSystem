@@ -18,12 +18,12 @@
     <main>
         <h2>Instructions how to activate your student profile in our Judge System</h2>
         <p>
-            You can access the system from this link: <a href="https://code-judgement.azurewebsites.net/">https://code-judgement.azurewebsites.net/</a>
+            You can access the system from this link: <a href="@{baseUrl}">@{baseUrl}</a>
         </p>
         <p>This is your activation key: <span>@{activationKey}</span></p>
-        <p>First create an account <a href="https://code-judgement.azurewebsites.net/Identity/Account/Register">here</a> before activating your student profile.</p>
+        <p>First create an account <a href="@{baseUrl}/Identity/Account/Register">here</a> before activating your student profile.</p>
         <p>
-            To activate your student profile click on this link: <a href="https://code-judgement.azurewebsites.net/Student/ActivateStudentProfile">Activate student profile</a>
+            To activate your student profile click on this link: <a href="@{baseUrl}/Student/ActivateStudentProfile">Activate student profile</a>
         </p>
         <p>
             Then paste your activation key in the input field and click <span>Activate</span> button.

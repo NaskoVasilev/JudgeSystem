@@ -5,7 +5,7 @@ using System.Linq;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Workers.Common;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -74,5 +74,7 @@ namespace JudgeSystem.Web.Utilites
             IEnumerable<string> errors = modelState.Select(x => x.Value).SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
             return string.Join(separator, errors);
         }
+
+        public static string GetBaseUrl(HttpContext httpContext) => $"{httpContext.Request.Scheme}://{httpContext.Request.Host.ToUriComponent()}";
     }
 }
