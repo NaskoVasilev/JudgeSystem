@@ -14,7 +14,13 @@ namespace JudgeSystem.Data.Seeding
 	{
 		public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
 		{
-			AdminSettings adminSettings = serviceProvider.GetRequiredService<AdminSettings>();
+			AdminSettings adminSettings = serviceProvider.GetService<AdminSettings>();
+
+            if(adminSettings == null)
+            {
+                return;
+            }
+
 			UserManager<ApplicationUser> userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 			ApplicationUser userFromDb = await userManager.FindByNameAsync(adminSettings.Username);
 
