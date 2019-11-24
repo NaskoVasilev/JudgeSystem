@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Controllers
 
         public IActionResult Send() => View();
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Send(FeedbackCreateInputModel model)
         {

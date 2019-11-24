@@ -25,7 +25,7 @@ namespace JudgeSystem.Web.Tests
         public async Task RequestToGivenUrlShoudReturnSuccessStatusCode(string url)
         {
             HttpClient client = server.CreateClient();
-            var response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
         }
 

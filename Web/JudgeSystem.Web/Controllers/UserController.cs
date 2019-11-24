@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Controllers
 {
-	public class UserController : BaseController
+    [Authorize]
+    public class UserController : BaseController
 	{
 		private readonly IUserService userService;
 		private readonly UserManager<ApplicationUser> userManager;
@@ -19,7 +20,6 @@ namespace JudgeSystem.Web.Controllers
 			this.userManager = userManager;
 		}
 
-		[Authorize]
 		public IActionResult MyResults()
 		{
             string userId = userManager.GetUserId(User);
