@@ -11,7 +11,7 @@
   },
   {
     "InputData": "your third test input comes here. Use \r\n for new line.",
-    "OutputData": "your thitd test expected output comes here. Use \r\n for new line.",
+    "OutputData": "your third test expected output comes here. Use \r\n for new line.",
     "IsTrialTest": false
   }
 ]
