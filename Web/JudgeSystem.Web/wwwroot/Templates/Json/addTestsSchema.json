@@ -1,0 +1,40 @@
+﻿{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "Tests",
+  "items": {
+    "$id": "tests",
+    "type": "object",
+    "title": "The Tests Schema",
+    "required": [
+      "InputData",
+      "OutputData",
+      "IsTrialTest"
+    ],
+    "properties": {
+      "InputData": {
+        "$id": "InputData",
+        "type": "string",
+        "title": "The Inputdata Schema",
+        "default": ""
+      },
+      "OutputData": {
+        "$id": "OutputData",
+        "type": "string",
+        "title": "The Outputdata Schema",
+        "default": ""
+      },
+      "IsTrialTest": {
+        "$id": "IsTrialTest",
+        "type": "boolean",
+        "title": "The Istrialtest Schema",
+        "default": false,
+        "examples": [
+          true
+        ]
+      }
+    }
+  }
+}

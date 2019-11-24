@@ -51,23 +51,17 @@ $(".problem-name").on("click", (e) => {
 
     changeProblemConstraints(id);
 
-	if ($("#admin-buttons").length > 0) {
-		let editProblemBtnHrefAttribute = $('#editProblemBtn').attr('href');
-		editProblemBtnHrefAttribute = editProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
-		$('#editProblemBtn').attr('href', editProblemBtnHrefAttribute);
+    if ($('#admin-buttons').length > 0) {
+        let oldIdHref = `/${oldId}`;
+        let newIdHref = `/${id}`;
+        replaceHref('editProblemBtn', oldIdHref, newIdHref);
+        replaceHref('deleteProblemBtn', oldIdHref, newIdHref);
 
-		let deleteProblemBtnHrefAttribute = $('#deleteProblemBtn').attr('href');
-		deleteProblemBtnHrefAttribute = deleteProblemBtnHrefAttribute.replace(`/${oldId}`, `/${id}`);
-		$('#deleteProblemBtn').attr('href', deleteProblemBtnHrefAttribute);
-
-		let addTestHrefAttribute = $('#addTestBtn').attr('href');
-		addTestHrefAttribute = addTestHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
-		$('#addTestBtn').attr('href', addTestHrefAttribute);
-
-		let allTestsBtnHrefAttribute = $('#allTestsBtn').attr('href');
-		allTestsBtnHrefAttribute = allTestsBtnHrefAttribute.replace(`problemId=${oldId}`, `problemId=${id}`);
-		$('#allTestsBtn').attr('href', allTestsBtnHrefAttribute);
-
+        let oldValue = `problemId=${oldId}`;
+        let newValue = `problemId=${id}`;
+        replaceHref('addTestsBtn', oldValue, newValue);
+        replaceHref('addTestBtn', oldValue, newValue);
+        replaceHref('allTestsBtn', oldValue, newValue);
 	}
 	
 	let page = 1;
@@ -75,6 +69,13 @@ $(".problem-name").on("click", (e) => {
 	getSubmissions(id, page);
 
 });
+
+function replaceHref(elemnetId, oldValue, newValue) {
+    let selector = '#' + elemnetId;
+    let hrefAttribute = $(selector).attr('href');
+    hrefAttribute = hrefAttribute.replace(oldValue, newValue);
+    $(selector).attr('href', hrefAttribute);
+}
 
 $('#submit-btn').on('click', () => {
 	let problemId = $('.active-problem')[0].dataset.id;

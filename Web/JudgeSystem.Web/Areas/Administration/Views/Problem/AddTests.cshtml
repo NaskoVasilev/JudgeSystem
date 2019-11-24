@@ -1,0 +1,32 @@
+﻿@model ProblemAddTestsInputModel
+
+@{
+    ViewData["Title"] = Model.ProblemName;
+}
+
+<h2 class="text-center">Add tests to task - <span class="font-italic">@Model.ProblemName</span></h2>
+<p class="text-center font-size-20">Click <a asp-area="@GlobalConstants.AdministrationArea" asp-controller="Test" asp-action="DownloadTemplate" class="text-decoration-none my-4">here</a> to download a template file.</p>
+<div class="row">
+    <div class="col-md-6">
+        <section>
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <div class="file-upload-wrapper my-4" data-text="Select your file!">
+                        <input asp-for="Tests" type="file" class="file-upload-field form-control" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add Tests</button>
+                    <a class="btn btn-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
+                       asp-route-lessonId="@Model.LessonId">Back to all problems</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/fileUploader.js"></script>
+}

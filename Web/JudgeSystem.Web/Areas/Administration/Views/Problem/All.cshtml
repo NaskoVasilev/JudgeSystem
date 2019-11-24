@@ -26,16 +26,18 @@
 		{
 			<tr class="row">
 				<td class="col-md-7">@task.Name</td>
-				<td class="col-md-5">
-					<a class="btn btn-primary" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">Add Test</a>
-					<a class="btn btn-primary" asp-area="@administrationArea"
-					   asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">All Tests</a>
-					<a class="btn btn-warning" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
-					<a class="btn btn-danger" asp-area="@administrationArea"
-					   asp-controller="Problem" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
-				</td>
+                <td class="col-md-5">
+                    <a class="btn btn-primary" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@task.Id">Add Tests</a>
+                    <a class="btn btn-primary" asp-area="@administrationArea"
+                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">All Tests</a>
+                    <a class="btn btn-primary" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">Add Test</a>
+                    <a class="btn btn-warning" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+                    <a class="btn btn-danger" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                </td>
 			</tr>
 		}
 	</tbody>

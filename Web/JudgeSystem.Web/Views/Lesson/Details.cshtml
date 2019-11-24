@@ -76,10 +76,12 @@
             @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <div class="mt-3" id="admin-buttons">
-                    <a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
+                    <a class="btn btn-primary" id="addTestsBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@firstProblem.Id">Add Tests</a>
                     <a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
                        asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
+                    <a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
                     <a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
                        asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
                     <a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
