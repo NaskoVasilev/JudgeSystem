@@ -16,13 +16,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 {
     public class FeedbackControllerTests
     {
-        [Fact]
-        public void ShouldBeAllowedOnlyForAdministrators() =>
-            MyController<FeedbackController>
-            .Instance()
-            .ShouldHave()
-            .Attributes(attributes => attributes.RestrictingForAuthorizedRequests(GlobalConstants.AdministratorRoleName));
-
         [Theory]
         [InlineData(1, 6)]
         [InlineData(2, 2)]

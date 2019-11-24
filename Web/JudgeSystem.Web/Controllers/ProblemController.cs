@@ -4,10 +4,12 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.Filters;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Controllers
 {
+    [Authorize]
     public class ProblemController : BaseController
 	{
         private readonly IProblemService problemService;
