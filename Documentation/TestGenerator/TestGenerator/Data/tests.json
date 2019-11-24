@@ -1,0 +1,32 @@
+[
+  {
+    "InputData": "0\r\n0\r\n0",
+    "OutputData": "No, he failed! He was 0.00 seconds slower.",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "0\r\n12\r\n1.1",
+    "OutputData": "No, he failed! He was 13.20 seconds slower.",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "10000.5\r\n505.55\r\n2.5",
+    "OutputData": "Yes, he succeeded! The new world record is 1676.38 seconds.",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "4555\r\n450\r\n2.23",
+    "OutputData": "Yes, he succeeded! The new world record is 1378.50 seconds.",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "10000\r\n1000\r\n5.25",
+    "OutputData": "Yes, he succeeded! The new world record is 6075.00 seconds.",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "1000\r\n100\r\n9.1",
+    "OutputData": "Yes, he succeeded! The new world record is 985.00 seconds.",
+    "IsTrialTest": false
+  }
+]
