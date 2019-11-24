@@ -4,12 +4,15 @@ using System.Threading.Tasks;
 using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.ViewModels.Test;
 using JudgeSystem.Web.InputModels.Test;
+using JudgeSystem.Web.InputModels.Problem;
 
 namespace JudgeSystem.Services.Data
 {
     public interface ITestService
 	{
 		Task<TestDto> Add(TestInputModel model);
+
+        Task AddRange(IEnumerable<ProblemTestInputModel> tests, int problemId);
 
 		IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId);
 

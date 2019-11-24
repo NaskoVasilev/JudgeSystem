@@ -22,13 +22,15 @@ namespace JudgeSystem.Services
             this.emailSender = emailSender;
         }
 
-        public async Task<string> SendActivationEmail(string email)
+        public async Task<string> SendActivationEmail(string email, string baseUrl)
         {
             string activationKey = Guid.NewGuid().ToString();
             string activationKeyPlaceholder = "@{activationKey}";
+            string baseUrlPlaceholder = "@{baseUrl}";
             string subject = GlobalConstants.StudentProfileActivationEmailSubject;
             string message = await ReadEmailTemplateAsync();
             message = message.Replace(activationKeyPlaceholder, activationKey);
+            message = message.Replace(baseUrlPlaceholder, baseUrl);
 
             await emailSender.SendEmailAsync(email, subject, message);
             return activationKey;

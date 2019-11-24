@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -9,8 +10,8 @@ using JudgeSystem.Web.Dtos.SchoolClass;
 using JudgeSystem.Web.Dtos.Student;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.InputModels.Student;
+using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.ViewModels.Student;
-using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,7 +60,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 				return View(model);
 			}
 
-            string activationKey = await studentProfileService.SendActivationEmail(model.Email);
+            string baseUrl = Utility.GetBaseUrl(HttpContext);
+            string activationKey = await studentProfileService.SendActivationEmail(model.Email, baseUrl);
             StudentDto student = await studentService.Create(model, activationKey);
             return await RedirectToStudentsByClass(student.SchoolClassId);
 		}

@@ -30,6 +30,11 @@ namespace JudgeSystem.Common
         public const string EmailTemplatesFolder = "EmailTemplates";
         public const string JsonContentType = "text/json";
         public const string PersonalDataFileName = "JudgePersonalData.json";
+        public const string JsonFileExtension = ".json";
+        public const string JsonFolder = "Json";
+        public const string AddTestsTemplateFileName = "addTestsTemplateFile.json";
+        public static string AddTestsInputJsonFileSchema = $"/{TemplatesFolder}/{JsonFolder}/addTestsSchema.json";
+        public static string AddTestsTemplsteFilePath = $"/{GlobalConstants.TemplatesFolder}/{JsonFolder}/{AddTestsTemplateFileName}";
         public static string[] AllowedFileExtensoins = new string[] { ".ppt", ".pptx", ".doc", ".docx", ".xls", ".cs", ".zip", ".json", ".xml", ".mp4", ".avi", ".txt", ".html", ".pdf" };
         #endregion
 

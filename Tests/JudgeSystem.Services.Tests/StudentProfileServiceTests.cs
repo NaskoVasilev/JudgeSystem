@@ -24,7 +24,7 @@ namespace JudgeSystem.Services.Tests
             emailSenderMock.Setup(x => x.SendEmailAsync(email, subject, It.IsAny<string>()));
 
             var service = new StudentProfileService(hostingEnvironmentMock.Object, emailSenderMock.Object);
-            string activationKey = await service.SendActivationEmail(email);
+            string activationKey = await service.SendActivationEmail(email, "http://localhost:44320");
 
             emailSenderMock.Verify(x => x.SendEmailAsync(email, subject, It.Is<string>(m => m.Contains(activationKey))), Times.Once());
         }

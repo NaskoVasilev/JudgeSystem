@@ -4,6 +4,6 @@ namespace JudgeSystem.Services
 {
     public interface IStudentProfileService
     {
-        Task<string> SendActivationEmail(string email);
+        Task<string> SendActivationEmail(string email, string baseUrl);
     }
 }

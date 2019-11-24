@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Workers.Common;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -73,6 +74,19 @@ namespace JudgeSystem.Web.Utilites
         {
             IEnumerable<string> errors = modelState.Select(x => x.Value).SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
             return string.Join(separator, errors);
+        }
+
+        public static string GetBaseUrl(HttpContext httpContext) => $"{httpContext.Request.Scheme}://{httpContext.Request.Host.ToUriComponent()}";
+
+        public static IEnumerable<string> ValidateObject(object obj)
+        {
+            var validationContext = new ValidationContext(obj);
+            ICollection<ValidationResult> results = new List<ValidationResult>(); // Will contain the results of the validation
+            Validator.TryValidateObject(obj, validationContext, results, true);
+            foreach (ValidationResult result in results)
+            {
+                yield return result.ErrorMessage;
+            }
         }
     }
 }
