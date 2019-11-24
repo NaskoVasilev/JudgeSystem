@@ -1,30 +1,36 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WorldSwimmingRecord
+namespace SumSquenece
 {
     class Program
     {
         static void Main(string[] args)
         {
-            double worldRecordTime = double.Parse(data[index++]);
-            double distanceToBeSwum = double.Parse(data[index++]);
-            double timeForSwimming1m = double.Parse(data[index++]);
-
-            double resistanceTime = ((int)distanceToBeSwum / 15) * 12.5;
-            double totalTime = (distanceToBeSwum * timeForSwimming1m) + resistanceTime;
-
-            if (totalTime < worldRecordTime)
+            int n = int.Parse(data[index++]);
+            int k = int.Parse(data[index++]);
+            int[] nums = new int[n];
+            int sum = 0;
+            nums[0] = 1;
+            for (int i = 1; i < n; i++)
             {
-                lines.AppendLine($"Yes, he succeeded! The new world record is {totalTime:F2} seconds.");
+                int initialPlace;
+                if (i - k < 0)
+                {
+                    initialPlace = 0;
+                }
+                else
+                {
+                    initialPlace = i - k;
+                }
+                for (int j = initialPlace; j < i; j++)
+                {
+                    sum += nums[j];
+                }
+                nums[i] = sum;
+                sum = 0;
             }
-            else
-            {
-                lines.AppendLine($"No, he failed! He was {totalTime - worldRecordTime:F2} seconds slower.");
-            }
+            lines.AppendLine(string.Join(" ", nums));
+
         }
     }
 }
