@@ -2,7 +2,6 @@
 using JudgeSystem.Executors;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
-using JudgeSystem.Web.Utilites;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,6 +35,7 @@ namespace JudgeSystem.Web.IocConfiguration
             services.AddTransient<IUtilityService, UtilityService>();
             services.AddTransient<IRouteBuilder, RouteBuilder>();
             services.AddTransient<IChecker, Checker>();
+            services.AddTransient<IJsonUtiltyService, JsonUtiltyService>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();

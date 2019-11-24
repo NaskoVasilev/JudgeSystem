@@ -55,5 +55,11 @@
         public const string StudentWithTheSameNumberInClassExists = "Student with the same number exists in {0} class.";
 
         public const string UserNotFound = "User with provided credentials was not found!";
+
+        public const string FileExtensionMustBeJson = "Your file must be in json format. Its extension should be .json";
+
+        public const string InvalidTest = "Test #{0} is invalid.";
+
+        public const string InvalidJsonFile = "Your json file is not valid. See template for more information about file format.";
     }
 }

@@ -8,6 +8,7 @@ using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.ViewModels.Test;
 using JudgeSystem.Web.InputModels.Test;
+using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Common;
 
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,18 @@ namespace JudgeSystem.Services.Data
 			return test.To<TestDto>();
 		}
 
-		public async Task Delete(int id)
+        public Task AddRange(IEnumerable<ProblemTestInputModel> tests, int problemId)
+        {
+            IEnumerable<Test> entites = tests.To<IEnumerable<Test>>();
+            foreach (Test entity in entites)
+            {
+                entity.OutputData = entity.OutputData.Trim();
+                entity.ProblemId = problemId;
+            }
+            return repository.AddRangeAsync(entites);
+        }
+
+        public async Task Delete(int id)
 		{
             Test test = await repository.FindAsync(id);
 			await executedTestService.DeleteExecutedTestsByTestId(test.Id);

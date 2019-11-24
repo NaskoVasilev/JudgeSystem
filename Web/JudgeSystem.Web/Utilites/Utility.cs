@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using JudgeSystem.Data.Models.Enums;
@@ -76,5 +77,16 @@ namespace JudgeSystem.Web.Utilites
         }
 
         public static string GetBaseUrl(HttpContext httpContext) => $"{httpContext.Request.Scheme}://{httpContext.Request.Host.ToUriComponent()}";
+
+        public static IEnumerable<string> ValidateObject(object obj)
+        {
+            var validationContext = new ValidationContext(obj);
+            ICollection<ValidationResult> results = new List<ValidationResult>(); // Will contain the results of the validation
+            Validator.TryValidateObject(obj, validationContext, results, true);
+            foreach (ValidationResult result in results)
+            {
+                yield return result.ErrorMessage;
+            }
+        }
     }
 }
