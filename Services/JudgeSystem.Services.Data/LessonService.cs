@@ -88,6 +88,7 @@ namespace JudgeSystem.Services.Data
                 .First(x => x.Id == lessonId).Problems
                 .OrderBy(x => x.CreatedOn).FirstOrDefault()?.Id;
         }
+        
         public async Task<LessonViewModel> GetLessonInfo(int id)
         {
             LessonViewModel lesson = await repository.All()
