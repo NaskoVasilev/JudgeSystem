@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Text;
+
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Services;
 using JudgeSystem.Web.Controllers;
+using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Lesson;
 
@@ -165,6 +168,75 @@ namespace JudgeSystem.Web.Tests.Controllers
            .Calling(c => c.Details(lessonId, contestId, null))
            .ShouldReturn()
            .RedirectToAction("EnterPassword", new { id = lesson.Id, contestId });
+        }
+
+        [Fact]
+        public void EneterPassword_WithNoParameters_ShouldReturnView() => 
+            MyController<LessonController>
+            .Instance()
+            .WithUser()
+            .Calling(c => c.EnterPassword())
+            .ShouldReturn()
+            .View();
+
+        [Fact]
+        public void EneterPassword_WithLessonWithValidPasswordAndContestId_ShouldHaveValidAttributesAndRedirectToDetailsWithCintestIdAsParameter()
+        {
+            Lesson lesson = LessonTestData.GetEntity();
+            string password = "testpass";
+            lesson.LessonPassword = new PasswordHashService().HashPassword(password);
+            Contest contest = ContestTestData.GetEntity();
+            var model = new LessonPasswordInputModel() { LessonPassword = password, Id = lesson.Id, ContestId = contest.Id };
+
+            MyController<LessonController>
+           .Instance()
+           .WithUser()
+           .WithData(lesson, contest)
+           .Calling(c => c.EnterPassword(model))
+           .ShouldHave()
+           .ActionAttributes(attributes => attributes.RestrictingForHttpMethod(HttpMethod.Post).ValidatingAntiForgeryToken())
+           .AndAlso()
+           .ShouldReturn()
+           .RedirectToAction("Details", new { lesson.Id, contestId = model.ContestId });
+        }
+
+        [Fact]
+        public void EneterPassword_WithLessonWithValidPasswordAndPracticeId_ShouldRedirectToDetailsWithPracticeIdAsParameterAndSetDataInTheSession()
+        {
+            Lesson lesson = LessonTestData.GetEntity();
+            string password = "testpass";
+            lesson.LessonPassword = new PasswordHashService().HashPassword(password);
+
+            var model = new LessonPasswordInputModel() { LessonPassword = password, Id = lesson.Id, PracticeId = lesson.Practice.Id };
+
+            MyController<LessonController>
+           .Instance()
+           .WithUser()
+           .WithData(lesson)
+           .Calling(c => c.EnterPassword(model))
+           .ShouldHave()
+           .Session(session => session.ContainingEntry(lesson.Id.ToString(), TestUser.Username))
+           .AndAlso()
+           .ShouldReturn()
+           .RedirectToAction("Details", new { lesson.Id, practiceId = model.PracticeId });
+        }
+
+        [Fact]
+        public void EneterPassword_WithInvalidLessonPassword_ShoudlReturnViewWithTheSameModelAndAddErrorToTheModelState()
+        {
+            Lesson lesson = LessonTestData.GetEntity();
+            var model = new LessonPasswordInputModel() { LessonPassword = "incorrect", Id = lesson.Id, PracticeId = lesson.Practice.Id };
+
+            MyController<LessonController>
+           .Instance()
+           .WithUser()
+           .WithData(lesson)
+           .Calling(c => c.EnterPassword(model))
+           .ShouldHave()
+           .ModelState(state => state.For<LessonPasswordInputModel>().ContainingErrorFor(x => x.LessonPassword))
+           .AndAlso()
+           .ShouldReturn()
+           .View(result =>result.WithModelOfType<LessonPasswordInputModel>());
         }
     }
 }
