@@ -73,7 +73,6 @@ namespace JudgeSystem.Web.Tests.Controllers
             .WithModelOfType<CourseLessonsViewModel>()
             .Passing(model =>
             {
-
                 Assert.Equal($"{lesson.Course.Name} - {lessonType}", model.Name);
                 LessonLinkViewModel firstLesson = model.Lessons.First();
                 Assert.NotNull(firstLesson);
