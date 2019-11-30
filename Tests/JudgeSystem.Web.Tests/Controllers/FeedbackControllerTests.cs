@@ -13,14 +13,14 @@ namespace JudgeSystem.Web.Tests.Controllers
     public class FeedbackControllerTests
     {
         [Fact]
-        public void FeedbackControllerActionsShouldBeAllowedOnlyForAuthorizedUser() =>
+        public void FeedbackControllerActions_ShouldBeAllowedOnlyForAuthorizedUser() =>
             MyController<FeedbackController>
             .Instance()
             .ShouldHave()
             .Attributes(attributes => attributes.RestrictingForAuthorizedRequests());
 
         [Fact]
-        public void SendShouldReturnView() =>
+        public void Send_ShouldReturnView() =>
             MyController<FeedbackController>
             .Instance()
             .Calling(c => c.Send())
@@ -28,30 +28,32 @@ namespace JudgeSystem.Web.Tests.Controllers
             .View();
 
         [Fact]
-        public void SendShouldBeAllowedOnlyForPostRequest() =>
+        public void Send_ShouldHaveAttribtesForPostRequestAndAntiForgeryToken() =>
             MyController<FeedbackController>
             .Instance()
             .Calling(c => c.Send(With.Default<FeedbackCreateInputModel>()))
             .ShouldHave()
             .ActionAttributes(attributes => attributes
-                .RestrictingForHttpMethod(HttpMethod.Post));
+                .RestrictingForHttpMethod(HttpMethod.Post)
+                .ValidatingAntiForgeryToken());
 
-        [Fact]
-        public void SendShouldReturnViewWithTheSameViewModelWhenModelStateIsInvalid() =>
+        [Theory]
+        [InlineData("no")]
+        public void Send_WithInvalidModelStateShouldReturnViewWithTheSameViewModel(string content) =>
             MyController<FeedbackController>
             .Instance()
-            .Calling(c => c.Send(With.Default<FeedbackCreateInputModel>()))
+            .Calling(c => c.Send(new FeedbackCreateInputModel { Content = content }))
             .ShouldHave()
             .InvalidModelState()
             .AndAlso()
             .ShouldReturn()
             .View(result => result
                 .WithModelOfType<FeedbackCreateInputModel>()
-                .Passing(model => model.Content == null));
+                .Passing(model => model.Content == content));
 
         [Theory]
         [InlineData("MyTested.AspNetCore.Mvc works fine")]
-        public void SendShouldReturnRedirectAndShoudAddFeedbackWithValidFeedback(string content) =>
+        public void Send_WithValidFeedback_ShouldReturnRedirectAndShoudAddFeedback(string content) =>
             MyController<FeedbackController>
             .Instance()
             .WithUser(user => user.WithUsername("nasko"))

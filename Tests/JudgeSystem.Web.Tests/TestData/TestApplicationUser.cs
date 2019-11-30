@@ -1,12 +1,14 @@
 ﻿using JudgeSystem.Data.Models;
 
+using MyTested.AspNetCore.Mvc;
+
 namespace JudgeSystem.Web.Tests.TestData
 {
     public static class TestApplicationUser
     {
-        public static string Id { get; set; } = "test_id";
+        public static string Id { get; set; } = TestUser.Identifier;
 
-        public static string Username { get; } = "test_username";
+        public static string Username { get; } = TestUser.Username;
 
         public static string Email { get; } = "test@email.com";
 
