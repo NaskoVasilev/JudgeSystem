@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Data.Models;
+﻿using System;
+
+using JudgeSystem.Data.Models;
 
 using MyTested.AspNetCore.Mvc;
 
@@ -22,7 +24,8 @@ namespace JudgeSystem.Web.Tests.TestData
             UserName = Username,
             Email = Email,
             Name = Name,
-            Surname = Surname
+            Surname = Surname,
+            SecurityStamp = Guid.NewGuid().ToString()
         };
     }
 }
