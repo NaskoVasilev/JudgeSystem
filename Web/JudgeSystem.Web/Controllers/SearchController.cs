@@ -21,11 +21,6 @@ namespace JudgeSystem.Web.Controllers
 
 		public IActionResult Results([Required] string keyword)
 		{
-			if(!ModelState.IsValid)
-			{
-				return View("ErrorView");
-			}
-
             var searchResults = new SearchResultsViewModel
             {
                 Problems = problemService.SearchByName(keyword).ToList(),

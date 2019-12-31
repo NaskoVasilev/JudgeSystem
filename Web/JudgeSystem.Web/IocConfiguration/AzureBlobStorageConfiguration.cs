@@ -14,6 +14,12 @@ namespace JudgeSystem.Web.IocConfiguration
         {
             AzureBlobSettings azureBlobSettings = configuration.GetSection(AppSettingsSections.AzureBlobSection).Get<AzureBlobSettings>();
 
+            //If someone try to start the application but have no azure storage account, just will skip adding azure storage related services to the DI container
+            if(azureBlobSettings == null)
+            {
+                return services;
+            }
+
             var storageAccount = CloudStorageAccount.Parse(azureBlobSettings.StorageConnectionString);
             services.AddSingleton(storageAccount);
 
