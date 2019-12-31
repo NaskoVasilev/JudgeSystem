@@ -6,7 +6,7 @@ namespace JudgeSystem.Web.Infrastructure.Attributes.Validation
 	[AttributeUsage(AttributeTargets.Property)]
 	public class AfterDateTimeNowAttribute : ValidationAttribute
 	{
-		private const string DefaultMessage = "The date must be in the future.";
+		public const string DefaultMessage = "The date must be in the future.";
 
 		public AfterDateTimeNowAttribute() : base(DefaultMessage)
 		{
