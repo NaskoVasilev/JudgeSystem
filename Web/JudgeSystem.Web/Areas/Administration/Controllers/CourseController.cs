@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-using JudgeSystem.Common;
 using JudgeSystem.Services.Data;
-using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels.Course;
 
