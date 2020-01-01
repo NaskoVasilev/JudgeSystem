@@ -7,5 +7,7 @@
         public const string StringLessThan3Symbols = "123";
 
         public const string StringLong10Symbols = "Tensymbols";
+
+        public const string OtherUserId = "Other_User_Id";
     }
 }
