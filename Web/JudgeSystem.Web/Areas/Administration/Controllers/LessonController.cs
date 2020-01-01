@@ -127,8 +127,14 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         public IActionResult RemovePassword() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemovePassword(LessonRemovePasswordInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             try
             {
                 LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, null);
@@ -138,7 +144,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             catch (BadRequestException ex)
             {
                 ModelState.AddModelError(nameof(LessonRemovePasswordInputModel.OldPassword), ex.Message);
-                return View();
+                return View(model);
             }
         }
     }

@@ -193,6 +193,5 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .ShouldReturn()
             .Redirect(result => result.To<Web.Controllers.CourseController>(a => a.All()));
         }
-
     }
 }
