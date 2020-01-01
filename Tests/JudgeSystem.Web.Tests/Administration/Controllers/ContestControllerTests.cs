@@ -420,13 +420,13 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .WithModelOfType<ContestSubmissionsViewModel>()
             .Passing(model =>
             {
-                model.ContestName = contest.Name;
-                model.ProblemName = problem.Name;
-                model.UserId = TestUser.Identifier;
-                model.Submissions.ShouldNotBeEmpty();
-                SubmissionResult submission = model.Submissions.First();
-                submission.Id.ShouldBe(submission.Id);
-                submission.ActualPoints.ShouldBe(submission.ActualPoints);
+                Assert.Equal(contest.Name, model.ContestName);
+                Assert.Equal(problem.Name, model.ProblemName);
+                Assert.Equal(TestUser.Identifier, model.UserId);
+                Assert.NotEmpty(model.Submissions);
+                SubmissionResult actualSubmission = model.Submissions.First();
+                Assert.Equal(submission.Id, actualSubmission.Id);
+                Assert.Equal(submission.ActualPoints, actualSubmission.ActualPoints);
                 Assert.Equal("/Administration/Contest/Submissions?contestId=1&userId=TestId&problemId={0}", model.UrlPlaceholder);
                 Assert.Equal("/Administration/Contest/Submissions?contestId=1&userId=TestId&problemId=1&page={0}", model.PaginationData.Url);
             }));
