@@ -1,7 +1,7 @@
 ﻿using JudgeSystem.Common.Settings;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyTested.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Tests
 {

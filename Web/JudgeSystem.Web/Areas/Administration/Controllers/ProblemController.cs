@@ -68,6 +68,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 LesosnId = lessonId,
                 PracticeId = practiceId
             };
+
             return View(model);
         }
 
@@ -140,6 +141,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             return View(model);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> AddTests(ProblemAddTestsInputModel model)
         {
@@ -151,16 +153,17 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            if (!model.Tests.FileName.EndsWith(GlobalConstants.JsonFileExtension))
+            if (string.IsNullOrEmpty(model.Tests.FileName) || !model.Tests.FileName.EndsWith(GlobalConstants.JsonFileExtension))
             {
-                ModelState.AddModelError(string.Empty, ErrorMessages.FileExtensionMustBeJson);
+                ModelState.AddModelError(nameof(ProblemAddTestsInputModel.Tests), ErrorMessages.FileExtensionMustBeJson);
                 return View(model);
             }
 
             var messages = new List<string>();
             using System.IO.Stream stream = model.Tests.OpenReadStream();
+            string dir = Environment.CurrentDirectory;
             string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
-            List<ProblemTestInputModel> tests = jsonUtiltyService.PasreJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, messages);
+            List<ProblemTestInputModel> tests = jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, messages);
 
             if (messages.Any())
             {

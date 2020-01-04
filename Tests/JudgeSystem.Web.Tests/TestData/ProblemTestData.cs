@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Data.Models;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Web.Tests.TestData
@@ -15,5 +17,29 @@ namespace JudgeSystem.Web.Tests.TestData
             MaxPoints = 100,
             SubmissionType = SubmissionType.PlainCode
         };
+
+        internal static IEnumerable<Problem> GetEntities()
+        {
+            Lesson lesson = LessonTestData.GetEntity();
+
+            return new List<Problem>
+            {
+                new Problem
+                {
+                    LessonId = lesson.Id,
+                    Name = "Sum in matrix",
+                },
+                new Problem
+                {
+                    LessonId = lesson.Id,
+                    Name = "Matrix diagonals"
+                },
+                new Problem
+                {
+                    LessonId = 100,
+                    Name = "Reflection"
+                }
+            };
+        }
     }
 }
