@@ -10,7 +10,7 @@ namespace JudgeSystem.Web.Tests.TestData
             Id = 1,
             AllowedMemoryInMegaBytes = 10,
             AllowedTimeInMilliseconds = 500,
-            Name = "Sum tow numbers",
+            Name = "Sum two numbers",
             Lesson = LessonTestData.GetEntity(),
             MaxPoints = 100,
             SubmissionType = SubmissionType.PlainCode

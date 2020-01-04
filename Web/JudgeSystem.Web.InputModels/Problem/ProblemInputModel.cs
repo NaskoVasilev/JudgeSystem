@@ -10,9 +10,9 @@ namespace JudgeSystem.Web.InputModels.Problem
 	{
         public ProblemInputModel()
         {
-            this.AllowedMemoryInMegaBytes = GlobalConstants.DefaultAllowedMemoryInMegaBytes;
-            this.AllowedTimeInMilliseconds = GlobalConstants.DefaultAllowedTimeInMilliseconds;
-            this.MaxPoints = GlobalConstants.DefaultMaxPoints;
+            AllowedMemoryInMegaBytes = GlobalConstants.DefaultAllowedMemoryInMegaBytes;
+            AllowedTimeInMilliseconds = GlobalConstants.DefaultAllowedTimeInMilliseconds;
+            MaxPoints = GlobalConstants.DefaultMaxPoints;
         }
 
         [Required]
