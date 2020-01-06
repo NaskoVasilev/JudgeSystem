@@ -8,15 +8,19 @@ namespace JudgeSystem.Web.Tests.TestData
 {
     public static class TestApplicationUser
     {
-        public static string Id { get; set; } = TestUser.Identifier;
+        public const string Id = TestUser.Identifier;
 
-        public static string Username { get; } = TestUser.Username;
+        public const string Username = TestUser.Username;
 
-        public static string Email { get; } = "test@email.com";
+        public const string Email = "test@email.com";
 
-        public static string Name { get; } = "test_name";
+        public const string Name = "test_name";
 
-        public static string Surname { get; } = "test_surname";
+        public const string Surname = "test_surname";
+
+        public const string Password = "T3st_P@ss";
+
+        public const string PasswordHash = "AQAAAAEAACcQAAAAEMdWe4GUIMaegFzcl0AtykG1JxIZ98PuZJUbikPQ62KD7I5luuGmv1rgE5s6sdsX6g==";
 
         public static ApplicationUser GetDefaultUser() => new ApplicationUser
         {
@@ -25,6 +29,9 @@ namespace JudgeSystem.Web.Tests.TestData
             Email = Email,
             Name = Name,
             Surname = Surname,
+            PasswordHash = PasswordHash,
+            EmailConfirmed = true,
+            NormalizedUserName = Username.ToUpper(),
             SecurityStamp = Guid.NewGuid().ToString()
         };
     }
