@@ -41,6 +41,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TestEditInputModel model)
         {
             if (!ModelState.IsValid)
