@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -45,7 +44,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(StudentCreateInputModel model)
 		{
-            if (studentService.ExistsByEmail(model.Email))
+            if (model.Email != null && studentService.ExistsByEmail(model.Email))
             {
                 ModelState.AddModelError(nameof(model.Email), ErrorMessages.StudentWithTheSameEmailAlreadyExists);
             }
@@ -95,7 +94,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(StudentEditInputModel model)
 		{
-			if(!ModelState.IsValid)
+            StudentDto currentStudent = await studentService.GetById<StudentDto>(model.Id);
+
+            if (model.Email != currentStudent.Email && studentService.ExistsByEmail(model.Email))
+            {
+                ModelState.AddModelError(nameof(model.Email), ErrorMessages.StudentWithTheSameEmailAlreadyExists);
+            }
+            if ((model.NumberInCalss != currentStudent.NumberInCalss || model.SchoolClassId != currentStudent.SchoolClassId) && 
+                studentService.ExistsByClassAndNumber(model.SchoolClassId, model.NumberInCalss))
+            {
+                string grade = await schoolClassService.GetGrade(model.SchoolClassId);
+                ModelState.AddModelError(nameof(model.NumberInCalss), string.Format(ErrorMessages.StudentWithTheSameNumberInClassExists, grade));
+            }
+
+            if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
