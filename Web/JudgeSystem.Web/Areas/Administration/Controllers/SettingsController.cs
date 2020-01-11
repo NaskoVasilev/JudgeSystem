@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [Authorize(Roles = GlobalConstants.OwnerRoleName)]
         public IActionResult AddAdministrator() => View();
 
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = GlobalConstants.OwnerRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddAdministrator(UserIdentityConfirmationInputModel model) =>
@@ -32,6 +33,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [Authorize(Roles = GlobalConstants.OwnerRoleName)]
         public IActionResult RemoveAdministrator() => View();
 
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = GlobalConstants.OwnerRoleName)]
         [HttpPost]
         public async Task<IActionResult> RemoveAdministrator(UserIdentityConfirmationInputModel model) => 

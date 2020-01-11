@@ -10,7 +10,7 @@ namespace JudgeSystem.Web.Filters
 {
     public class EntityNotFoundExceptionFilter : ExceptionFilterAttribute
     {
-        private const string EntityNotFoundErrorViewName = "EntityNotFoundError";
+        public const string EntityNotFoundErrorViewName = "EntityNotFoundError";
         private readonly IModelMetadataProvider modelMetadataProvider;
         
         public EntityNotFoundExceptionFilter(IModelMetadataProvider modelMetadataProvider)

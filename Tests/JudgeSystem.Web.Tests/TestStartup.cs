@@ -1,7 +1,12 @@
 ﻿using JudgeSystem.Common.Settings;
+using JudgeSystem.Services;
+using JudgeSystem.Web.Tests.Mocks;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using MyTested.AspNetCore.Mvc;
+
 
 namespace JudgeSystem.Web.Tests
 {
@@ -24,6 +29,8 @@ namespace JudgeSystem.Web.Tests
             services.AddSingleton(adminSettings);
 
             ConfigureServices(services);
+
+            services.Replace<IAzureStorageService, AzureStorageServiceMock>(ServiceLifetime.Transient);
         }
     }
 }
