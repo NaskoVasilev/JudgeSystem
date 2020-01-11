@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 PracticeResults = userService.GetPracticeResults(userId),
                 UserId = userId
             };
+
             return View(userResults);
         }
 
