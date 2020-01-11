@@ -1,6 +1,7 @@
 ﻿using JudgeSystem.Common.Settings;
 using JudgeSystem.Services;
 using JudgeSystem.Web.Tests.Mocks;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

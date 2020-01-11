@@ -161,7 +161,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             var messages = new List<string>();
             using System.IO.Stream stream = model.Tests.OpenReadStream();
-            string dir = Environment.CurrentDirectory;
             string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
             List<ProblemTestInputModel> tests = jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, messages);
 

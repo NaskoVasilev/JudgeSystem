@@ -150,7 +150,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             };
             MyController<LessonController>
             .Instance()
-            .WithUser("nasko", GlobalConstants.AdministratorRoleName)
             .WithData(lesson)
             .Calling(c => c.Edit(inputModel))
             .ShouldHave()

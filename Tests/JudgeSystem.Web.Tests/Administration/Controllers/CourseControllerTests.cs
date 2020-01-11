@@ -54,7 +54,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<CourseController>
             .Instance()
-            .WithUser("nasko", GlobalConstants.AdministratorRoleName)
             .Calling(c => c.Create(inputModel))
             .ShouldHave()
             .Data(data => data
@@ -74,7 +73,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<CourseController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(course)
             .Calling(c => c.Edit(course.Id))
             .ShouldReturn()
@@ -124,7 +122,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<CourseController>
             .Instance()
-            .WithUser("nasko", GlobalConstants.AdministratorRoleName)
             .WithData(course)
             .Calling(c => c.Edit(inputModel))
             .ShouldHave()
@@ -147,7 +144,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<CourseController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(course)
             .Calling(c => c.Delete(course.Id))
             .ShouldReturn()
@@ -179,7 +175,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<CourseController>
            .Instance()
-           .WithUser("admin", GlobalConstants.AdministratorRoleName)
            .WithData(course)
            .Calling(c => c.DeleteConfirm(course.Id))
            .ShouldHave()

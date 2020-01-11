@@ -114,7 +114,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("nasko", GlobalConstants.AdministratorRoleName)
             .WithData(lesson)
             .Calling(c => c.Create(inputModel))
             .ShouldHave()
@@ -137,7 +136,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         public void GetLessons_WithValidCourseIdAndLessonType_ShouldReturnCorrectData(int courseId, LessonType lessonType, string expectedIds) =>
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(LessonTestData.GetLessons())
             .Calling(c => c.GetLessons(courseId, lessonType))
             .ShouldReturn()
@@ -149,7 +147,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         public void ActiveContests_WithActiveAndFinishedContests_ShouldReturnOnlyActiveContests() =>
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(ContestTestData.GetContests())
             .Calling(c => c.ActiveContests())
             .ShouldReturn()
@@ -164,7 +161,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(contest)
             .Calling(c => c.Details(1))
             .ShouldReturn()
@@ -186,7 +182,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(contest)
             .Calling(c => c.Edit(1))
             .ShouldReturn()
@@ -285,7 +280,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("nasko", GlobalConstants.AdministratorRoleName)
             .WithData(contest)
             .Calling(c => c.Edit(inputModel))
             .ShouldHave()
@@ -310,7 +304,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(contest)
             .Calling(c => c.Delete(1))
             .ShouldReturn()
@@ -344,7 +337,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
            .Instance()
-           .WithUser("admin", GlobalConstants.AdministratorRoleName)
            .WithData(contest)
            .Calling(c => c.DeletePost(contest.Id))
            .ShouldHave()
@@ -374,7 +366,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
            .Instance()
-           .WithUser("admin", GlobalConstants.AdministratorRoleName)
            .WithData(allContests)
            .Calling(c => c.All(page))
            .ShouldReturn()
@@ -412,7 +403,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(user, lesson, problem, contest, submission, executedTest)
             .Calling(c => c.Submissions(user.Id, contest.Id, problemId, 1))
             .ShouldReturn()
@@ -452,7 +442,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(problem, contest)
             .Calling(c => c.Submissions(user.Id, contest.Id, problem.Id, page))
             .ShouldReturn()
@@ -482,7 +471,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
             MyController<ContestController>
             .Instance()
-            .WithUser("admin", GlobalConstants.AdministratorRoleName)
             .WithData(contest)
             .Calling(c => c.GetContestResultPagesCount(contest.Id))
             .ShouldHave()
