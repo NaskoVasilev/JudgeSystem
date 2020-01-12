@@ -1,4 +1,6 @@
-﻿using JudgeSystem.Data.Models;
+﻿using System;
+using System.Collections.Generic;
+using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Web.Tests.TestData
@@ -13,5 +15,20 @@ namespace JudgeSystem.Web.Tests.TestData
             Type = LessonType.Exercise,
             Practice = PracticeTestData.GetEntity(),
         };
+
+        internal static IEnumerable<Lesson> GenerateLessons()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                yield return new Lesson
+                {
+                    Id = i + 1,
+                    Name = "lesson" + i,
+                    CourseId = (i % 3) + 1,
+                    Type = (LessonType)((i % 3) + 1),
+                    Practice = new Practice() { Id = i + 1 },
+                };
+            }
+        }
     }
 }
