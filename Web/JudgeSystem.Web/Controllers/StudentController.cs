@@ -43,13 +43,13 @@ namespace JudgeSystem.Web.Controllers
             StudentDto student = await studentService.GetStudentProfileByActivationKey(model.ActivationKey);
 			if(student == null)
 			{
-				ModelState.AddModelError(string.Empty, ErrorMessages.InvalidActivationKey);
-				return View();
+				ModelState.AddModelError(nameof(StudentActivateProfileInputModel.ActivationKey), ErrorMessages.InvalidActivationKey);
+				return View(model);
 			}
 			if (student.IsActivated)
 			{
 				ModelState.AddModelError(string.Empty, ErrorMessages.ActivatedStudentProfile);
-				return View();
+				return View(model);
 			}
 
 			await studentService.SetStudentProfileAsActivated(student.Id);

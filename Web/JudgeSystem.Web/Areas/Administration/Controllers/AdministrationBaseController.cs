@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
 	[Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-	[Area("Administration")]
+	[Area(GlobalConstants.AdministrationArea)]
 	public class AdministrationBaseController : BaseController
 	{
 	}

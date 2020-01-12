@@ -6,7 +6,13 @@ namespace JudgeSystem.Web.Tests.TestData
 {
     public static class FeedbackTestData
     {
-        public static IEnumerable<Feedback> GetData()
+        public static Feedback GetEntity() => new Feedback
+        {
+            Id = 1,
+            Content = "test content"
+        };
+
+        public static IEnumerable<Feedback> GenerateFeedbacks()
         {
             string[] contents =
             {

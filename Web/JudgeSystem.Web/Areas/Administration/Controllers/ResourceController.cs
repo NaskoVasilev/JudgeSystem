@@ -44,7 +44,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
             if(!validationService.IsValidFileExtension(model.File.FileName))
             {
-                ModelState.AddModelError(string.Empty, 
+                ModelState.AddModelError(nameof(ResourceInputModel.File), 
                     string.Format(ErrorMessages.UnsupportedFileFormat, System.IO.Path.GetExtension(model.File.FileName)));
                 return View(model);
             }
@@ -81,7 +81,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			}
             if (model.File != null && !validationService.IsValidFileExtension(model.File.FileName))
             {
-                ModelState.AddModelError(string.Empty,
+                ModelState.AddModelError(nameof(ResourceEditInputModel.File),
                     string.Format(ErrorMessages.UnsupportedFileFormat, System.IO.Path.GetExtension(model.File.Name)));
                 return View(model);
             }
