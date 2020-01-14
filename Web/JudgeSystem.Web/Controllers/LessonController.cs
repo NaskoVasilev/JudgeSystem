@@ -64,6 +64,11 @@ namespace JudgeSystem.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EnterPassword(LessonPasswordInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             LessonDto lesson = await lessonService.GetById<LessonDto>(model.Id);
 
             if (lesson.LessonPassword == passwordHashService.HashPassword(model.LessonPassword))
