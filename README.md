@@ -2,9 +2,8 @@
 An open-source judge system for evaluating programmming code and managing tasks and competitions.
 This was my final project for "C# MVC Frameworks - ASP.NET Core - June 2019" course in SoftUni.
 
-Master branch
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=master)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=master)
-Develop branch
+
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=develop)
 
 ## Description
