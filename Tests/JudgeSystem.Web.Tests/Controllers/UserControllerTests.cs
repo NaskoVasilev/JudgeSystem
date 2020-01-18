@@ -19,7 +19,8 @@ namespace JudgeSystem.Web.Tests.Controllers
            .ShouldHave()
                 .Attributes(attributes => attributes.RestrictingForAuthorizedRequests());
         [Fact]
-        public void MyResults_WithNoDataInTheDbForCurrentUser_ShouldReturnViewWithNoData() => MyController<UserController>
+        public void MyResults_WithNoDataInTheDbForCurrentUser_ShouldReturnViewWithNoData() => 
+            MyController<UserController>
             .Instance()
             .WithUser()
             .WithData()

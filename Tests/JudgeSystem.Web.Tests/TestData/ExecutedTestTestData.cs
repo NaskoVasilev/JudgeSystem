@@ -1,5 +1,6 @@
 ﻿using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using System.Collections.Generic;
 
 namespace JudgeSystem.Web.Tests.TestData
 {
@@ -13,7 +14,7 @@ namespace JudgeSystem.Web.Tests.TestData
             MemoryUsed = 12,
             TimeUsed = 200,
             ExecutionResultType = TestExecutionResultType.Success,
-            Test = TestTestData.GetEntity()
+            Test = TestTestData.GetEntity(),
         };
     }
 }
