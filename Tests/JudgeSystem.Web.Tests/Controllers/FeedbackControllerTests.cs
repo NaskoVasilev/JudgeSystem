@@ -3,6 +3,7 @@
 using JudgeSystem.Data.Models;
 using JudgeSystem.Web.Controllers;
 using JudgeSystem.Web.InputModels.Feedback;
+using JudgeSystem.Common;
 
 using MyTested.AspNetCore.Mvc;
 using Xunit;
@@ -38,21 +39,26 @@ namespace JudgeSystem.Web.Tests.Controllers
                 .ValidatingAntiForgeryToken());
 
         [Theory]
-        [InlineData("no")]
-        public void Send_WithInvalidModelStateShouldReturnViewWithTheSameViewModel(string content) =>
-            MyController<FeedbackController>
-            .Instance()
-            .Calling(c => c.Send(new FeedbackCreateInputModel { Content = content }))
-            .ShouldHave()
-            .InvalidModelState()
-            .AndAlso()
-            .ShouldReturn()
-            .View(result => result
-                .WithModelOfType<FeedbackCreateInputModel>()
-                .Passing(model => model.Content == content));
+        [InlineData(ModelConstants.FeedbackContentMaxLength + 1)]
+        [InlineData(ModelConstants.FeedbackContentMinLength - 1)]
+        public void Send_WithInvalidModelStateShouldReturnViewWithTheSameViewModel(int contentLength)
+        {
+            string content = new string('a', contentLength);
 
+            MyController<FeedbackController>
+           .Instance()
+           .Calling(c => c.Send(new FeedbackCreateInputModel { Content = content }))
+           .ShouldHave()
+           .ModelState(modekState => modekState.For<FeedbackCreateInputModel>().ContainingErrorFor(m => m.Content))
+           .AndAlso()
+           .ShouldReturn()
+           .View(result => result
+               .WithModelOfType<FeedbackCreateInputModel>()
+               .Passing(model => model.Content == content));
+        }
+           
         [Theory]
-        [InlineData("MyTested.AspNetCore.Mvc works fine")]
+        [InlineData("Judge System works fine")]
         public void Send_WithValidFeedback_ShouldReturnRedirectAndShoudAddFeedback(string content) =>
             MyController<FeedbackController>
             .Instance()

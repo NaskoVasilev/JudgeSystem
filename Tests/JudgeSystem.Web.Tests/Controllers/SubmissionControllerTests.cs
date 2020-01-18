@@ -11,6 +11,7 @@ using JudgeSystem.Web.InputModels.Submission;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Submission;
 using JudgeSystem.Workers.Common;
+using JudgeSystem.Web.ViewModels.ExecutedTest;
 
 using MyTested.AspNetCore.Mvc;
 using Xunit;
@@ -31,11 +32,11 @@ namespace JudgeSystem.Web.Tests.Controllers
         {
             Submission submission = SubmissionTestData.GetEntity();
             ExecutedTest executeTest = ExecutedTestTestData.GetEntity();
+            executeTest.IsCorrect = true;
 
             MyController<SubmissionController>
             .Instance()
             .WithData(submission, executeTest)
-            .WithUser()
             .Calling(c => c.Details(submission.Id))
             .ShouldReturn()
             .View(result => result
@@ -46,7 +47,15 @@ namespace JudgeSystem.Web.Tests.Controllers
                     Assert.Equal(submission.Problem.Name, model.ProblemName);
                     Assert.Equal(SubmissionTestData.Code, model.Code);
                     Assert.Single(model.ExecutedTests);
-                    Assert.Equal(model.ExecutedTests.First().Id, executeTest.Id);
+
+                    ExecutedTestViewModel actualExecutedTest = model.ExecutedTests.First();
+                    Assert.Equal(executeTest.Id, actualExecutedTest.Id);
+                    Assert.Equal(executeTest.IsCorrect, actualExecutedTest.IsCorrect);
+                    Assert.Equal(executeTest.ExecutionResultType, actualExecutedTest.ExecutionResultType);
+                    Assert.Equal(executeTest.MemoryUsed, actualExecutedTest.MemoryUsed);
+                    Assert.Equal(executeTest.TimeUsed, actualExecutedTest.TimeUsed);
+                    Assert.Equal(executeTest.Output, actualExecutedTest.Output);
+                    Assert.Equal(executeTest.Test.OutputData, actualExecutedTest.TestOutputData);
                 }));
         }
 
@@ -58,7 +67,6 @@ namespace JudgeSystem.Web.Tests.Controllers
             MyController<SubmissionController>
             .Instance()
             .WithData(submission)
-            .WithUser()
             .Calling(c => c.Download(submission.Id))
             .ShouldReturn()
             .File(result => result
@@ -75,6 +83,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             Practice practice = PracticeTestData.GetEntity();
             submission.Contest = null;
             submission.PracticeId = practice.Id;
+            
             Submission contestSubmission = SubmissionTestData.GetEntity();
             contestSubmission.Id = 2;
             ExecutedTest executedTestInContest = ExecutedTestTestData.GetEntity();
@@ -95,7 +104,6 @@ namespace JudgeSystem.Web.Tests.Controllers
                 .Passing(model =>
                 {
                     Assert.Equal(2, model.Count());
-                    SubmissionResult expectedSubmission = model.OrderBy(x => x.Id).First();
                     Assert.Contains(model, s => s.Id == submission.Id && s.ActualPoints == submission.ActualPoints);
                     Assert.Contains(model, s => s.Id == contestSubmission.Id && s.ActualPoints == contestSubmission.ActualPoints);
                 }));
@@ -109,6 +117,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             Practice practice = PracticeTestData.GetEntity();
             submission.Contest = null;
             submission.PracticeId = practice.Id;
+            
             Submission contestSubmission = SubmissionTestData.GetEntity();
             contestSubmission.Id = 2;
             ExecutedTest executedTestInContest = ExecutedTestTestData.GetEntity();
@@ -133,7 +142,7 @@ namespace JudgeSystem.Web.Tests.Controllers
         }
 
         [Fact]
-        public void GetSubmissionsCount_WithContentIdNull_ShouldHaveEndpointExceptionFilterAndReturnCountOfAllSubmissions()
+        public void GetSubmissionsCount_WithContestIdNull_ShouldHaveEndpointExceptionFilterAndReturnCountOfAllSubmissions()
         {
             Submission submission = SubmissionTestData.GetEntity();
             Practice practice = PracticeTestData.GetEntity();

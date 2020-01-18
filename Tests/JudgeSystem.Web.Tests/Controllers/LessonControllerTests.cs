@@ -25,7 +25,7 @@ namespace JudgeSystem.Web.Tests.Controllers
                 .Attributes(attributes => attributes.RestrictingForAuthorizedRequests());
 
         [Fact]
-        public void Details_WithNotNullableContestIdAndAuthorizedUser_ShouldAddErrorMessageToTheTempDataAndRedirectToHomePage() =>
+        public void Details_WithNotNullableContestIdAndUserWhoIsNotInRoleStudent_ShouldAddErrorMessageToTheTempDataAndRedirectToHomePage() =>
             MyController<LessonController>
             .Instance()
             .WithUser()
@@ -40,9 +40,9 @@ namespace JudgeSystem.Web.Tests.Controllers
         public void Details_WithNotNullableContestIdAndUserInRoleStudent_ShouldAddUserToTheContestAndReturnViewWithProperData()
         {
             int lessonId = 1;
-            int contestId = 1;
             Lesson lesson = LessonTestData.GetEntity();
             Contest contest = ContestTestData.GetEntity();
+            int contestId = contest.Id;
             Resource resource = ResourceTestData.GetEntity();
             Problem problem = ProblemTestData.GetEntity();
 
@@ -78,9 +78,9 @@ namespace JudgeSystem.Web.Tests.Controllers
         [Fact]
         public void Details_WithNotNullablePracticeIdAndUser_ShouldAddUserToThePracticeAndReturnView()
         {
-            int lessonId = 1;
-            int practiceId = 1;
             Lesson lesson = LessonTestData.GetEntity();
+            int lessonId = lesson.Id;
+            int practiceId = lesson.Practice.Id;
 
             MyController<LessonController>
             .Instance()
@@ -97,15 +97,19 @@ namespace JudgeSystem.Web.Tests.Controllers
                  }))
             .AndAlso()
             .ShouldReturn()
-            .View(result => result.WithModelOfType<LessonViewModel>());
+            .View(result => result
+                .WithModelOfType<LessonViewModel>()
+                .Passing(model => model.Name == lesson.Name && 
+                model.PracticeId == practiceId && 
+                model.CourseId == lesson.Course.Id));
         }
 
         [Fact]
-        public void Details_WithLockedLessonUserInRoleAdministrator_ShouldBeAccessible()
+        public void Details_WithLockedLessonAndUserInRoleAdministrator_ShouldBeAccessible()
         {
-            int lessonId = 1;
-            int practiceId = 1;
             Lesson lesson = LessonTestData.GetEntity();
+            int lessonId = lesson.Id;
+            int practiceId = lesson.Practice.Id;
             lesson.LessonPassword = "some secret password";
 
             MyController<LessonController>
@@ -118,11 +122,11 @@ namespace JudgeSystem.Web.Tests.Controllers
         }
 
         [Fact]
-        public void Details_WithLockedLessonAndNoAdministratorAndDataInSession_ShouldBeAccessible()
+        public void Details_WithLockedLessonNoAdministratorUserAndUserLessonDataInTheSession_ShouldBeAccessible()
         {
-            int lessonId = 1;
-            int practiceId = 1;
             Lesson lesson = LessonTestData.GetEntity();
+            int lessonId = lesson.Id;
+            int practiceId = lesson.Practice.Id;
             lesson.LessonPassword = "some secret password";
 
             MyController<LessonController>
@@ -136,11 +140,11 @@ namespace JudgeSystem.Web.Tests.Controllers
         }
 
         [Fact]
-        public void Details_WithLockedLessonAndNoAdministratorAndDataInSessionWithDifferentUsername_ShouldRedirectToEnterPasswordAction()
+        public void Details_WithLockedLessonNoAdministratorUserAndDataInSessionWithDifferentUsername_ShouldRedirectToEnterPasswordAction()
         {
-            int lessonId = 1;
-            int practiceId = 1;
             Lesson lesson = LessonTestData.GetEntity();
+            int lessonId = lesson.Id;
+            int practiceId = lesson.Practice.Id;
             lesson.LessonPassword = "some secret password";
 
             MyController<LessonController>
@@ -150,15 +154,15 @@ namespace JudgeSystem.Web.Tests.Controllers
            .WithSession(session => session.WithEntry(lesson.Id.ToString(), Encoding.UTF8.GetBytes("wrong username")))
            .Calling(c => c.Details(lessonId, null, practiceId))
            .ShouldReturn()
-           .RedirectToAction("EnterPassword", new { id = lesson.Id, practiceId });
+           .RedirectToAction(nameof(LessonController.EnterPassword), new { id = lesson.Id, practiceId });
         }
 
         [Fact]
-        public void Details_WithLockedLessonAndNoAdministratorAndNoDataInTheSession_ShouldRedirectToEnterPassword()
+        public void Details_WithLockedLessonNoAdministratorUserAndEmptySession_ShouldRedirectToEnterPassword()
         {
-            int lessonId = 1;
-            int contestId = 1;
             Lesson lesson = LessonTestData.GetEntity();
+            int lessonId = lesson.Id;
+            int contestId = 1;
             lesson.LessonPassword = "some secret password";
 
             MyController<LessonController>
@@ -167,7 +171,7 @@ namespace JudgeSystem.Web.Tests.Controllers
            .WithUser(user => user.InRole(GlobalConstants.StudentRoleName))
            .Calling(c => c.Details(lessonId, contestId, null))
            .ShouldReturn()
-           .RedirectToAction("EnterPassword", new { id = lesson.Id, contestId });
+           .RedirectToAction(nameof(LessonController.EnterPassword), new { id = lesson.Id, contestId });
         }
 
         [Fact]
@@ -180,13 +184,51 @@ namespace JudgeSystem.Web.Tests.Controllers
             .View();
 
         [Fact]
-        public void EneterPassword_WithLessonWithValidPasswordAndContestId_ShouldHaveValidAttributesAndRedirectToDetailsWithCintestIdAsParameter()
+        public void EnterPassword_ShouldHaveValidateAntiforgeryTokenAndHttpPostAttributes() =>
+            MyController<LessonController>
+            .Instance()
+            .WithData(LessonTestData.GetEntity())
+            .Calling(c => c.EnterPassword(With.Default<LessonPasswordInputModel>()))
+            .ShouldHave().ActionAttributes(attributes => attributes
+               .RestrictingForHttpMethod(HttpMethod.Post)
+               .ValidatingAntiForgeryToken());
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("123")]
+        public void EnterPassword_WithInvalidInputData_ShouldHaveInvalidModelState(string password)
+        {
+            var model = new LessonPasswordInputModel()
+            {
+                LessonPassword = password,
+            };
+
+            MyController<LessonController>
+            .Instance()
+            .Calling(c => c.EnterPassword(model))
+            .ShouldHave()
+            .ModelState(modelState => modelState
+                .For<LessonPasswordInputModel>()
+                .ContainingErrorFor(m => m.LessonPassword))
+            .AndAlso()
+            .ShouldReturn()
+            .View(result => result.WithModelOfType<LessonPasswordInputModel>());
+        }
+
+        [Fact]
+        public void EneterPassword_WithValidPasswordAndContestId_ShouldRedirectToDetailsWithContestIdAsParameterAndSetUserLessonDataInTheSession()
         {
             Lesson lesson = LessonTestData.GetEntity();
             string password = "testpass";
             lesson.LessonPassword = new PasswordHashService().HashPassword(password);
             Contest contest = ContestTestData.GetEntity();
-            var model = new LessonPasswordInputModel() { LessonPassword = password, Id = lesson.Id, ContestId = contest.Id };
+            var model = new LessonPasswordInputModel() 
+            { 
+                LessonPassword = password, 
+                Id = lesson.Id, 
+                ContestId = contest.Id 
+            };
 
             MyController<LessonController>
            .Instance()
@@ -194,20 +236,24 @@ namespace JudgeSystem.Web.Tests.Controllers
            .WithData(lesson, contest)
            .Calling(c => c.EnterPassword(model))
            .ShouldHave()
-           .ActionAttributes(attributes => attributes.RestrictingForHttpMethod(HttpMethod.Post).ValidatingAntiForgeryToken())
+           .Session(session => session.ContainingEntry(lesson.Id.ToString(), TestUser.Username))
            .AndAlso()
            .ShouldReturn()
-           .RedirectToAction("Details", new { lesson.Id, contestId = model.ContestId });
+           .RedirectToAction(nameof(LessonController.Details), new { lesson.Id, contestId = model.ContestId });
         }
 
         [Fact]
-        public void EneterPassword_WithLessonWithValidPasswordAndPracticeId_ShouldRedirectToDetailsWithPracticeIdAsParameterAndSetDataInTheSession()
+        public void EneterPassword_WithValidPasswordAndPracticeId_ShouldRedirectToDetailsWithPracticeIdAsParameterAndSetUserLessonDataInTheSession()
         {
             Lesson lesson = LessonTestData.GetEntity();
             string password = "testpass";
             lesson.LessonPassword = new PasswordHashService().HashPassword(password);
-
-            var model = new LessonPasswordInputModel() { LessonPassword = password, Id = lesson.Id, PracticeId = lesson.Practice.Id };
+            var model = new LessonPasswordInputModel() 
+            { 
+                LessonPassword = password, 
+                Id = lesson.Id, 
+                PracticeId = lesson.Practice.Id 
+            };
 
             MyController<LessonController>
            .Instance()
@@ -218,14 +264,19 @@ namespace JudgeSystem.Web.Tests.Controllers
            .Session(session => session.ContainingEntry(lesson.Id.ToString(), TestUser.Username))
            .AndAlso()
            .ShouldReturn()
-           .RedirectToAction("Details", new { lesson.Id, practiceId = model.PracticeId });
+           .RedirectToAction(nameof(LessonController.Details), new { lesson.Id, practiceId = model.PracticeId });
         }
 
         [Fact]
-        public void EneterPassword_WithInvalidLessonPassword_ShoudlReturnViewWithTheSameModelAndAddErrorToTheModelState()
+        public void EneterPassword_WithInvalidLessonPassword_ShoudlReturnViewWithTheSameModelAndAddErrorInTheModelState()
         {
             Lesson lesson = LessonTestData.GetEntity();
-            var model = new LessonPasswordInputModel() { LessonPassword = "incorrect", Id = lesson.Id, PracticeId = lesson.Practice.Id };
+            var model = new LessonPasswordInputModel()
+            {
+                LessonPassword = "incorrect", 
+                Id = lesson.Id, 
+                PracticeId = lesson.Practice.Id 
+            };
 
             MyController<LessonController>
            .Instance()
@@ -233,10 +284,14 @@ namespace JudgeSystem.Web.Tests.Controllers
            .WithData(lesson)
            .Calling(c => c.EnterPassword(model))
            .ShouldHave()
-           .ModelState(state => state.For<LessonPasswordInputModel>().ContainingErrorFor(x => x.LessonPassword))
+           .ModelState(state => state
+                .For<LessonPasswordInputModel>()
+                .ContainingErrorFor(x => x.LessonPassword))
            .AndAlso()
            .ShouldReturn()
-           .View(result =>result.WithModelOfType<LessonPasswordInputModel>());
+           .View(result =>result
+                .WithModelOfType<LessonPasswordInputModel>()
+                .Passing(model => model.PracticeId == lesson.Practice.Id && model.Id == lesson.Id));
         }
     }
 }
