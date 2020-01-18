@@ -2,6 +2,7 @@
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Services;
 using JudgeSystem.Web.Controllers;
 using JudgeSystem.Web.InputModels.Student;
 using JudgeSystem.Web.Tests.TestData;
@@ -26,7 +27,6 @@ namespace JudgeSystem.Web.Tests.Controllers
         public void ActivateStudentProfile_ShouldReturnView() =>
             MyController<StudentController>
             .Instance()
-            .WithUser()
             .Calling(c => c.ActivateStudentProfile())
             .ShouldReturn()
             .View();
@@ -37,7 +37,6 @@ namespace JudgeSystem.Web.Tests.Controllers
         public void ActivateStudentProfile_WithInvalidModelState_ShouldReturnViewWithTheSameModel(string activationKey) =>
             MyController<StudentController>
             .Instance()
-            .WithUser()
             .Calling(c => c.ActivateStudentProfile(new StudentActivateProfileInputModel { ActivationKey = activationKey }))
             .ShouldHave()
             .InvalidModelState()
@@ -86,11 +85,12 @@ namespace JudgeSystem.Web.Tests.Controllers
         }
 
         [Fact]
-        public void ActivateStudentProfile_WithValidActivationKey_ShouldResirectAndAddStudentRoleToUser()
+        public void ActivateStudentProfile_WithValidActivationKey_ShouldRedirectAndAddStudentRoleToUser()
         {
             Student student = StudentTestData.GetEntity();
             ApplicationUser user = TestApplicationUser.GetDefaultUser();
             ApplicationRole role = RoleTestData.GetEntity(GlobalConstants.StudentRoleName);
+            string activationKeyHash = new PasswordHashService().HashPassword(StudentTestData.StudentActivationKey);
 
             MyController<StudentController>
            .Instance()
@@ -99,21 +99,28 @@ namespace JudgeSystem.Web.Tests.Controllers
            .Calling(c => c.ActivateStudentProfile(new StudentActivateProfileInputModel { ActivationKey = StudentTestData.StudentActivationKey }))
            .ShouldHave()
            .Data(data => data
-               .WithSet<Student>(set => Assert.NotNull(set.First(s => s.Id == student.Id && s.IsActivated)))
+               .WithSet<Student>(set =>
+               {
+                   Assert.NotNull(set.First(s => s.Id == student.Id && s.IsActivated && s.ActivationKeyHash == activationKeyHash));
+               })
                .WithSet<ApplicationUser>(set =>
                {
                    ApplicationUser targetUser = set.First(u => u.Id == user.Id);
                    Assert.NotNull(targetUser);
                    Assert.Equal(student.Id, targetUser.StudentId);
                })
-               .WithSet<IdentityUserRole<string>>(set => Assert.True(set.Any(x => x.RoleId == role.Id && x.UserId == user.Id))))
+               .WithSet<IdentityUserRole<string>>(set =>
+               {
+                   Assert.True(set.Any(x => x.RoleId == role.Id && x.UserId == user.Id));
+               }))
            .AndAlso()
            .ShouldReturn()
            .Redirect("/Identity/Account/Manage");
         }
 
         [Fact]
-        public void Profile_ShouldBeAllowedOnlyForUsersInRoleStudent() => MyController<StudentController>
+        public void Profile_ShouldBeAllowedOnlyForUsersInRoleStudent() =>
+            MyController<StudentController>
             .Instance()
             .WithData(TestApplicationUser.GetDefaultUser())
             .WithUser()
@@ -122,7 +129,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             .ActionAttributes(attributes => attributes.RestrictingForAuthorizedRequests(GlobalConstants.StudentRoleName));
 
         [Fact]
-        public void Profile_WithUserAuthenticatedUserInRoleStudent_ShouldReturnViewWithCorrectData()
+        public void Profile_WithUserInRoleStudent_ShouldReturnViewWithCorrectData()
         {
             ApplicationUser user = TestApplicationUser.GetDefaultUser();
             Student student = StudentTestData.GetEntity();
@@ -142,6 +149,23 @@ namespace JudgeSystem.Web.Tests.Controllers
                     Assert.Equal(student.Id, model.Id);
                     Assert.Equal($"{student.SchoolClass.ClassNumber} {student.SchoolClass.ClassType}", model.SchoolClassName);
                 }));
+        }
+
+        [Fact]
+        public void Profile_WithUserWithNotActivatedStudentProfile_ShouldSetErrorInTempDataAndReturnRedirectResult()
+        {
+            ApplicationUser user = TestApplicationUser.GetDefaultUser();
+
+            MyController<StudentController>
+            .Instance()
+            .WithData(user)
+            .WithUser(user => user.InRole(GlobalConstants.StudentRoleName))
+            .Calling(c => c.Profile())
+            .ShouldHave()
+            .TempData(tempData => tempData.ContainingEntry(GlobalConstants.ErrorKey, ErrorMessages.InvalidStudentProfile))
+            .AndAlso()
+            .ShouldReturn()
+            .Redirect(c => c.To<HomeController>(a => a.Index()));
         }
     }
 }

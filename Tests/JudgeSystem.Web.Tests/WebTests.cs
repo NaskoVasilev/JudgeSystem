@@ -22,7 +22,7 @@ namespace JudgeSystem.Web.Tests
         [InlineData("/Identity/Account/Login")]
         [InlineData("/Identity/Account/Register")]
         [InlineData("/Course/All")]
-        public async Task RequestToGivenUrlShoudReturnSuccessStatusCode(string url)
+        public async Task GetRequests_WithValidUrl_ShoudReturnSuccessStatusCode(string url)
         {
             HttpClient client = server.CreateClient();
             HttpResponseMessage response = await client.GetAsync(url);
@@ -39,10 +39,11 @@ namespace JudgeSystem.Web.Tests
         [InlineData("/Administration/Contest/ActiveContests")]
         [InlineData("/Administration/Contest/All")]
         [InlineData("/Administration/Student/StudentsByClass")]
-        public async Task AccessPageWithGivenUrlShoudRedirectToLoginPage(string url)
+        public async Task AccessPrivatePage_WithUnauthorizedUser_ShoudRedirectToLoginPage(string url)
         {
             HttpClient client = server.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
             HttpResponseMessage response = await client.GetAsync(url);
+            
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
             string expectedUrl = $"/Identity/Account/Login?ReturnUrl={WebUtility.UrlEncode(url)}";
             Assert.Contains(expectedUrl, response.Headers.Location.ToString());

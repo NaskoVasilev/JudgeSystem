@@ -11,7 +11,7 @@ namespace JudgeSystem.Web.Tests.Controllers
         private const string ErrorMessage = "Some error message.";
         private const string Action = "Index";
         private const string Controller = "HomeController";
-        private const string Area = "Administration";
+        private const string Area = GlobalConstants.AdministrationArea;
         private const string InfoMessage = "Some info message";
 
         [Fact]

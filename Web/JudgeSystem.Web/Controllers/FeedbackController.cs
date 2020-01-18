@@ -34,7 +34,7 @@ namespace JudgeSystem.Web.Controllers
             }
 
             await feedbackService.Create(model, userManager.GetUserId(User));
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

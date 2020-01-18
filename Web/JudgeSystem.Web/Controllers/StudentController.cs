@@ -69,7 +69,7 @@ namespace JudgeSystem.Web.Controllers
             ApplicationUser user = await userManager.GetUserAsync(User);
 			if(user.StudentId == null)
 			{
-                return ShowError(ErrorMessages.InvalidStudentProfile, "Index", "Home");
+                return ShowError(ErrorMessages.InvalidStudentProfile, nameof(HomeController.Index), "Home");
 			}
 
 			StudentProfileViewModel model = await studentService.GetById<StudentProfileViewModel>(user.StudentId);

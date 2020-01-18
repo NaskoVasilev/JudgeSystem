@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
@@ -32,8 +33,32 @@ namespace JudgeSystem.Web.Tests.Controllers
             .ShouldHave()
             .ActionAttributes(attributes => attributes.ContainingAttributeOfType<EndpointExceptionFilter>());
 
-        [Fact]
-        public void MyResults_WithValidArgumnets_ShouldReturnView()
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(90, 9)]
+        [InlineData(99, 10)]
+        [InlineData(11, 2)]
+        [InlineData(1, 1)]
+        public static void GetNumberOfPages_WithVariousNumberOfContest_ShouldReturnCorrectNumberOfPages(int contestsCount, int expectedNumberOfPages)
+        {
+            var contests = new List<Contest>();
+            for (int i = 0; i < contestsCount; i++)
+            {
+                contests.Add(new Contest() { Id = i + 1 });
+            }
+
+            MyController<ContestController>
+            .Instance()
+            .WithData(contests)
+            .Calling(c => c.GetNumberOfPages())
+            .ShouldReturn()
+            .Result(expectedNumberOfPages);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(1)]
+        public void MyResults_WithValidArgumnets_ShouldReturnViewWithValidData(int? problemId)
         {
             Lesson lesson = LessonTestData.GetEntity();
             Problem problem = ProblemTestData.GetEntity();
@@ -41,12 +66,11 @@ namespace JudgeSystem.Web.Tests.Controllers
             Submission submission = SubmissionTestData.GetEntity();
             ExecutedTest executedTest = ExecutedTestTestData.GetEntity();
 
-
             MyController<ContestController>
             .Instance()
             .WithUser()
             .WithData(lesson, problem, contest, submission, executedTest)
-            .Calling(c => c.MyResults(contest.Id, problem.Id, 1))
+            .Calling(c => c.MyResults(contest.Id, problemId, 1))
             .ShouldReturn()
             .View(result => result
             .WithName("Areas/Administration/Views/Contest/Submissions.cshtml") 
@@ -54,8 +78,12 @@ namespace JudgeSystem.Web.Tests.Controllers
             .Passing(model =>
             {
                 model.ContestName = contest.Name;
+                model.PaginationData.CurrentPage.ShouldBe(1);
+                model.PaginationData.Url.ShouldBe("/Contest/MyResults?contestId=1&problemId=1&page={0}");
+                model.UrlPlaceholder.ShouldBe("/Contest/MyResults?contestId=1&problemId={0}");
                 model.ProblemName = problem.Name;
                 model.UserId = TestUser.Identifier;
+
                 model.Submissions.ShouldNotBeEmpty();
                 SubmissionResult submission = model.Submissions.First();
                 submission.Id.ShouldBe(submission.Id);
@@ -98,6 +126,8 @@ namespace JudgeSystem.Web.Tests.Controllers
                 ContestResultViewModel firstContestResult = model.ContestResults.First();
                 firstContestResult.UserId.ShouldBe(userId);
                 firstContestResult.Total.ShouldBe(70);
+                firstContestResult.Student.FullName.ShouldBe(user.Student.FullName);
+                firstContestResult.Student.NumberInCalss.ShouldBe(user.Student.NumberInCalss);
 
                 Assert.True(firstContestResult.PointsByProblem.ContainsKey(problem.Id));
                 Assert.True(firstContestResult.PointsByProblem[problem.Id] == submission.ActualPoints);

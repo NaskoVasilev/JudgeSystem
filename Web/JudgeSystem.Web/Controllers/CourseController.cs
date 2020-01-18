@@ -37,6 +37,7 @@ namespace JudgeSystem.Web.Controllers
                 Lessons = lessonService.CourseLessonsByType(lessonType, courseId),
                 Name = $"{courseService.GetName(courseId)} - {lessonType}"
             };
+
 			return View(model);
 		}
 	}
