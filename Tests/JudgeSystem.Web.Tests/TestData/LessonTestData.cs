@@ -16,7 +16,7 @@ namespace JudgeSystem.Web.Tests.TestData
             Practice = PracticeTestData.GetEntity(),
         };
 
-        internal static IEnumerable<Lesson> GenerateLessons()
+        public static IEnumerable<Lesson> GenerateLessons()
         {
             for (int i = 0; i < 100; i++)
             {

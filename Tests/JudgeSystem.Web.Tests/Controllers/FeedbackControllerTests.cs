@@ -58,7 +58,7 @@ namespace JudgeSystem.Web.Tests.Controllers
         }
            
         [Theory]
-        [InlineData("Jydge System works fine")]
+        [InlineData("Judge System works fine")]
         public void Send_WithValidFeedback_ShouldReturnRedirectAndShoudAddFeedback(string content) =>
             MyController<FeedbackController>
             .Instance()
