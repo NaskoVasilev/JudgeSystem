@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
@@ -30,6 +29,7 @@ namespace JudgeSystem.Web.Tests.TestData
                     Practice = new Practice() { Id = i + 1 },
                 };
             }
+        }
           
         public static IEnumerable<Lesson> GetLessons()
         {
