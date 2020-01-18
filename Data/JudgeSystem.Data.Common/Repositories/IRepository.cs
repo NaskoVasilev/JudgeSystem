@@ -18,6 +18,8 @@ namespace JudgeSystem.Data.Common.Repositories
 
         Task DeleteAsync(TEntity entity);
 
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
+
         Task DeleteRangeAsync(IEnumerable<TEntity> entites);
 
         Task<TEntity> FindAsync(object id);

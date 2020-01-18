@@ -67,5 +67,10 @@ namespace JudgeSystem.Data.Repositories
 
         public void Dispose() => Context.Dispose();
 
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await Context.AddRangeAsync(entities);
+            await Context.SaveChangesAsync();
+        }
     }
 }

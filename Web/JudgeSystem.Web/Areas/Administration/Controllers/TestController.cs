@@ -5,9 +5,9 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.ViewModels.Test;
-using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -15,12 +15,14 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	{
 		private readonly ITestService testService;
 		private readonly IProblemService problemService;
+        private readonly IHostingEnvironment env;
 
-		public TestController(ITestService testService, IProblemService problemService)
+        public TestController(ITestService testService, IProblemService problemService,  IHostingEnvironment env)
 		{
 			this.testService = testService;
 			this.problemService = problemService;
-		}
+            this.env = env;
+        }
 
 		public async Task<IActionResult> ProblemTests(int problemId)
 		{
@@ -39,6 +41,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TestEditInputModel model)
         {
             if (!ModelState.IsValid)
@@ -58,5 +61,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			await testService.Delete(id);
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, "test"));
 		}
+
+        public IActionResult DownloadTemplate()
+        {
+            string filePath = env.WebRootPath + GlobalConstants.AddTestsTemplsteFilePath;
+            byte[] bytes = System.IO.File.ReadAllBytes(filePath);
+            return File(bytes, GlobalConstants.OctetStreamMimeType, GlobalConstants.AddTestsTemplateFileName);
+        }
 	}
 }

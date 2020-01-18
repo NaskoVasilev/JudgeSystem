@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\JudgeSystem.Services.Data\JudgeSystem.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services\JudgeSystem.Services.csproj" />
     <ProjectReference Include="..\..\Web\JudgeSystem.Web\JudgeSystem.Web.csproj" />
   </ItemGroup>

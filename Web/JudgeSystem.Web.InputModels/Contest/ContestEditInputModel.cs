@@ -9,7 +9,7 @@ namespace JudgeSystem.Web.InputModels.Contest
 {
     public class ContestEditInputModel : IMapFrom<Data.Models.Contest>, IMapTo<Data.Models.Contest>
 	{
-		private const string StartEndTimeErrorMessage = "End time must br after start time.";
+		public const string StartEndTimeErrorMessage = "End time must br after start time.";
 
 		public int Id { get; set; }
 

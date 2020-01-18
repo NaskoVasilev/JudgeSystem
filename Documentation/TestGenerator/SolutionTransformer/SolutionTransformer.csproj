@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Code\Code.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Code\Code.cs" />
+  </ItemGroup>
+
+</Project>

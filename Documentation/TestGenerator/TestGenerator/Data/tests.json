@@ -1,0 +1,27 @@
+[
+  {
+    "InputData": "6\r\n3",
+    "OutputData": "1 1 2 4 7 13",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "8\r\n2",
+    "OutputData": "1 1 2 3 5 8 13 21",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "9\r\n5",
+    "OutputData": "1 1 2 4 8 16 31 61 120",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "12\r\n2",
+    "OutputData": "1 1 2 3 5 8 13 21 34 55 89 144",
+    "IsTrialTest": false
+  },
+  {
+    "InputData": "10\r\n10",
+    "OutputData": "1 1 2 4 8 16 32 64 128 256",
+    "IsTrialTest": false
+  }
+]

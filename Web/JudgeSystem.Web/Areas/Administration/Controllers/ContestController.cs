@@ -90,6 +90,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
 		[HttpPost]
+        [ValidateAntiForgeryToken]
 		[ActionName(nameof(Delete))]
 		public async Task<IActionResult> DeletePost(int id)
 		{
