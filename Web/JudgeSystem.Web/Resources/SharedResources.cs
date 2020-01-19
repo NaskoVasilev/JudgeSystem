@@ -1,4 +1,4 @@
-﻿namespace JudgeSystem.Web.Resources.Shared
+﻿namespace JudgeSystem.Web.Resources
 {
     public class SharedResources
     {
