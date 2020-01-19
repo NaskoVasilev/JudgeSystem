@@ -1,43 +1,45 @@
-﻿@model ContestAllViewModel
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ContestAllViewModel
 
 @{
-	ViewData["Title"] = "All contests";
-	string url = $"/{GlobalConstants.AdministrationArea}/Contest/All?{GlobalConstants.PageKey}=" + "{0}"; 
-	PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
+    ViewData["Title"] = Localizer["All contests"];
+    string url = $"/{GlobalConstants.AdministrationArea}/Contest/All?{GlobalConstants.PageKey}=" + "{0}";
+    PaginationData paginationData = new PaginationData() { Url = url, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
-<h2 class="text-center mb-4">All contests</h2>
+<h2 class="text-center mb-4">@ViewData["Title"]</h2>
 
 <table class="table table-hover">
-	<thead>
-		<tr class="row">
-			<th class="col-md-7">Name</th>
-			<th class="col-md-5">Duration</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var contest in Model.Contests)
-		{
-			<tr class="row">
-				<td class="col-md-7">
-					<a class="text-decoration-none text-secondary"
-					   asp-controller="Contest" asp-action="Results" asp-route-id="@contest.Id">@contest.Name</a>
-				</td>
-				<td class="col-md-5">
-					From @contest.FormatedStartTime to @contest.FormatedEndTime
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr class="row">
+            <th class="col-md-7">@SharedLocalizer["Name"]</th>
+            <th class="col-md-5">@Localizer["Duration"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contest in Model.Contests)
+        {
+            <tr class="row">
+                <td class="col-md-7">
+                    <a class="text-decoration-none text-secondary"
+                       asp-controller="Contest" asp-action="Results" asp-route-id="@contest.Id">@contest.Name</a>
+                </td>
+                <td class="col-md-5">
+                    From @contest.FormatedStartTime to @contest.FormatedEndTime
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 <partial name="_ServerSidePaginationPartial" model="paginationData" />
 
 @section Scripts{
-		<script src="~/js/pagination.js"></script>
-		<script>
+    <script src="~/js/pagination.js"></script>
+    <script>
 			let url = "@url";
 			let numberOfPagesUrl = "/Contest/GetNumberOfPages";
 			InitializePaginationList(url, numberOfPagesUrl)
-		</script>
+    </script>
 }

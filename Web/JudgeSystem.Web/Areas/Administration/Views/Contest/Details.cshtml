@@ -1,29 +1,31 @@
-﻿@model ContestViewModel
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ContestViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Localizer["Contest Details"];
     Layout = "~/Views/Shared/_Layout.cshtml";
-	string administrationArea = GlobalConstants.AdministrationArea;
+    string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h2 class="text-center">Contest details</h2>
-<hr class="bg-secondary"/>
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr class="bg-secondary" />
 <h3 class="text-center">
     <a class="text-decoration-none text-dark"
        asp-controller="Contest" asp-action="Results" asp-route-id="@Model.Id">@Model.Name</a>
 </h3>
-<hr class="bg-secondary"/>
+<hr class="bg-secondary" />
 <div class="d-flex justify-content-around my-4">
-	<h3 class="font-weight-normal" >Start time: @Model.FormatedStartTime</h3>
-	<h3 class="font-weight-normal">End time: @Model.FormatedEndTime</h3>
+    <h3 class="font-weight-normal">@SharedLocalizer["Start time"]: @Model.FormatedStartTime</h3>
+    <h3 class="font-weight-normal">@SharedLocalizer["End time"]: @Model.FormatedEndTime</h3>
 </div>
-<hr class="bg-secondary"/>
+<hr class="bg-secondary" />
 <div class="d-flex justify-content-center mt-3">
-	<a class="btn btn-warning" asp-area="@administrationArea"
-	   asp-controller="Contest" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-	<a class="btn btn-primary mx-5" asp-area="@administrationArea"
-	   asp-controller="Contest" asp-action="ActiveContests">Back to all</a>
-	<a class="btn btn-danger" asp-area="@administrationArea"
-	   asp-controller="Contest" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    <a class="btn btn-warning" asp-area="@administrationArea"
+       asp-controller="Contest" asp-action="Edit" asp-route-id="@Model.Id">@SharedLocalizer["Edit"]</a>
+    <a class="btn btn-primary mx-5" asp-area="@administrationArea"
+       asp-controller="Contest" asp-action="ActiveContests">@SharedLocalizer["Back to all"]</a>
+    <a class="btn btn-danger" asp-area="@administrationArea"
+       asp-controller="Contest" asp-action="Delete" asp-route-id="@Model.Id">@SharedLocalizer["Delete"]</a>
 </div>
 
