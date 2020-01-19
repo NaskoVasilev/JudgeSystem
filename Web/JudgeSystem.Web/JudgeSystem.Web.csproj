@@ -47,4 +47,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Areas\Administration\Controllers\" />
+    <Folder Include="Resources\Areas\Administration\Views\" />
+    <Folder Include="Resources\Controllers\" />
+  </ItemGroup>
 </Project>

@@ -1,0 +1,26 @@
+﻿@{
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+    IRequestCultureFeature currentCulture = Context.Features.Get<IRequestCultureFeature>();
+    string requestedCultureName = string.Empty;
+    string requestedCultureDisplayName = string.Empty;
+
+    if(currentCulture.RequestCulture.Culture.Name == GlobalConstants.CurrentCultureInfo)
+    {
+        requestedCultureName = GlobalConstants.EnglishCultureInfo;
+        requestedCultureDisplayName = "EN";
+    }
+    else
+    {
+        requestedCultureName = GlobalConstants.CurrentCultureInfo;
+        requestedCultureDisplayName = "BG";
+    }
+
+}
+
+<a class="nav-link text-white" 
+   asp-controller="Home" 
+   asp-action="SetLanguage" 
+   asp-route-culture="@requestedCultureName"
+   asp-route-returnUrl="@returnUrl">
+    @requestedCultureDisplayName
+</a>

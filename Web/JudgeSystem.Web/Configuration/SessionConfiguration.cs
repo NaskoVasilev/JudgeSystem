@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JudgeSystem.Web.IocConfiguration
+namespace JudgeSystem.Web.Configuration
 {
     public static class SessionConfiguration
     {
