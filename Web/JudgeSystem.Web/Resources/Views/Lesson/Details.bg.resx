@@ -117,52 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add Lesson" xml:space="preserve">
-    <value>Добави урок</value>
+  <data name="Contest results" xml:space="preserve">
+    <value>Резултати от състезанието</value>
   </data>
-  <data name="Add Resource" xml:space="preserve">
-    <value>Добави ресурс</value>
+  <data name="Currently there are no tasks for this lesson!" xml:space="preserve">
+    <value>В момента няма задачи за този урок!</value>
   </data>
-  <data name="Add Task" xml:space="preserve">
-    <value>Добави задача</value>
+  <data name="Downlaod resources" xml:space="preserve">
+    <value>Изтегли ресурси</value>
   </data>
-  <data name="Add Test" xml:space="preserve">
-    <value>Добави тест</value>
+  <data name="More info" xml:space="preserve">
+    <value>Повече информация</value>
   </data>
-  <data name="All Resources" xml:space="preserve">
-    <value>Всички ресурси</value>
+  <data name="Points" xml:space="preserve">
+    <value>Точки</value>
   </data>
-  <data name="All Tasks" xml:space="preserve">
-    <value>Всички задачи</value>
+  <data name="Submission Date" xml:space="preserve">
+    <value>Дата на изпращане</value>
   </data>
-  <data name="All Tests" xml:space="preserve">
-    <value>Всички тестове</value>
-  </data>
-  <data name="Continue" xml:space="preserve">
-    <value>Продължи</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Изтрий</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Редактирай</value>
-  </data>
-  <data name="Exam" xml:space="preserve">
-    <value>Изпити</value>
-  </data>
-  <data name="Exercise" xml:space="preserve">
-    <value>Упражнения</value>
-  </data>
-  <data name="Homework" xml:space="preserve">
-    <value>Домашни</value>
-  </data>
-  <data name="Import tests" xml:space="preserve">
-    <value>Качи тестове</value>
-  </data>
-  <data name="s" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>Изпрати</value>
+  <data name="Time and memory used" xml:space="preserve">
+    <value>Време и памет</value>
   </data>
 </root>
