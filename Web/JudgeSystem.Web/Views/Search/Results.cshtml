@@ -1,85 +1,86 @@
-﻿@model SearchResultsViewModel
+﻿@inject IViewLocalizer Localizer
+@model SearchResultsViewModel
 @{
-	this.ViewData["Title"] = "Serach Results";
+    this.ViewData["Title"] = "Serach Results";
 }
 
 @if (Model.Problems.Count == 0 && Model.Lessons.Count == 0)
 {
-	<h2 class="text-danger">No resluts found</h2>
+    <h2 class="text-danger">@Localizer["No resluts found"]</h2>
 }
 else
 {
-	<nav class="mb-3">
-		<div class="nav nav-tabs" id="nav-tab" role="tablist">
-			<a class="nav-item nav-link active" id="nav-lessons-tab" data-toggle="tab" href="#nav-lessons" role="tab" aria-controls="nav-lessons" aria-selected="true">Lessons</a>
-			<a class="nav-item nav-link" id="nav-problems-tab" data-toggle="tab" href="#nav-problems" role="tab" aria-controls="nav-problems" aria-selected="false">Problems</a>
-		</div>
-	</nav>
-	<div class="tab-content" id="nav-tabContent">
-		<div class="tab-pane fade show active" id="nav-lessons" role="tabpanel" aria-labelledby="nav-lessons-tab">
-			@if (Model.Lessons.Count == 0)
-			{
-				<h4 class="text-danger">No lessons found!</h4>
-			}
-			else
-			{
-				@for (int i = 0; i < Model.Lessons.Count; i += 4)
-				{
-					<div class="row mb-3">
-						@for (int j = i; j < Math.Min(i + 4, Model.Lessons.Count); j++)
-						{
-							<div class="col-md-3 col-sm-6 col-12">
-								<div class="card">
-									<div class="card-body">
-										<a class="card-text text-secondary" 
-                                           asp-area="" asp-controller="Lesson" 
+    <nav class="mb-3">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-lessons-tab" data-toggle="tab" href="#nav-lessons" role="tab" aria-controls="nav-lessons" aria-selected="true">@Localizer["Lessons"]</a>
+            <a class="nav-item nav-link" id="nav-problems-tab" data-toggle="tab" href="#nav-problems" role="tab" aria-controls="nav-problems" aria-selected="false">@Localizer["Problems"]</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-lessons" role="tabpanel" aria-labelledby="nav-lessons-tab">
+            @if (Model.Lessons.Count == 0)
+            {
+                <h4 class="text-danger">@Localizer["No lessons found!"]</h4>
+            }
+            else
+            {
+                @for (int i = 0; i < Model.Lessons.Count; i += 4)
+                {
+                    <div class="row mb-3">
+                        @for (int j = i; j < Math.Min(i + 4, Model.Lessons.Count); j++)
+                        {
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <a class="card-text text-secondary"
+                                           asp-area="" asp-controller="Lesson"
                                            asp-action="Details"
-										   asp-route-id="@Model.Lessons[j].Id"
+                                           asp-route-id="@Model.Lessons[j].Id"
                                            asp-route-practiceId="@Model.Lessons[j].PracticeId">
-											@Model.Lessons[j].Name
-										</a>
-									</div>
-								</div>
-							</div>
-						}
-					</div>
-				}
-			}
-		</div>
+                                            @Model.Lessons[j].Name
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
 
 
-		<div class="tab-pane fade" id="nav-problems" role="tabpanel" aria-labelledby="nav-problems-tab">
-			@if (Model.Problems.Count == 0)
-			{
-				<h4 class="text-danger">No problems found!</h4>
-			}
-			else
-			{
-				@for (int i = 0; i < Model.Problems.Count; i += 4)
-				{
-					<div class="row mb-3">
-						@for (int j = i; j < Math.Min(i + 4, Model.Problems.Count); j++)
-						{
-							<div class="col-md-3 col-sm-6 col-12">
-								<div class="card">
-									<div class="card-body">
-										<p class="card-text">@Model.Problems[j].Name</p>
-										<a class="card-text text-secondary" asp-area="" 
+        <div class="tab-pane fade" id="nav-problems" role="tabpanel" aria-labelledby="nav-problems-tab">
+            @if (Model.Problems.Count == 0)
+            {
+                <h4 class="text-danger">@Localizer["No problems found!"]</h4>
+            }
+            else
+            {
+                @for (int i = 0; i < Model.Problems.Count; i += 4)
+                {
+                    <div class="row mb-3">
+                        @for (int j = i; j < Math.Min(i + 4, Model.Problems.Count); j++)
+                        {
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">@Model.Problems[j].Name</p>
+                                        <a class="card-text text-secondary" asp-area=""
                                            asp-controller="Lesson" asp-action="Details"
-										   asp-route-id="@Model.Problems[j].LessonId" 
+                                           asp-route-id="@Model.Problems[j].LessonId"
                                            asp-route-practiceId="@Model.Problems[j].LessonPracticeId"
                                            asp-fragment="@Model.Problems[j].Name">
-											@Model.Problems[j].LessonName
-										</a>
-									</div>
-								</div>
-							</div>
-						}
-					</div>
-				}
-			}
-		</div>
-	</div>
+                                            @Model.Problems[j].LessonName
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
 }
 
 
