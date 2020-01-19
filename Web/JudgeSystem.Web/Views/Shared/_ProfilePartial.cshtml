@@ -1,19 +1,21 @@
-﻿@if (this.User.Identity.IsAuthenticated)
+﻿@inject IViewLocalizer Localizer
+
+@if (this.User.Identity.IsAuthenticated)
 {
-	<li class="nav-item dropdown">
-		<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<i class="fas fa-user-circle" id="profile-icon"></i>
-		</a>
-		<div class="dropdown-menu" id="profile-dropdown" aria-labelledby="navbarDropdown">
-			<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
-			<a class="dropdown-item" asp-area="" asp-action="MyResults" asp-controller="User">Results</a>
-			@if (User.IsInRole(GlobalConstants.StudentRoleName))
-			{
-				<a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Profile">Student Profile</a>
-			}
-			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-				<button type="submit" class="dropdown-item">Logout</button>
-			</form>
-		</div>
-	</li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-circle" id="profile-icon"></i>
+        </a>
+        <div class="dropdown-menu" id="profile-dropdown" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@Localizer["Hello"], @(this.User.Identity.Name)!</a>
+            <a class="dropdown-item" asp-area="" asp-action="MyResults" asp-controller="User">@Localizer["Results"]</a>
+            @if (User.IsInRole(GlobalConstants.StudentRoleName))
+            {
+                <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Profile">@Localizer["Student Profile"]</a>
+            }
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                <button type="submit" class="dropdown-item">@Localizer["Logout"]</button>
+            </form>
+        </div>
+    </li>
 }

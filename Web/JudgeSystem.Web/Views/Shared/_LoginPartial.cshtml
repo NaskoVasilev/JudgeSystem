@@ -1,36 +1,38 @@
 ﻿@using JudgeSystem.Common
 @using JudgeSystem.Data.Models
 @using Microsoft.AspNetCore.Identity
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IViewLocalizer Localizer
 
-    <ul class="navbar-nav">
-        @if (this.SignInManager.IsSignedIn(this.User))
+<ul class="navbar-nav">
+    @if (this.SignInManager.IsSignedIn(this.User))
+    {
+        @if (User.IsInRole(GlobalConstants.OwnerRoleName))
         {
-            @if (User.IsInRole(GlobalConstants.OwnerRoleName))
-            {
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-users-cog" id="settings-icon"></i>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="AddAdministrator">Add administrator</a>
-                        <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="RemoveAdministrator">Remove administrator</a>
-                    </div>
-                </li>
-            }
-            <partial name="_ProfilePartial" />
-        }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-users-cog" id="settings-icon"></i>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="AddAdministrator">@Localizer["Add administrator"]</a>
+                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="RemoveAdministrator">@Localizer["Remove administrator"]</a>
+                </div>
             </li>
         }
+        <partial name="_ProfilePartial" />
+    }
+    else
+    {
         <li class="nav-item">
-            <partial name="_SelectLanguagePartial.cshtml" />
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a>
         </li>
-    </ul>
+        <li class="nav-item">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a>
+        </li>
+    }
+    <li class="nav-item">
+        <partial name="_SelectLanguagePartial.cshtml" />
+    </li>
+</ul>
