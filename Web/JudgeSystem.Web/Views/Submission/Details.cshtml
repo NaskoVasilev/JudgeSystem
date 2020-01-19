@@ -1,20 +1,22 @@
-﻿@model SubmissionViewModel
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model SubmissionViewModel
 
 @{
-    this.ViewData["Title"] = "Submission Details";
+    this.ViewData["Title"] = Localizer["Submission Details"];
     int zeroTestNumber = 1;
     int testNumber = 1;
     string testIds = string.Join(", ", Model.ExecutedTests.Select(t => t.Id));
 }
 
-<h3 class="text-center">Submission by @Model.UserUsername for problem <span class="text-secondary">"@Model.ProblemName"	</span></h3>
+<h3 class="text-center">@Localizer["Submission by"] @Model.UserUsername @Localizer["for problem"] <span class="text-secondary">"@Model.ProblemName"	</span></h3>
 
 @if (!Model.CompiledSucessfully)
 {
     <div class="alert alert-danger mt-3 text-center font-weight-bold" role="alert">
-        A compile time error occurred. Ensure your solution compile successfully before submitting it again!
+        @Localizer["A compile time error occurred. Ensure your solution compile successfully before submitting it again!"]
     </div>
-    <h4 class="font-weight-normal">Compilation result:</h4>
+    <h4 class="font-weight-normal">@Localizer["Compilation errors"]:</h4>
     <div class="container-fluid bg-light border px-3 py-2">@Model.CompilationErrors</div>
 }
 else
@@ -25,18 +27,18 @@ else
         string className = test.ExecutionResultType == TestExecutionResultType.Success && test.IsCorrect ? "text-secondary" : "text-danger";
         @if (test.TestIsTrialTest)
         {
-            <h4 class="@className mt-4">Trial test #@(zeroTestNumber++) (@test.ExecutionResult)</h4>
-            <p>Trial tests are not included in the final score!</p>
+            <h4 class="@className mt-4">@Localizer["Trial test"] #@(zeroTestNumber++) (@test.ExecutionResult)</h4>
+            <p>@Localizer["Trial tests are not included in the final score"]!</p>
         }
         else
         {
-            <h4 class="@className mt-4">Test #@(testNumber++) (@test.ExecutionResult)</h4>
+            <h4 class="@className mt-4">@Localizer["Test"] #@(testNumber++) (@test.ExecutionResult)</h4>
         }
 
         @if (test.TestIsTrialTest || User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
             <button class="btn btn-dark btn-sm test-input-button" data-id="@test.Id">
-                Show Input
+                @Localizer["Show Input"]
             </button>
             <div id="test-input-div-@test.Id" class="mt-2">
                 <textarea class="d-none" id="test-input-@test.Id">@test.TestInputData</textarea>
@@ -50,30 +52,30 @@ else
             {
                 <div class="d-flex justify-content-between">
                     <div class="col-md-6 ml-0 pl-0">
-                        <p class="my-2">Expected output</p>
+                        <p class="my-2">@Localizer["Expected output"]</p>
                         <textarea class="expected-output d-none">@test.TestOutputData</textarea>
                     </div>
                     <div class="col-md-6">
-                        <p class="my-2">Your output</p>
+                        <p class="my-2">@Localizer["Your output"]</p>
                         <textarea class="user-output d-none">@test.Output</textarea>
                     </div>
                 </div>
             }
         }
 
-        <p class="pt-1 m-0">Time used: @test.TimeUsed</p>
-        <p class="pb-2 m-0">Memory used: @test.MemoryUsed</p>
+        <p class="pt-1 m-0">@Localizer["Time used"]: @test.TimeUsed</p>
+        <p class="pb-2 m-0">@Localizer["Memory used"]: @test.MemoryUsed</p>
     }
 }
 
 @if (Model.ProblemSubmissionType == SubmissionType.ZipFile)
 {
-    <a asp-action="Download" asp-controller="Submission" asp-area="" asp-route-id="@Model.Id" class="mt-3 mb-2 btn btn-dark">Download Solution</a>
+<a asp-action="Download" asp-controller="Submission" asp-area="" asp-route-id="@Model.Id" class="mt-3 mb-2 btn btn-dark">@Localizer["Download Solution"]</a>
 }
 else
 {
     <div class="mt-5">
-        <h4 class="font-weight-normal">Source code</h4>
+        <h4 class="font-weight-normal">@Localizer["Source code"]</h4>
         <textarea id="source-code" class="d-none">@Model.Code</textarea>
     </div>
 }
@@ -86,13 +88,13 @@ else
     <script>
         let codeTextarea = document.getElementById('source-code');
         if (codeTextarea) {
-             var editor = CodeMirror.fromTextArea(codeTextarea,
-            {
-                lineNumbers: true,
-                matchBrackets: true,
-                mode: "text/x-c++src",
-                readOnly: 'cursor'
-            });
+            var editor = CodeMirror.fromTextArea(codeTextarea,
+                {
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    mode: "text/x-c++src",
+                    readOnly: 'cursor'
+                });
             editor.setValue(codeTextarea.innerText);
         }
 
