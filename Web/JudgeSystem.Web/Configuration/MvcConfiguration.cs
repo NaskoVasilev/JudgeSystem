@@ -17,6 +17,7 @@ namespace JudgeSystem.Web.Configuration
                     options.Filters.Add<EntityNotFoundExceptionFilter>(EntityNotFoundExceptionFilterOrder);
                 })
                 .AddViewLocalization()
+                .AddMvcLocalization()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {
