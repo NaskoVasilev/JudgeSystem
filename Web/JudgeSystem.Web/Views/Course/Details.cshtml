@@ -1,4 +1,5 @@
 ﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IViewLocalizer Localizer
 @model CourseViewModel
 
 @{
@@ -24,7 +25,7 @@
                            asp-action="Lessons"
                            asp-route-courseId="@Model.Id"
                            asp-route-lessonType="@lessonType">
-                            @($"{Model.Name} - {SharedLocalizer[lessonType]}{SharedLocalizer["s"]}")
+                            @($"{Model.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
                         </a>
                     </td>
                 </tr>

@@ -33,7 +33,7 @@
                                        asp-action="Lessons"
                                        asp-route-courseId="@course.Id"
                                        asp-route-lessonType="@lessonType">
-                                        @($"{course.Name} - {SharedLocalizer[lessonType]}{SharedLocalizer["s"]}")
+                                        @($"{course.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
                                     </a>
                                 </li>
                             }

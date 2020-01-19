@@ -120,4 +120,7 @@
   <data name="All courses" xml:space="preserve">
     <value>Всички обучения</value>
   </data>
+  <data name="s" xml:space="preserve">
+    <value />
+  </data>
 </root>

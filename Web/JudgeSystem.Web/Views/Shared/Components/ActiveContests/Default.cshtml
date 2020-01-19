@@ -1,14 +1,15 @@
-﻿@model IEnumerable<ActiveContestViewModel>
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model IEnumerable<ActiveContestViewModel>
 
 @foreach (var contest in Model)
 {
-	string remainingDaysText = contest.RemainingDays <= 0 ? "" : $"{contest.RemainingDays} days, ";
-	string remainingHoursText = contest.RemainingHours <= 0 ? "" : $"{contest.RemainingHours} hours and ";
+    string remainingDaysText = contest.RemainingDays <= 0 ? "" : $"{contest.RemainingDays} {SharedLocalizer["days"]}, ";
+    string remainingHoursText = contest.RemainingHours <= 0 ? "" : $"{contest.RemainingHours} {SharedLocalizer["hours"]} {SharedLocalizer["and"]} ";
 
-	<div class="border-top border-bottom overflow-auto pt-3">
-		<a class="h3 text-secondary text-decoration-none" asp-area="" asp-controller="Lesson" asp-action="Details"
-		   asp-route-contestId="@contest.Id" asp-route-id="@contest.LessonId">@contest.Name</a>
-		<p class="mt-2">Time remaining: @remainingDaysText@remainingHoursText@contest.RemainingMinutes minutes.</p>
-	</div>
+    <div class="border-top border-bottom overflow-auto pt-3">
+        <a class="h3 text-secondary text-decoration-none" asp-area="" asp-controller="Lesson" asp-action="Details"
+           asp-route-contestId="@contest.Id" asp-route-id="@contest.LessonId">@contest.Name</a>
+        <p class="mt-2">@SharedLocalizer["Remaining time"]: @remainingDaysText@remainingHoursText@contest.RemainingMinutes @SharedLocalizer["minutes"].</p>
+    </div>
 }
 
