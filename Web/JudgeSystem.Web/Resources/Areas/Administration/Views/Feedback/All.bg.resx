@@ -120,6 +120,15 @@
   <data name="Feedbacks" xml:space="preserve">
     <value>Обратни връзки</value>
   </data>
+  <data name="Sender email" xml:space="preserve">
+    <value>Имейл на изпращащия</value>
+  </data>
+  <data name="Sent by" xml:space="preserve">
+    <value>Изпратена от</value>
+  </data>
+  <data name="Sent on" xml:space="preserve">
+    <value>Изпратена на</value>
+  </data>
   <data name="There are no feedbacks" xml:space="preserve">
     <value>Няма обратни връзки</value>
   </data>
