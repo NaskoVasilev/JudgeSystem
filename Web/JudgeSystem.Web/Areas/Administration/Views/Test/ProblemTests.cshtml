@@ -1,48 +1,49 @@
-﻿@model ProblemTestsViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ProblemTestsViewModel
 
 @{
-	ViewData["Title"] = "Problem Tests";
-	int testNumber = 1;
+    ViewData["Title"] = SharedLocalizer["Problem Tests"];
+    int testNumber = 1;
 }
 
 <h2 class="text-center mb-3">Problem Tests</h2>
 <div class="d-flex justify-content-center mb-3">
-	<a class="btn btn-outline-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
-	   asp-route-lessonId="@Model.LessonId">Back to all problems</a>
+    <a class="btn btn-outline-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
+       asp-route-lessonId="@Model.LessonId">@SharedLocalizer["Back to all problems"]</a>
 </div>
 @foreach (TestViewModel test in Model.Tests)
 {
-	<div>
-		@if (test.IsTrialTest)
-		{
-			<h4>Zero Test</h4>
-		}
-		else
-		{
-			<h4>Test - @(testNumber++)</h4>
-		}
+    <div>
+        @if (test.IsTrialTest)
+        {
+            <h4>@SharedLocalizer["Zero Test"]</h4>
+        }
+        else
+        {
+            <h4>Test - @(testNumber++)</h4>
+        }
 
-		<div class="d-flex justify-content-between mb-3">
-			<div class="col-md-6 pl-0">
-				<p class="mb-1">Input Data</p>
-				<textarea class="text-left test-data d-none" id="input-data-@test.Id">@test.InputData</textarea>
-			</div>
-			<div class="col-md-6">
-				<p class="mb-1">Output data</p>
-				<textarea class="text-left test-data d-none" id="output-data-@test.Id">@test.OutputData</textarea>
-			</div>
-		</div>
-		<div class="admin-buttons-holder">
-			<a class="btn btn-warning testEditBtn" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Test" asp-action="Edit" asp-route-id="@test.Id">Edit</a>
-			<button class="btn btn-danger testDeleteBtn" data-id="@test.Id">Delete</button>
-		</div>
-		<hr />
-	</div>
+        <div class="d-flex justify-content-between mb-3">
+            <div class="col-md-6 pl-0">
+                <p class="mb-1">@SharedLocalizer["Input Data"]</p>
+                <textarea class="text-left test-data d-none" id="input-data-@test.Id">@test.InputData</textarea>
+            </div>
+            <div class="col-md-6">
+                <p class="mb-1">@SharedLocalizer["Output data"]</p>
+                <textarea class="text-left test-data d-none" id="output-data-@test.Id">@test.OutputData</textarea>
+            </div>
+        </div>
+        <div class="admin-buttons-holder">
+            <a class="btn btn-warning testEditBtn" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Test" asp-action="Edit" asp-route-id="@test.Id">@SharedLocalizer["Edit"]</a>
+            <button class="btn btn-danger testDeleteBtn" data-id="@test.Id">@SharedLocalizer["Delete"]</button>
+        </div>
+        <hr />
+    </div>
 }
 
 @section Scripts{
-	<script src="~/lib/codemirror/codemirror.js"></script>
+    <script src="~/lib/codemirror/codemirror.js"></script>
 
-	<script src="~/js/notification.js"></script>
-	<script src="~/js/controllers/testController.js"></script>
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/testController.js"></script>
 }

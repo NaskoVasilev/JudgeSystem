@@ -288,6 +288,9 @@
   <data name="Import tests" xml:space="preserve">
     <value>Качи тестове</value>
   </data>
+  <data name="Input Data" xml:space="preserve">
+    <value>Вход</value>
+  </data>
   <data name="Lesson Create" xml:space="preserve">
     <value>Създаване на урок</value>
   </data>
@@ -309,6 +312,9 @@
   <data name="Number in class" xml:space="preserve">
     <value>Номер в клас</value>
   </data>
+  <data name="Output data" xml:space="preserve">
+    <value>Изход</value>
+  </data>
   <data name="Practice results" xml:space="preserve">
     <value>Резултати от упражнения</value>
   </data>
@@ -317,6 +323,9 @@
   </data>
   <data name="Problem Delete" xml:space="preserve">
     <value>Изтриване на задача</value>
+  </data>
+  <data name="Problem Tests" xml:space="preserve">
+    <value>Тестове на задача</value>
   </data>
   <data name="Remaining time" xml:space="preserve">
     <value>Оставащо време</value>
@@ -353,5 +362,11 @@
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Изпрати</value>
+  </data>
+  <data name="Trial test" xml:space="preserve">
+    <value>Нулев тест</value>
+  </data>
+  <data name="Zero Test" xml:space="preserve">
+    <value>Нулев тест</value>
   </data>
 </root>
