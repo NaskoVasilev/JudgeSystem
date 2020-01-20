@@ -267,6 +267,9 @@
   <data name="Extra Task" xml:space="preserve">
     <value>Допълнителна задача</value>
   </data>
+  <data name="First name" xml:space="preserve">
+    <value>Собствено име</value>
+  </data>
   <data name="Full Name" xml:space="preserve">
     <value>Име</value>
   </data>
@@ -291,11 +294,17 @@
   <data name="Input Data" xml:space="preserve">
     <value>Вход</value>
   </data>
+  <data name="Last name" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
   <data name="Lesson Create" xml:space="preserve">
     <value>Създаване на урок</value>
   </data>
   <data name="Lesson Edit" xml:space="preserve">
     <value>Изтриване на урок</value>
+  </data>
+  <data name="Lesson name" xml:space="preserve">
+    <value>Урок</value>
   </data>
   <data name="m" xml:space="preserve">
     <value>м</value>
@@ -365,6 +374,9 @@
   </data>
   <data name="Trial test" xml:space="preserve">
     <value>Нулев тест</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Потребителско име</value>
   </data>
   <data name="Zero Test" xml:space="preserve">
     <value>Нулев тест</value>
