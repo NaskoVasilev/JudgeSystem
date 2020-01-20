@@ -1,45 +1,46 @@
-﻿@model LessonEditInputModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model LessonEditInputModel
 
 @{
-    ViewData["Title"] = "Lesson Edit";
+    ViewData["Title"] = SharedLocalizer["Lesson Edit"];
 }
 
 <h1 class="text-center mb-4">@ViewData["Title"]</h1>
 <div class="row">
-	<div class="col-md-5 mx-auto">
-		<section>
-			<form method="post">
-				<div asp-validation-summary="All" class="text-danger"></div>
-				<div class="form-group">
-					<label asp-for="Name"></label>
-					<input asp-for="Name" class="form-control" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<label asp-for="Type"></label>
+    <div class="col-md-5 mx-auto">
+        <section>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Type"></label>
                     <select class="form-control" asp-for="Type">
                         <partial name="Partials/LessonTypeOptions" />
                     </select>
-					<span asp-validation-for="Type" class="text-danger"></span>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Edit</button>
-				</div>
-			</form>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Edit"]</button>
+                </div>
+            </form>
 
-			@if (Model.IsLocked)
-			{
-				<a class="text-success font-weight-bold d-block" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-				   asp-action="ChangePassword" asp-route-id="@Model.Id">Change lesson password</a>
-				<a class="text-danger font-weight-bold d-block mt-2" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-				   asp-action="RemovePassword" asp-route-id="@Model.Id">Remove lesson password</a>
+            @if (Model.IsLocked)
+            {
+                <a class="text-success font-weight-bold d-block" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                   asp-action="ChangePassword" asp-route-id="@Model.Id">@SharedLocalizer["Change lesson password"]</a>
+                <a class="text-danger font-weight-bold d-block mt-2" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                   asp-action="RemovePassword" asp-route-id="@Model.Id">@SharedLocalizer["Remove lesson password"]</a>
 
-			}
-			else
-			{
-				<a class="font-weight-bold text-success" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-				   asp-action="AddPassword" asp-route-id="@Model.Id">Add password to the lesson</a>
-			}
-		</section>
-	</div>
+            }
+            else
+            {
+                <a class="font-weight-bold text-success" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                   asp-action="AddPassword" asp-route-id="@Model.Id">@SharedLocalizer["Add password to the lesson"]</a>
+            }
+        </section>
+    </div>
 </div>

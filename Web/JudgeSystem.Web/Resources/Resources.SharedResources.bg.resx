@@ -126,6 +126,12 @@
   <data name="Add Lesson" xml:space="preserve">
     <value>Добави урок</value>
   </data>
+  <data name="Add password" xml:space="preserve">
+    <value>Добави паролата</value>
+  </data>
+  <data name="Add password to the lesson" xml:space="preserve">
+    <value>Добави парола към урока</value>
+  </data>
   <data name="Add Resource" xml:space="preserve">
     <value>Добави ресурс</value>
   </data>
@@ -158,6 +164,12 @@
   </data>
   <data name="Back to all" xml:space="preserve">
     <value>Обратно към всички</value>
+  </data>
+  <data name="Change lesson password" xml:space="preserve">
+    <value>Промени паролата на урока</value>
+  </data>
+  <data name="Change password" xml:space="preserve">
+    <value>Промени паролата</value>
   </data>
   <data name="class" xml:space="preserve">
     <value>клас</value>
@@ -192,6 +204,9 @@
   <data name="Delete Course" xml:space="preserve">
     <value>Изтриване на обучение</value>
   </data>
+  <data name="Delete Lesson" xml:space="preserve">
+    <value>Изтриване на урок</value>
+  </data>
   <data name="Details" xml:space="preserve">
     <value>Детайли</value>
   </data>
@@ -222,6 +237,12 @@
   <data name="Import tests" xml:space="preserve">
     <value>Качи тестове</value>
   </data>
+  <data name="Lesson Create" xml:space="preserve">
+    <value>Създаване на урок</value>
+  </data>
+  <data name="Lesson Edit" xml:space="preserve">
+    <value>Изтриване на урок</value>
+  </data>
   <data name="m" xml:space="preserve">
     <value>м</value>
   </data>
@@ -239,6 +260,12 @@
   </data>
   <data name="Remaining time" xml:space="preserve">
     <value>Оставащо време</value>
+  </data>
+  <data name="Remove lesson password" xml:space="preserve">
+    <value>Премахни паролата на урока</value>
+  </data>
+  <data name="Remove password" xml:space="preserve">
+    <value>Премахни паролата</value>
   </data>
   <data name="Results" xml:space="preserve">
     <value>Резултати</value>
