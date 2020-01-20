@@ -1,7 +1,9 @@
 ﻿@page
 @model RegisterModel
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = SharedLocalizer["Register"];
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
@@ -51,7 +53,7 @@
                 </div>
             </div>
             <hr />
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">@SharedLocalizer["Register"]</button>
         </form>
     </div>
 </div>

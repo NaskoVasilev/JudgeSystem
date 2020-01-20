@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Access denied" xml:space="preserve">
+    <value>Достъпът отказан</value>
+  </data>
   <data name="Actions" xml:space="preserve">
     <value>Действия</value>
+  </data>
+  <data name="Activate Student Profile" xml:space="preserve">
+    <value>Активирайте ученически профил</value>
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Активиран</value>
@@ -243,6 +249,12 @@
   <data name="Details" xml:space="preserve">
     <value>Детайли</value>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Изтегли</value>
+  </data>
+  <data name="Download Your Data" xml:space="preserve">
+    <value>Изтеглете Вашите данни</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Редактирай</value>
   </data>
@@ -258,6 +270,9 @@
   <data name="End Time" xml:space="preserve">
     <value>Край</value>
   </data>
+  <data name="Enter your email." xml:space="preserve">
+    <value>Въведете Вашия емайл.</value>
+  </data>
   <data name="Exam" xml:space="preserve">
     <value>Изпити</value>
   </data>
@@ -269,6 +284,9 @@
   </data>
   <data name="First name" xml:space="preserve">
     <value>Собствено име</value>
+  </data>
+  <data name="Forgot your password?" xml:space="preserve">
+    <value>Забравили сте паролата си?</value>
   </data>
   <data name="Full Name" xml:space="preserve">
     <value>Име</value>
@@ -306,6 +324,9 @@
   <data name="Lesson name" xml:space="preserve">
     <value>Урок</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Вход</value>
+  </data>
   <data name="m" xml:space="preserve">
     <value>м</value>
   </data>
@@ -324,6 +345,12 @@
   <data name="Output data" xml:space="preserve">
     <value>Изход</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Парола</value>
+  </data>
+  <data name="Personal data" xml:space="preserve">
+    <value>Лични данни</value>
+  </data>
   <data name="Practice results" xml:space="preserve">
     <value>Резултати от упражнения</value>
   </data>
@@ -335,6 +362,15 @@
   </data>
   <data name="Problem Tests" xml:space="preserve">
     <value>Тестове на задача</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Профил</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Регистриране</value>
+  </data>
+  <data name="Register as a new user" xml:space="preserve">
+    <value>Регистрирайте се като нов потребител</value>
   </data>
   <data name="Remaining time" xml:space="preserve">
     <value>Оставащо време</value>
@@ -360,8 +396,14 @@
   <data name="s" xml:space="preserve">
     <value>с</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Запази</value>
+  </data>
   <data name="Select your file!" xml:space="preserve">
     <value>Изберете файл!</value>
+  </data>
+  <data name="Send verification email" xml:space="preserve">
+    <value>Изпрати емайл за потвъеждаване на акаунта</value>
   </data>
   <data name="Start Time" xml:space="preserve">
     <value>Начало</value>
@@ -377,6 +419,9 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>Потребителско име</value>
+  </data>
+  <data name="You don't have access to this resources" xml:space="preserve">
+    <value>Вие нямате достъп до тези ресурси.</value>
   </data>
   <data name="Zero Test" xml:space="preserve">
     <value>Нулев тест</value>

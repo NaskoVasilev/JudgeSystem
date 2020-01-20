@@ -1,11 +1,13 @@
-﻿<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">@SharedLocalizer["Profile"]</a></li>
 
     @if (!User.IsInRole(GlobalConstants.StudentRoleName))
     {
-        <li class="nav-item"><a class="nav-link" asp-action="ActivateStudentProfile" asp-controller="Student" asp-area="">Activate Student Profile</a></li>
+        <li class="nav-item"><a class="nav-link" asp-action="ActivateStudentProfile" asp-controller="Student" asp-area="">@SharedLocalizer["Activate Student Profile"]</a></li>
     }
 
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">@SharedLocalizer["Password"]</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">@SharedLocalizer["Personal data"]</a></li>
 </ul>
