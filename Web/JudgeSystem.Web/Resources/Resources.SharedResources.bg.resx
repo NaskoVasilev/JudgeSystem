@@ -123,6 +123,9 @@
   <data name="Add" xml:space="preserve">
     <value>Добави</value>
   </data>
+  <data name="Add administrator" xml:space="preserve">
+    <value>Добави администратор</value>
+  </data>
   <data name="Add Lesson" xml:space="preserve">
     <value>Добави урок</value>
   </data>
@@ -185,6 +188,9 @@
   </data>
   <data name="Click" xml:space="preserve">
     <value>Кликни</value>
+  </data>
+  <data name="Confirm your password" xml:space="preserve">
+    <value>Потвърди паролата си</value>
   </data>
   <data name="Contest" xml:space="preserve">
     <value>Състезание</value>
@@ -287,6 +293,9 @@
   </data>
   <data name="Remaining time" xml:space="preserve">
     <value>Оставащо време</value>
+  </data>
+  <data name="Remove administrator" xml:space="preserve">
+    <value>Премахни администратор</value>
   </data>
   <data name="Remove lesson password" xml:space="preserve">
     <value>Премахни паролата на урока</value>
