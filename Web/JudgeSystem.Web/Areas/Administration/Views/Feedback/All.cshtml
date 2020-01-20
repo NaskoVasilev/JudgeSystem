@@ -1,14 +1,15 @@
-﻿@model AllFeedbacksViewModel
+﻿@inject IViewLocalizer Localizer
+@model AllFeedbacksViewModel
 
 @{
-    ViewData["Title"] = "Feedbacks";
+    ViewData["Title"] = Localizer["Feedbacks"];
 }
 
 <h2 class="text-center">@ViewData["Title"]</h2>
 @if (!Model.Feedbacks.Any())
 {
     <hr />
-    <div class="font-size-30 text-center text-info">There are no feedbacks!</div>
+    <div class="font-size-30 text-center text-info">@Localizer["There are no feedbacks"]!</div>
     <hr />
 }
 else
