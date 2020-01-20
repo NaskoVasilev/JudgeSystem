@@ -144,6 +144,9 @@
   <data name="All" xml:space="preserve">
     <value>Всички</value>
   </data>
+  <data name="All Problems" xml:space="preserve">
+    <value>Всички задачи</value>
+  </data>
   <data name="All Resources" xml:space="preserve">
     <value>Всички ресурси</value>
   </data>
@@ -165,6 +168,12 @@
   <data name="Back to all" xml:space="preserve">
     <value>Обратно към всички</value>
   </data>
+  <data name="Back to all problems" xml:space="preserve">
+    <value>Обратно към всички задачи</value>
+  </data>
+  <data name="Back to lesson" xml:space="preserve">
+    <value>Обратно към урока</value>
+  </data>
   <data name="Change lesson password" xml:space="preserve">
     <value>Промени паролата на урока</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="class" xml:space="preserve">
     <value>клас</value>
+  </data>
+  <data name="Click" xml:space="preserve">
+    <value>Кликни</value>
   </data>
   <data name="Contest" xml:space="preserve">
     <value>Състезание</value>
@@ -213,6 +225,9 @@
   <data name="Edit" xml:space="preserve">
     <value>Редактирай</value>
   </data>
+  <data name="Edit Problem" xml:space="preserve">
+    <value>Редактиране на задача</value>
+  </data>
   <data name="End Time" xml:space="preserve">
     <value>Край</value>
   </data>
@@ -222,11 +237,17 @@
   <data name="Exercise" xml:space="preserve">
     <value>Упражнения</value>
   </data>
+  <data name="Extra Task" xml:space="preserve">
+    <value>Допълнителна задача</value>
+  </data>
   <data name="Full Name" xml:space="preserve">
     <value>Име</value>
   </data>
   <data name="h" xml:space="preserve">
     <value>ч</value>
+  </data>
+  <data name="here" xml:space="preserve">
+    <value>тук</value>
   </data>
   <data name="Homework" xml:space="preserve">
     <value>Домашни</value>
@@ -257,6 +278,12 @@
   </data>
   <data name="Practice results" xml:space="preserve">
     <value>Резултати от упражнения</value>
+  </data>
+  <data name="Problem Create" xml:space="preserve">
+    <value>Създаване на задача</value>
+  </data>
+  <data name="Problem Delete" xml:space="preserve">
+    <value>Изтриване на задача</value>
   </data>
   <data name="Remaining time" xml:space="preserve">
     <value>Оставащо време</value>

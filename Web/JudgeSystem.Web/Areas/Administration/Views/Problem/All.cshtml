@@ -1,44 +1,45 @@
-﻿@model ProblemAllViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ProblemAllViewModel
 
 @{
-	ViewData["Title"] = "All";
-	string administrationArea = GlobalConstants.AdministrationArea;
+    ViewData["Title"] = SharedLocalizer["All Problems"];
+    string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h2 class="text-center mb-3">All Problems</h2>
+<h2 class="text-center mb-3">@ViewData["Title"]</h2>
 <div class="d-flex justify-content-center mb-3">
-	<a class="btn btn-outline-primary" 
-       asp-area="" 
-       asp-action="Details" 
-       asp-controller="Lesson" 
+    <a class="btn btn-outline-primary"
+       asp-area=""
+       asp-action="Details"
+       asp-controller="Lesson"
        asp-route-id="@Model.LesosnId"
-       asp-route-practiceId="@Model.PracticeId">Back to lesson</a>
+       asp-route-practiceId="@Model.PracticeId">@SharedLocalizer["Back to lesson"]</a>
 </div>
 <table class="table table-hover">
-	<thead>
-		<tr class="row">
-			<th class="col-md-7">Name</th>
-			<th class="col-md-5">Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var task in Model.Problems)
-		{
-			<tr class="row">
-				<td class="col-md-7">@task.Name</td>
+    <thead>
+        <tr class="row">
+            <th class="col-md-7">@SharedLocalizer["Name"]</th>
+            <th class="col-md-5">@SharedLocalizer["Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Problems)
+        {
+            <tr class="row">
+                <td class="col-md-7">@task.Name</td>
                 <td class="col-md-5">
+                    <a class="btn btn-success" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@task.Id">@SharedLocalizer["Import tests"]</a>
                     <a class="btn btn-primary" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@task.Id">Add Tests</a>
+                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">@SharedLocalizer["All Tests"]</a>
                     <a class="btn btn-primary" asp-area="@administrationArea"
-                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">All Tests</a>
-                    <a class="btn btn-primary" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">Add Test</a>
+                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">@SharedLocalizer["Add Test"]</a>
                     <a class="btn btn-warning" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+                       asp-controller="Problem" asp-action="Edit" asp-route-id="@task.Id">@SharedLocalizer["Edit"]</a>
                     <a class="btn btn-danger" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                       asp-controller="Problem" asp-action="Delete" asp-route-id="@task.Id">@SharedLocalizer["Delete"]</a>
                 </td>
-			</tr>
-		}
-	</tbody>
+            </tr>
+        }
+    </tbody>
 </table>
