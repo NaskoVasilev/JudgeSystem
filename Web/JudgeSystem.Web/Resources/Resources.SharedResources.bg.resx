@@ -120,6 +120,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Действия</value>
   </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Активиран</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Добави</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="Add Resource" xml:space="preserve">
     <value>Добави ресурс</value>
+  </data>
+  <data name="Add Student" xml:space="preserve">
+    <value>Добавяне на ученик</value>
   </data>
   <data name="Add Task" xml:space="preserve">
     <value>Добави задача</value>
@@ -183,8 +189,14 @@
   <data name="Change password" xml:space="preserve">
     <value>Промени паролата</value>
   </data>
+  <data name="Choose student class" xml:space="preserve">
+    <value>Посочете класа на ученика</value>
+  </data>
   <data name="class" xml:space="preserve">
     <value>клас</value>
+  </data>
+  <data name="Class type" xml:space="preserve">
+    <value>Паралелка</value>
   </data>
   <data name="Click" xml:space="preserve">
     <value>Кликни</value>
@@ -225,6 +237,9 @@
   <data name="Delete Lesson" xml:space="preserve">
     <value>Изтриване на урок</value>
   </data>
+  <data name="Delete Student" xml:space="preserve">
+    <value>Изтриване на ученик</value>
+  </data>
   <data name="Details" xml:space="preserve">
     <value>Детайли</value>
   </data>
@@ -233,6 +248,12 @@
   </data>
   <data name="Edit Problem" xml:space="preserve">
     <value>Редактиране на задача</value>
+  </data>
+  <data name="Edit Student" xml:space="preserve">
+    <value>Редактиране на ученик</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Имейл</value>
   </data>
   <data name="End Time" xml:space="preserve">
     <value>Край</value>
@@ -248,6 +269,9 @@
   </data>
   <data name="Full Name" xml:space="preserve">
     <value>Име</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>Клас</value>
   </data>
   <data name="h" xml:space="preserve">
     <value>ч</value>
@@ -278,6 +302,9 @@
   </data>
   <data name="Name" xml:space="preserve">
     <value>Име</value>
+  </data>
+  <data name="Not Activated" xml:space="preserve">
+    <value>Неактивиран</value>
   </data>
   <data name="Number in class" xml:space="preserve">
     <value>Номер в клас</value>
@@ -320,6 +347,9 @@
   </data>
   <data name="Start Time" xml:space="preserve">
     <value>Начало</value>
+  </data>
+  <data name="Students" xml:space="preserve">
+    <value>Ученици</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Изпрати</value>

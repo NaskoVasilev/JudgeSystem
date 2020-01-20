@@ -1,34 +1,35 @@
-﻿@model StudentProfileViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model StudentProfileViewModel
 
 @{
-    ViewData["Title"] = "Delete Student";
+    ViewData["Title"] = SharedLocalizer["Delete Student"];
 }
 
 <h1>@ViewData["Title"]</h1>
 <div class="row">
-	<div class="col-md-4" >
-		<section>
-			<form method="post" enctype="multipart/form-data">
-				<div class="form-group">
-					<label>Full name</label>
-					<input asp-for="FullName" class="form-control" disabled />
-				</div>
-				<div class="form-group">
-					<label>Email</label>
-					<input asp-for="Email" class="form-control" disabled />
-				</div>
-				<div class="form-group">
-					<label>Number in class</label>
-					<input asp-for="NumberInCalss" class="form-control" disabled />
-				</div>
-				<div class="form-group">
-					<label>Grade</label>
-					<input asp-for="SchoolClassName" class="form-control" disabled />
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Delete</button>
-				</div>
-			</form>
-		</section>
-	</div>
+    <div class="col-md-4">
+        <section>
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Full name</label>
+                    <input asp-for="FullName" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input asp-for="Email" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label>Number in class</label>
+                    <input asp-for="NumberInCalss" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <input asp-for="SchoolClassName" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Delete"]</button>
+                </div>
+            </form>
+        </section>
+    </div>
 </div>
