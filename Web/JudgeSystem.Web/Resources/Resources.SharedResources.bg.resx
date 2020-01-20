@@ -171,6 +171,12 @@
   <data name="Continue" xml:space="preserve">
     <value>Продължи</value>
   </data>
+  <data name="Course Create" xml:space="preserve">
+    <value>Създаване на обучение</value>
+  </data>
+  <data name="Course Edit" xml:space="preserve">
+    <value>Редактиране на обучение</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Създай</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Изтрий</value>
+  </data>
+  <data name="Delete Course" xml:space="preserve">
+    <value>Изтриване на обучение</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Детайли</value>
