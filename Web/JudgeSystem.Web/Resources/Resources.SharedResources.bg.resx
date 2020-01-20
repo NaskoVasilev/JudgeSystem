@@ -319,7 +319,7 @@
     <value>Създаване на урок</value>
   </data>
   <data name="Lesson Edit" xml:space="preserve">
-    <value>Изтриване на урок</value>
+    <value>Редактиране на урок</value>
   </data>
   <data name="Lesson name" xml:space="preserve">
     <value>Урок</value>
@@ -399,6 +399,9 @@
   <data name="Save" xml:space="preserve">
     <value>Запази</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Търси</value>
+  </data>
   <data name="Select your file!" xml:space="preserve">
     <value>Изберете файл!</value>
   </data>
@@ -411,8 +414,14 @@
   <data name="Students" xml:space="preserve">
     <value>Ученици</value>
   </data>
+  <data name="Submission date" xml:space="preserve">
+    <value> Дата на изпращане</value>
+  </data>
   <data name="Submit" xml:space="preserve">
     <value>Изпрати</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Тест</value>
   </data>
   <data name="Trial test" xml:space="preserve">
     <value>Нулев тест</value>

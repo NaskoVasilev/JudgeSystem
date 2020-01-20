@@ -18,19 +18,19 @@
 <table class="table table-hover">
     <thead>
         <tr class="row">
-            <th class="col-md-7">@SharedLocalizer["Name"]</th>
-            <th class="col-md-5">@SharedLocalizer["Actions"]</th>
+            <th class="col-md-6">@SharedLocalizer["Name"]</th>
+            <th class="col-md-6">@SharedLocalizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var task in Model.Problems)
         {
             <tr class="row">
-                <td class="col-md-7">@task.Name</td>
-                <td class="col-md-5">
+                <td class="col-md-5">@task.Name</td>
+                <td class="col-md-7 ">
                     <a class="btn btn-success" asp-area="@administrationArea"
                        asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@task.Id">@SharedLocalizer["Import tests"]</a>
-                    <a class="btn btn-primary" asp-area="@administrationArea"
+                    <a class="btn btn-dark" asp-area="@administrationArea"
                        asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@task.Id">@SharedLocalizer["All Tests"]</a>
                     <a class="btn btn-primary" asp-area="@administrationArea"
                        asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@task.Id">@SharedLocalizer["Add Test"]</a>

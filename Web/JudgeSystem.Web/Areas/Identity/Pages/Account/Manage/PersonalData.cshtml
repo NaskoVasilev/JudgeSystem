@@ -4,7 +4,7 @@
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 
 @{
-    ViewData["Title"] = SharedLocalizer["Personal Data"];
+    ViewData["Title"] = SharedLocalizer["Personal data"];
     ViewData[IdentityAreaConstants.ActivePageKey] = ManageNavPages.PersonalData;
 }
 
@@ -20,7 +20,7 @@
             <button class="btn btn-primary" type="submit">@SharedLocalizer["Download"]</button>
         </form>
         <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-primary">@SharedLocalizer["Delete"]</a>
+            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">@SharedLocalizer["Delete"]</a>
         </p>
     </div>
 </div>
