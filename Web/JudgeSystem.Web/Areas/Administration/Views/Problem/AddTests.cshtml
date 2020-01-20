@@ -14,7 +14,7 @@
             <form method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <div class="file-upload-wrapper my-4" data-text="Select your file!">
+                    <div class="file-upload-wrapper my-4" data-text="@SharedLocalizer["Select your file!"]">
                         <input asp-for="Tests" type="file" class="file-upload-field form-control" value="">
                     </div>
                 </div>

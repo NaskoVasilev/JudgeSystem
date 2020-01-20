@@ -294,11 +294,20 @@
   <data name="Remove password" xml:space="preserve">
     <value>Премахни паролата</value>
   </data>
+  <data name="Resource Create" xml:space="preserve">
+    <value>Добавяне на ресурс</value>
+  </data>
+  <data name="Resource Edit" xml:space="preserve">
+    <value>Редактиране на ресурс</value>
+  </data>
   <data name="Results" xml:space="preserve">
     <value>Резултати</value>
   </data>
   <data name="s" xml:space="preserve">
     <value>с</value>
+  </data>
+  <data name="Select your file!" xml:space="preserve">
+    <value>Изберете файл!</value>
   </data>
   <data name="Start Time" xml:space="preserve">
     <value>Начало</value>
