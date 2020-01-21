@@ -23,5 +23,7 @@
         public const string AddAdministrator = "{0} was successfully added as adminstrator";
 
         public const string RemoveAdministrator = "{0} was successfully removed as adminstrator";
+
+        public const string AddedTest = "The test was successfully added to problem \"{0}\"!";
     }
 }

@@ -11,6 +11,7 @@ using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Services;
 using JudgeSystem.Web.Utilites;
+using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
@@ -130,7 +131,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
 
             await testService.Add(model);
-            return RedirectToAction(nameof(AddTest), new { problemId = model.ProblemId });
+
+            string problemName = problemService.GetProblemName(model.ProblemId);
+            string infoMessage = string.Format(InfoMessages.AddedTest, problemName);
+            return ShowInfo(infoMessage, nameof(AddTest), new { problemId = model.ProblemId });
         }
 
         public async Task<IActionResult> AddTests(int problemId)
@@ -182,7 +186,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             await testService.AddRange(tests, model.ProblemId);
 
-            return RedirectToAction(nameof(All), new { model.LessonId });
+            return RedirectToAction(nameof(TestController.ProblemTests), nameof(TestController).ToControllerName(), new { model.ProblemId });
         }
 
         private void ValidateTests(List<ProblemTestInputModel> tests)

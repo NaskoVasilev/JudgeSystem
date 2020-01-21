@@ -30,7 +30,13 @@ namespace JudgeSystem.Web.Controllers
 			return RedirectToAction(action, conrtoller);
 		}
 
-		public IActionResult ShowInfo(string infoMessage, string action, string conrtoller, object routeValues)
+        public IActionResult ShowInfo(string infoMessage, string action, object routeValues)
+        {
+            TempData[GlobalConstants.InfoKey] = infoMessage;
+            return RedirectToAction(action, routeValues);
+        }
+
+        public IActionResult ShowInfo(string infoMessage, string action, string conrtoller, object routeValues)
 		{
 			TempData[GlobalConstants.InfoKey] = infoMessage;
 			return RedirectToAction(action, conrtoller, routeValues);
