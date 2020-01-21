@@ -103,7 +103,7 @@ namespace JudgeSystem.Services.Data.Tests
 
             Assert.Equal(0, context.UserContests.Count(x => x.UserId == user.Id));
             Assert.Equal(0, context.UserPractices.Count(x => x.UserId == user.Id));
-            if(studentId != null)
+            if (studentId != null)
             {
                 studentServiceMock.Verify(x => x.Delete(studentId), Times.Once());
             }
@@ -111,6 +111,29 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 studentServiceMock.Verify(x => x.Delete(studentId), Times.Never());
             }
+        }
+
+        [Theory]
+        [InlineData("nonexisting", true, false)]
+        [InlineData("nonexisting", false, false)]
+        [InlineData("existing", false, true)]
+        [InlineData("existing", true, false)]
+        public void IsExistingUserWithNotConfirmedEmail_WithDifferentArguments_ShouldReturnExpectedResult(string username, bool emailConfirmed, bool expectedResult)
+        {
+            var users = new List<ApplicationUser>
+            { 
+                new ApplicationUser
+                {
+                    Id = "id1",
+                    UserName = "existing",
+                    EmailConfirmed = emailConfirmed
+                } 
+            };
+
+            UserService service = CreateUserServiceWithMockedRepository(users.AsQueryable());
+            bool actualResult = service.IsExistingUserWithNotConfirmedEmail(username);
+            
+            Assert.Equal(expectedResult, actualResult);
         }
 
         private UserService CreateUserServiceWithMockedRepository(IQueryable<ApplicationUser> testData)

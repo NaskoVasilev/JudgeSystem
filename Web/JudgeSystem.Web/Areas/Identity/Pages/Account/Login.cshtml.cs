@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Services.Data;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace JudgeSystem.Web.Areas.Identity.Pages.Account
 {
@@ -17,12 +18,12 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly ILogger<LoginModel> logger;
+        private readonly IUserService userService;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, IUserService userService)
         {
             this.signInManager = signInManager;
-            this.logger = logger;
+            this.userService = userService;
         }
 
         [BindProperty]
@@ -50,18 +51,24 @@ namespace JudgeSystem.Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
             if (ModelState.IsValid)
             {
                 Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLoginAttempt);
+                    if (userService.IsExistingUserWithNotConfirmedEmail(Input.Username))
+                    {
+                        ModelState.AddModelError(string.Empty, ErrorMessages.NotConfirmedEmail);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLoginAttempt);
+                    }
+
                     return Page();
                 }
             }
