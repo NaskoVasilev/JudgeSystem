@@ -1,4 +1,6 @@
-﻿@model CourseLessonsViewModel
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model CourseLessonsViewModel
 
 @{
     this.ViewData["Title"] = Model.Name;
@@ -19,13 +21,13 @@
                             {
                                 if (lesson.Contests.Count == 1)
                                 {
-                                    <a class="btn btn-success mr-4" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id" asp-route-contestId="@lesson.Contests[0].Id">Compete</a>
+                                    <a class="btn btn-success mr-4" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id" asp-route-contestId="@lesson.Contests[0].Id">@Localizer["Compete"]</a>
                                 }
                                 else
                                 {
                                     <div class="dropdown mr-4 d-inline-block">
                                         <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Compete
+                                            @Localizer["Compete"]
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             @foreach (var contest in lesson.Contests)
@@ -38,7 +40,7 @@
                                 }
                             }
                         }
-                        <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">Practice</a>
+                        <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">@Localizer["Practice"]</a>
                     </td>
                     <td>
                         <i class="fas fa-file"></i>
@@ -48,9 +50,9 @@
                     {
                         <td>
                             <a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-                               asp-action="Edit" asp-route-id="@lesson.Id">Edit</a>
+                               asp-action="Edit" asp-route-id="@lesson.Id">@SharedLocalizer["Edit"]</a>
                             <a class="btn btn-danger" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-                               asp-action="Delete" asp-route-id="@lesson.Id">Delete</a>
+                               asp-action="Delete" asp-route-id="@lesson.Id">@SharedLocalizer["Delete"]</a>
                         </td>
                     }
                 </tr>

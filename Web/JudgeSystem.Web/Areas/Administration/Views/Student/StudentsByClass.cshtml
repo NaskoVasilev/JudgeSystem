@@ -1,17 +1,19 @@
 ﻿@using JudgeSystem.Web.Infrastructure.Extensions
 @using JudgeSystem.Data.Models.Enums
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IViewLocalizer Localizer
 @model StudentsByClassViewModel
 
 @{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] =SharedLocalizer["Students"];
 
 }
 <div class="d-flex justify-content-center border pt-3 pb-2 mb-4">
     <form class="form-inline">
         <div class="form-group mb-2">
-            <label class="font-weight-bold mr-3">Grade:</label>
+            <label class="font-weight-bold mr-3">@SharedLocalizer["Grade"]:</label>
             <select class="form-control" name="classNumber" id="classNumber">
-                <option disabled selected>Grade</option>
+                <option disabled selected>@SharedLocalizer["Grade"]</option>
                 @for (int i = GlobalConstants.MinClassNumber; i <= GlobalConstants.MaxClassNumber; i++)
                 {
                     <option value="@i">@i</option>
@@ -19,23 +21,23 @@
             </select>
         </div>
         <div class="form-group mx-sm-3 mb-2">
-            <label class="font-weight-bold mr-3">Class type:</label>
+            <label class="font-weight-bold mr-3">@SharedLocalizer["Class type"]:</label>
             <select class="form-control" name="classType" id="classType">
-                <option disabled selected>Class type</option>
+                <option disabled selected>@SharedLocalizer["Class type"]</option>
                 @foreach (var classType in EnumExtensions.GetEnumValuesAsString<SchoolClassType>())
                 {
                     <option value="@classType">@classType</option>
                 }
             </select>
         </div>
-        <button type="submit" class="btn btn-success mb-2">Search</button>
+        <button type="submit" class="btn btn-success mb-2">@SharedLocalizer["Search"]</button>
     </form>
 </div>
 <div>
     @if (!Model.Students.Any())
     {
         <hr class="bg-info cm-hr" />
-        <div class="text-secondary font-size-30 text-center mt-4">There are no students.</div>
+        <div class="text-secondary font-size-30 text-center mt-4">@Localizer["There are no students."]</div>
         <hr class="bg-info cm-hr" />
     }
     else
@@ -44,10 +46,10 @@
             <thead>
                 <tr class="row">
                     <th class="col-md-1">&#8470;</th>
-                    <th class="col-md-1">Class</th>
-                    <th class="col-md-4">Full name</th>
-                    <th class="col-md-4">Email</th>
-                    <th class="col-md-2">Actions</th>
+                    <th class="col-md-1">@SharedLocalizer["Grade"]</th>
+                    <th class="col-md-4">@SharedLocalizer["Full Name"]</th>
+                    <th class="col-md-4">@SharedLocalizer["Email"]</th>
+                    <th class="col-md-2">@SharedLocalizer["Actions"]</th>
                 </tr>
             </thead>
             <tbody>

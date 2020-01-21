@@ -1,8 +1,10 @@
 ﻿@page
 @model AccessDeniedModel
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = SharedLocalizer["Access denied"];
 }
 
-<h2 class="text-center text-danger my-4">You don't have access to this resources</h2>
+<h2 class="text-center text-danger my-4">@SharedLocalizer["You don't have access to this resources"]</h2>
 <img class="w-100" src="~/images/no-access.png" alt="Alternate Text" />

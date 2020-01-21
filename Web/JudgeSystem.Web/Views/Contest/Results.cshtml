@@ -1,20 +1,21 @@
-﻿@model ContestAllResultsViewModel
+﻿@inject IViewLocalizer Localizer
+@model ContestAllResultsViewModel
 
 @{
-    ViewData["Title"] = "All contests";
+    ViewData["Title"] = Model.Name;
     int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
     string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
     var paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
-<h2 class="text-center mb-4">Results for contest "@Model.Name"</h2>
+<h2 class="text-center mb-4">@Localizer["Results for contest"] "@Model.Name"</h2>
 
 <table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
     <thead>
         <tr>
             <th class="text-center">&#8470;</th>
-            <th class="text-center">Class</th>
-            <th class="text-center">Full name</th>
+            <th class="text-center">@Localizer["Class"]</th>
+            <th class="text-center">@Localizer["Full name"]</th>
             @foreach (var problem in Model.Problems)
             {
                 <th class="text-center">
@@ -25,7 +26,7 @@
                     }
                 </th>
             }
-            <th class="text-center">Total</th>
+            <th class="text-center">@Localizer["Total"]</th>
         </tr>
     </thead>
     <tbody>

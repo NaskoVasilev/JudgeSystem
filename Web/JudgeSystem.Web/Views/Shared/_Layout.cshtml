@@ -1,4 +1,5 @@
 ﻿@inject JavaScriptSnippet JavaScriptSnippet
+@inject IViewLocalizer Localizer
 
 @{
     string error = string.Empty;
@@ -53,7 +54,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Courses
+                                @Localizer["Courses"]
                             </a>
                             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                                 <vc:course-links class-name="dropdown-item"></vc:course-links>
@@ -64,38 +65,38 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Administration
+                                    @Localizer["Administration"]
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Course" asp-action="Create">Add course</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Contest">Add contest</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Student">Add student</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Course" asp-action="Create">@Localizer["Add course"]</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Contest">@Localizer["Add contest"]</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-action="Create" asp-controller="Student">@Localizer["Add student"]</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="ActiveContests">Active contests</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="All">All contests</a>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass" asp-route-classType="@SchoolClassType.A">Students</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="ActiveContests">@Localizer["Active contests"]</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Contest" asp-action="All">@Localizer["All contests"]</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Student" asp-action="StudentsByClass" asp-route-classType="@SchoolClassType.A">@Localizer["Students"]</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="User" asp-action="All">All users</a>
+                                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="User" asp-action="All">@Localizer["All users"]</a>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Feedback" asp-action="All">Feedbacks</a>
+                                <a class="nav-link text-white" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Feedback" asp-action="All">@Localizer["Feedbacks"]</a>
                             </li>
                         }
                         else if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Feedback" asp-action="Send">Feedback</a>
+                                <a class="nav-link text-white" asp-controller="Feedback" asp-action="Send">@Localizer["Feedback"]</a>
                             </li>
                         }
 
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Documentation">Documentation</a>
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Documentation">@Localizer["Documentation"]</a>
                         </li>
                         <li class="nav-item">
                             <form method="get" class="form-inline ml-lg-3 my-lg-0" asp-area="" asp-controller="Search" asp-action="Results">
-                                <input class="form-control mr-sm-2" type="search" name="keyword" id="keyword" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-secondary text-white te my-2 my-sm-0" type="submit">Search</button>
+                                <input class="form-control mr-sm-2" type="search" name="keyword" id="keyword" placeholder="@Localizer["Search"]" aria-label="Search">
+                                <button class="btn btn-secondary text-white te my-2 my-sm-0" type="submit">@Localizer["Search"]</button>
                             </form>
                         </li>
                     </ul>
@@ -121,7 +122,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            &copy; @DateTime.Now.Year - JudgeSystem. <a href="https://github.com/NaskoVasilev/JudgeSystem">Open source project</a>
+            @DateTime.Now.Year - JudgeSystem. <a href="https://github.com/NaskoVasilev/JudgeSystem">@Localizer["Open source project"]</a>
         </div>
     </footer>
 

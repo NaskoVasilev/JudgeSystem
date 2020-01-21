@@ -1,8 +1,10 @@
-﻿using JudgeSystem.Web.Controllers;
-
+﻿using JudgeSystem.Common;
+using JudgeSystem.Web.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using MyTested.AspNetCore.Mvc;
-
+using System;
 using Xunit;
 
 namespace JudgeSystem.Web.Tests.Controllers
@@ -39,5 +41,19 @@ namespace JudgeSystem.Web.Tests.Controllers
             .AndAlso()
             .ShouldReturn()
             .View();
+
+        [Theory]
+        [InlineData("/Home/About")]
+        [InlineData("/")]
+        public void SetLanguage_WithPassedCultureAndReturnUrl_ShoudldSetCultureCookieToResponseAndRedirctToProvidedReturnUrl(string url) => 
+            MyController<HomeController>
+            .Instance()
+            .Calling(c => c.SetLanguage(GlobalConstants.CurrentCultureInfo, url))
+            .ShouldHave()
+            .HttpResponse(response => response
+                .ContainingCookie(CookieRequestCultureProvider.DefaultCookieName))
+            .AndAlso()
+            .ShouldReturn()
+            .Redirect(url);
     }
 }

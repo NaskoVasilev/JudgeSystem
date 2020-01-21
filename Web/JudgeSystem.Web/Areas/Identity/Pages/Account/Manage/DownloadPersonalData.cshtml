@@ -1,7 +1,8 @@
 ﻿@page
 @model DownloadPersonalDataModel
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
-    ViewData["Title"] = "Download Your Data";
+    ViewData["Title"] = SharedLocalizer["Download Your Data"];
     ViewData[IdentityAreaConstants.ActivePageKey] = ManageNavPages.PersonalData;
 }
 

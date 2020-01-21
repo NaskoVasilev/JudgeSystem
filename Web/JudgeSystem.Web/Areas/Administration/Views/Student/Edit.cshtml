@@ -1,7 +1,9 @@
-﻿@model StudentEditInputModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IViewLocalizer Localizer
+@model StudentEditInputModel
 
 @{
-    ViewData["Title"] = "Edit Student";
+    ViewData["Title"] = SharedLocalizer["Edit Student"];
 }
 
 <h2 class="text-center">@ViewData["Title"]</h2>
@@ -32,10 +34,10 @@
                     <span asp-validation-for="NumberInCalss" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    Student status: @(Model.IsActivated ? "Activated": "Not Activated")
+                    @Localizer["Student status"]: @(Model.IsActivated ? SharedLocalizer["Activated"] : SharedLocalizer["Not Activated"])
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Edit Student</button>
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Edit"]</button>
                 </div>
             </form>
         </section>

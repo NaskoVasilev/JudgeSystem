@@ -1,20 +1,22 @@
-﻿@{
-    this.ViewData["Title"] = "Home Page";
+﻿@inject IViewLocalizer Localizer
+
+@{
+    this.ViewData["Title"] = Localizer["Home Page"];
 }
 
 <div class="jumbotron">
-    <h2 class="display-4">Welcome to our automated Judge System!</h2>
+    <h2 class="display-4">@Localizer["Welcome to our automated Judge System!"]</h2>
     <p class="lead text-center">
-        Click <a class="lead text-decoration-none" asp-action="Documentation" asp-controller="Home">here</a> to learn how the system works and how to submit solutions.
+        @Localizer["Click"] <a class="lead text-decoration-none" asp-action="Documentation" asp-controller="Home">@Localizer["here"]</a> @Localizer["to learn how the system works and how to submit solutions."]
     </p>
     <hr class="my-4">
     <div class="d-flex justify-content-between">
         <div class="col-md-6 border mr-2 height-500 overflow-auto">
-            <h2 class="font-weight-lighter p-3">Active contests</h2>
+            <h2 class="font-weight-lighter p-3">@Localizer["Active contests"]</h2>
             <vc:active-contests></vc:active-contests>
         </div>
         <div class="col-md-6 border ml-2 height-500 overflow-auto">
-            <h2 class="font-weight-lighter p-3">Previous contests</h2>
+            <h2 class="font-weight-lighter p-3">@Localizer["Previous contests"]</h2>
             <vc:previous-contests></vc:previous-contests>
         </div>
     </div>

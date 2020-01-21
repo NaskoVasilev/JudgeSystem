@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JudgeSystem.Web.IocConfiguration
+namespace JudgeSystem.Web.Configuration
 {
     public static class MvcConfiguration
     {
@@ -16,6 +16,8 @@ namespace JudgeSystem.Web.IocConfiguration
                 {
                     options.Filters.Add<EntityNotFoundExceptionFilter>(EntityNotFoundExceptionFilterOrder);
                 })
+                .AddViewLocalization()
+                .AddMvcLocalization()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {

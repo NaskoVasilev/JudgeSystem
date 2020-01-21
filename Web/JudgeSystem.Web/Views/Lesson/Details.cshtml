@@ -1,4 +1,6 @@
-﻿@model LessonViewModel
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model LessonViewModel
 
 @{
     this.ViewData["Title"] = Model.Name;
@@ -15,14 +17,14 @@
         <vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
         <div class="mt-5 font-size-20">
             <a class="text-decoration-none text-secondary"
-               asp-controller="Contest" asp-action="Results" asp-route-id="@Model.ContestId">Contest results</a>
+               asp-controller="Contest" asp-action="Results" asp-route-id="@Model.ContestId">@Localizer["Contest results"]</a>
         </div>
     </div>
 }
 @if (Model.Resources.Count > 0 || User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
-        <h4 class="mb-3 mt-0">Downlaod resources</h4>
+        <h4 class="mb-3 mt-0">@Localizer["Downlaod resources"]</h4>
         <ul class="list-group d-flex flex-sm-row flex-wrap">
             @foreach (var resource in Model.Resources)
             {
@@ -34,11 +36,11 @@
             {
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Resource"
-                       asp-action="Create" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">Add Resource</a>
+                       asp-action="Create" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">@SharedLocalizer["Add Resource"]</a>
                 </li>
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Resource"
-                       asp-action="LessonResources" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">All Resources</a>
+                       asp-action="LessonResources" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">@SharedLocalizer["All Resources"]</a>
                 </li>
             }
         </ul>
@@ -61,11 +63,11 @@
             {
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Problem"
-                       asp-action="Create" asp-route-lessonId="@Model.Id">Add Task</a>
+                       asp-action="Create" asp-route-lessonId="@Model.Id">@SharedLocalizer["Add Task"]</a>
                 </li>
                 <li class="list-group-item a-holder">
                     <a asp-area="@administrationArea" asp-controller="Problem"
-                       asp-action="All" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">All Tasks</a>
+                       asp-action="All" asp-route-lessonId="@Model.Id" asp-route-practiceId="@Model.PracticeId">@SharedLocalizer["All Tasks"]</a>
                 </li>
             }
         </ul>
@@ -76,16 +78,16 @@
             @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <div class="mt-3" id="admin-buttons">
-                    <a class="btn btn-primary" id="addTestsBtn" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@firstProblem.Id">Add Tests</a>
+                    <a class="btn btn-success" id="addTestsBtn" asp-area="@administrationArea"
+                       asp-controller="Problem" asp-action="AddTests" asp-route-problemId="@firstProblem.Id">@SharedLocalizer["Import tests"]</a>
                     <a class="btn btn-primary test-btn" id="allTestsBtn" asp-area="@administrationArea"
-                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">All Tests</a>
+                       asp-controller="Test" asp-action="ProblemTests" asp-route-problemId="@firstProblem.Id">@SharedLocalizer["All Tests"]</a>
                     <a class="btn btn-primary" id="addTestBtn" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">Add Test</a>
+                       asp-controller="Problem" asp-action="AddTest" asp-route-problemId="@firstProblem.Id">@SharedLocalizer["Add Test"]</a>
                     <a class="btn btn-warning problem-btn" id="editProblemBtn" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">Edit</a>
+                       asp-controller="Problem" asp-action="Edit" asp-route-id="@firstProblem.Id">@SharedLocalizer["Edit"]</a>
                     <a class="btn btn-danger problem-btn" id="deleteProblemBtn" asp-area="@administrationArea"
-                       asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">Delete</a>
+                       asp-controller="Problem" asp-action="Delete" asp-route-id="@firstProblem.Id">@SharedLocalizer["Delete"]</a>
                 </div>
             }
         }
@@ -110,12 +112,12 @@
 
         <div class="mt-3">
             <p class="my-1">
-                <span class="font-weight-bold">Allowed working time: </span>
+                <span class="font-weight-bold">@SharedLocalizer["Allowed working time"]: </span>
                 <span class="font-italic allowed-time">@firstProblem.AllowedTimeInMilliseconds</span>
                 <span class="font-italic">ms</span>
             </p>
             <p class="my-1">
-                <span class="font-weight-bold">Allowed memory: </span>
+                <span class="font-weight-bold">@SharedLocalizer["Allowed memory"]: </span>
                 <span class="font-italic allowed-memory">@firstProblem.AllowedMemoryInMegaBytes</span>
                 <span class="font-italic">MB</span>
             </p>
@@ -126,11 +128,11 @@
             <div class="button-holder mr-3 mt-4">
                 @if (Model.ContestId.HasValue)
                 {
-                    <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">Submit</button>
+                <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">@SharedLocalizer["Submit"]</button>
                 }
                 else
                 {
-                    <button class="btn btn-secondary" id="submit-btn" data-practiceId="@Model.PracticeId">Submit</button>
+                    <button class="btn btn-secondary" id="submit-btn" data-practiceId="@Model.PracticeId">@SharedLocalizer["Submit"]</button>
                 }
             </div>
             <div class="w-25 form-group mt-4" id="programmingLanguage">
@@ -142,10 +144,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Points</th>
-                        <th scope="col">Time and memory used</th>
-                        <th scope="col">Submission Date</th>
-                        <th scope="col">More info</th>
+                        <th scope="col">@Localizer["Points"]</th>
+                        <th scope="col">@Localizer["Time and memory used"]</th>
+                        <th scope="col">@Localizer["Submission Date"]</th>
+                        <th scope="col">@Localizer["More info"]</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -172,7 +174,7 @@
     else
     {
         <hr />
-        <p class="text-info font-size-20 text-center">Currently there are no tasks for this problem!</p>
+        <p class="text-info font-size-20 text-center">@Localizer["Currently there are no tasks for this lesson!"]</p>
         <hr />
 
     }

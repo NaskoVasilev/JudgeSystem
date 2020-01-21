@@ -1,8 +1,9 @@
 ﻿@page
 @model LoginModel
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = SharedLocalizer["Login"];
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
@@ -27,14 +28,14 @@
                     <label class="custom-control-label" asp-for="Input.RememberMe"></label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Login"]</button>
                 </div>
                 <div class="form-group">
                     <p>
-                        <a id="forgot-password" class="text-success font-weight-bold" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" class="text-success font-weight-bold" asp-page="./ForgotPassword">@SharedLocalizer["Forgot your password?"]</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" class="text-info font-weight-bold" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" class="text-info font-weight-bold" asp-route-returnUrl="@Model.ReturnUrl">@SharedLocalizer["Register as a new user"].</a>
                     </p>
                 </div>
             </form>

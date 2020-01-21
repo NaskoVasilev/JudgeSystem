@@ -1,4 +1,6 @@
-﻿@model IEnumerable<UserViewModel>
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model IEnumerable<UserViewModel>
 
 @{
     ViewData["Title"] = "All Users";
@@ -7,23 +9,23 @@
 <table class="table">
     <thead>
         <tr class="row">
-            <th class="col-lg-3 col-md-3 col-sm-2">Username</th>
-            <th class="col-lg-3 col-md-2 col-sm-2">First name</th>
-            <th class="col-lg-3 col-md-2 col-sm-2">Last name</th>
-            <th class="col-lg-3 col-md-4 col-sm-6">Email</th>
+            <th class="col-lg-3 col-md-3 col-sm-2">@SharedLocalizer["Username"]</th>
+            <th class="col-lg-3 col-md-2 col-sm-2">@SharedLocalizer["First name"]</th>
+            <th class="col-lg-3 col-md-2 col-sm-2">@SharedLocalizer["Last name"]</th>
+            <th class="col-lg-3 col-md-4 col-sm-6">@SharedLocalizer["Email"]</th>
         </tr>
         <tr class="row inputs">
             <th class="col-sm-3">
-                <input type="text" id="username" class="form-control" placeholder="Filter by username">
+                <input type="text" id="username" class="form-control" placeholder="@Localizer["Filter by username"]">
             </th>
             <th class="col-sm-3">
-                <input type="text" id="first-name" class="form-control" placeholder="Filter by first name">
+                <input type="text" id="first-name" class="form-control" placeholder="@Localizer["Filter by first name"]">
             </th>
             <th class="col-sm-3">
-                <input type="text" id="last-name" class="form-control" placeholder="Filter by last name">
+                <input type="text" id="last-name" class="form-control" placeholder="@Localizer["Filter by last name"]">
             </th>
             <th class="col-sm-3">
-                <input type="text" id="email" class="form-control" placeholder="Filter by email">
+                <input type="text" id="email" class="form-control" placeholder="@Localizer["Filter by email"]">
             </th>
         </tr>
     </thead>
