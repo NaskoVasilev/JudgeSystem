@@ -288,6 +288,9 @@
   <data name="Forgot your password?" xml:space="preserve">
     <value>Забравили сте паролата си?</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>От</value>
+  </data>
   <data name="Full Name" xml:space="preserve">
     <value>Име</value>
   </data>
@@ -422,6 +425,9 @@
   </data>
   <data name="Test" xml:space="preserve">
     <value>Тест</value>
+  </data>
+  <data name="to" xml:space="preserve">
+    <value>до</value>
   </data>
   <data name="Trial test" xml:space="preserve">
     <value>Нулев тест</value>

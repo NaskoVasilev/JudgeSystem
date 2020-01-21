@@ -1,10 +1,10 @@
 ﻿using JudgeSystem.Common;
 using JudgeSystem.Web.Controllers;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+
 using MyTested.AspNetCore.Mvc;
-using System;
 using Xunit;
 
 namespace JudgeSystem.Web.Tests.Controllers
