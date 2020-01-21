@@ -123,4 +123,7 @@
   <data name="Practice" xml:space="preserve">
     <value>Упражнение</value>
   </data>
+  <data name="There aren't lessons for this category!" xml:space="preserve">
+    <value>В момента няма уроци за това обучение!</value>
+  </data>
 </root>

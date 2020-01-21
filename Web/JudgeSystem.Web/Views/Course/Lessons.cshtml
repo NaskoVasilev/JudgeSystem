@@ -6,57 +6,77 @@
     this.ViewData["Title"] = Model.Name;
 }
 
-<h2 class="text-center text-secondary mb-4">@Model.Name</h2>
-<div class="row">
-    <table class="table table">
-        <tbody>
-            @foreach (var lesson in Model.Lessons)
-            {
-                <tr>
-                    <td>@lesson.Name</td>
-                    <td>
-                        @if (User.IsInRole(GlobalConstants.AdministratorRoleName) || User.IsInRole(GlobalConstants.StudentRoleName))
-                        {
-                            @if (lesson.Contests.Any())
+<h2 class="text-center text-secondary mb-3">@Model.Name</h2>
+@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <div class="d-flex justify-content-center mb-3">
+        <a asp-area="@GlobalConstants.AdministrationArea"
+           asp-controller="Lesson" asp-action="Create"
+           asp-route-courseId="@Model.CourseId"
+           asp-route-type="@Model.LessonType"
+           class="btn btn-outline-dark">
+            @SharedLocalizer["Add Lesson"]
+        </a>
+    </div>
+}
+
+@if (!Model.Lessons.Any())
+{
+    <div class="text-center font-size-20 text-info">@Localizer["There aren't lessons for this category!"]</div>
+}
+else
+{
+    <div class="row">
+        <table class="table table">
+            <tbody>
+                @foreach (var lesson in Model.Lessons)
+                {
+                    <tr>
+                        <td>@lesson.Name</td>
+                        <td>
+                            @if (User.IsInRole(GlobalConstants.AdministratorRoleName) || User.IsInRole(GlobalConstants.StudentRoleName))
                             {
-                                if (lesson.Contests.Count == 1)
+                                @if (lesson.Contests.Any())
                                 {
-                                    <a class="btn btn-success mr-4" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id" asp-route-contestId="@lesson.Contests[0].Id">@Localizer["Compete"]</a>
-                                }
-                                else
-                                {
-                                    <div class="dropdown mr-4 d-inline-block">
-                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            @Localizer["Compete"]
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            @foreach (var contest in lesson.Contests)
-                                            {
-                                                <a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
-                                                   asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
-                                            }
+                                    if (lesson.Contests.Count == 1)
+                                    {
+                                        <a class="btn btn-success mr-4" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id" asp-route-contestId="@lesson.Contests[0].Id">@Localizer["Compete"]</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="dropdown mr-4 d-inline-block">
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                @Localizer["Compete"]
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                @foreach (var contest in lesson.Contests)
+                                                {
+                                                    <a class="dropdown-item" asp-action="Details" asp-controller="Lesson"
+                                                       asp-route-id="@lesson.Id" asp-route-contestId="@contest.Id">@contest.Name</a>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                 }
                             }
-                        }
-                        <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">@Localizer["Practice"]</a>
-                    </td>
-                    <td>
-                        <i class="fas fa-file"></i>
-                        @lesson.ProblemsCount
-                    </td>
-                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <td>
-                            <a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-                               asp-action="Edit" asp-route-id="@lesson.Id">@SharedLocalizer["Edit"]</a>
-                            <a class="btn btn-danger" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
-                               asp-action="Delete" asp-route-id="@lesson.Id">@SharedLocalizer["Delete"]</a>
+                            <a class="btn btn-dark" asp-area="" asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" asp-route-practiceId="@lesson.PracticeId">@Localizer["Practice"]</a>
                         </td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                        <td>
+                            <i class="fas fa-file"></i>
+                            @lesson.ProblemsCount
+                        </td>
+                        @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <td>
+                                <a class="btn btn-primary" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                                   asp-action="Edit" asp-route-id="@lesson.Id">@SharedLocalizer["Edit"]</a>
+                                <a class="btn btn-danger" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Lesson"
+                                   asp-action="Delete" asp-route-id="@lesson.Id">@SharedLocalizer["Delete"]</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
