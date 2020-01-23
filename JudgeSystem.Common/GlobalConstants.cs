@@ -56,6 +56,7 @@ namespace JudgeSystem.Common
         public const int ContestsPerPage = 10;
         public const int FeedbacksPerPage = 6;
         public const int StudentsPerPage = 9;
+        public const int DefaultPage = 1;
         #endregion
 
         #region Email constants

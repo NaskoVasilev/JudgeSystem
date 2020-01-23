@@ -1,0 +1,80 @@
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model PracticeAllResultsViewModel
+
+@{
+    ViewData["Title"] = Model.LessonName;
+    int row = 1;
+}
+
+<h2 class="text-center mb-4">@Localizer["Practice results for lesson"] "@Model.LessonName"</h2>
+
+<table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
+    <thead>
+        <tr>
+            <th class="text-center">&#8470;</th>
+            <th class="text-center">@Localizer["Full name"]</th>
+            @foreach (var problem in Model.Problems)
+            {
+                <th class="text-center">
+                    @problem.Name
+                    @if (problem.IsExtraTask)
+                    {
+                        <span class="text-success ml-2 font-size-10"><i class="fas fa-star"></i></span>
+                    }
+                </th>
+            }
+            <th class="text-center">@Localizer["Total"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var practiceResult in Model.PracticeResults)
+        {
+        <tr>
+            <td class="text-center">@(row++)</td>
+            <td class="text-center">@practiceResult.FullName</td>
+            <td class="text-center">
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <a target="_blank" class="text-dark"
+                       asp-area="@GlobalConstants.AdministrationArea"
+                       asp-controller="Contest"
+                       asp-action="Submissions"
+                       asp-route-practiceId="@Model.Id"
+                       asp-route-userId="@practiceResult.UserId">
+                        @practiceResult.Username
+                    </a>
+                }
+                else
+                {
+                    @practiceResult.Username
+                }
+            </td>
+            @foreach (var problemId in Model.ProblemsIds)
+            {
+                int points = 0;
+                int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
+                if (practiceResult.PointsByProblem.ContainsKey(problemId))
+                {
+                    points = practiceResult.PointsByProblem[problemId];
+                }
+
+                <td class="text-center w-auto">@points/@maxPoints</td>
+            }
+            <td class="text-center">@practiceResult.Total/@Model.MaxPoints</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_ServerSidePaginationPartial" model="paginationData" />
+
+@section Scripts{
+    <script src="~/js/pagination.js"></script>
+    <script>
+		let url = "@paginationUrl";
+		let numberOfPagesUrl = "/Practice/Results/@Model.Id/PagesCount";
+		InitializePaginationList(url, numberOfPagesUrl)
+    </script>
+}
+

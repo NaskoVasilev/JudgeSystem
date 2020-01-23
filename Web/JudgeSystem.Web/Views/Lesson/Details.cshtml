@@ -21,6 +21,18 @@
         </div>
     </div>
 }
+else
+{
+    <div class="d-flex justify-content-between">
+        <vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
+        <div class="mt-5 font-size-20">
+            <a class="text-decoration-none text-secondary"
+               asp-controller="Practice" asp-action="Results" asp-route-id="@Model.PracticeId">@SharedLocalizer["Results"]</a>
+        </div>
+    </div>
+}
+
+
 @if (Model.Resources.Count > 0 || User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <div class="ul-holder border shadow-sm text-secondary px-3 pb-3 pt-2">
@@ -128,7 +140,7 @@
             <div class="button-holder mr-3 mt-4">
                 @if (Model.ContestId.HasValue)
                 {
-                <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">@SharedLocalizer["Submit"]</button>
+                    <button class="btn btn-success" data-contestId="@Model.ContestId" id="submit-btn">@SharedLocalizer["Submit"]</button>
                 }
                 else
                 {
