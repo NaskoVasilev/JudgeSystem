@@ -74,5 +74,19 @@ namespace JudgeSystem.Web.Tests.Controllers
             .ShouldReturn()
             .RedirectToAction(Action, Controller, routeValues);
         }
+
+        [Fact]
+        public void ShowInfo_WithInfoMessageActionAndRouteValues_ShouldReturnRedirectResultAndAddInfoToTempData()
+        {
+            var routeValues = new { Area, LessonId = 5, ContestId = 45 };
+            MyController<BaseController>
+            .Instance()
+            .Calling(c => c.ShowInfo(InfoMessage, Action, routeValues))
+            .ShouldHave()
+            .TempData(tempData => tempData.ContainingEntry(GlobalConstants.InfoKey, InfoMessage))
+            .AndAlso()
+            .ShouldReturn()
+            .RedirectToAction(Action, routeValues);
+        }
     }
 }

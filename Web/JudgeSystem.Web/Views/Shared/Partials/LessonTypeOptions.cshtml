@@ -1,8 +1,16 @@
-﻿@{
+﻿@model string
+@{
     IEnumerable<SelectListItem> lessonTypes = Utility.GetSelectListItems<LessonType>();
 }
 
 @foreach (var lessonType in lessonTypes)
 {
-    <option value="@lessonType.Value">@lessonType.Text</option>
+    if (Model == lessonType.Value)
+    {
+        <option value="@lessonType.Value" selected="selected">@lessonType.Text</option>
+    }
+    else
+    {
+        <option value="@lessonType.Value">@lessonType.Text</option>
+    }
 }

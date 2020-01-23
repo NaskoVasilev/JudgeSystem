@@ -5,6 +5,7 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Data.Models.Enums;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.practiceService = practiceService;
         }
 
-        public IActionResult Create() => View();
+        public IActionResult Create(LessonType type) => View(new LessonInputModel { Type = type });
 
         [ValidateAntiForgeryToken]
         [HttpPost]

@@ -35,7 +35,9 @@ namespace JudgeSystem.Web.Controllers
             var model = new CourseLessonsViewModel
             {
                 Lessons = lessonService.CourseLessonsByType(lessonType, courseId),
-                Name = $"{courseService.GetName(courseId)} - {lessonType}"
+                Name = $"{courseService.GetName(courseId)} - {lessonType}",
+                CourseId = courseId,
+                LessonType = lessonType
             };
 
 			return View(model);

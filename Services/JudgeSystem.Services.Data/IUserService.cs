@@ -17,5 +17,7 @@ namespace JudgeSystem.Services.Data
         Task<UserNamesViewModel> GetUserNames(string userId);
 
         IEnumerable<UserViewModel> All();
+
+        public bool IsExistingUserWithNotConfirmedEmail(string username);
     }
 }

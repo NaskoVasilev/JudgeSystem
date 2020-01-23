@@ -61,5 +61,7 @@
         public const string InvalidTest = "Test #{0} is invalid.";
 
         public const string InvalidJsonFile = "Your json file is not valid. See template for more information about file format.";
+
+        public const string NotConfirmedEmail = "Your email is not confirmed. Please confirm your email before login!";
     }
 }

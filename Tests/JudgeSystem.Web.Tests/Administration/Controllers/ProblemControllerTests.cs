@@ -383,6 +383,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         public void AddTest_WithValidInputData_ShouldReturnRedirectResultAndShouldAddTheTest()
         {
             Problem problem = ProblemTestData.GetEntity();
+            string infoMessage = string.Format(InfoMessages.AddedTest, problem.Name);
             var inputModel = new TestInputModel
             {
                 InputData = "test input",
@@ -406,6 +407,9 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
 
                     Assert.True(testExists);
                 }))
+            .AndAlso()
+            .ShouldHave()
+            .TempData(tempData => tempData.ContainingEntry(GlobalConstants.InfoKey, infoMessage))
             .AndAlso()
             .ShouldReturn()
             .RedirectToAction(nameof(ProblemController.AddTest), new { problemId = problem.Id });
@@ -719,7 +723,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 }))
                 .AndAlso()
                 .ShouldReturn()
-                .RedirectToAction(nameof(ProblemController.All), new { LessonId = problem.Lesson.Id });
+                .RedirectToAction(nameof(TestController.ProblemTests), new { inputModel.ProblemId });
             }
         }
     }
