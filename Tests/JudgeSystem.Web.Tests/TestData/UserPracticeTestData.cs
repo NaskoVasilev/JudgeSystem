@@ -38,5 +38,19 @@ namespace JudgeSystem.Web.Tests.TestData
                }
             };
         }
+
+        public static IEnumerable<UserPractice> GenerateEntities(int entitesCount)
+        {
+            for (int i = 0; i < entitesCount * 2; i++)
+            {
+                int practiceId = (i % 2) + 1;
+
+                yield return new UserPractice
+                {
+                    PracticeId = practiceId,
+                    UserId = $"id_{i + 1}"
+                };
+            }
+        }
     }
 }

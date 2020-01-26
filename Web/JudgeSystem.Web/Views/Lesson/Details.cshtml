@@ -23,8 +23,7 @@
 }
 else
 {
-    <div class="d-flex justify-content-between">
-        <vc:contest-timer contest-id="@Model.ContestId.Value"></vc:contest-timer>
+    <div class="d-flex justify-content-end">
         <div class="mt-5 font-size-20">
             <a class="text-decoration-none text-secondary"
                asp-controller="Practice" asp-action="Results" asp-route-id="@Model.PracticeId">@SharedLocalizer["Results"]</a>

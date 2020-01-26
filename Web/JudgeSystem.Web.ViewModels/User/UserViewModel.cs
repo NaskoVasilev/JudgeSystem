@@ -5,6 +5,8 @@ namespace JudgeSystem.Web.ViewModels.User
 {
     public class UserViewModel : IMapFrom<ApplicationUser>
     {
+        public string Id { get; set; }
+
         public string Username { get; set; }
 
         public string Name { get; set; }

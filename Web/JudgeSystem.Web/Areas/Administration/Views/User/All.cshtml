@@ -33,7 +33,15 @@
         @foreach (var user in Model)
         {
             <tr class="row data-row">
-                <td class="col-lg-3 col-md-3 col-sm-2">@user.Username</td>
+                <td class="col-lg-3 col-md-3 col-sm-2">
+                    <a target="_blank" class="text-dark" 
+                       asp-area="@GlobalConstants.AdministrationArea"
+                       asp-controller="User"
+                       asp-action="Results"
+                       asp-route-userId="@user.Id">
+                        @user.Username
+                    </a>
+                </td>
                 <td class="col-lg-3 col-md-2 col-sm-2">@user.Name</td>
                 <td class="col-lg-3 col-md-2 col-sm-2">@user.Surname</td>
                 <td class="col-lg-3 col-md-4 col-sm-6">@user.Email</td>

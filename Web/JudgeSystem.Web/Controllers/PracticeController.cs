@@ -11,7 +11,7 @@ namespace JudgeSystem.Web.Controllers
 {
     public class PracticeController : BaseController
     {
-        private const int ResultsPerPage = 15;
+        public const int ResultsPerPage = 1;
         private readonly IPracticeService practiceService;
 
         public PracticeController(IPracticeService practiceService)
@@ -22,7 +22,7 @@ namespace JudgeSystem.Web.Controllers
         public IActionResult Results(int id, int page = GlobalConstants.DefaultPage)
         {
             PracticeAllResultsViewModel model = practiceService.GetPracticeResults(id, page, ResultsPerPage);
-            var routeString = new RouteString(GlobalConstants.AdministrationArea, nameof(PracticeController), nameof(Results));
+            var routeString = new RouteString(nameof(PracticeController), nameof(Results));
 
             model.PaginationData = new PaginationData
             {

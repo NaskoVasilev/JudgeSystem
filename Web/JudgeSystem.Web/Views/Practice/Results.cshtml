@@ -13,7 +13,8 @@
     <thead>
         <tr>
             <th class="text-center">&#8470;</th>
-            <th class="text-center">@Localizer["Full name"]</th>
+            <th class="text-center">@SharedLocalizer["Full Name"]</th>
+            <th class="text-center">@SharedLocalizer["Username"]</th>
             @foreach (var problem in Model.Problems)
             {
                 <th class="text-center">
@@ -24,7 +25,7 @@
                     }
                 </th>
             }
-            <th class="text-center">@Localizer["Total"]</th>
+            <th class="text-center">@SharedLocalizer["Total"]</th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +39,7 @@
                     {
                         <a target="_blank" class="text-dark"
                            asp-area="@GlobalConstants.AdministrationArea"
-                           asp-controller="Contest"
+                           asp-controller="Practice"
                            asp-action="Submissions"
                            asp-route-practiceId="@Model.Id"
                            asp-route-userId="@practiceResult.UserId">
