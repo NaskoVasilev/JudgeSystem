@@ -30,49 +30,49 @@
     <tbody>
         @foreach (var practiceResult in Model.PracticeResults)
         {
-        <tr>
-            <td class="text-center">@(row++)</td>
-            <td class="text-center">@practiceResult.FullName</td>
-            <td class="text-center">
-                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-                {
-                    <a target="_blank" class="text-dark"
-                       asp-area="@GlobalConstants.AdministrationArea"
-                       asp-controller="Contest"
-                       asp-action="Submissions"
-                       asp-route-practiceId="@Model.Id"
-                       asp-route-userId="@practiceResult.UserId">
+            <tr>
+                <td class="text-center">@(row++)</td>
+                <td class="text-center">@practiceResult.FullName</td>
+                <td class="text-center">
+                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a target="_blank" class="text-dark"
+                           asp-area="@GlobalConstants.AdministrationArea"
+                           asp-controller="Contest"
+                           asp-action="Submissions"
+                           asp-route-practiceId="@Model.Id"
+                           asp-route-userId="@practiceResult.UserId">
+                            @practiceResult.Username
+                        </a>
+                    }
+                    else
+                    {
                         @practiceResult.Username
-                    </a>
-                }
-                else
+                    }
+                </td>
+                @foreach (var problemId in Model.ProblemsIds)
                 {
-                    @practiceResult.Username
-                }
-            </td>
-            @foreach (var problemId in Model.ProblemsIds)
-            {
-                int points = 0;
-                int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
-                if (practiceResult.PointsByProblem.ContainsKey(problemId))
-                {
-                    points = practiceResult.PointsByProblem[problemId];
-                }
+                    int points = 0;
+                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
+                    if (practiceResult.PointsByProblem.ContainsKey(problemId))
+                    {
+                        points = practiceResult.PointsByProblem[problemId];
+                    }
 
-                <td class="text-center w-auto">@points/@maxPoints</td>
-            }
-            <td class="text-center">@practiceResult.Total/@Model.MaxPoints</td>
-        </tr>
+                    <td class="text-center w-auto">@points/@maxPoints</td>
+                }
+                <td class="text-center">@practiceResult.Total/@Model.MaxPoints</td>
+            </tr>
         }
     </tbody>
 </table>
 
-<partial name="_ServerSidePaginationPartial" model="paginationData" />
+<partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
 
 @section Scripts{
     <script src="~/js/pagination.js"></script>
     <script>
-		let url = "@paginationUrl";
+		let url = "@Model.PaginationData.Url";
 		let numberOfPagesUrl = "/Practice/Results/@Model.Id/PagesCount";
 		InitializePaginationList(url, numberOfPagesUrl)
     </script>

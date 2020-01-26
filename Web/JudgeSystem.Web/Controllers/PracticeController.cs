@@ -2,7 +2,6 @@
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Practice;
-using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Web.Infrastructure.Routes;
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ namespace JudgeSystem.Web.Controllers
         private const int ResultsPerPage = 15;
         private readonly IPracticeService practiceService;
 
-        public PracticeController(IPracticeService practiceService
+        public PracticeController(IPracticeService practiceService)
         {
             this.practiceService = practiceService;
         }
