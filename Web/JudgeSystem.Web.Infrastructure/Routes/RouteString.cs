@@ -5,23 +5,25 @@ namespace JudgeSystem.Web.Infrastructure.Routes
 {
     public class RouteString
     {
+        private const char Slash = '/';
+
         public int QueryStringPairsCount { get; set; }
 
         public string Value { get; private set; }
 
         public RouteString(string controller, string action)
         {
-            Value = $"/{controller.ToControllerName()}/{action}";
+            Value = $"{Slash}{controller.ToControllerName()}{Slash}{action}";
         }
 
         public RouteString(string area, string controller, string action) : this(controller, action)
         {
-            Value = $"/{area}{Value}";
+            Value = $"{Slash}{area}{Value}";
         }
 
         public RouteString AppendId(object id)
         {
-            Value += $"/{id}";
+            Value += $"{Slash}{id}";
             return this;
         }
 

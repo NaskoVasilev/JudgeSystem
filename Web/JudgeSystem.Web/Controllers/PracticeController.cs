@@ -3,6 +3,7 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Practice;
 using JudgeSystem.Web.Infrastructure.Routes;
+using JudgeSystem.Web.Filters;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,5 +33,8 @@ namespace JudgeSystem.Web.Controllers
 
             return View(model);
         }
+
+        [EndpointExceptionFilter]
+        public int ResultsPagesCount(int id) => practiceService.GetPracticeResultsPagesCount(id, ResultsPerPage);
     }
 }

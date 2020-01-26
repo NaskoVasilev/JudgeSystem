@@ -73,7 +73,7 @@
     <script src="~/js/pagination.js"></script>
     <script>
 		let url = "@Model.PaginationData.Url";
-		let numberOfPagesUrl = "/Practice/Results/@Model.Id/PagesCount";
+		let numberOfPagesUrl = "/Practice/ResultsPagesCount/@Model.Id";
 		InitializePaginationList(url, numberOfPagesUrl)
     </script>
 }
