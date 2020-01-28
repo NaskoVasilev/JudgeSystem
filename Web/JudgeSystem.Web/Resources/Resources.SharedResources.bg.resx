@@ -429,6 +429,9 @@
   <data name="to" xml:space="preserve">
     <value>до</value>
   </data>
+  <data name="Total" xml:space="preserve">
+    <value>Общо</value>
+  </data>
   <data name="Trial test" xml:space="preserve">
     <value>Нулев тест</value>
   </data>

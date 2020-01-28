@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using JudgeSystem.Web.Dtos.Lesson;
+using JudgeSystem.Web.ViewModels.Practice;
 
 namespace JudgeSystem.Services.Data
 {
@@ -11,5 +12,9 @@ namespace JudgeSystem.Services.Data
         Task AddUserToPracticeIfNotAdded(string userId, int value);
 
         Task<LessonDto> GetLesson(int practiceId);
+
+        PracticeAllResultsViewModel GetPracticeResults(int id, int page, int entitesPerPage);
+
+        int GetPracticeResultsPagesCount(int id, int entitesPerPage);
     }
 }
