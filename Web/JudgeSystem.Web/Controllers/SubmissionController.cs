@@ -22,15 +22,18 @@ namespace JudgeSystem.Web.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ISubmissionService submissionService;
         private readonly IUtilityService utilityService;
+        private readonly IContestService contestService;
 
         public SubmissionController(
             UserManager<ApplicationUser> userManager,
             ISubmissionService submissionService,
-            IUtilityService utilityService)
+            IUtilityService utilityService,
+            IContestService contestService)
         {
             this.userManager = userManager;
             this.submissionService = submissionService;
             this.utilityService = utilityService;
+            this.contestService = contestService;
         }
 
         public IActionResult Details(int id)
@@ -87,6 +90,11 @@ namespace JudgeSystem.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SubmissionInputModel model)
         {
+            if(model.ContestId.HasValue && !contestService.IsActive(model.ContestId.Value))
+            {
+                return BadRequest(ErrorMessages.ContestIsNotActive);
+            }
+
             SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
 
             string userId = userManager.GetUserId(User);

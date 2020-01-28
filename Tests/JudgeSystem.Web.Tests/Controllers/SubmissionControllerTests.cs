@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using JudgeSystem.Data.Models.Enums;
@@ -190,6 +191,26 @@ namespace JudgeSystem.Web.Tests.Controllers
                 {
                     Assert.Equal(1, model);
                 }));
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(-5, -2)]
+        public void Create_WithContestIdAndNotActiveContest_ShouldReturnBadRquestWithCorrectMessage(int startTime, int endTime)
+        {
+            var contest = new Contest
+            {
+                Id = 1,
+                StartTime = DateTime.Now.AddDays(startTime),
+                EndTime = DateTime.Now.AddDays(endTime),
+            };
+
+            MyController<SubmissionController>
+            .Instance()
+            .WithData(contest)
+            .Calling(c => c.Create(new SubmissionInputModel { ContestId = contest.Id }))
+            .ShouldReturn()
+            .BadRequest(ErrorMessages.ContestIsNotActive);
         }
 
         [Fact]

@@ -252,5 +252,7 @@ namespace JudgeSystem.Services.Data
                 throw new EntityNotFoundException(nameof(Contest));
             }
         }
+
+        public bool IsActive(int contestId) => repository.All().Any(x => x.Id == contestId && x.IsActive);
     }
 }
