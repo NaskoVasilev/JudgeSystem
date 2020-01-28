@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="and I am developing this system." xml:space="preserve">
+    <value>и аз разработвам системата.</value>
+  </data>
+  <data name="Atanas Vasilev" xml:space="preserve">
+    <value>Атанас Василев</value>
+  </data>
+  <data name="Contact with me if you would like to contribute." xml:space="preserve">
+    <value>Свържите се с мен, ако искате да участвате в разработката на проекта.</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Документация</value>
+  </data>
+  <data name="here" xml:space="preserve">
+    <value>тук</value>
+  </data>
+  <data name="How admins can work with the system?" xml:space="preserve">
+    <value>Как администраторите могат да работят със системата?</value>
+  </data>
+  <data name="How can you activate your student profile." xml:space="preserve">
+    <value>Как да си активираш ученическия профил?</value>
+  </data>
+  <data name="How can you participate in contests." xml:space="preserve">
+    <value>Как можеш да участваш в състезания?</value>
+  </data>
+  <data name="How can you track your results and progress." xml:space="preserve">
+    <value>Как да си следиш резултатите и прогреса?</value>
+  </data>
+  <data name="How to add contests to the system." xml:space="preserve">
+    <value>Как да добавяте състезания в системата?</value>
+  </data>
+  <data name="How to add new problems and create tests for them." xml:space="preserve">
+    <value>Как да добавяте нова задача и  да създавате тесове за нея?</value>
+  </data>
+  <data name="How to add students and contests to the system." xml:space="preserve">
+    <value>Как да добавяте ученици и състезания?</value>
+  </data>
+  <data name="How to manage courses, lessons, problems and tests." xml:space="preserve">
+    <value>Как да управлявате обучения, уроци, задачи и тестове към задачите?</value>
+  </data>
+  <data name="How to see details for users' submissions." xml:space="preserve">
+    <value>Как да видите детайли за решенията на учениците?</value>
+  </data>
+  <data name="How to see information about submisison's trial tests." xml:space="preserve">
+    <value>Как да видите информация за резултата от пробните тесове на Ваше решение?</value>
+  </data>
+  <data name="How to submit solutions and see results from them." xml:space="preserve">
+    <value>Как да изпратите решение и да си видите резултата?</value>
+  </data>
+  <data name="How to track users' contest and exam results." xml:space="preserve">
+    <value>Как да следите резултатите на учениците от състезанията?</value>
+  </data>
+  <data name="How users can work with the system?" xml:space="preserve">
+    <value>Как се работи със системата?</value>
+  </data>
+  <data name="If you find some problems do not hesitate to send some feedback or even create an issue in github." xml:space="preserve">
+    <value>Ако намерите някакви проблеми не се колебайте да изпратите обратна връзка или дори да създадете "issue" в GitHub</value>
+  </data>
+  <data name="More information about the project and author." xml:space="preserve">
+    <value>Повече информация за проекта и разработчика.</value>
+  </data>
+  <data name="My name is" xml:space="preserve">
+    <value>Моето име е</value>
+  </data>
+  <data name="My personal" xml:space="preserve">
+    <value>Моят личен</value>
+  </data>
+  <data name="The project is open source and you can find the repository" xml:space="preserve">
+    <value>Проектът е с отворен код и можете да видите кода от</value>
+  </data>
+  <data name="What you will learn form the video?" xml:space="preserve">
+    <value>Какво ще научите от видеото?</value>
+  </data>
+</root>

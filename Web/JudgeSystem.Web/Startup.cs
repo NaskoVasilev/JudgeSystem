@@ -1,14 +1,13 @@
-﻿using System.Globalization;
-using System.Reflection;
+﻿using System.Reflection;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data;
 using JudgeSystem.Data.Seeding;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Web.Configuration;
 using JudgeSystem.Web.Dtos.Course;
 using JudgeSystem.Web.Dtos.ML;
 using JudgeSystem.Web.InputModels.Course;
-using JudgeSystem.Web.IocConfiguration;
 using JudgeSystem.Web.ViewModels;
 
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +38,7 @@ namespace JudgeSystem.Web
 
             services.ConfigureIdentity()
                 .ConfigureSession()
+                .ConfigureLocalization()
                 .ConfigureMvc()
                 .ConfigureCookies()
                 .ConfigureSettings(configuration)
@@ -50,9 +50,7 @@ namespace JudgeSystem.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var cultureInfo = new CultureInfo(GlobalConstants.CurrentCultureInfo);
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            LocalizationConfiguration.SetDefaultCulture();
 
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
@@ -80,6 +78,7 @@ namespace JudgeSystem.Web
             }
 
             app.UseHttpsRedirection();
+            app.UserLocalization();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();

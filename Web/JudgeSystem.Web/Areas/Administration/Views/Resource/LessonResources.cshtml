@@ -1,49 +1,50 @@
-﻿@model AllResourcesViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model AllResourcesViewModel
 
 @{
-	ViewData["Title"] = "All Resources";
-	string administrationArea = GlobalConstants.AdministrationArea;
+    ViewData["Title"] = SharedLocalizer["All Resources"];
+    string administrationArea = GlobalConstants.AdministrationArea;
 }
 
-<h1 class="text-center mb-3">All Resources</h1>
+<h1 class="text-center mb-3">@ViewData["Title"]</h1>
 
 <div class="d-flex justify-content-center mb-3">
-	<a class="btn btn-outline-primary" asp-area="" 
-       asp-action="Details" 
-       asp-controller="Lesson" 
+    <a class="btn btn-outline-primary" asp-area=""
+       asp-action="Details"
+       asp-controller="Lesson"
        asp-route-id="@Model.LessonId"
        asp-route-practiceId="@Model.PracticeId">
-       Back to lesson
+        @SharedLocalizer["Back to lesson"]
     </a>
 </div>
 
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				Name
-			</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var resource in Model.Resources)
-		{
-			<tr>
-				<td>
-					@resource.Name
-				</td>
-				<td>
-					<a class="btn btn-warning" asp-area="@administrationArea"
-					   asp-controller="Resource" asp-action="Edit" asp-route-id="@resource.Id">Edit</a>
-					<button class="btn btn-danger resourceDeleteBtn" data-id="@resource.Id">Delete</button>
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr>
+            <th>
+                @SharedLocalizer["Name"]
+            </th>
+            <th>@SharedLocalizer["Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var resource in Model.Resources)
+        {
+            <tr>
+                <td>
+                    @resource.Name
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-area="@administrationArea"
+                       asp-controller="Resource" asp-action="Edit" asp-route-id="@resource.Id">@SharedLocalizer["Edit"]</a>
+                    <button class="btn btn-danger resourceDeleteBtn" data-id="@resource.Id">@SharedLocalizer["Delete"]</button>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 @section Scripts{
-	<script src="~/js/notification.js"></script>
-	<script src="~/js/controllers/resourceController.js"></script>
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/resourceController.js"></script>
 }

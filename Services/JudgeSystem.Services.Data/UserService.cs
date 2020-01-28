@@ -138,5 +138,8 @@ namespace JudgeSystem.Services.Data
             .OrderBy(x => x.Name)
             .ThenBy(x => x.Surname)
             .ToList();
+
+        public bool IsExistingUserWithNotConfirmedEmail(string username) => 
+            repository.All().Any(x => x.UserName == username && !x.EmailConfirmed);
     }
 }

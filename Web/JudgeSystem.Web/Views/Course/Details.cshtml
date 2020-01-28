@@ -1,4 +1,6 @@
-﻿@model CourseViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IViewLocalizer Localizer
+@model CourseViewModel
 
 @{
     this.ViewData["Title"] = Model.Name;
@@ -23,7 +25,7 @@
                            asp-action="Lessons"
                            asp-route-courseId="@Model.Id"
                            asp-route-lessonType="@lessonType">
-                            @($"{Model.Name} - {lessonType}s")
+                            @($"{Model.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
                         </a>
                     </td>
                 </tr>
@@ -36,18 +38,18 @@
                 <a class="btn btn-success"
                    asp-area="@administrationArea" asp-controller="Lesson"
                    asp-action="Create" asp-route-courseId="@Model.Id">
-                    Add Lesson
+                    @SharedLocalizer["Add Lesson"]
                 </a>
                 <a class="btn btn-secondary"
                    asp-area="@administrationArea" asp-controller="Course"
                    asp-action="Edit" asp-route-id="@Model.Id">
-                    Edit
+                    @SharedLocalizer["Edit"]
                 </a>
                 <a class="btn btn-danger"
                    asp-area="@GlobalConstants.AdministrationArea"
                    asp-controller="Course"
                    asp-action="Delete"
-                   asp-route-id="@Model.Id">Delete</a>
+                   asp-route-id="@Model.Id">@SharedLocalizer["Delete"]</a>
             </div>
         }
     </div>

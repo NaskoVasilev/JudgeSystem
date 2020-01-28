@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Components
 		{
 			ContestStartEndTimeDto contest = await contestService.GetById<ContestStartEndTimeDto>(contestId);
 			TimeRemainingDto model = estimator.CalculateRemainingTime(contest.EndTime);
+            model.ContestName = contest.Name;
 			return View(model);
 		}
 	}

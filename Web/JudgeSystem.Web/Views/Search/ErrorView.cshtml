@@ -1,5 +1,7 @@
-﻿@{
-	ViewData["Title"] = "Search Results";
+﻿@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Search Results"];
 }
 
-<h2 class="text-danger">Search keyword is required.</h2>
+<h2 class="text-danger">@Localizer["Search keyword is required."]</h2>

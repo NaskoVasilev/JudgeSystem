@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JudgeSystem.Web.IocConfiguration
+namespace JudgeSystem.Web.Configuration
 {
     public static class IdentityConfiguration
     {

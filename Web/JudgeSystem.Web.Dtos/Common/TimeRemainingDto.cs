@@ -2,7 +2,9 @@
 {
 	public class TimeRemainingDto
 	{
-		public int Days { get; set; }
+        public string ContestName { get; set; }
+
+        public int Days { get; set; }
 
 		public int Hours { get; set; }
 

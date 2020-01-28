@@ -1,18 +1,20 @@
-﻿@model UserResultsViewModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IViewLocalizer Localizer
+@model UserResultsViewModel
 
 @{
-    ViewData["Title"] = "Results";
+    ViewData["Title"] = SharedLocalizer["Results"];
 }
 
 <h3 class="text-center mb-4">
     <span class="text-info">
         <vc:user-names user-id="@Model.UserId"></vc:user-names>
-    </span> contest and practice results.
+    </span> @Localizer["contest and practice results."]
 </h3>
 <nav class="mb-3">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active" id="nav-contest-results-tab" data-toggle="tab" href="#nav-contest-results" role="tab" aria-controls="nav-contest-results" aria-selected="true">Contest results</a>
-        <a class="nav-item nav-link" id="nav-practice-results-tab" data-toggle="tab" href="#nav-practice-results" role="tab" aria-controls="nav-practice-results" aria-selected="false">Practice results</a>
+        <a class="nav-item nav-link active" id="nav-contest-results-tab" data-toggle="tab" href="#nav-contest-results" role="tab" aria-controls="nav-contest-results" aria-selected="true">@SharedLocalizer["Contest results"]</a>
+        <a class="nav-item nav-link" id="nav-practice-results-tab" data-toggle="tab" href="#nav-practice-results" role="tab" aria-controls="nav-practice-results" aria-selected="false">@SharedLocalizer["Practice results"]</a>
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -20,8 +22,8 @@
         <table class="table table-striped">
             <thead>
                 <tr class="row">
-                    <th class="col-sm-9">Contest name</th>
-                    <th class="col-sm-3">Results</th>
+                    <th class="col-sm-9">@SharedLocalizer["Contest"]</th>
+                    <th class="col-sm-3">@SharedLocalizer["Results"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,8 +51,8 @@
         <table class="table table-striped">
             <thead>
                 <tr class="row">
-                    <th class="col-sm-9">Lesson name</th>
-                    <th class="col-sm-3">Results</th>
+                    <th class="col-sm-9">@SharedLocalizer["Lesson name"]</th>
+                    <th class="col-sm-3">@SharedLocalizer["Results"]</th>
                 </tr>
             </thead>
             <tbody>

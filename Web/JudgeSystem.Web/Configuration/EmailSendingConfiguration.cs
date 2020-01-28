@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JudgeSystem.Web.IocConfiguration
+namespace JudgeSystem.Web.Configuration
 {
     public static class EmailSendingConfiguration
     {

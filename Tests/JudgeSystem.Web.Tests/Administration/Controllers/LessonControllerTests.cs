@@ -16,12 +16,14 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
     public class LessonControllerTests
     {
         [Fact]
-        public void Create_ShouldReturnView() =>
+        public void Create_WithPassedLessonType_ShouldReturnViewWithModelWithSetLessonType() =>
           MyController<LessonController>
           .Instance()
-          .Calling(c => c.Create())
+          .Calling(c => c.Create(LessonType.Exam))
           .ShouldReturn()
-          .View();
+          .View(result => result
+                .WithModelOfType<LessonInputModel>()
+                .Passing(model => model.Type == LessonType.Exam));
 
         [Fact]
         public void Create_ShouldHaveAttribtesForPostRequestAndAntiForgeryToken() =>

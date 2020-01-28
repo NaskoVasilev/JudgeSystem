@@ -1,10 +1,11 @@
-﻿@model PracticeSubmissionsViewModel
+﻿@inject IViewLocalizer Localizer
+@model PracticeSubmissionsViewModel
 
 <h4 class="text-center mb-3">
     <span class="text-info">
         <vc:user-names user-id="@Model.UserId"></vc:user-names>
     </span>
-    submissions for practice "@Model.LessonName"
+    @Localizer["submissions for practice"] "@Model.LessonName"
 </h4>
 
 <div class="border p-3 bg-light mb-3">

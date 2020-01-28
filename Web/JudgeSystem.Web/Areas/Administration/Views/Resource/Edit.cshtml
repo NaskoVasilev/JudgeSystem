@@ -1,7 +1,8 @@
-﻿@model ResourceEditInputModel
+﻿@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ResourceEditInputModel
 
 @{
-    ViewData["Title"] = "Resource Edit";
+    ViewData["Title"] = SharedLocalizer["Resource Edit"];
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -15,12 +16,12 @@
                     <input asp-for="Name" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <div class="file-upload-wrapper my-4" data-text="Select your file!">
+                    <div class="file-upload-wrapper my-4" data-text="@SharedLocalizer["Select your file!"]">
                         <input asp-for="File" type="file" class="file-upload-field form-control" value="">
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Edit"]</button>
                 </div>
             </form>
         </section>
