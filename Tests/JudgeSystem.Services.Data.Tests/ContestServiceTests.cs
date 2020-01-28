@@ -111,7 +111,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             ContestService contestService = CreateContestServiceWithMockedRepository(Generate50ContestsWithStartDate().AsQueryable());
 
-            int page = 50 / GlobalConstants.ContestsPerPage + 1;
+            int page = (50 / GlobalConstants.ContestsPerPage) + 1;
             int expectedEntities = 50 % GlobalConstants.ContestsPerPage;
             IEnumerable<ContestViewModel> actualContests = contestService.GetAllConests(page);
             IEnumerable<int> expectedData = Enumerable.Range(50 - expectedEntities, expectedEntities);
