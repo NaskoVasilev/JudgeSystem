@@ -9,13 +9,14 @@ infoBox.on('click', () => {
 errorBox.on('click', () => {
 	errorBox.hide();
 });
-if (infoBox.find('span').text() !== "") {
+
+if (infoBox.find('span').text().trim() !== "") {
 	infoBox.show();
 	setTimeout(function () {
 		$('#infoBox').fadeOut();
-	}, 3000);
+    }, 4000);
 }
 
 if (errorBox.find('span').text() !== "") {
-	errorBox.show();
+    errorBox.show();
 }

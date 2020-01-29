@@ -35,5 +35,7 @@ namespace JudgeSystem.Services.Data
         Task<int> GetLessonId(int contestId);
 
         Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl);
+        
+        bool IsActive(int contestId);
     }
 }

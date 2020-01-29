@@ -6,8 +6,6 @@ $(".testDeleteBtn").on('click', (e) => {
 	let button = $(e.target)[0];
 	let testId = button.dataset.id;
 
-	console.log(testId);
-
 	$.post('/Administration/Test/Delete', { id: testId })
 		.done((response) => {
 			$(button.parentElement.parentElement).hide();

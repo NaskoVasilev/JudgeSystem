@@ -359,6 +359,29 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(pagesCount, actualModel.PaginationData.NumberOfPages);
         }
 
+        [Theory]
+        [InlineData(-2, -1, false)]
+        [InlineData(2, 5, false)]
+        [InlineData(-2, 1, true)]
+        public async Task IsActive_WithDifferentArguments_ShoudReturnCorrectResults(int startTime, int endTime, bool expectedResult)
+        {
+            //Arrange
+            var contest = new Contest
+            {
+                Id = 1,
+                StartTime = DateTime.Now.AddDays(startTime),
+                EndTime = DateTime.Now.AddDays(endTime)
+            };
+
+            ContestService contestService = await CreateContestService(new List<Contest> { contest }, null);
+
+            //Act
+            bool actualResult = contestService.IsActive(contest.Id);
+           
+            //Assert
+            Assert.Equal(expectedResult, actualResult);
+        }
+
         private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
         {
             await context.Contests.AddRangeAsync(testData);

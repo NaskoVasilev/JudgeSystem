@@ -1,14 +1,14 @@
 ﻿function showInfo(message) {
 	let infoBox = $('#infoBox');
-	infoBox.find('span').text(message);
+	infoBox.find('div > span').text(message);
 	infoBox.show();
 	setTimeout(function () {
 		$('#infoBox').fadeOut();
-	}, 3000);
+    }, 4000);
 }
 
 function showError(err) {
 	let errorBox = $('#errorBox');
-	errorBox.find('span').text(err);
+	errorBox.find('div > span').text(err);
 	errorBox.show();
 }
