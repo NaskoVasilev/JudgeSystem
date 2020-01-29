@@ -177,21 +177,32 @@ body {
     display: none;
 }
 
-    .notification > span {
-        display: inline-block;
-        padding: 10px 20px;
-        display: block;
+    .notification > div {
+        padding: 17px 17px;
         text-align: center;
         width: 100%;
+        border-radius: 5px;
+        opacity: 0.97;
+        cursor: pointer;
     }
 
 
-#infoBox > span {
+#infoBox > div {
     background: #393;
 }
 
-#errorBox > span {
+#errorBox > div {
     background: #F50;
+}
+
+.messages {
+    float: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+    text-align: center;
+    margin: 10px;
+    z-index: 999;
 }
 
 /*Listing all tests*/
@@ -279,7 +290,7 @@ input[type=file] {
     background-color: #deeadb
 }
 
-.CodeMirror-linenumber  {
+.CodeMirror-linenumber {
     color: #481414
 }
 
@@ -345,10 +356,10 @@ input[type=file] {
     font-size: 30px;
 }
 
-.loader{
+.loader {
     font-size: 20px;
 }
 
-.font-size-10{
+.font-size-10 {
     font-size: 10px;
 }
