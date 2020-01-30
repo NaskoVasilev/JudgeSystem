@@ -46,8 +46,8 @@ namespace JudgeSystem.Services.Data.Tests
                 Assert.Equal(Email, feedback.SenderEmail);
             }
 
-            Assert.Equal("content3", feedbacks[0].Content);
-            Assert.Equal("content4", feedbacks[1].Content);
+            Assert.Equal("content3", feedbacks[1].Content);
+            Assert.Equal("content4", feedbacks[0].Content);
         }
 
         private async Task AddTestData(IEnumerable<Feedback> testData)

@@ -101,25 +101,14 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Theory]
-        [InlineData(5, "1, 2, 3")]
-        [InlineData(45, "")]
-        public async Task GetTestsByProblemId_WithDifferntData_ShouldReturnDifferentResults(int problemId, string expectedIds)
-        {
-            TestService service = await CreateTestService(GetTestData());
-
-            IEnumerable<TestDataDto> results = service.GetTestsByProblemId(problemId);
-
-            Assert.Equal(expectedIds, string.Join(", ", results.Select(x => x.Id)));
-        }
-
-        [Theory]
         [InlineData(5, "1, 3, 2")]
+        [InlineData(4, "4, 5")]
         [InlineData(45, "")]
         public async Task GetTestsByProblemIdOrderedByIsTrialDescending_WithDifferntData_ShouldReturnDifferentResults(int problemId, string expectedIds)
         {
             TestService service = await CreateTestService(GetTestData());
 
-            IEnumerable<TestViewModel> results = service.GetTestsByProblemIdOrderedByIsTrialDescending(problemId);
+            IEnumerable<TestViewModel> results = service.GetTestsByProblemIdOrderedByIsTrialDescending<TestViewModel>(problemId);
 
             Assert.Equal(expectedIds, string.Join(", ", results.Select(x => x.Id)));
         }

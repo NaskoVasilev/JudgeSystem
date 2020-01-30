@@ -219,13 +219,16 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetContestReults_WithValidContestId_ShouldWorkCorrect()
         {
+            //Arrange
             List<Contest> testData = GetContestReultsTestData();
             ContestService service = await CreateContestService(testData);
-
-            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
             Contest expectedContest = testData.First();
             var expectedProblems = expectedContest.Lesson.Problems.OrderBy(x => x.CreatedOn).ToList();
 
+            //Act
+            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
+
+            //Assert
             Assert.Equal(expectedContest.Name, actualContest.Name);
             Assert.Equal(1, actualContest.NumberOfPages);
             Assert.Equal(1, actualContest.CurrentPage);
@@ -238,8 +241,10 @@ namespace JudgeSystem.Services.Data.Tests
                 Assert.Equal(expectedProblem.Id, actualProblem.Id);
                 Assert.Equal(expectedProblem.IsExtraTask, actualProblem.IsExtraTask);
             }
+            
             Assert.Equal(2, actualContest.ContestResults.Count);
-            ContestResultViewModel naskoResults = actualContest.ContestResults[0];
+            
+            ContestResultViewModel naskoResults = actualContest.ContestResults[1];
             Assert.Equal(50, naskoResults.PointsByProblem[1]);
             Assert.Equal(100, naskoResults.PointsByProblem[3]);
             Assert.Equal(150, naskoResults.Total);
@@ -247,7 +252,8 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal("A", naskoResults.Student.ClassType);
             Assert.Equal(2, naskoResults.Student.NumberInCalss);
             Assert.Equal("Atanas Vasilev", naskoResults.Student.FullName);
-            ContestResultViewModel martoResults = actualContest.ContestResults[1];
+            
+            ContestResultViewModel martoResults = actualContest.ContestResults[0];
             Assert.Equal(60, martoResults.PointsByProblem[1]);
             Assert.Equal(100, martoResults.PointsByProblem[2]);
             Assert.Equal(70, martoResults.PointsByProblem[3]);

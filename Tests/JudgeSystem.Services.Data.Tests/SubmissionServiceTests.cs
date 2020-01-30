@@ -334,7 +334,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new TestDataDto { Id = 12, InputData = "123", OutputData = expectedOutput }
             };
             var testServiceMock = new Mock<ITestService>();
-            testServiceMock.Setup(x => x.GetTestsByProblemId(submission.ProblemId)).Returns(tests);
+            testServiceMock.Setup(x => x.GetTestsByProblemIdOrderedByIsTrialDescending<TestDataDto>(submission.ProblemId)).Returns(tests);
 
             var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
 
@@ -589,20 +589,91 @@ namespace JudgeSystem.Services.Data.Tests
 
         private List<Submission> PaginationTestData()
         {
+            byte[] compilationError = new byte[10];
             var firstProblem = new Problem { Id = 1 };
             var secondProblem = new Problem { Id = 2 };
             var thirdProblem = new Problem { Id = 3 };
 
             return new List<Submission>
             {
-                new Submission { Id = 1, ProblemId = 2, ContestId = null, UserId = "me", SubmisionDate = new DateTime(2019, 7, 2), Problem = secondProblem },
-                new Submission { Id = 2, ProblemId = 2, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 6, 2), Problem = secondProblem },
-                new Submission { Id = 3, ProblemId = 1, ContestId = 2,  UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = firstProblem },
-                new Submission { Id = 4, ProblemId = 2, ContestId = 2, UserId = "me", SubmisionDate = new DateTime(2018, 7, 2), Problem = secondProblem },
-                new Submission { Id = 5, ProblemId = 3, ContestId = null, UserId = "me", SubmisionDate = new DateTime(2019, 9, 2), Problem = thirdProblem },
-                new Submission { Id = 6, ProblemId = 3, ContestId = 1, UserId = "me123", SubmisionDate = new DateTime(2019, 2, 2), Problem = thirdProblem },
-                new Submission { Id = 7, ProblemId = 3, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 4, 2), Problem = thirdProblem },
-                new Submission { Id = 8, ProblemId = 2, ContestId = 1, UserId = "me", SubmisionDate = new DateTime(2019, 8, 2), Problem = secondProblem },
+                new Submission
+                {
+                    Id = 1,
+                    ProblemId = 2,
+                    CompilationErrors = compilationError,
+                    ContestId = null,
+                    UserId = "me",
+                    SubmisionDate = new DateTime(2019, 7, 2),
+                    Problem = secondProblem
+                },
+                new Submission
+                {
+                    Id = 2,
+                    ProblemId = 2,
+                    CompilationErrors = compilationError,
+                    ContestId = 1, UserId = "me",
+                    SubmisionDate = new DateTime(2019, 6, 2),
+                    Problem = secondProblem
+                },
+                new Submission
+                {
+                    Id = 3,
+                    ProblemId = 1,
+                    CompilationErrors = compilationError,
+                    ContestId = 2,
+                    UserId = "me",
+                    SubmisionDate = new DateTime(2019, 8, 2),
+                    Problem = firstProblem
+                },
+                new Submission
+                {
+                    Id = 4,
+                    ProblemId = 2,
+                    CompilationErrors = compilationError,
+                    ContestId = 2,
+                    UserId = "me",
+                    SubmisionDate = new DateTime(2018, 7, 2),
+                    Problem = secondProblem
+                },
+                new Submission
+                {
+                    Id = 5,
+                    ProblemId = 3,
+                    CompilationErrors = compilationError,
+                    ContestId = null, UserId = "me",
+                    SubmisionDate = new DateTime(2019, 9, 2),
+                    Problem = thirdProblem
+                },
+                new Submission
+                {
+                    Id = 6,
+                    ProblemId = 3,
+                    CompilationErrors = compilationError,
+                    ContestId = 1,
+                    UserId = "me123",
+                    SubmisionDate = new DateTime(2019, 2, 2),
+                    Problem = thirdProblem
+                },
+                new Submission
+                {
+                    Id = 7,
+                    ProblemId = 3,
+                    CompilationErrors = compilationError,
+                    ContestId = 1,
+                    UserId = "me",
+                    SubmisionDate = new DateTime(2019, 4, 2),
+                    Problem = thirdProblem
+                },
+                new Submission
+                {
+                    Id = 8,
+                    ProblemId = 2,
+                    CompilationErrors = compilationError,
+                    ContestId = 1,
+                    UserId = "me",
+                    SubmisionDate = new DateTime(2019, 8, 2),
+                    Problem = secondProblem
+                }
             };
         }
     }

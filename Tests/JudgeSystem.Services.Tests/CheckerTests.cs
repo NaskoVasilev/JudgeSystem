@@ -19,9 +19,11 @@ namespace JudgeSystem.Services.Tests
 
         [Theory]
         [InlineData("test", "test", true)]
-        [InlineData("test ", "test", true)]
-        [InlineData("test", "test  ", true)]
-        [InlineData("test\r\n", "test  ", true)]
+        [InlineData("test ", "test ", true)]
+        [InlineData("test\r\n", "test\r\n", true)]
+        [InlineData("test ", "test", false)]
+        [InlineData("test   ", "test ", false)]
+        [InlineData("test\r\n", "test", false)]
         public void Check_WithDifferentArguments_ShouldreturnDifferentResults(string output, string expectedOutput, bool isCorrect)
         {
             var checker = new Checker();
