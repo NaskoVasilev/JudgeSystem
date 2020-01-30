@@ -7,7 +7,7 @@ namespace JudgeSystem.Web.Infrastructure.Routes
     {
         private const char Slash = '/';
 
-        public int QueryStringPairsCount { get; set; }
+        public int QueryStringPairsCount { get; private set; }
 
         public string Value { get; private set; }
 

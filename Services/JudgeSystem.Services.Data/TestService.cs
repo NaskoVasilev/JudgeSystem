@@ -59,22 +59,12 @@ namespace JudgeSystem.Services.Data
             return test;
 		}
 
-		public IEnumerable<TestDataDto> GetTestsByProblemId(int problemId)
+		public IEnumerable<T> GetTestsByProblemIdOrderedByIsTrialDescending<T>(int problemId)
 		{
 			var tests = repository.All()
-				.Where(t => t.ProblemId == problemId)
-                .OrderByDescending(x => x.IsTrialTest)
-                .To<TestDataDto>()
-				.ToList();
-			return tests;
-		}
-
-		public IEnumerable<TestViewModel> GetTestsByProblemIdOrderedByIsTrialDescending(int problemId)
-		{
-			var tests = repository.All()
-				.Where(t => t.ProblemId == problemId)
-				.OrderByDescending(t => t.IsTrialTest)
-				.To<TestViewModel>()
+                .Where(t => t.ProblemId == problemId)
+                .OrderByDescending(t => t.IsTrialTest)
+                .To<T>()
 				.ToList();
             return tests;
 		}
@@ -87,5 +77,5 @@ namespace JudgeSystem.Services.Data
             test.OutputData = model.OutputData.Trim();
             await repository.UpdateAsync(test);
 		}
-	}
+    }
 }

@@ -103,15 +103,24 @@
                 </div>
             </div>
         </nav>
-        <div class="messages">
-            <div id="infoBox" class="notification">
+    </header>
+
+    <div class="messages">
+        <div id="infoBox" class="notification">
+            <div>
+                <i class="fas fa-check text-white font-size-30 mx-4"></i>
                 <span>@info</span>
-            </div>
-            <div id="errorBox" class="notification">
-                <span>@error</span>
+                <i class="fas fa-times text-white font-size-20 ml-4"></i>
             </div>
         </div>
-    </header>
+        <div id="errorBox" class="notification">
+            <div>
+                <i class="fas fa-exclamation-triangle text-white font-size-30 mx-4"></i>
+                <span>@error</span>
+                <i class="fas fa-times text-white font-size-20 ml-4"></i>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <partial name="_CookieConsentPartial" />

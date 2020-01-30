@@ -329,7 +329,7 @@ namespace JudgeSystem.Services.Data
 
         private async Task RunTests(Submission submission, CompileResult compileResult, ProgrammingLanguage programmingLanguage)
         {
-            var tests = testService.GetTestsByProblemId(submission.ProblemId).ToList();
+            var tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending<TestDataDto>(submission.ProblemId).ToList();
             ProblemConstraintsDto problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
             if (tests.Count == 0)
             {

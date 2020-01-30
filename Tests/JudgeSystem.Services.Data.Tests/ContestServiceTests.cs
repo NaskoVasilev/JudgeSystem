@@ -219,13 +219,16 @@ namespace JudgeSystem.Services.Data.Tests
         [Fact]
         public async Task GetContestReults_WithValidContestId_ShouldWorkCorrect()
         {
+            //Arrange
             List<Contest> testData = GetContestReultsTestData();
             ContestService service = await CreateContestService(testData);
-
-            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
             Contest expectedContest = testData.First();
             var expectedProblems = expectedContest.Lesson.Problems.OrderBy(x => x.CreatedOn).ToList();
 
+            //Act
+            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
+
+            //Assert
             Assert.Equal(expectedContest.Name, actualContest.Name);
             Assert.Equal(1, actualContest.NumberOfPages);
             Assert.Equal(1, actualContest.CurrentPage);
@@ -238,8 +241,10 @@ namespace JudgeSystem.Services.Data.Tests
                 Assert.Equal(expectedProblem.Id, actualProblem.Id);
                 Assert.Equal(expectedProblem.IsExtraTask, actualProblem.IsExtraTask);
             }
+            
             Assert.Equal(2, actualContest.ContestResults.Count);
-            ContestResultViewModel naskoResults = actualContest.ContestResults[0];
+            
+            ContestResultViewModel naskoResults = actualContest.ContestResults[1];
             Assert.Equal(50, naskoResults.PointsByProblem[1]);
             Assert.Equal(100, naskoResults.PointsByProblem[3]);
             Assert.Equal(150, naskoResults.Total);
@@ -247,7 +252,8 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal("A", naskoResults.Student.ClassType);
             Assert.Equal(2, naskoResults.Student.NumberInCalss);
             Assert.Equal("Atanas Vasilev", naskoResults.Student.FullName);
-            ContestResultViewModel martoResults = actualContest.ContestResults[1];
+            
+            ContestResultViewModel martoResults = actualContest.ContestResults[0];
             Assert.Equal(60, martoResults.PointsByProblem[1]);
             Assert.Equal(100, martoResults.PointsByProblem[2]);
             Assert.Equal(70, martoResults.PointsByProblem[3]);
@@ -357,6 +363,29 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Equal(expecedPaginationUrl, actualModel.PaginationData.Url);
             Assert.Equal(page, actualModel.PaginationData.CurrentPage);
             Assert.Equal(pagesCount, actualModel.PaginationData.NumberOfPages);
+        }
+
+        [Theory]
+        [InlineData(-2, -1, false)]
+        [InlineData(2, 5, false)]
+        [InlineData(-2, 1, true)]
+        public async Task IsActive_WithDifferentArguments_ShoudReturnCorrectResults(int startTime, int endTime, bool expectedResult)
+        {
+            //Arrange
+            var contest = new Contest
+            {
+                Id = 1,
+                StartTime = DateTime.Now.AddDays(startTime),
+                EndTime = DateTime.Now.AddDays(endTime)
+            };
+
+            ContestService contestService = await CreateContestService(new List<Contest> { contest }, null);
+
+            //Act
+            bool actualResult = contestService.IsActive(contest.Id);
+           
+            //Assert
+            Assert.Equal(expectedResult, actualResult);
         }
 
         private async Task<ContestService> CreateContestService(List<Contest> testData, IRepository<UserContest> userContestRepository)
