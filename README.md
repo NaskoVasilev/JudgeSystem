@@ -19,6 +19,11 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://www.youtube.com/embed/FbM2rhNMFVs) video you can watch how users can work in the system.
 * In [this](https://www.youtube.com/watch?v=JjZ8iy4g0K0) video you can watch how administrators can work in the system.
 
+## Awards
+* НТИТ - Национален есенен турнир по информационни технологии „Джон Атанасов“ – първо място в направление „Интернет приложения“
+* Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне
+Click here to see certificates, medals and awards from the contests above.
+
 ## Getting Started
 ### Prerequisites
 You will need the following tools:
