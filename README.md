@@ -92,6 +92,7 @@ Follow these steps to set up your development environmet:
 * Automapper, SendGrid, jQuery, Bootstrap
 
 ## Project Architecture
+![Architecture](Documentation/Architecture.jpg)
 * Data access layer - works with the database using Entity Franework Core 2.2, this layer is independent from the others. It consists of two other layers:
   * Domain Layer - contains all entities, enums. Classes which represent tables in the database
   * Persistence Layer - contains database context, all configurations, migrations and data seeding logic. It is responsible for data persistance. Here is implmented Repository desing pattern which help us to accomplish more abstraction between data access logic and business logic. As a result we can our database provider without making so many changes to the code. For example we can chnage MS SQL with MongoDB without changing some business logic.
