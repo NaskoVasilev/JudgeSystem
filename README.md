@@ -159,7 +159,3 @@ Follow these steps to set up your development environmet:
   ### Lectures
   - Each lecture can be one of the tree types(Homework, Exercise or Exam)
   - Lecture can be added with some password which is really convenient for exam lecture
-  ## Submission evaluation workflow
-  ![Submission evaluation](Documentation/Submission evaluation.jpg)
-  ![Submissionevaluation](Documentation/Submission evaluation.jpg)
-  ![Architecture](Documentation/Architecture.jpg)
