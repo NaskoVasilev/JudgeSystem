@@ -11,7 +11,7 @@ namespace JudgeSystem.Web.Controllers
 {
     public class PracticeController : BaseController
     {
-        public const int ResultsPerPage = 1;
+        public const int ResultsPerPage = 15;
         private readonly IPracticeService practiceService;
 
         public PracticeController(IPracticeService practiceService)
