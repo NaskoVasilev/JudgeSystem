@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label asp-for="Type"></label>
                     <select class="form-control" asp-for="Type">
-                        <partial name="Partials/LessonTypeOptions" model="Model?.Type.ToString()"/>
+                        <partial name="Partials/LessonTypeOptions" />
                     </select>
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>

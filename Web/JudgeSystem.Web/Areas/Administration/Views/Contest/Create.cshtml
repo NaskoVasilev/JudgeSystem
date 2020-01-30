@@ -4,7 +4,6 @@
 
 @{
     ViewData["Title"] = Localizer["Contest Create"];
-    string defaultLessonType = LessonType.Exercise.ToString();
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -32,7 +31,7 @@
                 <div class="form-group">
                     <label>Lesson Type</label>
                     <select id="lessonType" class="form-control">
-                        <partial name="Partials/LessonTypeOptions" model="defaultLessonType"/>
+                        <partial name="Partials/LessonTypeOptions" />
                     </select>
                 </div>
                 <div class="form-group">
