@@ -334,7 +334,7 @@ namespace JudgeSystem.Services.Data.Tests
                 new TestDataDto { Id = 12, InputData = "123", OutputData = expectedOutput }
             };
             var testServiceMock = new Mock<ITestService>();
-            testServiceMock.Setup(x => x.GetTestsByProblemId(submission.ProblemId)).Returns(tests);
+            testServiceMock.Setup(x => x.GetTestsByProblemIdOrderedByIsTrialDescending<TestDataDto>(submission.ProblemId)).Returns(tests);
 
             var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
 

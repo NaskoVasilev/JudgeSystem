@@ -29,7 +29,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             var model = new ProblemTestsViewModel
             {
                 LessonId = await problemService.GetLessonId(problemId),
-                Tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending(problemId)
+                Tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending<TestViewModel>(problemId)
             };
 			return View(model);
 		}
