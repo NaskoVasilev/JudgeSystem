@@ -18,6 +18,8 @@ namespace JudgeSystem.Executors
                     return new CPlusPlusExecutor();
                 case ProgrammingLanguage.Java:
                     return new JavaExecutor();
+                case ProgrammingLanguage.Python:
+                    return new PythonExecutor();
                 default:
                     throw new ArgumentException(UnsupportedExecutorErrorMessage);
             }

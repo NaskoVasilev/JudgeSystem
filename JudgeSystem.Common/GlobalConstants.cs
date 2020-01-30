@@ -72,6 +72,7 @@ namespace JudgeSystem.Common
         public const string CSharpFileExtension = ".cs";
         public const string JavaFileExtension = ".java";
         public const string CppFileExtension = ".cpp";
+        public const string PythonFileExtension = ".py";
         public const int SubmissionFileMaxSizeInKb = 16;
         public const int MinSubmissionCodeLength = 10;
         public const int MaxSubmissionCodeLength = 100000;

@@ -186,6 +186,10 @@ namespace JudgeSystem.Services
             {
                 return GlobalConstants.CppFileExtension;
             }
+            else if(programmingLanguage == ProgrammingLanguage.Python)
+            {
+                return GlobalConstants.PythonFileExtension;
+            }
 
             return null;
         }

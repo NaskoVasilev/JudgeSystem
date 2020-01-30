@@ -4,6 +4,7 @@
     {
         CSharp = 1, 
         Java = 2,
-        CPlusPlus = 3
+        CPlusPlus = 3,
+        Python = 4
     }
 }

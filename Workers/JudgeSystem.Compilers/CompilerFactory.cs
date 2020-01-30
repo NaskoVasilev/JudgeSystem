@@ -18,6 +18,8 @@ namespace JudgeSystem.Compilers
                     return new CPlusPlusCompiler();
                 case ProgrammingLanguage.Java:
                     return new JavaCompiler();
+                case ProgrammingLanguage.Python:
+                    return new PythonCompiler();
                 default:
                     throw new ArgumentException(UnsupportedCompilerErrorMessage);
             }
