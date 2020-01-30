@@ -123,7 +123,7 @@
   <data name="Learn More" xml:space="preserve">
     <value>Научете повече</value>
   </data>
-  <data name="Use this space to summarize your privacy and cookie use policy." xml:space="preserve">
-    <value>Ние използваме "бисквитки". За да продължите трябва да се приемете нашата политика за обработка на личните данни.</value>
+  <data name="We use cookies. Accept our policy to continue surfing." xml:space="preserve">
+    <value>Ние използваме "бисквитки". За да продължите е нужно да приемете нашата политика.</value>
   </data>
 </root>
