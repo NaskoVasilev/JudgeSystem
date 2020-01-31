@@ -170,3 +170,8 @@ Follow these steps to set up your development environmet:
   ### Lectures
   - Each lecture can be one of the tree types(Homework, Exercise or Exam)
   - Lecture can be added with some password which is really convenient for exam lecture
+  
+  ## Languages and compilers
+  - C#
+  - Java 11 – compiler javac 11.0.4
+  - C++ - compiler g++ (MinGW GCC-8.2.0-3) 8.2.0
