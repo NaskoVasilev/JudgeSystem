@@ -102,6 +102,73 @@ Follow these steps to set up your development environmet:
 * jQuery, Bootstrap, JavaScript
 * Automapper, SendGrid
 
+## Languages and compilers
+- C#
+- Java 11 – compiler javac 11.0.4
+- C++ - compiler g++ (MinGW GCC-8.2.0-3) 8.2.0
+
+## Add new programming language
+Follow this steps to add Python as another option for programming language
+1. Create class ```PythonCompiler``` in project ```JudgeSystem.Comilers``` which implements ```ICompiler``` interface
+```
+using System.Collections.Generic;
+
+using JudgeSystem.Workers.Common;
+
+namespace JudgeSystem.Compilers
+{
+    public class PythonCompiler : ICompiler
+    {
+        public CompileResult Compile(string fileName, string workingDirectory, IEnumerable<string> sources = null)
+        {
+            var baseCompiler = new Compiler();
+            string arguments = "Place Python compilation arguments here";
+            return baseCompiler.Compile(arguments);
+        }
+    }
+}
+```
+2. Add the following line in ```enum ProgrammingLanguages```
+```Python = 4```
+3. Add the following code in class ```CompilerFactory```
+```
+case ProgrammingLanguage.Python:
+    return new PythonCompiler();
+```
+4. Create class ```PythonExecutor ``` in project ```JudgeSystem.Executors``` which implements ```IExecutor``` interface
+```
+using System;
+using System.Threading.Tasks;
+using JudgeSystem.Workers.Common;
+
+namespace JudgeSystem.Executors
+{
+    public class PythonExecutor : IExecutor
+    {
+        public Task<ExecutionResult> Execute(string filePath, string input, int timeLimit, int memoryLimit)
+        {
+            var baseExecutor = new Executor();
+            string arguments = "Place Python program execution arguments here";
+            return baseExecutor.Execute(arguments, input, timeLimit, memoryLimit);
+        }
+    }
+}
+```
+5. Add the following code in ```ExecutorFactory```
+```
+case ProgrammingLanguage.Python:
+    return new PythonExecutor();
+```
+6. Add the followong line in ```GlobalConstants ```
+```public const string PythonFileExtension = ".py";```
+7. Add the following check in method ```GetFileExtension``` in class ```UtilityService``` in project ```JudgeSystem.Services ```
+```
+else if(programmingLanguage == ProgrammingLanguage.Python)
+{
+    return GlobalConstants.PythonFileExtension;
+}
+```
+  
 ## Project Architecture
 ![Architecture](Documentation/Architecture.jpg)
 * Data access layer - works with the database using Entity Franework Core 2.2, this layer is independent from the others. It consists of two other layers:
@@ -170,8 +237,3 @@ Follow these steps to set up your development environmet:
   ### Lectures
   - Each lecture can be one of the tree types(Homework, Exercise or Exam)
   - Lecture can be added with some password which is really convenient for exam lecture
-  
-  ## Languages and compilers
-  - C#
-  - Java 11 – compiler javac 11.0.4
-  - C++ - compiler g++ (MinGW GCC-8.2.0-3) 8.2.0
