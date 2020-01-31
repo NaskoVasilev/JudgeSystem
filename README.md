@@ -18,7 +18,7 @@ You can find the documentation by navigation to the following path: Documentatio
 Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://www.youtube.com/embed/FbM2rhNMFVs) video you can watch how users can work in the system.
 * In [this](https://www.youtube.com/watch?v=JjZ8iy4g0K0) video you can watch how administrators can work in the system.
-* In [this](https://www.youtube.com/watch?v=GqCLoFPXkPs&feature=youtu.be) video you can watch how administrators create lesson, add problem and resource to it, add tests to the problem and finally create contest for this lesson.
+* In [this](https://www.youtube.com/watch?v=GqCLoFPXkPs&feature=youtu.be) video you can watch how administrators can create lesson, add problem and resource to it, add tests to the problem and finally create contest for this lesson.
 * In [this](https://www.youtube.com/watch?v=pQtEAqjQcIg&feature=youtu.be) video you can watch how users can submit solutions.
 * In [this](https://www.youtube.com/watch?v=DA2GwSgnLx4&feature=youtu.be) video you can watch how administrators can review users' results and submission.
 
@@ -97,8 +97,10 @@ Follow these steps to set up your development environmet:
 * ASP.NET Core 2.2
 * ASP.NET Core MVC
 * Entity Framework Core 2.2
-* xUnit
-* Automapper, SendGrid, jQuery, Bootstrap
+* Azure
+* xUnit, MyTested.AspNetCore.Mvc
+* jQuery, Bootstrap, JavaScript
+* Automapper, SendGrid
 
 ## Project Architecture
 ![Architecture](Documentation/Architecture.jpg)
