@@ -14,7 +14,7 @@ namespace JudgeSystem.Common
         public const string AdministrationArea = "Administration";
         public const string LessonsRrecommendationMlModelPath = "MLModels/JudgeSystemLessonsModel.zip";
         public const string CurrentCultureInfo = "bg-BG";
-        public const string EnglishCultureInfo = "en-150";
+        public const string EnglishCultureInfo = "en-GB";
         public const int CultureCookieExpirationTimeInMonths = 6;
         public static string DefaultDateTimeFormat = CultureInfo.GetCultureInfo(CurrentCultureInfo).DateTimeFormat.FullDateTimePattern;
         #endregion
