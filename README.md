@@ -128,7 +128,7 @@ namespace JudgeSystem.Compilers
     }
 }
 ```
-2. Add the following line in ```enum ProgrammingLanguages```
+2. Add the following line in ```enum ProgrammingLanguages```:
 ```Python = 4```
 3. Add the following code in class ```CompilerFactory```
 ```
@@ -160,7 +160,7 @@ namespace JudgeSystem.Executors
 case ProgrammingLanguage.Python:
     return new PythonExecutor();
 ```
-6. Add the followong line in ```GlobalConstants ```
+6. Add the followong line in ```GlobalConstants ```:
 ```public const string PythonFileExtension = ".py";```
 7. Add the following check in method ```GetFileExtension``` in class ```UtilityService``` in project ```JudgeSystem.Services ```
 ```
