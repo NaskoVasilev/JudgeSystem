@@ -18,6 +18,8 @@
     </a>
 </div>
 
+<partial name="Partials/DeleteConfirmationModal" />
+
 <table class="table">
     <thead>
         <tr>
@@ -37,7 +39,9 @@
                 <td>
                     <a class="btn btn-warning" asp-area="@administrationArea"
                        asp-controller="Resource" asp-action="Edit" asp-route-id="@resource.Id">@SharedLocalizer["Edit"]</a>
-                    <button class="btn btn-danger resourceDeleteBtn" data-id="@resource.Id">@SharedLocalizer["Delete"]</button>
+                    <button type="button" class="btn btn-danger resourceDeleteBtn" data-id="@resource.Id" data-toggle="modal" data-target="#exampleModal">
+                        @SharedLocalizer["Delete"]
+                    </button>
                 </td>
             </tr>
         }
