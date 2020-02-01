@@ -180,7 +180,7 @@
   <data name="and" xml:space="preserve">
     <value>и</value>
   </data>
-  <data name="Are you sure you want to execute deletion action?" xml:space="preserve">
+  <data name="Are you sure you want to execute deletion?" xml:space="preserve">
     <value>Сигурни ли сте, че искате да извършите изтриването?</value>
   </data>
   <data name="Back to all" xml:space="preserve">
