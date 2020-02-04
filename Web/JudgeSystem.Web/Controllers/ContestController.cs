@@ -4,6 +4,8 @@ using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
+using JudgeSystem.Web.Infrastructure.Pagination;
+using JudgeSystem.Web.Infrastructure.Routes;
 using JudgeSystem.Web.ViewModels.Contest;
 
 using Microsoft.AspNetCore.Authorization;
@@ -49,8 +51,15 @@ namespace JudgeSystem.Web.Controllers
         public IActionResult Results(int id, int page = DefaultPage)
         {
             ContestAllResultsViewModel model = contestService.GetContestReults(id, page, EntitiesPerPage);
-            model.NumberOfPages = contestService.GetContestResultsPagesCount(id, EntitiesPerPage);
-            model.CurrentPage = page;
+
+            var routeString = new RouteString(GlobalConstants.AdministrationArea, nameof(ContestController), nameof(Results));
+            model.PaginationData = new PaginationData() 
+            { 
+                Url = routeString.AppendId(id).AppendPaginationPlaceholder(), 
+                NumberOfPages = contestService.GetContestResultsPagesCount(id, EntitiesPerPage), 
+                CurrentPage = page 
+            };
+
             return View(model);
         }
 

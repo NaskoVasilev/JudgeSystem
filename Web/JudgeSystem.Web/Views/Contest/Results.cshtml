@@ -3,9 +3,6 @@
 
 @{
     ViewData["Title"] = Model.Name;
-    int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
-    string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
-    var paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
 <h2 class="text-center mb-4">@Localizer["Results for contest"] "@Model.Name"</h2>
@@ -52,7 +49,7 @@
                         @contestResult.Student.FullName
                     }
                 </td>
-                @foreach (var problemId in problemIds)
+                @foreach (var problemId in Model.ProblemIds)
                 {
                     int points = 0;
                     int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
@@ -68,12 +65,12 @@
     </tbody>
 </table>
 
-<partial name="_ServerSidePaginationPartial" model="paginationData" />
+<partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
 
 @section Scripts{
     <script src="~/js/pagination.js"></script>
     <script>
-		let url = "@paginationUrl";
+		let url = "@Model.PaginationData.Url";
 		let numberOfPagesUrl = "/Contest/Results/@Model.Id/PagesCount";
 		InitializePaginationList(url, numberOfPagesUrl)
     </script>
