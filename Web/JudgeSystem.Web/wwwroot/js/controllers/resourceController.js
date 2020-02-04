@@ -1,17 +1,24 @@
-﻿//Delete course
-$(".resourceDeleteBtn").on('click', (e) => {
-	let button = $(e.target)[0];
-	let courseId = button.dataset.id;
-	console.log(courseId);
+﻿//Delete resource
+let clickedDeleteButton;
 
-	$.post('/Administration/Resource/Delete', { id: courseId })
-		.done((response) => {
-			$(button.parentElement.parentElement).hide();
-			showInfo(response);
-		})
-		.fail((error) => {
-			showError(error.responseText);
-		});
+$("#delete-confirm-btn").on('click', (e) => {
+
+    if (clickedDeleteButton) {
+        let resourceId = clickedDeleteButton.dataset.id;
+
+        $.post('/Administration/Resource/Delete', { id: resourceId })
+            .done((response) => {
+                $(clickedDeleteButton.parentElement.parentElement).hide();
+                showInfo(response);
+            })
+            .fail((error) => {
+                showError(error.responseText);
+            });
+    }
+});
+
+$(".resourceDeleteBtn").on('click', (e) => {
+    clickedDeleteButton = $(e.target)[0];
 });
 
 $("form").on("submit", showFileUploader);

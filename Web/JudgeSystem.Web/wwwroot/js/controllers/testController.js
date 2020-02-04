@@ -1,19 +1,25 @@
 ﻿let testEditors = new Map();
 setTestEditors('.test-data');
 
+let clickedDeleteButton;
+
+$("#delete-confirm-btn").on('click', (e) => {
+    if (clickedDeleteButton) {
+        let testId = clickedDeleteButton.dataset.id;
+
+        $.post('/Administration/Test/Delete', { id: testId })
+            .done((response) => {
+                $(clickedDeleteButton.parentElement.parentElement).hide();
+                showInfo(response);
+            })
+            .fail((error) => {
+                showError(error.responseText);
+            });
+    }
+});
 
 $(".testDeleteBtn").on('click', (e) => {
-	let button = $(e.target)[0];
-	let testId = button.dataset.id;
-
-	$.post('/Administration/Test/Delete', { id: testId })
-		.done((response) => {
-			$(button.parentElement.parentElement).hide();
-			showInfo(response);
-		})
-		.fail((error) => {
-			showError(error.responseText);
-		});
+    clickedDeleteButton = $(e.target)[0];
 });
 
 //This code get new values for test input and output and sent request to /Administration/Test/Edit to edit the test
