@@ -106,11 +106,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-        [EndpointExceptionFilter]
-        [HttpGet("/Contest/Results/{contestId}/PagesCount")]
-        public int GetContestResultPagesCount(int contestId) => 
-            contestService.GetContestResultsPagesCount(contestId);
-
         public async Task<IActionResult> Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/{nameof(Submissions)}?contestId={contestId}&userId={userId}";

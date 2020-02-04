@@ -28,9 +28,9 @@ namespace JudgeSystem.Services.Data
 
 		int GetNumberOfPages();
 
-		ContestAllResultsViewModel GetContestReults(int contestId, int page);
+		ContestAllResultsViewModel GetContestReults(int contestId, int page, int entitiesPerPage);
 
-		int GetContestResultsPagesCount(int contestId);
+		int GetContestResultsPagesCount(int contestId, int entitiesPerPage);
 
         Task<int> GetLessonId(int contestId);
 

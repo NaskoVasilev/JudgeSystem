@@ -16,6 +16,7 @@ namespace JudgeSystem.Web.Controllers
     public class ContestController : BaseController
 	{
         private const int DefaultPage = 1;
+        private const int EntitiesPerPage = 15;
 
 		private readonly IContestService contestService;
         private readonly UserManager<ApplicationUser> userManager;
@@ -47,8 +48,15 @@ namespace JudgeSystem.Web.Controllers
 
         public IActionResult Results(int id, int page = DefaultPage)
         {
-            ContestAllResultsViewModel model = contestService.GetContestReults(id, page);
+            ContestAllResultsViewModel model = contestService.GetContestReults(id, page, EntitiesPerPage);
+            model.NumberOfPages = contestService.GetContestResultsPagesCount(id, EntitiesPerPage);
+            model.CurrentPage = page;
             return View(model);
         }
+
+        [EndpointExceptionFilter]
+        [HttpGet("/Contest/Results/{contestId}/PagesCount")]
+        public int GetContestResultPagesCount(int contestId) =>
+                    contestService.GetContestResultsPagesCount(contestId, EntitiesPerPage);
     }
 }

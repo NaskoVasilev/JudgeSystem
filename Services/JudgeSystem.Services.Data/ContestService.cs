@@ -133,7 +133,7 @@ namespace JudgeSystem.Services.Data
 			return (int)Math.Ceiling((double)numberOfContests / GlobalConstants.ContestsPerPage);
 		}
 
-		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
+		public ContestAllResultsViewModel GetContestReults(int contestId, int page, int entitiesPerPage)
 		{
             ContestAllResultsViewModel model = repository.All()
 				.Where(c => c.Id == contestId)
@@ -172,20 +172,18 @@ namespace JudgeSystem.Services.Data
                     .ThenBy(cr => cr.Student.ClassNumber)
                     .ThenBy(cr => cr.Student.ClassType)
 					.ThenBy(cr => cr.Student.NumberInCalss)
-					.Skip((page - 1) * ResultsPerPage)
-					.Take(ResultsPerPage)
+					.Skip((page - 1) * entitiesPerPage)
+					.Take(entitiesPerPage)
 					.ToList(),
 				})
 				.FirstOrDefault();
 
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(model, nameof(Contest));
-            model.NumberOfPages = GetContestResultsPagesCount(contestId);
-            model.CurrentPage = page;
 
 			return model;
 		}
 
-		public int GetContestResultsPagesCount(int contestId)
+		public int GetContestResultsPagesCount(int contestId, int entitiesPerPage)
         {
             ThrowEntityNotFoundExceptionIfContestDoesNotExist(contestId);
 
@@ -197,7 +195,7 @@ namespace JudgeSystem.Services.Data
                 .Where(uc => uc.User.StudentId != null)
                 .Count();
 
-            return paginationService.CalculatePagesCount(count, ResultsPerPage);
+            return paginationService.CalculatePagesCount(count, entitiesPerPage);
         }
 
         public async Task<int> GetLessonId(int contestId)
@@ -245,6 +243,8 @@ namespace JudgeSystem.Services.Data
             return model;
         }
 
+        public bool IsActive(int contestId) => repository.All().Any(x => x.Id == contestId && x.IsActive);
+        
         private void ThrowEntityNotFoundExceptionIfContestDoesNotExist(int contestId)
         {
             if (!repository.All().Any(x => x.Id == contestId))
@@ -253,6 +253,7 @@ namespace JudgeSystem.Services.Data
             }
         }
 
-        public bool IsActive(int contestId) => repository.All().Any(x => x.Id == contestId && x.IsActive);
+        private IQueryable<>
+
     }
 }
