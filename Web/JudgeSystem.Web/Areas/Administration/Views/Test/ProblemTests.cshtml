@@ -6,11 +6,14 @@
     int testNumber = 1;
 }
 
-    <h2 class="text-center mb-3">@ViewData["Title"]</h2>
+<h2 class="text-center mb-3">@ViewData["Title"]</h2>
 <div class="d-flex justify-content-center mb-3">
     <a class="btn btn-outline-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"
        asp-route-lessonId="@Model.LessonId">@SharedLocalizer["Back to all problems"]</a>
 </div>
+
+<partial name="Partials/DeleteConfirmationModal" />
+
 @foreach (TestViewModel test in Model.Tests)
 {
     <div>
@@ -35,7 +38,9 @@
         </div>
         <div class="admin-buttons-holder">
             <a class="btn btn-warning testEditBtn" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Test" asp-action="Edit" asp-route-id="@test.Id">@SharedLocalizer["Edit"]</a>
-            <button class="btn btn-danger testDeleteBtn" data-id="@test.Id">@SharedLocalizer["Delete"]</button>
+            <button class="btn btn-danger testDeleteBtn" data-id="@test.Id" data-toggle="modal" data-target="#exampleModal">
+                @SharedLocalizer["Delete"]
+            </button>
         </div>
         <hr />
     </div>

@@ -180,6 +180,9 @@
   <data name="and" xml:space="preserve">
     <value>и</value>
   </data>
+  <data name="Are you sure you want to execute deletion?" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да извършите изтриването?</value>
+  </data>
   <data name="Back to all" xml:space="preserve">
     <value>Обратно към всички</value>
   </data>
@@ -206,6 +209,12 @@
   </data>
   <data name="Click" xml:space="preserve">
     <value>Кликни</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Затвори</value>
+  </data>
+  <data name="Confirm your actions!" xml:space="preserve">
+    <value>Потвърдете Вашите намерения!</value>
   </data>
   <data name="Confirm your password" xml:space="preserve">
     <value>Потвърди паролата си</value>
