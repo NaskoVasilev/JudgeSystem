@@ -230,8 +230,6 @@ namespace JudgeSystem.Services.Data.Tests
 
             //Assert
             Assert.Equal(expectedContest.Name, actualContest.Name);
-            Assert.Equal(1, actualContest.NumberOfPages);
-            Assert.Equal(1, actualContest.CurrentPage);
             Assert.Equal(expectedProblems.Count, actualContest.Problems.Count);
             for (int i = 0; i < actualContest.Problems.Count; i++)
             {

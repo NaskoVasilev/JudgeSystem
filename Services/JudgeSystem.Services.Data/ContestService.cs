@@ -252,8 +252,5 @@ namespace JudgeSystem.Services.Data
                 throw new EntityNotFoundException(nameof(Contest));
             }
         }
-
-        private IQueryable<>
-
     }
 }
