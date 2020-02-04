@@ -1,7 +1,9 @@
-﻿namespace JudgeSystem.Services
+﻿using System.Collections.Generic;
+
+namespace JudgeSystem.Services
 {
     public interface IExcelFileGenerator
     {
-        byte[] Generate(string[] columns, string[,] data);
+        byte[] Generate(List<string> columns, object[,] data);
     }
 }

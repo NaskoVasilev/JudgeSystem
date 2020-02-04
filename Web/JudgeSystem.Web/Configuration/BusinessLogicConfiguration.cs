@@ -36,6 +36,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IRouteBuilder, RouteBuilder>();
             services.AddTransient<IChecker, Checker>();
             services.AddTransient<IJsonUtiltyService, JsonUtiltyService>();
+            services.AddTransient<IExcelFileGenerator, ExcelFileGenerator>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();

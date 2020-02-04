@@ -1,4 +1,5 @@
 ﻿using GemBox.Spreadsheet;
+using System.Collections.Generic;
 using System.IO;
 
 namespace JudgeSystem.Services
@@ -7,9 +8,9 @@ namespace JudgeSystem.Services
     {
         private const string LicenseKey = "FREE-LIMITED-KEY";
 
-        public byte[] Generate(string[] columns, string[,] data)
+        public byte[] Generate(List<string> columns, object[,] data)
         {
-            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            SpreadsheetInfo.SetLicense(LicenseKey);
             XlsxSaveOptions options = SaveOptions.XlsxDefault;
             var workbook = new ExcelFile();
             ExcelWorksheet worksheet = workbook.Worksheets.Add("Sheet1");
@@ -18,7 +19,7 @@ namespace JudgeSystem.Services
             style.Font.Weight = ExcelFont.BoldWeight;
             style.HorizontalAlignment = HorizontalAlignmentStyle.Center;
 
-            for (int i = 0; i < columns.Length; i++)
+            for (int i = 0; i < columns.Count; i++)
             {
                 worksheet.Cells[0, i].Value = columns[i];
             }
