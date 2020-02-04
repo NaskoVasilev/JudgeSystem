@@ -67,5 +67,11 @@ namespace JudgeSystem.Web.Controllers
         [HttpGet("/Contest/Results/{contestId}/PagesCount")]
         public int GetContestResultPagesCount(int contestId) =>
                     contestService.GetContestResultsPagesCount(contestId, EntitiesPerPage);
+
+        public IActionResult ExportResults(int id)
+        {
+            ContestAllResultsViewModel results = contestService.GetContestReults(id, DefaultPage, int.MaxValue);
+            return null;
+        }
     }
 }
