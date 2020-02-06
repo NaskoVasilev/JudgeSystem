@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace JudgeSystem.Web.ViewModels.Practice
@@ -14,5 +15,11 @@ namespace JudgeSystem.Web.ViewModels.Practice
         public Dictionary<int, int> PointsByProblem { get; set; }
 
         public int Total => PointsByProblem.Values.Sum();
+
+        public int GetPoints(int problemId)
+        {
+            PointsByProblem.TryGetValue(problemId, out int points);
+            return points;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @inject IStringFormatter  StringFormatter
 @model ContestAllResultsViewModel
 
@@ -6,8 +7,10 @@
     ViewData["Title"] = Model.Name;
 }
 
-<h2 class="text-center mb-4">@Localizer["Results for contest"] "@Model.Name"</h2>
-
+<h2 class="text-center mb-3">@Localizer["Results for contest"] "@Model.Name"</h2>
+<div class="d-flex justify-content-center mb-3">
+    <a class="btn btn-outline-dark font-weight-bold" asp-controller="Contest" asp-action="ExportResults" asp-route-id="@Model.Id">@SharedLocalizer["Export"]</a>
+</div>
 <table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
     <thead>
         <tr>

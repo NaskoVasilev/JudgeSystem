@@ -17,8 +17,6 @@ namespace JudgeSystem.Web.ViewModels.Practice
 
         public int MaxPoints => Problems.Sum(x => x.MaxPoints);
 
-        public int[] ProblemsIds => Problems.Select(p => p.Id).ToArray();
-
         public PaginationData PaginationData { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using JudgeSystem.Web.ViewModels.Contest;
 using JudgeSystem.Web.ViewModels.Problem;
+using JudgeSystem.Web.ViewModels.Practice;
 
 using GemBox.Spreadsheet;
 
@@ -26,8 +27,7 @@ namespace JudgeSystem.Services
         {
             Action<ExcelWorksheet> fillWorksheet = (ExcelWorksheet worksheet) =>
             {
-                AlignColumns(worksheet, 0, 2, HorizontalAlignmentStyle.Left);
-                AlignColumns(worksheet, 3, columns.Count - 1, HorizontalAlignmentStyle.Center);
+                worksheet.Columns[0].Style.HorizontalAlignment = HorizontalAlignmentStyle.Left;
                 AddColumns(worksheet, columns);
                 worksheet.Columns[2].SetWidth(200, LengthUnit.Pixel);
 
@@ -45,6 +45,32 @@ namespace JudgeSystem.Services
                     }
 
                     worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(contestResult.Total, contestResultsData.MaxPoints);
+                }
+            };
+
+            return Generate(fillWorksheet);
+        }
+
+        public byte[] GeneratePracticeResultsReport(PracticeAllResultsViewModel practiceResultsData, List<string> columns)
+        {
+            Action<ExcelWorksheet> fillWorksheet = (ExcelWorksheet worksheet) =>
+            {
+                AddColumns(worksheet, columns);
+                worksheet.Columns[0].SetWidth(200, LengthUnit.Pixel);
+
+                for (int row = 1; row <= practiceResultsData.PracticeResults.Count; row++)
+                {
+                    int col = 0;
+                    PracticeResultViewModel practiceResult = practiceResultsData.PracticeResults[row - 1];
+                    worksheet.Cells[row, col++].Value = practiceResult.FullName;
+                    worksheet.Cells[row, col++].Value = practiceResult.Username;
+
+                    foreach (PracticeProblemViewModel problem in practiceResultsData.Problems)
+                    {
+                        worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(practiceResult.GetPoints(problem.Id), problem.MaxPoints);
+                    }
+
+                    worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(practiceResult.Total, practiceResultsData.MaxPoints);
                 }
             };
 
