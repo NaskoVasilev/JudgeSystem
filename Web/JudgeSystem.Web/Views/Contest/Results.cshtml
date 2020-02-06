@@ -1,4 +1,5 @@
 ﻿@inject IViewLocalizer Localizer
+@inject IStringFormatter  StringFormatter
 @model ContestAllResultsViewModel
 
 @{
@@ -49,17 +50,11 @@
                         @contestResult.Student.FullName
                     }
                 </td>
-                @foreach (var problemId in Model.ProblemIds)
+                @foreach (var problem in Model.Problems)
                 {
-                    int points = 0;
-                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
-                    if (contestResult.PointsByProblem.ContainsKey(problemId))
-                    {
-                        points = contestResult.PointsByProblem[problemId];
-                    }
-                    <td class="text-center w-auto">@points/@maxPoints</td>
+                    <td class="text-center w-auto">@StringFormatter.FormatPoints(contestResult.GetPoints(problem.Id), problem.MaxPoints)</td>
                 }
-                <td class="text-center">@contestResult.Total/@Model.Problems.Sum(x => x.MaxPoints)</td>
+                <td class="text-center">@StringFormatter.FormatPoints(contestResult.Total, Model.MaxPoints)</td>
             </tr>
         }
     </tbody>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using JudgeSystem.Common;
 using JudgeSystem.Web.ViewModels.Student;
 
 namespace JudgeSystem.Web.ViewModels.Contest
@@ -14,5 +14,11 @@ namespace JudgeSystem.Web.ViewModels.Contest
         public Dictionary<int, int> PointsByProblem { get; set; }
 
 		public int Total => PointsByProblem.Values.Sum();
+
+        public int GetPoints(int problemId)
+        {
+            PointsByProblem.TryGetValue(problemId, out int points);
+            return points;
+        }
 	}
 }

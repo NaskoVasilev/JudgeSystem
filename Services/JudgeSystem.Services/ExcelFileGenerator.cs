@@ -41,8 +41,7 @@ namespace JudgeSystem.Services
 
                     foreach (ContestProblemViewModel problem in contestResultsData.Problems)
                     {
-                        contestResult.PointsByProblem.TryGetValue(problem.Id, out int points);
-                        worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(points, problem.MaxPoints);
+                        worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(contestResult.GetPoints(problem.Id), problem.MaxPoints);
                     }
 
                     worksheet.Cells[row, col++].Value = stringFormatter.FormatPoints(contestResult.Total, contestResultsData.MaxPoints);
