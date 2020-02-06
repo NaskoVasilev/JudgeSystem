@@ -2,6 +2,6 @@
 {
     public class StringFormatter : IStringFormatter
     {
-        public string FormatPoints(int points, int maxPoints) => $"{points}/{maxPoints}";
+        public string FormatPoints(int actualPoints, int maxPoints) => $"{actualPoints}/{maxPoints}";
     }
 }

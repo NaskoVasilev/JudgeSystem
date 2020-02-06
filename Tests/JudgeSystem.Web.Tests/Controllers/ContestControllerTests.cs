@@ -3,13 +3,20 @@ using System.Linq;
 
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Services;
+using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Controllers;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Web.Filters;
+using JudgeSystem.Web.Resources;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Contest;
 using JudgeSystem.Web.ViewModels.Problem;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
+
+using Moq;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -150,6 +157,47 @@ namespace JudgeSystem.Web.Tests.Controllers
             .AndAlso()
             .ShouldReturn()
             .Result(3);
+        }
+
+        [Fact]
+        public void ExportResults_WithValidId_ShouldReturnFileResult()
+        {
+            int contestId = 12;
+            string problemName = "Sum two numbers";
+            byte[] expectedBytes = new byte[] { 255, 45, 155, 20, 6 };
+            var columns = new List<string>() { "Номер в клас", "Клас", "Име", problemName, "Общо" };
+            var contestResultsTestData = new ContestAllResultsViewModel
+            {
+                Name = "Test contest",
+                Problems = new List<ContestProblemViewModel>
+                {
+                    new ContestProblemViewModel
+                    {
+                        Name = problemName
+                    }
+                }
+            };
+
+            var contestServiceMock = new Mock<IContestService>();
+            contestServiceMock.Setup(x =>
+                x.GetContestReults(contestId, GlobalConstants.DefaultPage, int.MaxValue)).Returns(contestResultsTestData);
+            var excelFileGeneratorMock = new Mock<IExcelFileGenerator>();
+            excelFileGeneratorMock.Setup(x =>
+                x.GenerateContestResultsReport(contestResultsTestData, columns)).Returns(expectedBytes);
+
+            MyController<ContestController>
+            .Instance()
+            .WithDependencies(
+                contestServiceMock.Object,
+                excelFileGeneratorMock.Object,
+                From.Services<UserManager<ApplicationUser>>(),
+                From.Services<IStringLocalizer<SharedResources>>())
+            .Calling(c => c.ExportResults(contestId))
+            .ShouldReturn()
+            .File(expectedBytes, GlobalConstants.OctetStreamMimeType, $"{contestResultsTestData.Name}{GlobalConstants.ExcelFileExtension}");
+
+            contestServiceMock.Verify(x => x.GetContestReults(contestId, GlobalConstants.DefaultPage, int.MaxValue), Times.Once);
+            excelFileGeneratorMock.Verify(x => x.GenerateContestResultsReport(contestResultsTestData, columns), Times.Once);
         }
     }
 }
