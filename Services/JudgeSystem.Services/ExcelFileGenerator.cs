@@ -28,6 +28,7 @@ namespace JudgeSystem.Services
             Action<ExcelWorksheet> fillWorksheet = (ExcelWorksheet worksheet) =>
             {
                 worksheet.Columns[0].Style.HorizontalAlignment = HorizontalAlignmentStyle.Left;
+                SetHeadRowStyle(worksheet, HorizontalAlignmentStyle.Center);
                 AddColumns(worksheet, columns);
                 worksheet.Columns[2].SetWidth(200, LengthUnit.Pixel);
 
@@ -55,6 +56,7 @@ namespace JudgeSystem.Services
         {
             Action<ExcelWorksheet> fillWorksheet = (ExcelWorksheet worksheet) =>
             {
+                SetHeadRowStyle(worksheet, HorizontalAlignmentStyle.Center);
                 AddColumns(worksheet, columns);
                 worksheet.Columns[0].SetWidth(200, LengthUnit.Pixel);
 
@@ -81,6 +83,7 @@ namespace JudgeSystem.Services
         {
             Action<ExcelWorksheet> fillWorksheet = (ExcelWorksheet worksheet) =>
             {
+                SetHeadRowStyle(worksheet, HorizontalAlignmentStyle.Center);
                 AddColumns(worksheet, columns);
 
                 for (int row = 0; row < data.GetLength(0); row++)
@@ -111,15 +114,21 @@ namespace JudgeSystem.Services
 
         private void AddColumns(ExcelWorksheet worksheet, List<string> columns)
         {
-            CellStyle style = worksheet.Rows[0].Style;
-            style.Font.Weight = ExcelFont.BoldWeight;
-            style.HorizontalAlignment = HorizontalAlignmentStyle.Center;
-
             for (int i = 0; i < columns.Count; i++)
             {
                 worksheet.Cells[0, i].Value = columns[i];
                 worksheet.Columns[i].SetWidth(columns[i].Length + CellPadding, LengthUnit.ZeroCharacterWidth);
             }
+        }
+
+        private static void SetHeadRowStyle(ExcelWorksheet worksheet, HorizontalAlignmentStyle alignmentStyle, int fontWeight = ExcelFont.BoldWeight) => 
+            SetRowStyle(worksheet, 0, alignmentStyle, fontWeight);
+
+        private static void SetRowStyle(ExcelWorksheet worksheet, int row, HorizontalAlignmentStyle alignmentStyle, int fontWeight = ExcelFont.NormalWeight)
+        {
+            CellStyle style = worksheet.Rows[row].Style;
+            style.Font.Weight = fontWeight;
+            style.HorizontalAlignment = alignmentStyle;
         }
 
         private void AlignColumns(ExcelWorksheet worksheet, int startCol, int endCol, HorizontalAlignmentStyle alignmentStyle)
