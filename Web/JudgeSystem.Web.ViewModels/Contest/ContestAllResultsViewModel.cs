@@ -20,5 +20,7 @@ namespace JudgeSystem.Web.ViewModels.Contest
 
         public int[] ProblemIds => Problems.Select(p => p.Id).ToArray();
 
+        public int MaxPoints => Problems.Sum(x => x.MaxPoints);
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -8,11 +9,13 @@ using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.Infrastructure.Routes;
+using JudgeSystem.Web.Resources;
 using JudgeSystem.Web.ViewModels.Contest;
-using JudgeSystem.Web.ViewModels.Problem;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -25,15 +28,18 @@ namespace JudgeSystem.Web.Controllers
 		private readonly IContestService contestService;
         private readonly IExcelFileGenerator excelFileGenerator;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IStringLocalizer<SharedResources> sharedLocalizer;
 
         public ContestController(
             IContestService contestService,
             IExcelFileGenerator excelFileGenerator,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IStringLocalizer<SharedResources> sharedLocalizer)
 		{
 			this.contestService = contestService;
             this.excelFileGenerator = excelFileGenerator;
             this.userManager = userManager;
+            this.sharedLocalizer = sharedLocalizer;
         }
 
         [EndpointExceptionFilter]
@@ -76,48 +82,28 @@ namespace JudgeSystem.Web.Controllers
         public IActionResult ExportResults(int id)
         {
             ContestAllResultsViewModel results = contestService.GetContestReults(id, DefaultPage, int.MaxValue);
+            List<string> columns = GenerateColumns(results.Problems.Select(x => x.Name));
+            byte[] bytes = excelFileGenerator.GenerateContestResultsReport(results, columns);
+
+            return File(bytes, GlobalConstants.OctetStreamMimeType, $"{results.Name}{GlobalConstants.ExcelFileExtension}");
+        }
+
+        private List<string> GenerateColumns(IEnumerable<string> problemNames)
+        {
             var columns = new List<string>
             {
-                "№",
-                "Class",
-                "Full name"
+                sharedLocalizer[ModelConstants.StudentNumberInClassDisplayName],
+                sharedLocalizer[ModelConstants.StudentSchoolClassIdDisplayName],
+                sharedLocalizer[ModelConstants.StudentFullNameDisplayName]
             };
 
-            foreach (ContestProblemViewModel problem in results.Problems)
+            foreach (string name in problemNames)
             {
-                columns.Add(problem.Name);
+                columns.Add(name);
             }
 
-            columns.Add("Total");
-            object[,] data = new object[results.ContestResults.Count, columns.Count];
-            int col = 0;
-            int[] problemIds = results.ProblemIds;
-
-            for (int i = 0; i < results.ContestResults.Count; i++)
-            {
-                col = 0;
-                ContestResultViewModel contestResult = results.ContestResults[i];
-                data[i, col++] = contestResult.Student.NumberInCalss;
-                data[i, col++] = $"{contestResult.Student.ClassNumber} {contestResult.Student.ClassType}";
-                data[i, col++] = contestResult.Student.FullName;
-                
-                foreach (int problemId in problemIds)
-                {
-                    if (contestResult.PointsByProblem.TryGetValue(problemId, out int points))
-                    {
-                        data[i, col++] = points;
-                    }
-                    else
-                    {
-                        data[i, col++] = 0;
-                    }
-                }
-
-                data[i, col++] = contestResult.Total;
-            }
-
-            byte[] bytes = excelFileGenerator.Generate(columns, data);
-            return File(bytes, GlobalConstants.OctetStreamMimeType, $"{results.Name}.xlsx");
+            columns.Add(sharedLocalizer[nameof(ContestResultViewModel.Total)]);
+            return columns;
         }
     }
 }
