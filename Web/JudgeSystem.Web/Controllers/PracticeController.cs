@@ -25,8 +25,8 @@ namespace JudgeSystem.Web.Controllers
 
         public PracticeController(
             IPracticeService practiceService, 
-            IStringLocalizer<SharedResources> sharedLocalizer,
-            IExcelFileGenerator excelFileGenerator)
+            IExcelFileGenerator excelFileGenerator,
+            IStringLocalizer<SharedResources> sharedLocalizer)
         {
             this.practiceService = practiceService;
             this.sharedLocalizer = sharedLocalizer;
