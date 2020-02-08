@@ -88,8 +88,6 @@ namespace JudgeSystem.Services
 
                 for (int row = 0; row < data.GetLength(0); row++)
                 {
-                    worksheet.Rows[row + 1].Style.HorizontalAlignment = HorizontalAlignmentStyle.Center;
-
                     for (int col = 0; col < data.GetLength(1); col++)
                     {
                         worksheet.Cells[row + 1, col].Value = data[row, col];
