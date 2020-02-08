@@ -183,7 +183,7 @@ namespace JudgeSystem.Services.Data.Tests
             var contests = new List<Contest>() { new Contest() };
             ContestService contestService = CreateContestServiceWithMockedRepository(contests.AsQueryable());
 
-            Assert.Throws<EntityNotFoundException>(() => contestService.GetContestResultsPagesCount(23));
+            Assert.Throws<EntityNotFoundException>(() => contestService.GetContestResultsPagesCount(23, 12));
         }
 
         [Fact]
@@ -226,12 +226,10 @@ namespace JudgeSystem.Services.Data.Tests
             var expectedProblems = expectedContest.Lesson.Problems.OrderBy(x => x.CreatedOn).ToList();
 
             //Act
-            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1);
+            ContestAllResultsViewModel actualContest = service.GetContestReults(11, 1, 15);
 
             //Assert
             Assert.Equal(expectedContest.Name, actualContest.Name);
-            Assert.Equal(1, actualContest.NumberOfPages);
-            Assert.Equal(1, actualContest.CurrentPage);
             Assert.Equal(expectedProblems.Count, actualContest.Problems.Count);
             for (int i = 0; i < actualContest.Problems.Count; i++)
             {
@@ -270,7 +268,7 @@ namespace JudgeSystem.Services.Data.Tests
             List<Contest> testData = GetContestReultsTestData();
             ContestService service = await CreateContestService(testData);
 
-            Assert.Throws<EntityNotFoundException>(() => service.GetContestReults(564, 12));
+            Assert.Throws<EntityNotFoundException>(() => service.GetContestReults(564, 12, 15));
         }
 
         [Theory]
@@ -279,13 +277,14 @@ namespace JudgeSystem.Services.Data.Tests
         [InlineData(65)]
         public void GetNumberOfPages_WithDifferentData_ShouldWorkCorrect(int userContestsCount)
         {
+            int entitiesPerPage = 15;
             Contest contest = GenerateContestForGetContestResultsPagesCount(userContestsCount);
             var testData = new List<Contest> { GenerateContestForGetContestResultsPagesCount(userContestsCount) };
             ContestService service = CreateContestServiceWithMockedRepository(testData.AsQueryable());
 
-            int expectedPages = service.GetContestResultsPagesCount(contest.Id);
+            int expectedPages = service.GetContestResultsPagesCount(contest.Id, entitiesPerPage);
 
-            Assert.Equal(paginationService.CalculatePagesCount(userContestsCount, ContestService.ResultsPerPage), expectedPages);
+            Assert.Equal(paginationService.CalculatePagesCount(userContestsCount, entitiesPerPage), expectedPages);
         }
 
         [Fact]

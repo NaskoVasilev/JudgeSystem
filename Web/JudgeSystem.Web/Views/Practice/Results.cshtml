@@ -1,5 +1,6 @@
 ﻿@inject IViewLocalizer Localizer
 @inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IStringFormatter StringFormatter
 @model PracticeAllResultsViewModel
 
 @{
@@ -8,7 +9,9 @@
 }
 
 <h2 class="text-center mb-4">@Localizer["Practice results for lesson"] "@Model.LessonName"</h2>
-
+<div class="d-flex justify-content-center mb-3">
+    <a class="btn btn-outline-dark font-weight-bold" asp-controller="Practice" asp-action="ExportResults" asp-route-id="@Model.Id">@SharedLocalizer["Export"]</a>
+</div>
 <table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
     <thead>
         <tr>
@@ -31,39 +34,32 @@
     <tbody>
         @foreach (var practiceResult in Model.PracticeResults)
         {
-            <tr>
-                <td class="text-center">@(row++)</td>
-                <td class="text-center">@practiceResult.FullName</td>
-                <td class="text-center">
-                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <a target="_blank" class="text-dark"
-                           asp-area="@GlobalConstants.AdministrationArea"
-                           asp-controller="Practice"
-                           asp-action="Submissions"
-                           asp-route-practiceId="@Model.Id"
-                           asp-route-userId="@practiceResult.UserId">
-                            @practiceResult.Username
-                        </a>
-                    }
-                    else
-                    {
-                        @practiceResult.Username
-                    }
-                </td>
-                @foreach (var problemId in Model.ProblemsIds)
+        <tr>
+            <td class="text-center">@(row++)</td>
+            <td class="text-center">@practiceResult.FullName</td>
+            <td class="text-center">
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
                 {
-                    int points = 0;
-                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
-                    if (practiceResult.PointsByProblem.ContainsKey(problemId))
-                    {
-                        points = practiceResult.PointsByProblem[problemId];
-                    }
-
-                    <td class="text-center w-auto">@points/@maxPoints</td>
+                    <a target="_blank" class="text-dark"
+                       asp-area="@GlobalConstants.AdministrationArea"
+                       asp-controller="Practice"
+                       asp-action="Submissions"
+                       asp-route-practiceId="@Model.Id"
+                       asp-route-userId="@practiceResult.UserId">
+                        @practiceResult.Username
+                    </a>
                 }
-                <td class="text-center">@practiceResult.Total/@Model.MaxPoints</td>
-            </tr>
+                else
+                {
+                    @practiceResult.Username
+                }
+            </td>
+            @foreach (var problem in Model.Problems)
+            {
+                <td class="text-center w-auto">@StringFormatter.FormatPoints(practiceResult.GetPoints(problem.Id), problem.MaxPoints)</td>
+            }
+            <td class="text-center">@StringFormatter.FormatPoints(practiceResult.Total, Model.MaxPoints)</td>
+        </tr>
         }
     </tbody>
 </table>

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
+using JudgeSystem.Web.Infrastructure.Pagination;
 using JudgeSystem.Web.ViewModels.Problem;
 
 namespace JudgeSystem.Web.ViewModels.Contest
@@ -14,8 +16,8 @@ namespace JudgeSystem.Web.ViewModels.Contest
 
 		public List<ContestProblemViewModel> Problems { get; set; }
 
-        public int NumberOfPages { get; set; }
+        public PaginationData PaginationData { get; set; }
 
-        public int CurrentPage { get; set; }
+        public int MaxPoints => Problems.Sum(x => x.MaxPoints);
     }
 }

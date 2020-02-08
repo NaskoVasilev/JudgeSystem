@@ -288,6 +288,9 @@
   <data name="Exercise" xml:space="preserve">
     <value>Упражнения</value>
   </data>
+  <data name="Export" xml:space="preserve">
+    <value>Експортиране на резултатите</value>
+  </data>
   <data name="Extra Task" xml:space="preserve">
     <value>Допълнителна задача</value>
   </data>

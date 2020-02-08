@@ -8,9 +8,16 @@ using JudgeSystem.Web.Controllers;
 using JudgeSystem.Web.Filters;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Practice;
+using JudgeSystem.Web.ViewModels.Problem;
+using JudgeSystem.Services.Data;
+using JudgeSystem.Services;
+using JudgeSystem.Web.Resources;
+
+using Microsoft.Extensions.Localization;
 
 using MyTested.AspNetCore.Mvc;
 using Xunit;
+using Moq;
 
 namespace JudgeSystem.Web.Tests.Controllers
 {
@@ -64,6 +71,46 @@ namespace JudgeSystem.Web.Tests.Controllers
             .AndAlso()
             .ShouldReturn()
             .Result(expectedPages);
+        }
+
+        [Fact]
+        public void ExportResults_WithValidId_ShouldReturnFileResult()
+        {
+            int practiceId = 1;
+            string problemName = "Sum two numbers";
+            byte[] expectedBytes = new byte[] { 255, 45, 155, 20, 6 };
+            var columns = new List<string>()  { "Име", "Потребителско име", problemName, "Общо" };
+            var practiceResultsTestData = new PracticeAllResultsViewModel
+            {
+                LessonName = "Test lesson",
+                Problems = new List<PracticeProblemViewModel>
+                {
+                    new PracticeProblemViewModel
+                    {
+                        Name = problemName
+                    }
+                }
+            };
+
+            var practiceServiceMock = new Mock<IPracticeService>();
+            practiceServiceMock.Setup(x =>
+                x.GetPracticeResults(practiceId, GlobalConstants.DefaultPage, int.MaxValue)).Returns(practiceResultsTestData);
+            var excelFileGeneratorMock = new Mock<IExcelFileGenerator>();
+            excelFileGeneratorMock.Setup(x =>
+                x.GeneratePracticeResultsReport(practiceResultsTestData, columns)).Returns(expectedBytes);
+
+            MyController<PracticeController>
+            .Instance()
+            .WithDependencies(
+                practiceServiceMock.Object,
+                excelFileGeneratorMock.Object,
+                From.Services<IStringLocalizer<SharedResources>>())
+            .Calling(c => c.ExportResults(practiceId))
+            .ShouldReturn()
+            .File(expectedBytes, GlobalConstants.OctetStreamMimeType, $"{practiceResultsTestData.LessonName}{GlobalConstants.ExcelFileExtension}");
+
+            practiceServiceMock.Verify(x => x.GetPracticeResults(practiceId, GlobalConstants.DefaultPage, int.MaxValue), Times.Once);
+            excelFileGeneratorMock.Verify(x => x.GeneratePracticeResultsReport(practiceResultsTestData, columns), Times.Once);
         }
     }
 }
