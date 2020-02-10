@@ -74,6 +74,8 @@
         public const string TestInputDataDisplayName = "Input";
         public const string TestOutputDataDisplayName = "Expected output";
         public const string TestIsTrialTestDisplayName = "Trial test";
+        public const string TestJsonImportStrategyDisplayName = "Json file with all the data";
+        public const string TestZipImportStrategyDisplayName = "Zip file with files per input and output";
         #endregion
 
         #region Feedback models constants
