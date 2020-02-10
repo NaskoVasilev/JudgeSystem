@@ -1,14 +1,13 @@
 # Judge System
-An open-source judge system for evaluating programmming code and managing tasks and competitions.
-This was my final project for "C# MVC Frameworks - ASP.NET Core - June 2019" course in SoftUni.
+An open-source judge system for evaluating programmming code and managing problems, lectures, exams and competitions. Is is developed to
+be used in schools in informatics lessons in order to improve the eduation and automate some parts of teachers' work.
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=master)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=master)
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=develop)
 
 ## Description
-This is a judge system, similar to SoftUni judge but a bit more simple.
-It can evaluate user's programming code automatically.
+Applicaiton can evaluate user's programming code automatically.
 Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
@@ -23,6 +22,7 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://www.youtube.com/watch?v=DA2GwSgnLx4&feature=youtu.be) video you can watch how administrators can review users' results and submission.
 
 ## Awards
+* Финален проект за курса: ASP.NET Core MVC - June 2019 в SoftUni - оценка: 6.00 и проекта беше част от петте най-добри приложения в курса.
 * НТИТ - Национален есенен турнир по информационни технологии „Джон Атанасов“ – първо място в направление „Интернет приложения“ 🏆
 * Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне 🏅
 
