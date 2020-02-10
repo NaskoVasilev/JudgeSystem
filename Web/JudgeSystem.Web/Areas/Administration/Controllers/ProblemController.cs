@@ -153,12 +153,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            if (string.IsNullOrEmpty(model.Tests.FileName) || !model.Tests.FileName.EndsWith(GlobalConstants.JsonFileExtension))
-            {
-                ModelState.AddModelError(nameof(ProblemAddTestsInputModel.Tests), ErrorMessages.FileExtensionMustBeJson);
-                return View(model);
-            }
-
             var errorMessages = new List<string>();
             ParseTestsStrategy parseTestsStrategy = new ParseTestsStartegyFactory().CreateStrategy(model.Strategy);
             IEnumerable<ProblemTestInputModel> tests = parseTestsStrategy.Parse(serviceProvider, model.Tests, errorMessages);
@@ -169,6 +163,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 {
                     ModelState.AddModelError(string.Empty, errorMessage);
                 }
+
                 return View(model);
             }
 

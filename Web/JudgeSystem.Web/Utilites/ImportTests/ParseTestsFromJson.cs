@@ -16,6 +16,12 @@ namespace JudgeSystem.Web.Utilites.ImportTests
     {
         public override IEnumerable<ProblemTestInputModel> Parse(IServiceProvider serviceProvider, IFormFile file, ICollection<string> errorMessages)
         {
+            if (string.IsNullOrEmpty(file.FileName) || !file.FileName.EndsWith(GlobalConstants.JsonFileExtension))
+            {
+                errorMessages.Add(string.Format(ErrorMessages.InvalidFileExtension, GlobalConstants.JsonFileExtension));
+                return Enumerable.Empty<ProblemTestInputModel>();
+            }
+
             IHostingEnvironment env = serviceProvider.GetRequiredService<IHostingEnvironment>();
             IJsonUtiltyService jsonUtiltyService = serviceProvider.GetRequiredService<IJsonUtiltyService>();
 

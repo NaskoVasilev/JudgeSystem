@@ -19,7 +19,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <select class="form-control" asp-items="Utility.GetFormatedSelectListItems<TestsImportStrategy>()">
+                    <label>Import Strategy</label>
+                    <select class="form-control" asp-for="Strategy" asp-items="Utility.GetSelectListItems<TestsImportStrategy>()">
                     </select>
                 </div>
                 <div class="form-group">

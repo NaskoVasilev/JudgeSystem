@@ -56,7 +56,7 @@
 
         public const string UserNotFound = "User with provided credentials was not found!";
 
-        public const string FileExtensionMustBeJson = "Your file must be in json format. Its extension should be .json";
+        public const string InvalidFileExtension = "Your file must be in {0} format. Its extension should be {0}";
 
         public const string InvalidTest = "Test #{0} is invalid.";
 
