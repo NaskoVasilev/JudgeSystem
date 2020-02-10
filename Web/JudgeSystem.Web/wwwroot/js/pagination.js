@@ -64,3 +64,10 @@ function getHtml(url, page) {
             showError(error.responseText);
         });
 }
+
+let itemsField = $('#entities-per-page');
+if (itemsField) {
+    itemsField.on('input', (e) => {
+        console.log(itemsField.val());
+    });
+}

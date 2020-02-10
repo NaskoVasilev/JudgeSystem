@@ -363,3 +363,8 @@ input[type=file] {
 .font-size-10 {
     font-size: 10px;
 }
+
+#entities-per-page{
+    width: 70px;
+    display: inline;
+}
