@@ -4,18 +4,18 @@ using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Web.Utilites.ImportTests
 {
-    public class ParseTestsStartegyFactory<T>
+    public class ParseTestsStartegyFactory
     {
         private const string UnsupportedTestsImportStrategyErrorMessage = "This tests import strategy is not supported!";
 
-        ParseTestsStrategy<T> CreateStrategy(TestsImportStrategy strategy)
+        public ParseTestsStrategy CreateStrategy(TestsImportStrategy strategy)
         {
             switch (strategy)
             {
                 case TestsImportStrategy.Json:
-                    return new ParseTestsFromJson<T>();
+                    return new ParseTestsFromJson();
                 case TestsImportStrategy.Zip:
-                    return new ParseTestsFromZip<T>();
+                    return new ParseTestsFromZip();
                 default:
                     throw new ArgumentException(UnsupportedTestsImportStrategyErrorMessage);
             }

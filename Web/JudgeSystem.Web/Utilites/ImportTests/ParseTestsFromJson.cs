@@ -1,18 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using JudgeSystem.Common;
+using JudgeSystem.Services;
+using JudgeSystem.Web.InputModels.Problem;
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JudgeSystem.Web.Utilites.ImportTests
 {
-    public class ParseTestsFromJson<T> : ParseTestsStrategy<T>
+    public class ParseTestsFromJson : ParseTestsStrategy
     {
-        public override IEnumerable<T> Parse(IFormFile file, ICollection<string> errorMessages)
+        public override IEnumerable<ProblemTestInputModel> Parse(IServiceProvider serviceProvider, IFormFile file, ICollection<string> errorMessages)
         {
-            var messages = new List<string>();
+            IHostingEnvironment env = serviceProvider.GetRequiredService<IHostingEnvironment>();
+            IJsonUtiltyService jsonUtiltyService = serviceProvider.GetRequiredService<IJsonUtiltyService>();
+
             using System.IO.Stream stream = file.OpenReadStream();
             string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
-            List<T> tests = jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<T>>(stream, schemaFilePath, messages);
-
+            return jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages.ToList());
         }
     }
 }

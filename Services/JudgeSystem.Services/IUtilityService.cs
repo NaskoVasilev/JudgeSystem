@@ -16,8 +16,6 @@ namespace JudgeSystem.Services
 
         List<CodeFile> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions);
 
-        IEnumerable<ProblemTestInputModel> ParseTestsFromZip(Stream stream);
-
         IEnumerable<string> ParseZip(Stream stream);
 
         double ConvertBytesToMegaBytes(long bytes);

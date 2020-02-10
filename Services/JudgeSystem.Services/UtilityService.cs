@@ -132,22 +132,6 @@ namespace JudgeSystem.Services
             }
         }
 
-        public IEnumerable<ProblemTestInputModel> ParseTestsFromZip(Stream stream)
-        {
-            var inputAndOutputs = ParseZip(stream).ToList();
-
-            for (int i = 0; i < inputAndOutputs.Count - 1; i += 2)
-            {
-                string input = inputAndOutputs[i];
-                string output = inputAndOutputs[i + 1];
-                yield return new ProblemTestInputModel()
-                {
-                    InputData = input,
-                    OutputData = output
-                };
-            }
-        }
-
         private List<CodeFile> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
         {
             var filesData = new List<CodeFile>();
