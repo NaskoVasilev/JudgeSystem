@@ -15,6 +15,7 @@ using JudgeSystem.Web.Infrastructure.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -26,6 +27,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         private readonly ISubmissionService submissionService;
         private readonly IHostingEnvironment env;
         private readonly IJsonUtiltyService jsonUtiltyService;
+        private readonly IUtilityService utilityService;
 
         public ProblemController(
             IProblemService problemService,
@@ -33,7 +35,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             ILessonService lessonService,
             ISubmissionService submissionService,
             IHostingEnvironment env,
-            IJsonUtiltyService jsonUtiltyService)
+            IJsonUtiltyService jsonUtiltyService,
+            IUtilityService utilityService)
         {
             this.problemService = problemService;
             this.testService = testService;
@@ -41,6 +44,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             this.submissionService = submissionService;
             this.env = env;
             this.jsonUtiltyService = jsonUtiltyService;
+            this.utilityService = utilityService;
         }
 
         public IActionResult Create() => View(new ProblemInputModel());
@@ -163,14 +167,13 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var messages = new List<string>();
-            using System.IO.Stream stream = model.Tests.OpenReadStream();
-            string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
-            List<ProblemTestInputModel> tests = jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, messages);
+            List<ProblemTestInputModel> tests;
+            var errorMessages = new List<string>();
+            tests = ParseTestsFromJson(model.Tests, errorMessages);
 
-            if (messages.Any())
+            if (errorMessages.Any())
             {
-                foreach (string errorMessage in messages)
+                foreach (string errorMessage in errorMessages)
                 {
                     ModelState.AddModelError(string.Empty, errorMessage);
                 }
@@ -187,6 +190,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             await testService.AddRange(tests, model.ProblemId);
 
             return RedirectToAction(nameof(TestController.ProblemTests), nameof(TestController).ToControllerName(), new { model.ProblemId });
+        }
+
+        private List<ProblemTestInputModel> ParseTestsFromJson(IFormFile file, List<string> errorMessages)
+        {
+            using System.IO.Stream stream = file.OpenReadStream();
+            string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
+            return jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages);
+        }
+
+        private List<ProblemTestInputModel> ParseTestsFromZip(IFormFile file)
+        {
+            return null;
         }
 
         private void ValidateTests(List<ProblemTestInputModel> tests)

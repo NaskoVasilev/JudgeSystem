@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
 using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Workers.Common;
 
 using Microsoft.AspNetCore.Http;
@@ -115,6 +116,36 @@ namespace JudgeSystem.Services
 
             Match match = regex.Match(sourceCode);
             return match.Groups[1].Value;
+        }
+
+        public IEnumerable<string> ParseZip(Stream stream)
+        {
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
+            {
+                foreach (ZipArchiveEntry entry in zip.Entries)
+                {
+                    using (var reader = new StreamReader(entry.Open()))
+                    {
+                        yield return reader.ReadToEnd();
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<ProblemTestInputModel> ParseTestsFromZip(Stream stream)
+        {
+            var inputAndOutputs = ParseZip(stream).ToList();
+
+            for (int i = 0; i < inputAndOutputs.Count - 1; i += 2)
+            {
+                string input = inputAndOutputs[i];
+                string output = inputAndOutputs[i + 1];
+                yield return new ProblemTestInputModel()
+                {
+                    InputData = input,
+                    OutputData = output
+                };
+            }
         }
 
         private List<CodeFile> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 using JudgeSystem.Web.Dtos.Submission;
+using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Workers.Common;
 
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,10 @@ namespace JudgeSystem.Services
         Task<SubmissionCodeDto> ExtractSubmissionCode(string code, IFormFile submissionFile, ProgrammingLanguage programmingLanguage);
 
         List<CodeFile> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions);
+
+        IEnumerable<ProblemTestInputModel> ParseTestsFromZip(Stream stream);
+
+        IEnumerable<string> ParseZip(Stream stream);
 
         double ConvertBytesToMegaBytes(long bytes);
 
