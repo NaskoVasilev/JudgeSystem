@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Web.Dtos.Common;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Workers.Common;
 
@@ -131,7 +132,7 @@ namespace JudgeSystem.Services.Tests
         }
 
         [Fact]
-        public async Task ExtractSubmissionCode_WithNullCodeArgumentAndNullFileArgumet_ShouldThrowBadRequestException() => 
+        public async Task ExtractSubmissionCode_WithNullCodeArgumentAndNullFileArgumet_ShouldThrowBadRequestException() =>
             await Assert.ThrowsAsync<BadRequestException>(() => utilityService.ExtractSubmissionCode(null, null, ProgrammingLanguage.Java));
 
         [Fact]
@@ -153,9 +154,9 @@ namespace JudgeSystem.Services.Tests
             string thirdFileData = "let sum = (a, b) => a + b;\r\nlet multiply = (a, b) => a * b;";
             string fourthFileData = "//smaple solution comes here\r\nusing System;\r\nclass Program\r\n{\r\n}\r\n\t";
 
-            using (FileStream stream = File.OpenRead(ServiceTestsConstants.TestDataFolderPath + "/ZippedSolution.zip"))
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.ZippedSolutionPath))
             {
-                List<CodeFile> sourceCodes = utilityService.ExtractZipFile(stream, new List<string> { ".txt", ".cs", ".js" });
+                List<CodeFile> sourceCodes = utilityService.ExtractZipFile(stream, new HashSet<string> { ".txt", ".cs", ".js" });
 
                 sourceCodes = sourceCodes.OrderBy(x => x.Code.Length).ToList();
                 Assert.Equal(4, sourceCodes.Count);
@@ -167,10 +168,82 @@ namespace JudgeSystem.Services.Tests
         }
 
         [Fact]
+        public void ParseZip_WithPassedZipFile_ShouldReturnAllFilesInTheZip()
+        {
+            //Arrange
+            var fileNames = new List<string>
+            {
+                "test.txt",
+                "code.js",
+                "phpSolution.php",
+                "sampleSolution.cs",
+                "solutionJava.java",
+                "cppSolution.cpp",
+                "solution.cs"
+            }
+            .OrderBy(x => x);
+
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.ZippedSolutionPath))
+            {
+                //Act
+                IEnumerable<string> files = utilityService.ParseZip(stream)
+                    .Select(x => x.Name)
+                    .OrderBy(x => x);
+
+                //Assert
+                Assert.Equal(fileNames, files);
+            }
+        }
+
+        [Fact]
+        public void ParseZip_WithPassedZipFile_ShouldReadContentForeachFile()
+        {
+            //Arrange
+            string testContent = "Some test data comes here";
+            string fileName = "test.txt";
+
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.ZippedSolutionPath))
+            {
+                //Act
+                IEnumerable<FileDto> files = utilityService.ParseZip(stream, new HashSet<string> { ".txt" });
+
+                //Assert
+                string content = files.First(x => x.Name == fileName).Content;
+                Assert.Equal(testContent, content);
+            }
+        }
+
+        [Fact]
+        public void ParseZip_WithPassedZipFileAndAllowedFileExtensions_ShouldReturnOnlyMatchingFiles()
+        {
+            //Arrange
+            var fileNames = new List<string>
+            {
+                "code.js",
+                "sampleSolution.cs",
+                "solutionJava.java",
+                "cppSolution.cpp",
+                "solution.cs"
+            }
+            .OrderBy(x => x);
+
+            using (FileStream stream = File.OpenRead(ServiceTestsConstants.ZippedSolutionPath))
+            {
+                //Act
+                IEnumerable<string> files = utilityService.ParseZip(stream, new HashSet<string>() { ".cs", ".java", ".cpp", ".in", ".js" })
+                    .Select(x => x.Name)
+                    .OrderBy(x => x);
+
+                //Assert
+                Assert.Equal(fileNames, files);
+            }
+        }
+
+        [Fact]
         public void DeleteDirectory_WithExistingPath_ShouldDeleteTheDirectoryAndAllFilesInIt()
         {
             string directoryName = "testDirectory";
-            DirectoryInfo directoryInfo =  Directory.CreateDirectory(directoryName);
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryName);
             File.WriteAllText(Path.Combine(directoryInfo.FullName, "test.txt"), "This is test file with should be deleted!");
 
             utilityService.DeleteDirectory(directoryName);
@@ -211,7 +284,7 @@ namespace JudgeSystem.Services.Tests
 
         [Theory]
         [InlineData("clas Test")]
-        public void GetJavaClassName_WithInvalidCode_ShouldThrowBadRequestException(string code) => 
+        public void GetJavaClassName_WithInvalidCode_ShouldThrowBadRequestException(string code) =>
             Assert.Throws<BadRequestException>(() => utilityService.GetJavaClassName(code));
     }
 }

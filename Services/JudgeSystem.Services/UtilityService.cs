@@ -129,8 +129,9 @@ namespace JudgeSystem.Services
             {
                 foreach (ZipArchiveEntry entry in zip.Entries)
                 {
-                    if (allowdFileExtensions != null &&
-                      !allowdFileExtensions.Contains(Path.GetExtension(entry.Name)))
+                    if (string.IsNullOrEmpty(entry.Name) || 
+                       (allowdFileExtensions != null &&
+                       !allowdFileExtensions.Contains(Path.GetExtension(entry.Name))))
                     {
                         continue;
                     }
@@ -161,7 +162,7 @@ namespace JudgeSystem.Services
             using (var stream = new MemoryStream())
             {
                 await submissionFile.CopyToAsync(stream);
-                var fileExtensions = new List<string> { GetFileExtension(programmingLanguage) };
+                var fileExtensions = new HashSet<string> { GetFileExtension(programmingLanguage) };
 
                 List<CodeFile> sourceCodes = ExtractZipFile(stream, fileExtensions);
                 if (sourceCodes.Count == 0)
