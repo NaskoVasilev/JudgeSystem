@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using JudgeSystem.Common;
@@ -25,7 +26,7 @@ namespace JudgeSystem.Web.Utilites.ImportTests
             IHostingEnvironment env = serviceProvider.GetRequiredService<IHostingEnvironment>();
             IJsonUtiltyService jsonUtiltyService = serviceProvider.GetRequiredService<IJsonUtiltyService>();
 
-            using System.IO.Stream stream = file.OpenReadStream();
+            using Stream stream = file.OpenReadStream();
             string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
             return jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages.ToList());
         }

@@ -155,7 +155,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             var errorMessages = new List<string>();
             ParseTestsStrategy parseTestsStrategy = new ParseTestsStartegyFactory().CreateStrategy(model.Strategy);
-            IEnumerable<ProblemTestInputModel> tests = parseTestsStrategy.Parse(serviceProvider, model.Tests, errorMessages);
+            var tests = parseTestsStrategy.Parse(serviceProvider, model.Tests, errorMessages).ToList();
 
             if (errorMessages.Any())
             {
@@ -167,7 +167,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            ValidateTests(tests.ToList());
+            ValidateTests(tests);
 
             if (!ModelState.IsValid)
             {

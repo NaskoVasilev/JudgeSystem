@@ -171,7 +171,7 @@ namespace JudgeSystem.Services.Tests
         public void ParseZip_WithPassedZipFile_ShouldReturnAllFilesInTheZip()
         {
             //Arrange
-            var fileNames = new List<string>
+            IEnumerable<string> fileNames = new List<string>
             {
                 "test.txt",
                 "code.js",
@@ -217,7 +217,7 @@ namespace JudgeSystem.Services.Tests
         public void ParseZip_WithPassedZipFileAndAllowedFileExtensions_ShouldReturnOnlyMatchingFiles()
         {
             //Arrange
-            var fileNames = new List<string>
+            IEnumerable<string> fileNames = new List<string>
             {
                 "code.js",
                 "sampleSolution.cs",
