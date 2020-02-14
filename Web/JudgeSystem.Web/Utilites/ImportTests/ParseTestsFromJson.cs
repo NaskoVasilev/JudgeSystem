@@ -29,7 +29,7 @@ namespace JudgeSystem.Web.Utilites.ImportTests
             using Stream stream = file.OpenReadStream();
             string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
             return jsonUtiltyService
-                .ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages.ToList()) 
+                .ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages) 
                 ?? Enumerable.Empty<ProblemTestInputModel>();
         }
     }

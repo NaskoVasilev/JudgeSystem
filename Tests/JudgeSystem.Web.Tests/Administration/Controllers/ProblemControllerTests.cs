@@ -517,7 +517,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         public void AddTests_WithJsonWithoutRequiredProperties_ShouldSetErrorsInTheModelStateAndReturnView(string json, string missingProperties)
         {
             string expectedErrorMessage = "Required properties are missing from object: " + missingProperties;
-            IHostingEnvironment hostingEnvironment = HostingEnvironmentMock.CreateInstance();
             Problem problem = ProblemTestData.GetEntity();
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
@@ -527,18 +526,12 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 {
                     Tests = new FormFile(memoryStream, 0, buffer.Length, "test", "test.json"),
                     LessonId = problem.Lesson.Id,
-                    ProblemId = problem.Id
+                    ProblemId = problem.Id,
+                    Strategy = TestsImportStrategy.Json
                 };
 
                 MyController<ProblemController>
                 .Instance()
-                .WithDependencies(
-                    From.Services<IProblemService>(),
-                    From.Services<ITestService>(),
-                    From.Services<ILessonService>(),
-                    From.Services<ISubmissionService>(),
-                    hostingEnvironment,
-                    From.Services<IJsonUtiltyService>())
                 .WithData(problem)
                 .Calling(c => c.AddTests(inputModel))
                 .ShouldHave()
@@ -560,7 +553,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         [InlineData(@"[{""InputData"" ""input, ""Output"" = ""output"", ""IsTrialTest"": ""true""")]
         public void AddTests_WithFileWhichHasInvalidJsonFormat_ShouldSetErrorsInTheModelStateAndReturnView(string json)
         {
-            IHostingEnvironment hostingEnvironment = HostingEnvironmentMock.CreateInstance();
             Problem problem = ProblemTestData.GetEntity();
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
@@ -597,7 +589,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         [InlineData(@"[{""InputData"": ""input"", ""OutputData"": """", ""IsTrialTest"": true, ""Test"": false }]")]
         public void AddTests_WithValidJsonFileAndInvalidTests_ShouldSetErrorsInTheModelStateAndReturnView(string json)
         {
-            IHostingEnvironment hostingEnvironment = HostingEnvironmentMock.CreateInstance();
             Problem problem = ProblemTestData.GetEntity();
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
@@ -607,18 +598,12 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 {
                     Tests = new FormFile(memoryStream, 0, buffer.Length, "test", "test.json"),
                     LessonId = problem.Lesson.Id,
-                    ProblemId = problem.Id
+                    ProblemId = problem.Id,
+                    Strategy = TestsImportStrategy.Json
                 };
 
                 MyController<ProblemController>
                 .Instance()
-                .WithDependencies(
-                    From.Services<IProblemService>(),
-                    From.Services<ITestService>(),
-                    From.Services<ILessonService>(),
-                    From.Services<ISubmissionService>(),
-                    hostingEnvironment,
-                    From.Services<IJsonUtiltyService>())
                 .WithData(problem)
                 .Calling(c => c.AddTests(inputModel))
                 .ShouldHave()
@@ -639,7 +624,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         [InlineData(@"[{""InputData"": 13.5, ""OutputData"": { ""test"": ""test value""}, ""IsTrialTest"": []}]", "Invalid type. Expected String but got Object. Path '[0].OutputData'")]
         public void AddTests_WithValidJsonAndDifferentPropertyTypes_ShouldSetErrorsInTheModelStateAndReturnView(string json, string expectedError)
         {
-            IHostingEnvironment hostingEnvironment = HostingEnvironmentMock.CreateInstance();
             Problem problem = ProblemTestData.GetEntity();
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
@@ -649,18 +633,12 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 {
                     Tests = new FormFile(memoryStream, 0, buffer.Length, "test", "test.json"),
                     LessonId = problem.Lesson.Id,
-                    ProblemId = problem.Id
+                    ProblemId = problem.Id,
+                    Strategy = TestsImportStrategy.Json
                 };
 
                 MyController<ProblemController>
                 .Instance()
-                .WithDependencies(
-                    From.Services<IProblemService>(),
-                    From.Services<ITestService>(),
-                    From.Services<ILessonService>(),
-                    From.Services<ISubmissionService>(),
-                    hostingEnvironment,
-                    From.Services<IJsonUtiltyService>())
                 .WithData(problem)
                 .Calling(c => c.AddTests(inputModel))
                 .ShouldHave()
@@ -681,7 +659,6 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         [InlineData("[]", 0)]
         public void AddTests_WithValidJsonAndValidTests_ShouldAddTestsToTheDbAndRedirectToAllTests(string json, int expectedCount)
         {
-            IHostingEnvironment hostingEnvironment = HostingEnvironmentMock.CreateInstance();
             Problem problem = ProblemTestData.GetEntity();
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
@@ -691,18 +668,12 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 {
                     Tests = new FormFile(memoryStream, 0, buffer.Length, "test", "test.json"),
                     LessonId = problem.Lesson.Id,
-                    ProblemId = problem.Id
+                    ProblemId = problem.Id,
+                    Strategy = TestsImportStrategy.Json
                 };
 
                 MyController<ProblemController>
                 .Instance()
-                .WithDependencies(
-                    From.Services<IProblemService>(),
-                    From.Services<ITestService>(),
-                    From.Services<ILessonService>(),
-                    From.Services<ISubmissionService>(),
-                    hostingEnvironment,
-                    From.Services<IJsonUtiltyService>())
                 .WithData(problem)
                 .Calling(c => c.AddTests(inputModel))
                 .ShouldHave()

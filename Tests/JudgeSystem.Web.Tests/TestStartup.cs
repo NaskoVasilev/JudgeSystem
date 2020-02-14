@@ -33,6 +33,7 @@ namespace JudgeSystem.Web.Tests
             ConfigureServices(services);
 
             services.Replace<IAzureStorageService, AzureStorageServiceMock>(ServiceLifetime.Transient);
+            //Mock IHostingEnvironment
             services.AddScoped(_ => HostingEnvironmentMock.CreateInstance());
         }
     }
