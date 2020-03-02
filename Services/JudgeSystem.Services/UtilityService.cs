@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using JudgeSystem.Common;
 using JudgeSystem.Common.Exceptions;
+using JudgeSystem.Web.Dtos.Common;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Workers.Common;
 
@@ -61,12 +62,17 @@ namespace JudgeSystem.Services
             return submissionCodeDto;
         }
 
-        public List<CodeFile> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions)
+        public List<CodeFile> ExtractZipFile(Stream stream, ISet<string> allowedFileExtensions)
         {
-            using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
-            {
-                return ExtractFilesFromZipArchive(allowedFilesExtensions, zip);
-            }
+            var files = ParseZip(stream, allowedFileExtensions)
+                .Select(file => new CodeFile()
+                {
+                    Name = Path.GetFileNameWithoutExtension(file.Name),
+                    Code = file.Content
+                })
+                .ToList();
+
+            return files;
         }
 
         public void CreateLanguageSpecificFiles(ProgrammingLanguage programmingLanguage, IEnumerable<CodeFile> codeFiles, string workingDirectory)
@@ -117,28 +123,28 @@ namespace JudgeSystem.Services
             return match.Groups[1].Value;
         }
 
-        private List<CodeFile> ExtractFilesFromZipArchive(List<string> allowedFilesExtensions, ZipArchive zip)
+        public IEnumerable<FileDto> ParseZip(Stream stream, ISet<string> allowdFileExtensions = null)
         {
-            var filesData = new List<CodeFile>();
-
-            foreach (ZipArchiveEntry entry in zip.Entries)
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
-                if (allowedFilesExtensions.Any(extension => entry.Name.EndsWith(extension)))
+                foreach (ZipArchiveEntry entry in zip.Entries)
                 {
-                    CodeFile codeFile = ExtractDataFromZipArchiveEntry(entry);
-                    filesData.Add(codeFile);
+                    if (string.IsNullOrEmpty(entry.Name) || 
+                       (allowdFileExtensions != null &&
+                       !allowdFileExtensions.Contains(Path.GetExtension(entry.Name))))
+                    {
+                        continue;
+                    }
+
+                    using (var reader = new StreamReader(entry.Open()))
+                    {
+                        yield return new FileDto
+                        {
+                            Name = entry.Name,
+                            Content = reader.ReadToEnd()
+                        };
+                    }
                 }
-            }
-
-            return filesData;
-        }
-
-        private CodeFile ExtractDataFromZipArchiveEntry(ZipArchiveEntry entry)
-        {
-            using (var reader = new StreamReader(entry.Open()))
-            {
-                var codeFile = new CodeFile() { Name = Path.GetFileNameWithoutExtension(entry.Name), Code = reader.ReadToEnd() };
-                return codeFile;
             }
         }
 
@@ -156,7 +162,7 @@ namespace JudgeSystem.Services
             using (var stream = new MemoryStream())
             {
                 await submissionFile.CopyToAsync(stream);
-                var fileExtensions = new List<string> { GetFileExtension(programmingLanguage) };
+                var fileExtensions = new HashSet<string> { GetFileExtension(programmingLanguage) };
 
                 List<CodeFile> sourceCodes = ExtractZipFile(stream, fileExtensions);
                 if (sourceCodes.Count == 0)

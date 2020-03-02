@@ -18,7 +18,11 @@
                         <input asp-for="Tests" type="file" class="file-upload-field form-control" value="">
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label>@Localizer["Import Format"]</label>
+                    <select class="form-control" asp-for="Strategy" asp-items="Utility.GetSelectListItems<TestsImportStrategy>(true)">
+                    </select>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">@SharedLocalizer["Import tests"]</button>
                     <a class="btn btn-info" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Problem" asp-action="All"

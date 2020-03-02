@@ -11,7 +11,7 @@ namespace JudgeSystem.Services
 {
     public class JsonUtiltyService : IJsonUtiltyService
     {
-        public T ParseJsonFormStreamUsingJSchema<T>(Stream stream, string schemaFilePath, List<string> messages)
+        public T ParseJsonFormStreamUsingJSchema<T>(Stream stream, string schemaFilePath, ICollection<string> messages)
         {
             using var streamReader = new StreamReader(stream);
             string json = streamReader.ReadToEnd();

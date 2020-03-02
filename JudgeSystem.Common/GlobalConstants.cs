@@ -26,6 +26,7 @@ namespace JudgeSystem.Common
 
         #region Folder names, mime types, formats, file names
         public const string ExcelFileExtension = ".xlsx";
+        public const string ZipFileExtension = ".zip";
         public const string OctetStreamMimeType = "application/octet-stream";
         public const string StandardDateFormat = "dd/MM/yyyy HH:mm:ss";
         public const string TemplatesFolder = "Templates";
