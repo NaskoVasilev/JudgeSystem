@@ -1,43 +1,48 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Common;
 using JudgeSystem.Services.Mapping;
+using static JudgeSystem.Common.ModelConstants;
+using static JudgeSystem.Common.GlobalConstants;
 
 namespace JudgeSystem.Web.InputModels.Problem
 {
-	public class ProblemInputModel : IMapTo<Data.Models.Problem>
+    public class ProblemInputModel : IMapTo<Data.Models.Problem>
 	{
         public ProblemInputModel()
         {
-            AllowedMemoryInMegaBytes = GlobalConstants.DefaultAllowedMemoryInMegaBytes;
-            AllowedTimeInMilliseconds = GlobalConstants.DefaultAllowedTimeInMilliseconds;
-            MaxPoints = GlobalConstants.DefaultMaxPoints;
+            AllowedMemoryInMegaBytes = DefaultAllowedMemoryInMegaBytes;
+            AllowedTimeInMilliseconds = DefaultAllowedTimeInMilliseconds;
+            MaxPoints = DefaultMaxPoints;
         }
 
         [Required]
-        [StringLength(ModelConstants.ProblemNameMaxLength, MinimumLength = ModelConstants.ProblemNameMinLength)]
+        [StringLength(ProblemNameMaxLength, MinimumLength = ProblemNameMinLength)]
         public string Name { get; set; }
 
-        [Display(Name = ModelConstants.ProblemIsExtraTaskDisplayName)]
+        [Display(Name = ProblemIsExtraTaskDisplayName)]
         public bool IsExtraTask { get; set; }
 
-        [Range(ModelConstants.ProblemMinPoints, ModelConstants.ProblemMaxPoints)]
-        [Display(Name = ModelConstants.ProblemMaxPointsDisplayName)]
+        [Range(ProblemMinPoints, ProblemMaxPoints)]
+        [Display(Name = ProblemMaxPointsDisplayName)]
         public int MaxPoints { get; set; }
 
 
-        [Range(GlobalConstants.MinAllowedTimeInMilliseconds, GlobalConstants.MaxAllowedTimeInMilliseconds)]
-        [Display(Name = ModelConstants.ProblemAllowedTimeInMillisecondsDisplayName)]
+        [Range(MinAllowedTimeInMilliseconds, MaxAllowedTimeInMilliseconds)]
+        [Display(Name = ProblemAllowedTimeInMillisecondsDisplayName)]
         public int AllowedTimeInMilliseconds { get; set; }
 
-        [Range(GlobalConstants.MinAllowedMemoryInMegaBytes, GlobalConstants.MaxAllowedMemoryInMegaBytes)]
-        [Display(Name = ModelConstants.ProblemAllowedMemoryInMegaBytesDisplayName)]
+        [Range(MinAllowedMemoryInMegaBytes, MaxAllowedMemoryInMegaBytes)]
+        [Display(Name = ProblemAllowedMemoryInMegaBytesDisplayName)]
         public double AllowedMemoryInMegaBytes { get; set; }
+
+        [Range(ProblemMinTimeIntervalBetweenSubmissionInSeconds, ProblemMaxTimeIntervalBetweenSubmissionInSeconds)]
+        [Display(Name = ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName)]
+        public int TimeIntervalBetweenSubmissionInSeconds { get; set; }
 
         public int LessonId { get; set; }
 
-        [Display(Name = ModelConstants.ProblemSubmissionTypeDisplayName)]
+        [Display(Name = ProblemSubmissionTypeDisplayName)]
         public SubmissionType SubmissionType { get; set; }
     }
 }
