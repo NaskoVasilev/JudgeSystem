@@ -65,5 +65,7 @@
         public const string NotConfirmedEmail = "Your email is not confirmed. Please confirm your email before login!";
 
         public const string ContestIsNotActive = "This contest is not active.";
+
+        public const string ExceedSubmissionTimeInterval = "Please, wait {0} seconds before send your submission!";
     }
 }

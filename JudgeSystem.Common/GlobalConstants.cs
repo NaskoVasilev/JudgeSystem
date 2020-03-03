@@ -84,6 +84,7 @@ namespace JudgeSystem.Common
         public const int MinAllowedTimeInMilliseconds = 50;
         public const int MaxAllowedTimeInMilliseconds = 50000;
         public const int DefaultMaxPoints = 100;
+        public const int DefaultTimeIntervalBetweenSubmissionInSeconds = 5;
         #endregion
 
         #region Other numeric constants

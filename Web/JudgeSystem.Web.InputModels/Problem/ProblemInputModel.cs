@@ -14,6 +14,7 @@ namespace JudgeSystem.Web.InputModels.Problem
             AllowedMemoryInMegaBytes = DefaultAllowedMemoryInMegaBytes;
             AllowedTimeInMilliseconds = DefaultAllowedTimeInMilliseconds;
             MaxPoints = DefaultMaxPoints;
+            TimeIntervalBetweenSubmissionInSeconds = DefaultTimeIntervalBetweenSubmissionInSeconds;
         }
 
         [Required]

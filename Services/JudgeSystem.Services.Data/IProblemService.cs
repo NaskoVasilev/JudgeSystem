@@ -26,5 +26,7 @@ namespace JudgeSystem.Services.Data
 		Task<int> GetLessonId(int problemId);
 
         string GetProblemName(int id);
+
+        int GetTimeIntevalBetweenSubmissionInSeconds(int problemId);
     }
 }

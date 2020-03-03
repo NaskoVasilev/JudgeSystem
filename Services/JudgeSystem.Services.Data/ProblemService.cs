@@ -61,6 +61,12 @@ namespace JudgeSystem.Services.Data
             return problemName;
         }
 
+        public int GetTimeIntevalBetweenSubmissionInSeconds(int problemId) => 
+            problemRepository.All()
+                .Where(p => p.Id == problemId)
+                .Select(p => p.TimeIntervalBetweenSubmissionInSeconds)
+                .First();
+
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			var problems = problemRepository.All()
