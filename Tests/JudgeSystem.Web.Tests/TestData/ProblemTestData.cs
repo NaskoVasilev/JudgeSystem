@@ -15,7 +15,8 @@ namespace JudgeSystem.Web.Tests.TestData
             Name = "Sum two numbers",
             Lesson = LessonTestData.GetEntity(),
             MaxPoints = 100,
-            SubmissionType = SubmissionType.PlainCode
+            SubmissionType = SubmissionType.PlainCode,
+            TimeIntervalBetweenSubmissionInSeconds = 20
         };
 
         internal static IEnumerable<Problem> GetEntities()

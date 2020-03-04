@@ -120,7 +120,7 @@ namespace JudgeSystem.Web.Controllers
                 double secondsToWaitUntilNextSubmission = timeIntervalBetweenSubmissionInSeconds - passedSeconds;
                 if (secondsToWaitUntilNextSubmission > 0)
                 {
-                    return BadRequest(string.Format(ErrorMessages.SendSubmissionToEarly, secondsToWaitUntilNextSubmission));
+                    return BadRequest(string.Format(ErrorMessages.SendSubmissionToEarly, Math.Ceiling(secondsToWaitUntilNextSubmission)));
                 }
             }
 
@@ -140,7 +140,7 @@ namespace JudgeSystem.Web.Controllers
         private void AddClintIpInCache(string key, int timeIntervalBetweenSubmissionInSeconds)
         {
             string submissionDateTime = DateTime.UtcNow.ToString(GlobalConstants.StandardDateFormat);
-            var absoluteExpiration = TimeSpan.FromSeconds(timeIntervalBetweenSubmissionInSeconds);
+            var absoluteExpiration = TimeSpan.FromSeconds(Math.Max(timeIntervalBetweenSubmissionInSeconds, GlobalConstants.DefaultTimeIntervalBetweenSubmissionInSeconds));
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(absoluteExpiration);
             cache.SetString(key, submissionDateTime, options);
         }

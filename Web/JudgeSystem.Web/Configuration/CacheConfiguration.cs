@@ -29,7 +29,7 @@ namespace JudgeSystem.Web.Configuration
         {
             services.AddDistributedSqlServerCache(options =>
             {
-                options.ConnectionString = configuration[GlobalConstants.DefaultConnectionStringName];
+                options.ConnectionString = configuration.GetConnectionString(GlobalConstants.DefaultConnectionStringName);
                 options.SchemaName = SchemaName;
                 options.TableName = TableName;
             });
