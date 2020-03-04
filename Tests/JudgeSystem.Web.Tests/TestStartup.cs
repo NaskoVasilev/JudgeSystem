@@ -4,6 +4,8 @@ using JudgeSystem.Web.Tests.Mocks;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.SqlServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +37,7 @@ namespace JudgeSystem.Web.Tests
             services.Replace<IAzureStorageService, AzureStorageServiceMock>(ServiceLifetime.Transient);
             //Mock IHostingEnvironment
             services.AddScoped(_ => HostingEnvironmentMock.CreateInstance());
+            services.AddSingleton<IDistributedCache, DistributedCacheMock>();
         }
     }
 }

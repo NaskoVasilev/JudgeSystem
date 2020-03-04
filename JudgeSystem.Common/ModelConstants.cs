@@ -45,11 +45,14 @@
         public const int ProblemNameMinLength = 3;
         public const int ProblemMinPoints = 1;
         public const int ProblemMaxPoints = 300;
+        public const int ProblemMinTimeIntervalBetweenSubmissionInSeconds = 5;
+        public const int ProblemMaxTimeIntervalBetweenSubmissionInSeconds = 3000;
         public const string ProblemIsExtraTaskDisplayName = "Extra task";
         public const string ProblemMaxPointsDisplayName = "Max points";
         public const string ProblemAllowedTimeInMillisecondsDisplayName = "Allowed time in miliseconds";
         public const string ProblemAllowedMemoryInMegaBytesDisplayName = "Allowed memory in MB";
         public const string ProblemSubmissionTypeDisplayName = "Submission type";
+        public const string ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName = "Time interval between submission in seconds";
         #endregion
 
         #region Resource models consatnts

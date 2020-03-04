@@ -61,6 +61,12 @@ namespace JudgeSystem.Services.Data
             return problemName;
         }
 
+        public int GetTimeIntevalBetweenSubmissionInSeconds(int problemId) => 
+            problemRepository.All()
+                .Where(p => p.Id == problemId)
+                .Select(p => p.TimeIntervalBetweenSubmissionInSeconds)
+                .First();
+
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			var problems = problemRepository.All()
@@ -96,6 +102,7 @@ namespace JudgeSystem.Services.Data
 			problem.SubmissionType = model.SubmissionType;
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
+            problem.TimeIntervalBetweenSubmissionInSeconds = model.TimeIntervalBetweenSubmissionInSeconds;
 
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();

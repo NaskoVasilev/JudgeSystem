@@ -38,6 +38,7 @@ namespace JudgeSystem.Web
 
             services.ConfigureIdentity()
                 .ConfigureSession()
+                .ConfigureDistributedSqlServerCache(configuration)
                 .ConfigureLocalization()
                 .ConfigureMvc()
                 .ConfigureCookies()
@@ -83,7 +84,7 @@ namespace JudgeSystem.Web
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseSession();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
