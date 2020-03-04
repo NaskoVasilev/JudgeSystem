@@ -41,6 +41,8 @@ namespace JudgeSystem.Data
         public DbSet<Practice> Practices { get; set; }
         public DbSet<UserPractice> UserPractices { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<AllowedIpAddress> AllowedIpAddresses { get; set; }
+        public DbSet<AllowedIpAddressContest> AllowedIpAddressContests { get; set; }
 
         public override int SaveChanges() => SaveChanges(true);
 
@@ -63,6 +65,11 @@ namespace JudgeSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<AllowedIpAddressContest>(entity =>
+            {
+                entity.HasKey(e => new { e.AllowedIpAddressId, e.ContestId });
+            });
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 

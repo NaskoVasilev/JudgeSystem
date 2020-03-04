@@ -19,6 +19,10 @@
     <Compile Remove="Migrations\20190802202727_AddAllowedTimeAndAlowedMemoryColumnsToProblem.Designer.cs" />
     <Compile Remove="Migrations\20191004141819_FeedbackSenderRequired.cs" />
     <Compile Remove="Migrations\20191004141819_FeedbackSenderRequired.Designer.cs" />
+    <Compile Remove="Migrations\20200304204204_AllowedIpAddressEntity.cs" />
+    <Compile Remove="Migrations\20200304204204_AllowedIpAddressEntity.Designer.cs" />
+    <Compile Remove="Migrations\20200304204459_AllowedIpAddressEntity.cs" />
+    <Compile Remove="Migrations\20200304204459_AllowedIpAddressEntity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
