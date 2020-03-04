@@ -30,8 +30,6 @@ namespace JudgeSystem.Web.Controllers
         private readonly IContestService contestService;
         private readonly IDistributedCache cache;
 
-        public IProblemService IUtilityService { get; }
-
         public SubmissionController(
             UserManager<ApplicationUser> userManager,
             ISubmissionService submissionService,
