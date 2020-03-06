@@ -1,0 +1,44 @@
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model IEnumerable<AllowedIpAddressViewModel>
+
+@{
+    ViewData["Title"] = Localizer["All allowed ip addresses"];
+    int index = 1;
+}
+
+<partial name="Partials/DeleteConfirmationModal" />
+
+<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-outline-dark mb-3" asp-area="@GlobalConstants.AdministrationArea" asp-controller="AllowedIpAddress" asp-action="Create">@SharedLocalizer["Add"]</a>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr class="row">
+            <th class="col-md-2">&#8470;</th>
+            <th class="col-md-5">@Localizer["Ip address"]</th>
+            <th class="col-md-5">@SharedLocalizer["Actions"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ipAddress in Model)
+        {
+            <tr class="row">
+                <td class="col-md-2">@(index++)</td>
+                <td class="col-md-5">@ipAddress.Value</td>
+                <td class="col-md-5">
+                    <button type="button" class="btn btn-danger ipAddressDeleteBtn" data-id="@ipAddress.Id" data-toggle="modal" data-target="#exampleModal">
+                        @SharedLocalizer["Delete"]
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/ipAddressController.js"></script>
+}
+

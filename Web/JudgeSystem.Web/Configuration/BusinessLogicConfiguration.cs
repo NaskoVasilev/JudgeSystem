@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<ISchoolClassService, SchoolClassService>();
             services.AddTransient<IPracticeService, PracticeService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IAllowedIpAddressService, AllowedIpAddressService>();
 
             services.AddTransient<IEstimator, Estimator>();
             services.AddTransient<IPasswordHashService, PasswordHashService>();

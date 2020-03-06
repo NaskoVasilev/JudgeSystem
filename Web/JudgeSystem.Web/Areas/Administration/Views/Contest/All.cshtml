@@ -13,20 +13,40 @@
 <table class="table table-hover">
     <thead>
         <tr class="row">
-            <th class="col-md-7">@SharedLocalizer["Name"]</th>
+            <th class="col-md-5">@SharedLocalizer["Name"]</th>
             <th class="col-md-5">@Localizer["Duration"]</th>
+            <th class="col-md-2">@SharedLocalizer["Settings"]</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var contest in Model.Contests)
         {
             <tr class="row">
-                <td class="col-md-7">
+                <td class="col-md-5">
                     <a class="text-decoration-none text-secondary"
                        asp-controller="Contest" asp-action="Results" asp-route-id="@contest.Id">@contest.Name</a>
                 </td>
                 <td class="col-md-5">
                     @SharedLocalizer["From"] @contest.FormatedStartTime @SharedLocalizer["to"] @contest.FormatedEndTime
+                </td>
+                <td class="col-md-2">
+                    <div class="dropdown">
+                         <i type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fas fa-cog"></i>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" 
+                               asp-area="@GlobalConstants.AdministrationArea"
+                               asp-controller="Contest"
+                               asp-action="AllowedIpAddresses"
+                               asp-route-id="@contest.Id"
+                               asp-route-name="@contest.Name">@Localizer["Allowed ip addresses"]</a>
+                            <a class="dropdown-item"
+                               asp-area="@GlobalConstants.AdministrationArea"
+                               asp-controller="Contest"
+                               asp-action="AddAllowedIpAddress"
+                               asp-route-id="@contest.Id"
+                               asp-route-name="@contest.Name">@Localizer["Add allowed ip address"]</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
         }

@@ -67,5 +67,9 @@
         public const string ContestIsNotActive = "This contest is not active.";
 
         public const string SendSubmissionToEarly = "Please, wait {0} seconds before send your submission!";
+
+        public const string InvalidIpAddress = "Please, provide valid IPv6 or IPv4";
+
+        public const string DeniedAccessToContestByIp = "You are not allowed to send submissions for this contest from ip: {0}";
     }
 }

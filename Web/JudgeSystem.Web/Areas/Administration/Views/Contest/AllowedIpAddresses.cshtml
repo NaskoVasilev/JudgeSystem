@@ -1,0 +1,61 @@
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model ContestAllowedIpAddressesViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} - {Localizer["Allowed ip addresses"].Value}";
+    int index = 1;
+}
+
+<partial name="Partials/DeleteConfirmationModal" />
+
+<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-outline-dark mb-3"
+       asp-area="@GlobalConstants.AdministrationArea"
+       asp-controller="Contest"
+       asp-action="AddAllowedIpAddress"
+       asp-route-id="@Model.Id"
+       asp-route-name="@Model.Name">@SharedLocalizer["Add"]</a>
+</div>
+@if (Model.AllowedIpAddresses.Any())
+{
+    <table class="table table-hover">
+        <thead>
+            <tr class="row">
+                <th class="col-md-2">&#8470;</th>
+                <th class="col-md-5">@Localizer["Ip address"]</th>
+                <th class="col-md-5">@SharedLocalizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ipAddress in Model.AllowedIpAddresses)
+            {
+                <tr class="row">
+                    <td class="col-md-2">@(index++)</td>
+                    <td class="col-md-5">@ipAddress.Value</td>
+                    <td class="col-md-5">
+                        <button type="button"
+                                class="btn btn-danger contest-allowed-ip-address-delete-btn"
+                                data-ipAddressId="@ipAddress.Id"
+                                data-contestId="@Model.Id"
+                                data-toggle="modal"
+                                data-target="#exampleModal">
+                            @SharedLocalizer["Delete"]
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-center font-size-20">@Localizer["Currently the access to the contest is not limited."]</p>
+}
+
+@section Scripts{
+    <script src="~/js/notification.js"></script>
+    <script src="~/js/controllers/contestController.js"></script>
+}
+

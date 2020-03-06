@@ -14,6 +14,7 @@ namespace JudgeSystem.Data.Models
 		{
 			UserContests = new HashSet<UserContest>();
 			Submissions = new HashSet<Submission>();
+            AllowedIpAddresses = new HashSet<AllowedIpAddressContest>();
 		}
 
 		[Required]
@@ -33,5 +34,7 @@ namespace JudgeSystem.Data.Models
 		public ICollection<UserContest> UserContests { get; set; }
 
 		public ICollection<Submission> Submissions { get; set; }
-	}
+
+        public ICollection<AllowedIpAddressContest> AllowedIpAddresses { get; set; }
+    }
 }

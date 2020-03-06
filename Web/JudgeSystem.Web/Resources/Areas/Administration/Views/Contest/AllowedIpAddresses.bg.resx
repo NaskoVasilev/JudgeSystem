@@ -117,49 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Active contests" xml:space="preserve">
-    <value>Активни състезания</value>
+  <data name="Allowed ip addresses" xml:space="preserve">
+    <value>Разрешени ip адреси</value>
   </data>
-  <data name="Add contest" xml:space="preserve">
-    <value>Добави състезаниe</value>
-  </data>
-  <data name="Add course" xml:space="preserve">
-    <value>Добави обучение</value>
-  </data>
-  <data name="Add student" xml:space="preserve">
-    <value>Добави ученик</value>
-  </data>
-  <data name="Administration" xml:space="preserve">
-    <value>Администрация</value>
-  </data>
-  <data name="All contests" xml:space="preserve">
-    <value>Всички състезания</value>
-  </data>
-  <data name="All ip addresses" xml:space="preserve">
-    <value>Всички ip адреси</value>
-  </data>
-  <data name="All users" xml:space="preserve">
-    <value>Потребители</value>
-  </data>
-  <data name="Courses" xml:space="preserve">
-    <value>Обучения</value>
-  </data>
-  <data name="Documentation" xml:space="preserve">
-    <value>Документация</value>
-  </data>
-  <data name="Feedback" xml:space="preserve">
-    <value>Мнение</value>
-  </data>
-  <data name="Feedbacks" xml:space="preserve">
-    <value>Мнения</value>
-  </data>
-  <data name="Open source project" xml:space="preserve">
-    <value>Проект с отворен код</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Търси</value>
-  </data>
-  <data name="Students" xml:space="preserve">
-    <value>Ученици</value>
+  <data name="Currently the access to the contest is not limited." xml:space="preserve">
+    <value>Достъпа до състезанието не е ограничен в момента.</value>
   </data>
 </root>
