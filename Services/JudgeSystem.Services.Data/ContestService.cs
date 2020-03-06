@@ -269,5 +269,12 @@ namespace JudgeSystem.Services.Data
                 .FirstOrDefault(x => x.AllowedIpAddressId == ipAddressId && x.ContestId == contestId);
             await allowedIpAddressContestRepository.DeleteAsync(entry);
         }
+
+        public bool IsRestricted(int contestId, string ip) => 
+            repository.All()
+                .Include(c => c.AllowedIpAddresses)
+                .ThenInclude(a => a.AllowedIpAddress)
+                .Where(c => c.Id == contestId && c.AllowedIpAddresses.Any())
+                .Any(c => !c.AllowedIpAddresses.Any(a => a.AllowedIpAddress.Value == ip));
     }
 }

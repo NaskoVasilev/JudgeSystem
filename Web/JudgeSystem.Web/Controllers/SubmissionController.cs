@@ -104,6 +104,14 @@ namespace JudgeSystem.Web.Controllers
             {
                 return BadRequest(ErrorMessages.ContestIsNotActive);
             }
+            if (model.ContestId.HasValue)
+            {
+                string ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                if (contestService.IsRestricted(model.ContestId.Value, ip))
+                {
+                    return BadRequest(string.Format(ErrorMessages.DeniedAccessToContestByIp, ip));
+                }
+            }
 
             string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
             int timeIntervalBetweenSubmissionInSeconds = problemService.GetTimeIntevalBetweenSubmissionInSeconds(model.ProblemId);
