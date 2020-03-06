@@ -33,3 +33,28 @@ function getLessons(courseId, lessonType) {
 function deleteAllFindLessons() {
 	$('#lessonId > option:enabled').remove();
 }
+
+//Delete contest allowed ip address
+let clickedDeleteButton;
+
+$("#delete-confirm-btn").on('click', (e) => {
+
+    if (clickedDeleteButton) {
+        let ipAddressId = clickedDeleteButton.dataset.ipaddressid;
+        debugger;
+        let contestId = clickedDeleteButton.dataset.contestid;
+
+        $.post('/Administration/Contest/RemoveAllowedIpAddress', { ipAddressId, contestId })
+            .done((response) => {
+                $(clickedDeleteButton.parentElement.parentElement).hide();
+                showInfo(response);
+            })
+            .fail((error) => {
+                showError(error.responseText);
+            });
+    }
+});
+
+$(".contest-allowed-ip-address-delete-btn").on('click', (e) => {
+    clickedDeleteButton = $(e.target)[0];
+});

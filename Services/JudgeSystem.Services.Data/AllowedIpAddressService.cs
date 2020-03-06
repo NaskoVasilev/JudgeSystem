@@ -10,7 +10,7 @@ using JudgeSystem.Web.ViewModels.AllowedIpAddress;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace JudgeSystem.Services
+namespace JudgeSystem.Services.Data
 {
     public class AllowedIpAddressService : IAllowedIpAddressService
     {
@@ -34,10 +34,14 @@ namespace JudgeSystem.Services
             allowedIpAddressContestRepository.All()
             .Include(a => a.AllowedIpAddress)
             .Where(a => a.ContestId == contestId)
-            .To<AllowedIpAddressViewModel>()
+            .Select(a => new AllowedIpAddressViewModel 
+            {
+                Id = a.AllowedIpAddressId,
+                Value = a.AllowedIpAddress.Value
+            })
             .ToList();
 
-        public async Task Create(AllowedIpAddressInputModel model) => 
+        public async Task Create(AllowedIpAddressInputModel model) =>
             await repository.AddAsync(model.To<AllowedIpAddress>());
 
         public async Task Delete(int id)
@@ -46,10 +50,10 @@ namespace JudgeSystem.Services
                 .Where(ip => ip.AllowedIpAddressId == id)
                 .ToList();
             await allowedIpAddressContestRepository.DeleteRangeAsync(contestAllowedIpAddresses);
-            
+
             AllowedIpAddress allowedIpAddress = await repository.FindAsync(id);
             await repository.DeleteAsync(allowedIpAddress);
-            
+
         }
 
         public T GetById<T>(int id) =>
@@ -57,5 +61,12 @@ namespace JudgeSystem.Services
             .Where(a => a.Id == id)
             .To<T>()
             .FirstOrDefault();
+
+        public IEnumerable<AllowedIpAddressViewModel> NotAddedIpAdresses(int contestId) => 
+            repository.All()
+                .Include(c => c.Contests)
+                .Where(ip => !ip.Contests.Any(c => c.ContestId == contestId))
+                .To<AllowedIpAddressViewModel>()
+                .ToList();
     }
 }

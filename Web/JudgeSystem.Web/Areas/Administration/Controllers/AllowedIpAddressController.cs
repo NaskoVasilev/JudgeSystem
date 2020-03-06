@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
-using JudgeSystem.Services;
+using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.AllowedIpAddress;
 using JudgeSystem.Web.ViewModels.AllowedIpAddress;
 

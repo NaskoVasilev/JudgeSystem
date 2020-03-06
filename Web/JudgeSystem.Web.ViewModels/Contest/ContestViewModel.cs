@@ -18,7 +18,7 @@ namespace JudgeSystem.Web.ViewModels.Contest
 
 		public DateTime EndTime { get; set; }
 
-		[IgnoreMap]
+        [IgnoreMap]
 		public string FormatedStartTime => StartTime.ToString(GlobalConstants.StandardDateFormat, CultureInfo.InvariantCulture);
 
 		[IgnoreMap]

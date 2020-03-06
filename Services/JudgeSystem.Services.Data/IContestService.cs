@@ -37,5 +37,9 @@ namespace JudgeSystem.Services.Data
         Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl);
         
         bool IsActive(int contestId);
+        
+        Task AddAllowedIpAddress(ContestAllowedIpAddressesInputModel model, int id);
+        
+        Task RemoveAllowedIpAddress(int contestId, int ipAddressId);
     }
 }
