@@ -42,8 +42,20 @@ namespace JudgeSystem.Services
 
         public async Task Delete(int id)
         {
+            var contestAllowedIpAddresses = allowedIpAddressContestRepository.All()
+                .Where(ip => ip.AllowedIpAddressId == id)
+                .ToList();
+            await allowedIpAddressContestRepository.DeleteRangeAsync(contestAllowedIpAddresses);
+            
             AllowedIpAddress allowedIpAddress = await repository.FindAsync(id);
             await repository.DeleteAsync(allowedIpAddress);
+            
         }
+
+        public T GetById<T>(int id) =>
+            repository.All()
+            .Where(a => a.Id == id)
+            .To<T>()
+            .FirstOrDefault();
     }
 }

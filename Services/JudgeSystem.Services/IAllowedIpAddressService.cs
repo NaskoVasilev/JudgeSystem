@@ -15,5 +15,7 @@ namespace JudgeSystem.Services
         IEnumerable<AllowedIpAddressViewModel> ContestAllowedIpAddresses(int contestId);
 
         Task Delete(int id);
+
+        T GetById<T>(int id);
     }
 }
