@@ -1,5 +1,4 @@
 ﻿using JudgeSystem.Services.Mapping;
-using AutoMapper;
 
 namespace JudgeSystem.Web.ViewModels.AllowedIpAddress
 {

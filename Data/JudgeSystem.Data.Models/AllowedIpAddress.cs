@@ -1,6 +1,7 @@
-﻿using JudgeSystem.Data.Common.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
+using JudgeSystem.Data.Common.Models;
 
 namespace JudgeSystem.Data.Models
 {

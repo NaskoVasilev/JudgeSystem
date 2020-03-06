@@ -41,7 +41,6 @@ $("#delete-confirm-btn").on('click', (e) => {
 
     if (clickedDeleteButton) {
         let ipAddressId = clickedDeleteButton.dataset.ipaddressid;
-        debugger;
         let contestId = clickedDeleteButton.dataset.contestid;
 
         $.post('/Administration/Contest/RemoveAllowedIpAddress', { ipAddressId, contestId })

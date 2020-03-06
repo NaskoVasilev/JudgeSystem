@@ -1,5 +1,6 @@
-﻿using JudgeSystem.Web.ViewModels.AllowedIpAddress;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using JudgeSystem.Web.ViewModels.AllowedIpAddress;
 
 namespace JudgeSystem.Web.ViewModels.Contest
 {
