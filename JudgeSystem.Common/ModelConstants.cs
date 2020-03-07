@@ -52,7 +52,10 @@
         public const string ProblemAllowedTimeInMillisecondsDisplayName = "Allowed time in miliseconds";
         public const string ProblemAllowedMemoryInMegaBytesDisplayName = "Allowed memory in MB";
         public const string ProblemSubmissionTypeDisplayName = "Submission type";
+        public const string ProblemTestingStrategyDisplayName = "Testing type";
         public const string ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName = "Time interval between submission in seconds";
+        public const string ProblemCheckOutputStrategyDisplayName = "Compile, execute and check produced output";
+        public const string ProblemRunAutomatedTestsStrategyDisplayName = "Run automated tests to check submission";
         #endregion
 
         #region Resource models consatnts
