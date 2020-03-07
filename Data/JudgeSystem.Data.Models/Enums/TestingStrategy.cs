@@ -8,7 +8,7 @@ namespace JudgeSystem.Data.Models.Enums
     {
         [Display(Name = ProblemCheckOutputStrategyDisplayName)]
         CheckOutput = 1,
-        [Display(Name = = ProblemRunAutomatedTestsStrategyDisplayName)]
+        [Display(Name = ProblemRunAutomatedTestsStrategyDisplayName)]
         RunAutomatedTests = 2
     }
 }

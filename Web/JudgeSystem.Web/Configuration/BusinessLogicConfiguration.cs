@@ -39,6 +39,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IJsonUtiltyService, JsonUtiltyService>();
             services.AddTransient<IExcelFileGenerator, ExcelFileGenerator>();
             services.AddTransient<IStringFormatter, StringFormatter>();
+            services.AddTransient<IFileSystemService, FileSystemService>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();

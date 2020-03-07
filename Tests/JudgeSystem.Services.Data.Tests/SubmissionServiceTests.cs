@@ -346,6 +346,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
             problemServiceMock.Setup(x => x.GetById<ProblemConstraintsDto>(submission.ProblemId)).Returns(Task.FromResult(problemConstraintsDto));
             var utilityServiceMock = new Mock<IUtilityService>();
+            var fileSystemMock = new Mock<IFileSystemService>();
             var executedTestServiceMock = new Mock<IExecutedTestService>();
             executedTestServiceMock.Setup(x => x.Create(It.IsAny<ExecutedTest>()));
 
@@ -359,13 +360,23 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 IsCorrect = isCorret
             };
+
             checkerMock.Setup(x => x.Check(executionResult, expectedOutput)).Returns(checkerResult);
 
             IExecutor executor = CreateExecutor(executionResult);
             IExecutorFactory executorFactory = CreateExecutorFactory(programmingLanguage, executor);
 
-            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
-                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+            var submissionService = new SubmissionService(
+                submissionRepository, 
+                null, 
+                problemServiceMock.Object,
+                testServiceMock.Object, 
+                executedTestServiceMock.Object, 
+                utilityServiceMock.Object, 
+                fileSystemMock.Object,
+                compilerFactory, 
+                executorFactory, 
+                checkerMock.Object);
 
             //Act
             await submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage);
@@ -415,12 +426,22 @@ namespace JudgeSystem.Services.Data.Tests
             var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
             var problemServiceMock = new Mock<IProblemService>();
             var utilityServiceMock = new Mock<IUtilityService>();
+            var fileSystemMock = new Mock<IFileSystemService>();
             var executedTestServiceMock = new Mock<IExecutedTestService>();
             var checkerMock = new Mock<IChecker>();
             var testServiceMock = new Mock<ITestService>();
 
-            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
-                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+            var submissionService = new SubmissionService(
+                submissionRepository, 
+                null, 
+                problemServiceMock.Object,
+                testServiceMock.Object, 
+                executedTestServiceMock.Object, 
+                utilityServiceMock.Object,
+                fileSystemMock.Object,
+                compilerFactory, 
+                executorFactory, 
+                checkerMock.Object);
             return submissionService;
         }
 
@@ -458,7 +479,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Submissions.AddRangeAsync(testData);
             await context.SaveChangesAsync();
             IDeletableEntityRepository<Submission> repository = new EfDeletableEntityRepository<Submission>(context);
-            var service = new SubmissionService(repository, estimator, null, null, null, null, null, null, null);
+            var service = new SubmissionService(repository, estimator, null, null, null, null, null, null, null, null);
             return service;
         }
 
@@ -466,7 +487,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Submission>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null, null, null, null);
+            return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null, null, null, null, null);
         }
 
         private Submission GetSubmission()

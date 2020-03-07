@@ -85,16 +85,6 @@ namespace JudgeSystem.Services
             }
         }
 
-        public void DeleteDirectory(string workingDirectory)
-        {
-            IEnumerable<string> files = Directory.EnumerateFiles(workingDirectory);
-            foreach (string file in files)
-            {
-                File.Delete(file);
-            }
-            Directory.Delete(workingDirectory);
-        }
-
         public string GetJavaMainClass(IEnumerable<string> sourceCodes)
         {
             string mainMethodRegexPattern = @"static void main\s*\([^)]*\)";

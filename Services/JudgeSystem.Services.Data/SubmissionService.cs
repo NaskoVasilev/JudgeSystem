@@ -35,6 +35,7 @@ namespace JudgeSystem.Services.Data
         private readonly ITestService testService;
         private readonly IExecutedTestService executedTestService;
         private readonly IUtilityService utilityService;
+        private readonly IFileSystemService fileSystem;
         private readonly ICompilerFactory compilerFactory;
         private readonly IExecutorFactory executorFactory;
         private readonly IChecker checker;
@@ -46,6 +47,7 @@ namespace JudgeSystem.Services.Data
             ITestService testService,
             IExecutedTestService executedTestService,
             IUtilityService utilityService,
+            IFileSystemService fileSystem,
             ICompilerFactory compilerFactory,
             IExecutorFactory executorFactory,
             IChecker checker)
@@ -56,6 +58,7 @@ namespace JudgeSystem.Services.Data
             this.testService = testService;
             this.executedTestService = executedTestService;
             this.utilityService = utilityService;
+            this.fileSystem = fileSystem;
             this.compilerFactory = compilerFactory;
             this.executorFactory = executorFactory;
             this.checker = checker;
@@ -252,7 +255,7 @@ namespace JudgeSystem.Services.Data
             }
             finally
             {
-                utilityService.DeleteDirectory(workingDirectory);
+                fileSystem.DeleteDirectory(workingDirectory);
             }
         }
 
