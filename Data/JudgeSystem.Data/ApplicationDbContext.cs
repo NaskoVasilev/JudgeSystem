@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using JudgeSystem.Data.Common.Models;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +69,11 @@ namespace JudgeSystem.Data
             builder.Entity<AllowedIpAddressContest>(entity =>
             {
                 entity.HasKey(e => new { e.AllowedIpAddressId, e.ContestId });
+            });
+            builder.Entity<Problem>(problem =>
+            {
+                problem.Property(p => p.TestingStrategy)
+                .HasDefaultValue(TestingStrategy.CheckOutput);
             });
 
             // Needed for Identity models configuration
