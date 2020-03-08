@@ -8,17 +8,13 @@ namespace JudgeSystem.Web.Utilites.ImportTests
     {
         private const string UnsupportedTestsImportStrategyErrorMessage = "This tests import strategy is not supported!";
 
-        public ParseTestsStrategy CreateStrategy(TestsImportStrategy strategy)
+        public ParseTestsStrategy CreateStrategy(TestsImportStrategy strategy) => 
+            strategy switch
         {
-            switch (strategy)
-            {
-                case TestsImportStrategy.Json:
-                    return new ParseTestsFromJson();
-                case TestsImportStrategy.Zip:
-                    return new ParseTestsFromZip();
-                default:
-                    throw new ArgumentException(UnsupportedTestsImportStrategyErrorMessage);
-            }
-        }
+            TestsImportStrategy.Json => new ParseTestsFromJson(),
+            TestsImportStrategy.Zip => new ParseTestsFromZip(),
+            TestsImportStrategy.TestingProject => new ParseTestsFromTestingProject(),
+            _ => throw new ArgumentException(UnsupportedTestsImportStrategyErrorMessage),
+        };
     }
 }

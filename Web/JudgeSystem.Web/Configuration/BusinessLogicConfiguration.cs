@@ -40,6 +40,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IExcelFileGenerator, ExcelFileGenerator>();
             services.AddTransient<IStringFormatter, StringFormatter>();
             services.AddTransient<IFileSystemService, FileSystemService>();
+            services.AddTransient<IProcessRunner, ProcessRunner>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();

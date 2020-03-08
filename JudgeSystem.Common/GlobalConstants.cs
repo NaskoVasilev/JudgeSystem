@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace JudgeSystem.Common
 {
@@ -86,10 +87,47 @@ namespace JudgeSystem.Common
         public const int MaxAllowedTimeInMilliseconds = 50000;
         public const int DefaultMaxPoints = 100;
         public const int DefaultTimeIntervalBetweenSubmissionInSeconds = 5;
+        public const string PassedTest = "Passed";
         #endregion
 
         #region Other numeric constants
         public const int RecommendedLessonsCachingMinutes = 60;
         #endregion
+
+        public static string ConsoleFile
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "cmd.exe";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return "/bin/bash";
+                }
+                else
+                {
+                    throw new ArgumentException(UnsupportedOSErrorMessage);
+                }
+            }
+        }
+
+        public static string ConsoleComamndPrefix
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return "-c";
+                }
+                else
+                {
+                    return "/c";
+                }
+            }
+        }
+
+        private const string UnsupportedOSErrorMessage = "Unsupported OS. Commands cannot be run on currently used OS";
     }
 }

@@ -115,6 +115,8 @@ namespace JudgeSystem.Services
 
         public IEnumerable<FileDto> ParseZip(Stream stream, ISet<string> allowdFileExtensions = null)
         {
+            var files = new List<FileDto>();
+
             using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 foreach (ZipArchiveEntry entry in zip.Entries)
@@ -128,14 +130,16 @@ namespace JudgeSystem.Services
 
                     using (var reader = new StreamReader(entry.Open()))
                     {
-                        yield return new FileDto
+                        files.Add(new FileDto
                         {
                             Name = entry.Name,
                             Content = reader.ReadToEnd()
-                        };
+                        });
                     }
                 }
             }
+
+            return files;
         }
 
         private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile, ProgrammingLanguage programmingLanguage)

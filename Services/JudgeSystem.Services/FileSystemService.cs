@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using System.IO.Compression;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using JudgeSystem.Web.Dtos.Common;
-using static JudgeSystem.Common.GlobalConstants;
 
 namespace JudgeSystem.Services
 {
@@ -23,6 +24,13 @@ namespace JudgeSystem.Services
             return Directory.CreateDirectory(fullPath).FullName;
         }
 
+        public async Task CreateFile(Stream stream, string filePath)
+        {
+            using FileStream fileStream = File.Create(filePath);
+            await stream.CopyToAsync(fileStream);
+            await fileStream.FlushAsync();
+        }
+
         public void DeleteDirectory(string workingDirectory)
         {
             IEnumerable<string> files = Directory.EnumerateFiles(workingDirectory);
@@ -31,7 +39,16 @@ namespace JudgeSystem.Services
                 File.Delete(file);
             }
 
+            IEnumerable<string> directories = Directory.EnumerateDirectories(workingDirectory);
+            foreach (string directory in directories)
+            {
+                DeleteDirectory(directory);
+            }
+
             Directory.Delete(workingDirectory);
         }
+
+        public void ExtractZipToDirectory(string filePath, string projectDirectory) =>
+            ZipFile.ExtractToDirectory(filePath, projectDirectory);
     }
 }
