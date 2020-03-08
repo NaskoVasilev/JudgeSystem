@@ -10,6 +10,14 @@ namespace JudgeSystem.Services
     {
         public const string DotnetListTestsCommand = "dotnet test --list-tests";
 
+        public const string DotnetBuildProjectCommand = "dotnet build";
+
+        public const string DotnetRunTestCommand = "dotnet test --filter FullyQualifiedName={0}";
+
+        public const string DotnetRunTestsCommand = "dotnet test";
+
+        public const string BuildFaildMessage = "Build failed";
+
         public async Task<ProcessResult> Run(string arguments, string woringDirectory)
         {
             var process = new Process();

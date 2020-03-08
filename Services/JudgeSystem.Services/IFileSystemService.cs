@@ -16,6 +16,10 @@ namespace JudgeSystem.Services
 
         Task CreateFile(Stream stream, string filePath);
 
-        void ExtractZipToDirectory(string filePath, string projectDirectory);
+        Task CreateFile(byte[] fileData, string filePath);
+
+        void ExtractZipToDirectory(string filePath, string destinationDirectory);
+
+        void ExtractZipToDirectory(string filePath, string destinationDirectory, bool overwrite);
     }
 }

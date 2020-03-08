@@ -67,6 +67,12 @@ namespace JudgeSystem.Services.Data
                 .Select(p => p.TimeIntervalBetweenSubmissionInSeconds)
                 .First();
 
+        public ProblemSubmissionDto GetProblemSubmissionData(int problemId) =>
+            problemRepository.All()
+            .Where(p => p.Id == problemId)
+            .To<ProblemSubmissionDto>()
+            .FirstOrDefault();
+
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			var problems = problemRepository.All()
@@ -108,5 +114,18 @@ namespace JudgeSystem.Services.Data
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();
 		}
+
+        public async Task AddAutomatedTestingProject(int id, byte[] testingProject)
+        {
+            Problem problem = await problemRepository.FindAsync(id);
+            problem.AutomatedTestingProject = testingProject;
+            await problemRepository.UpdateAsync(problem);
+        }
+
+        public async Task<byte[]> GetAutomatedTestingProject(int id) =>
+            await problemRepository.All()
+            .Where(p => p.Id == id)
+            .Select(p => p.AutomatedTestingProject)
+            .FirstOrDefaultAsync();
     }
 }

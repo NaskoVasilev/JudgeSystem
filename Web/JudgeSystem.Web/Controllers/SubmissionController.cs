@@ -10,6 +10,7 @@ using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Services;
 using JudgeSystem.Web.ViewModels.Submission;
 using JudgeSystem.Common;
+using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.Filters;
 
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Web.Controllers
 {
@@ -113,8 +115,9 @@ namespace JudgeSystem.Web.Controllers
                 }
             }
 
+            ProblemSubmissionDto problemSubmissionDto = problemService.GetProblemSubmissionData(model.ProblemId);
             string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
-            int timeIntervalBetweenSubmissionInSeconds = problemService.GetTimeIntevalBetweenSubmissionInSeconds(model.ProblemId);
+            int timeIntervalBetweenSubmissionInSeconds = problemSubmissionDto.TimeIntervalBetweenSubmissionInSeconds;
             string lastSubmissionDateTime = cache.GetString(key);
             if (lastSubmissionDateTime == null)
             {
@@ -130,13 +133,22 @@ namespace JudgeSystem.Web.Controllers
                 }
             }
 
-            SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
-
             string userId = userManager.GetUserId(User);
-            model.SubmissionContent = submissionCode.Content;
-            SubmissionDto submission = await submissionService.Create(model, userId);
-
-            await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes, model.ProgrammingLanguage);
+            SubmissionDto submission = null;
+            if(problemSubmissionDto.TestingStrategy == TestingStrategy.RunAutomatedTests)
+            {
+                model.SubmissionContent = await model.File.ToArrayAsync();
+                submission = await submissionService.Create(model, userId);
+                await submissionService.RunAutomatedTests(submission.Id, model.ProgrammingLanguage);
+            }
+            else
+            {
+                SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
+                model.SubmissionContent = submissionCode.Content;
+                submission = await submissionService.Create(model, userId);
+                await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes, model.ProgrammingLanguage);
+            }
+            
             await submissionService.CalculateActualPoints(submission.Id);
 
             SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);

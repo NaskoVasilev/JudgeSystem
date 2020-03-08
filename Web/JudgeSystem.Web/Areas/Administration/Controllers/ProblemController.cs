@@ -12,6 +12,8 @@ using JudgeSystem.Web.Dtos.Problem;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Web.Utilites.ImportTests;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Common.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -175,6 +177,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
 
             await testService.AddRange(tests, model.ProblemId);
+
+            if(model.Strategy == TestsImportStrategy.TestingProject)
+            {
+                byte[] testingProject = model.Tests.OpenReadStream().ToArray();
+                await problemService.AddAutomatedTestingProject(model.ProblemId, testingProject);
+            }
 
             return RedirectToAction(nameof(TestController.ProblemTests), nameof(TestController).ToControllerName(), new { model.ProblemId });
         }

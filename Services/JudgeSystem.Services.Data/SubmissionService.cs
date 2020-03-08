@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -22,6 +21,8 @@ using JudgeSystem.Web.Dtos.Test;
 using JudgeSystem.Web.InputModels.Submission;
 using JudgeSystem.Web.ViewModels.Submission;
 using JudgeSystem.Workers.Common;
+using static JudgeSystem.Common.GlobalConstants;
+using JudgeSystem.Services.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,7 @@ namespace JudgeSystem.Services.Data
         private readonly ICompilerFactory compilerFactory;
         private readonly IExecutorFactory executorFactory;
         private readonly IChecker checker;
+        private readonly IProcessRunner processRunner;
 
         public SubmissionService(
             IDeletableEntityRepository<Submission> repository,
@@ -50,7 +52,8 @@ namespace JudgeSystem.Services.Data
             IFileSystemService fileSystem,
             ICompilerFactory compilerFactory,
             IExecutorFactory executorFactory,
-            IChecker checker)
+            IChecker checker,
+            IProcessRunner processRunner)
         {
             this.repository = repository;
             this.estimator = estimator;
@@ -62,6 +65,7 @@ namespace JudgeSystem.Services.Data
             this.compilerFactory = compilerFactory;
             this.executorFactory = executorFactory;
             this.checker = checker;
+            this.processRunner = processRunner;
         }
 
         public async Task<SubmissionDto> Create(SubmissionInputModel model, string userId)
@@ -262,6 +266,72 @@ namespace JudgeSystem.Services.Data
         public int GetSubmissionsCountByProblemIdAndPracticeId(int problemId, int practiceId, string userId) =>
             repository.All().Count(s => s.ProblemId == problemId && s.UserId == userId && s.PracticeId == practiceId);
 
+        public async Task DeleteSubmissionsByProblemId(int problemId)
+        {
+            var submissions = repository.All().Where(x => x.ProblemId == problemId).ToList();
+            await repository.DeleteRangeAsync(submissions);
+        }
+
+        public async Task RunAutomatedTests(int id, ProgrammingLanguage programmingLanguage)
+        {
+            Submission submission = await repository.FindAsync(id);
+            byte[] testingProject = await problemService.GetAutomatedTestingProject(submission.ProblemId);
+            ProblemConstraintsDto problemConstraints = await problemService.GetById<ProblemConstraintsDto>(submission.ProblemId);
+            string projectDirectory = string.Empty;
+
+            try
+            {
+                projectDirectory = fileSystem.CreateDirectory(CompilationDirectoryPath, Path.GetRandomFileName());
+                string testingProjectFilePath = Path.Combine(projectDirectory, Path.GetRandomFileName() + ZipFileExtension);
+                await fileSystem.CreateFile(testingProject, testingProjectFilePath);
+                fileSystem.ExtractZipToDirectory(testingProjectFilePath, projectDirectory);
+
+                string userProjectFilePath = Path.Combine(projectDirectory, Path.GetRandomFileName() + ZipFileExtension);
+                await fileSystem.CreateFile(submission.Code, userProjectFilePath);
+                fileSystem.ExtractZipToDirectory(userProjectFilePath, projectDirectory, overwrite: true);
+
+                string buildCommand = processRunner.PrependChangeDirectoryCommand(ProcessRunner.DotnetBuildProjectCommand, projectDirectory);
+                ProcessResult buildProjectResult = await processRunner.Run(buildCommand, projectDirectory);
+                if (buildProjectResult.Output.ToLower().Contains(ProcessRunner.BuildFaildMessage.ToLower()))
+                {
+                    buildProjectResult.Errors = buildProjectResult.Output.Replace(projectDirectory, string.Empty);
+                    submission.CompilationErrors = Encoding.UTF8.GetBytes(buildProjectResult.Errors);
+                    await Update(submission);
+                }
+                else
+                {
+                    var tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending<TestDataDto>(submission.ProblemId).ToList();
+                    ProcessResult testResults = await processRunner.Run(ProcessRunner.DotnetRunTestsCommand, projectDirectory);
+                    IEnumerable<AutomatedTestResult> automatedTestsResults = checker.CheckAutomatedTestsOutput(tests, testResults, projectDirectory);
+
+                    foreach (AutomatedTestResult automatedTestResult in automatedTestsResults)
+                    {
+                        var executedTest = new ExecutedTest
+                        {
+                            TestId = automatedTestResult.TestData.Id,
+                            SubmissionId = submission.Id,
+                            ExecutionResultType = TestExecutionResultType.Success,
+                            TimeUsed = problemConstraints.AllowedTimeInMilliseconds,
+                            Output = automatedTestResult.Ouput,
+                            MemoryUsed = problemConstraints.AllowedMemoryInMegaBytes,
+                            IsCorrect = automatedTestResult.IsCorrect
+                        };
+
+                        await executedTestService.Create(executedTest);
+                    }
+                }
+
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            finally
+            {
+                fileSystem.DeleteDirectory(projectDirectory);
+            }
+        }
+
         private string GetJavaFileName(List<string> sourceCodes)
         {
             string javaMainClass = utilityService.GetJavaMainClass(sourceCodes);
@@ -364,12 +434,6 @@ namespace JudgeSystem.Services.Data
 
                 await executedTestService.Create(executedTest);
             }
-        }
-
-        public async Task DeleteSubmissionsByProblemId(int problemId)
-        {
-            var submissions = repository.All().Where(x => x.ProblemId == problemId).ToList();
-            await repository.DeleteRangeAsync(submissions);
         }
     }
 }

@@ -31,6 +31,12 @@ namespace JudgeSystem.Services
             await fileStream.FlushAsync();
         }
 
+        public async Task CreateFile(byte[] fileData, string filePath)
+        {
+            using var memoryStream = new MemoryStream(fileData);
+            await CreateFile(memoryStream, filePath);
+        }
+
         public void DeleteDirectory(string workingDirectory)
         {
             IEnumerable<string> files = Directory.EnumerateFiles(workingDirectory);
@@ -48,7 +54,32 @@ namespace JudgeSystem.Services
             Directory.Delete(workingDirectory);
         }
 
-        public void ExtractZipToDirectory(string filePath, string projectDirectory) =>
-            ZipFile.ExtractToDirectory(filePath, projectDirectory);
+        public void ExtractZipToDirectory(string filePath, string destinationDirectory) =>
+            ZipFile.ExtractToDirectory(filePath, destinationDirectory);
+
+        public void ExtractZipToDirectory(string filePath, string destinationDirectory, bool overwrite)
+        {
+            if (!overwrite)
+            {
+                ExtractZipToDirectory(filePath, destinationDirectory);
+                return;
+            }
+
+            using FileStream stream = File.Open(filePath, FileMode.Open);
+            using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
+            foreach (ZipArchiveEntry file in zip.Entries)
+            {
+                string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectory, file.FullName));
+
+                // Assuming Empty for Directory
+                if (file.Name == "")
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                    continue;
+                }
+
+                file.ExtractToFile(completeFileName, true);
+            }
+        }
     }
 }

@@ -19,7 +19,6 @@ namespace JudgeSystem.Web.Utilites.ImportTests
 
         public override IEnumerable<ProblemTestInputModel> Parse(IServiceProvider serviceProvider, IFormFile file, ICollection<string> errorMessages)
         {
-            IUtilityService utilityService = serviceProvider.GetRequiredService<IUtilityService>();
             IFileSystemService fileSystem = serviceProvider.GetRequiredService<IFileSystemService>();
             IProcessRunner processRunner = serviceProvider.GetRequiredService<IProcessRunner>();
 
@@ -63,8 +62,6 @@ namespace JudgeSystem.Web.Utilites.ImportTests
                     OutputData = PassedTest
                 };
             }
-
-            //save file in the database
         }
     }
 }

@@ -10,7 +10,7 @@
 
         public string Output { get; set; }
 
-        public string Errors { get; private set; }
+        public string Errors { get; set; }
 
         public bool IsSuccessfull => string.IsNullOrEmpty(Errors);
     }
