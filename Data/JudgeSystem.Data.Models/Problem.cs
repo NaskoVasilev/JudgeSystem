@@ -36,6 +36,8 @@ namespace JudgeSystem.Data.Models
 
         public TestingStrategy TestingStrategy { get; set; }
 
+        public byte[] AutomatedTestingProject { get; set; }
+
         public ICollection<Test> Tests { get; set; }
 
 		public ICollection<Submission> Submissions { get; set; }
