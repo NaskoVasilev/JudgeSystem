@@ -46,7 +46,7 @@ namespace JudgeSystem.Services
 
                 foreach (TestDataDto test in tests)
                 {
-                    int index = testResults.Output.LastIndexOf(test.InputData);
+                    int index = testResults.Output.LastIndexOf($"X {test.InputData}");
                     if (index != -1)
                     {
                         testIndicies.Add(index);

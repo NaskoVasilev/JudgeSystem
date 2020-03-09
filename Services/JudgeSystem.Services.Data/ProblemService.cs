@@ -67,12 +67,6 @@ namespace JudgeSystem.Services.Data
                 .Select(p => p.TimeIntervalBetweenSubmissionInSeconds)
                 .First();
 
-        public ProblemSubmissionDto GetProblemSubmissionData(int problemId) =>
-            problemRepository.All()
-            .Where(p => p.Id == problemId)
-            .To<ProblemSubmissionDto>()
-            .FirstOrDefault();
-
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			var problems = problemRepository.All()

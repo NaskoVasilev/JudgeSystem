@@ -322,9 +322,9 @@ namespace JudgeSystem.Services.Data
                 }
 
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                throw exception;
+                throw;
             }
             finally
             {

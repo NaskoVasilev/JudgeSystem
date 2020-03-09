@@ -115,7 +115,7 @@ namespace JudgeSystem.Web.Controllers
                 }
             }
 
-            ProblemSubmissionDto problemSubmissionDto = problemService.GetProblemSubmissionData(model.ProblemId);
+            ProblemSubmissionDto problemSubmissionDto = await problemService.GetById<ProblemSubmissionDto>(model.ProblemId);
             string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
             int timeIntervalBetweenSubmissionInSeconds = problemSubmissionDto.TimeIntervalBetweenSubmissionInSeconds;
             string lastSubmissionDateTime = cache.GetString(key);

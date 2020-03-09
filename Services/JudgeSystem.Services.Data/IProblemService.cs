@@ -32,7 +32,5 @@ namespace JudgeSystem.Services.Data
         Task AddAutomatedTestingProject(int id, byte[] testingProject);
 
         Task<byte[]> GetAutomatedTestingProject(int id);
-
-        ProblemSubmissionDto GetProblemSubmissionData(int problemId);
     }
 }
