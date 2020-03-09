@@ -116,20 +116,23 @@ namespace JudgeSystem.Web.Controllers
             }
 
             ProblemSubmissionDto problemSubmissionDto = await problemService.GetById<ProblemSubmissionDto>(model.ProblemId);
-            string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
             int timeIntervalBetweenSubmissionInSeconds = problemSubmissionDto.TimeIntervalBetweenSubmissionInSeconds;
-            string lastSubmissionDateTime = cache.GetString(key);
-            if (lastSubmissionDateTime == null)
+            if(timeIntervalBetweenSubmissionInSeconds >= GlobalConstants.DefaultTimeIntervalBetweenSubmissionInSeconds)
             {
-                AddClintIpInCache(key, timeIntervalBetweenSubmissionInSeconds);
-            }
-            else
-            {
-                double passedSeconds = DateTime.UtcNow.GetDifferenceInSeconds(lastSubmissionDateTime, GlobalConstants.StandardDateFormat);
-                double secondsToWaitUntilNextSubmission = timeIntervalBetweenSubmissionInSeconds - passedSeconds;
-                if (secondsToWaitUntilNextSubmission > 0)
+                string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
+                string lastSubmissionDateTime = cache.GetString(key);
+                if (lastSubmissionDateTime == null)
                 {
-                    return BadRequest(string.Format(ErrorMessages.SendSubmissionToEarly, Math.Ceiling(secondsToWaitUntilNextSubmission)));
+                    AddClintIpInCache(key, timeIntervalBetweenSubmissionInSeconds);
+                }
+                else
+                {
+                    double passedSeconds = DateTime.UtcNow.GetDifferenceInSeconds(lastSubmissionDateTime, GlobalConstants.StandardDateFormat);
+                    double secondsToWaitUntilNextSubmission = timeIntervalBetweenSubmissionInSeconds - passedSeconds;
+                    if (secondsToWaitUntilNextSubmission > 0)
+                    {
+                        return BadRequest(string.Format(ErrorMessages.SendSubmissionToEarly, Math.Ceiling(secondsToWaitUntilNextSubmission)));
+                    }
                 }
             }
 
