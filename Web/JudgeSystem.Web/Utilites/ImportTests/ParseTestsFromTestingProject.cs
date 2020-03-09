@@ -15,6 +15,7 @@ namespace JudgeSystem.Web.Utilites.ImportTests
 {
     public class ParseTestsFromTestingProject : ParseTestsStrategy
     {
+        public const string AvilableTestsMessage = "The following Tests are available";
         public const int UnnecessaryLines = 5;
 
         public override IEnumerable<ProblemTestInputModel> Parse(IServiceProvider serviceProvider, IFormFile file, ICollection<string> errorMessages)
@@ -22,12 +23,12 @@ namespace JudgeSystem.Web.Utilites.ImportTests
             IFileSystemService fileSystem = serviceProvider.GetRequiredService<IFileSystemService>();
             IProcessRunner processRunner = serviceProvider.GetRequiredService<IProcessRunner>();
 
-            //write all file with extensions: .cs and .csproj in temp directory
             ProcessResult processResult;
             string projectDirectory = string.Empty;
 
             try
             {
+                //extract zip in temp folder
                 projectDirectory = fileSystem.CreateDirectory(CompilationDirectoryPath, Path.GetRandomFileName());
                 string filePath = Path.Combine(projectDirectory, file.FileName);
                 fileSystem.CreateFile(file.OpenReadStream(), filePath).GetAwaiter().GetResult();
@@ -47,9 +48,9 @@ namespace JudgeSystem.Web.Utilites.ImportTests
             }
 
 
-            if (!processResult.IsSuccessfull)
+            if (!processResult.Output.Contains(AvilableTestsMessage))
             {
-                errorMessages.Add(processResult.Errors);
+                errorMessages.Add(processResult.Output.Replace(projectDirectory, string.Empty));
                 yield break;
             }
 
