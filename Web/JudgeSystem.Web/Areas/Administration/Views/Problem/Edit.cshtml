@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = SharedLocalizer["Edit Problem"];
     IEnumerable<SelectListItem> submissionTypes = Utility.GetFormatedSelectListItems<SubmissionType>();
+    IEnumerable<SelectListItem> testingStrategies = Utility.GetSelectListItems<TestingStrategy>(true);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -41,6 +42,11 @@
                     <label asp-for="SubmissionType"></label>
                     <select asp-for="SubmissionType" class="form-control" asp-items="submissionTypes"></select>
                     <span asp-validation-for="SubmissionType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TestingStrategy"></label>
+                    <select asp-for="TestingStrategy" class="form-control" asp-items="testingStrategies"></select>
+                    <span asp-validation-for="TestingStrategy" class="text-danger"></span>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-3">

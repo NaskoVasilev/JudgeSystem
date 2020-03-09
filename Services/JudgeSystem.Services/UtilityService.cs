@@ -85,16 +85,6 @@ namespace JudgeSystem.Services
             }
         }
 
-        public void DeleteDirectory(string workingDirectory)
-        {
-            IEnumerable<string> files = Directory.EnumerateFiles(workingDirectory);
-            foreach (string file in files)
-            {
-                File.Delete(file);
-            }
-            Directory.Delete(workingDirectory);
-        }
-
         public string GetJavaMainClass(IEnumerable<string> sourceCodes)
         {
             string mainMethodRegexPattern = @"static void main\s*\([^)]*\)";
@@ -125,6 +115,8 @@ namespace JudgeSystem.Services
 
         public IEnumerable<FileDto> ParseZip(Stream stream, ISet<string> allowdFileExtensions = null)
         {
+            var files = new List<FileDto>();
+
             using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 foreach (ZipArchiveEntry entry in zip.Entries)
@@ -138,14 +130,16 @@ namespace JudgeSystem.Services
 
                     using (var reader = new StreamReader(entry.Open()))
                     {
-                        yield return new FileDto
+                        files.Add(new FileDto
                         {
                             Name = entry.Name,
                             Content = reader.ReadToEnd()
-                        };
+                        });
                     }
                 }
             }
+
+            return files;
         }
 
         private async Task<SubmissionCodeDto> ExtractSubmissionCodeDtoFromSubmissionFile(IFormFile submissionFile, ProgrammingLanguage programmingLanguage)

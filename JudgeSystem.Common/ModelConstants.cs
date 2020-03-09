@@ -52,7 +52,10 @@
         public const string ProblemAllowedTimeInMillisecondsDisplayName = "Allowed time in miliseconds";
         public const string ProblemAllowedMemoryInMegaBytesDisplayName = "Allowed memory in MB";
         public const string ProblemSubmissionTypeDisplayName = "Submission type";
+        public const string ProblemTestingStrategyDisplayName = "Testing type";
         public const string ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName = "Time interval between submission in seconds";
+        public const string ProblemCheckOutputStrategyDisplayName = "Compile, execute and check produced output";
+        public const string ProblemRunAutomatedTestsStrategyDisplayName = "Run automated tests to check submission";
         #endregion
 
         #region Resource models consatnts
@@ -79,6 +82,7 @@
         public const string TestIsTrialTestDisplayName = "Trial test";
         public const string TestJsonImportStrategyDisplayName = "Json file with all the data";
         public const string TestZipImportStrategyDisplayName = "Zip file with files per input and output";
+        public const string TestingProjectStrategyDisplayName = "Testing project with automated tests";
         #endregion
 
         #region Feedback models constants

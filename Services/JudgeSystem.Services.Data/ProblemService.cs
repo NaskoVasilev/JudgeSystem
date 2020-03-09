@@ -103,9 +103,23 @@ namespace JudgeSystem.Services.Data
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
             problem.TimeIntervalBetweenSubmissionInSeconds = model.TimeIntervalBetweenSubmissionInSeconds;
+            problem.TestingStrategy = model.TestingStrategy;
 
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();
 		}
+
+        public async Task AddAutomatedTestingProject(int id, byte[] testingProject)
+        {
+            Problem problem = await problemRepository.FindAsync(id);
+            problem.AutomatedTestingProject = testingProject;
+            await problemRepository.UpdateAsync(problem);
+        }
+
+        public async Task<byte[]> GetAutomatedTestingProject(int id) =>
+            await problemRepository.All()
+            .Where(p => p.Id == id)
+            .Select(p => p.AutomatedTestingProject)
+            .FirstOrDefaultAsync();
     }
 }

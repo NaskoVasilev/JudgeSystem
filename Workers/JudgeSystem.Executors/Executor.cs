@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common;
 using JudgeSystem.Common.Extensions;
 using JudgeSystem.Workers.Common;
 
@@ -20,7 +21,7 @@ namespace JudgeSystem.Executors
 
             using (var process = new Process())
             {
-                process.StartInfo.FileName = CompilationSettings.ConsoleFile;
+                process.StartInfo.FileName = GlobalConstants.ConsoleFile;
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.RedirectStandardOutput = true;

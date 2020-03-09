@@ -45,5 +45,8 @@ namespace JudgeSystem.Web.InputModels.Problem
 
         [Display(Name = ProblemSubmissionTypeDisplayName)]
         public SubmissionType SubmissionType { get; set; }
+
+        [Display(Name = ProblemTestingStrategyDisplayName)]
+        public TestingStrategy TestingStrategy { get; set; }
     }
 }

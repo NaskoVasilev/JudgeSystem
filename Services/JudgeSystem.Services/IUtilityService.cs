@@ -26,8 +26,6 @@ namespace JudgeSystem.Services
 
         void CreateLanguageSpecificFiles(ProgrammingLanguage programmingLanguage, IEnumerable<CodeFile> sourceCodes, string workingDirectory);
 
-        void DeleteDirectory(string workingDirectory);
-
         string GetJavaClassName(string sourceCode);
 
         string GetJavaMainClass(IEnumerable<string> sourceCodes);

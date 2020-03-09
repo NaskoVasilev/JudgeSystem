@@ -28,7 +28,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var contest = new ContestCreateInputModel { Name = "testContest" };
             var repository = new EfDeletableEntityRepository<Contest>(context);
-            var contestService = new ContestService(repository, null, null, null, null, null);
+            var contestService = new ContestService(repository, null, null, null, null, null, null);
 
             await contestService.Create(contest);
 
@@ -46,7 +46,7 @@ namespace JudgeSystem.Services.Data.Tests
             context.AddRange(GetUserContestsTestData());
             await context.SaveChangesAsync();
             var repository = new EfRepository<UserContest>(context);
-            var contestService = new ContestService(null, repository, null, null, null, null);
+            var contestService = new ContestService(null, repository, null, null, null, null, null);
 
             bool result = await contestService.AddUserToContestIfNotAdded(userId, contestId);
 
@@ -346,7 +346,7 @@ namespace JudgeSystem.Services.Data.Tests
             var paginationServiceMock = new Mock<IPaginationService>();
             paginationServiceMock.Setup(x => 
                 x.CalculatePagesCount(totalSubmissions, It.IsAny<int>())).Returns(pagesCount);
-            var service = new ContestService(repository, null, lessonServiceMock.Object, problemServiceMock.Object, 
+            var service = new ContestService(repository, null, null, lessonServiceMock.Object, problemServiceMock.Object, 
                 submissionServiceMock.Object, paginationServiceMock.Object);
 
             //Act
@@ -392,7 +392,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Contests.AddRangeAsync(testData);
             await context.SaveChangesAsync();
             IDeletableEntityRepository<Contest> repository = new EfDeletableEntityRepository<Contest>(context);
-            var service = new ContestService(repository, userContestRepository, null, null, null, paginationService);
+            var service = new ContestService(repository, userContestRepository, null, null, null, null, paginationService);
             return service;
         }
 
@@ -403,7 +403,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Contest>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new ContestService(reposotiryMock.Object, userContestRepository, null, null, null, paginationService);
+            return new ContestService(reposotiryMock.Object, userContestRepository, null, null, null, null, paginationService);
         }
 
         private ContestService CreateContestServiceWithMockedRepository(IQueryable<Contest> testData) => 

@@ -239,18 +239,6 @@ namespace JudgeSystem.Services.Tests
             }
         }
 
-        [Fact]
-        public void DeleteDirectory_WithExistingPath_ShouldDeleteTheDirectoryAndAllFilesInIt()
-        {
-            string directoryName = "testDirectory";
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryName);
-            File.WriteAllText(Path.Combine(directoryInfo.FullName, "test.txt"), "This is test file with should be deleted!");
-
-            utilityService.DeleteDirectory(directoryName);
-
-            Assert.False(Directory.Exists(directoryInfo.FullName));
-        }
-
         [Theory]
         [InlineData("static void main(String[] args){\n")]
         [InlineData("static void main (String[] startUpArgs) {\n")]

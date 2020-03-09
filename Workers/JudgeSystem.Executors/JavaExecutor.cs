@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common;
 using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Executors
@@ -16,7 +17,7 @@ namespace JudgeSystem.Executors
             string workingDirectory = Path.GetDirectoryName(filePath);
             string fileName = Path.GetFileName(filePath);
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetJavaCompilerPathCommand} & java {fileNameWithoutExtension} -Xmx128m";
+            string arguments = $"{GlobalConstants.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetJavaCompilerPathCommand} & java {fileNameWithoutExtension} -Xmx128m";
 
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);
