@@ -291,17 +291,23 @@ namespace JudgeSystem.Services.Data
                 fileSystem.ExtractZipToDirectory(userProjectFilePath, projectDirectory, overwrite: true);
 
                 string buildCommand = processRunner.PrependChangeDirectoryCommand(ProcessRunner.DotnetBuildProjectCommand, projectDirectory);
-                ProcessResult buildProjectResult = await processRunner.Run(buildCommand, projectDirectory);
+                ProcessResult buildProjectResult = await processRunner.Run(buildCommand, projectDirectory, ProcessRunner.BuildCommandTimeout);
                 if (buildProjectResult.Output.ToLower().Contains(ProcessRunner.BuildFaildMessage.ToLower()))
                 {
-                    buildProjectResult.Errors = buildProjectResult.Output.Replace(projectDirectory, string.Empty);
-                    submission.CompilationErrors = Encoding.UTF8.GetBytes(buildProjectResult.Errors);
-                    await Update(submission);
+                    await SetCompilationErrors(submission, projectDirectory, buildProjectResult);
                 }
                 else
                 {
                     var tests = testService.GetTestsByProblemIdOrderedByIsTrialDescending<TestDataDto>(submission.ProblemId).ToList();
-                    ProcessResult testResults = await processRunner.Run(ProcessRunner.DotnetRunTestsCommand, projectDirectory);
+                    int timeout = problemConstraints.AllowedTimeInMilliseconds * tests.Count();
+                    ProcessResult testResults = await processRunner.Run(ProcessRunner.DotnetRunTestsCommand, projectDirectory, timeout);
+                    string runnedTestsMessage = $"Total tests: {tests.Count}";
+                    if (!testResults.Output.Contains(runnedTestsMessage))
+                    {
+                        await SetCompilationErrors(submission, projectDirectory, testResults);
+                        return;
+                    }
+
                     IEnumerable<AutomatedTestResult> automatedTestsResults = checker.CheckAutomatedTestsOutput(tests, testResults, projectDirectory);
 
                     foreach (AutomatedTestResult automatedTestResult in automatedTestsResults)
@@ -330,6 +336,13 @@ namespace JudgeSystem.Services.Data
             {
                 fileSystem.DeleteDirectory(projectDirectory);
             }
+        }
+
+        private async Task SetCompilationErrors(Submission submission, string projectDirectory, ProcessResult processResult)
+        {
+            string errors = processResult.Output.Replace(projectDirectory, string.Empty);
+            submission.CompilationErrors = Encoding.UTF8.GetBytes(errors);
+            await Update(submission);
         }
 
         private string GetJavaFileName(List<string> sourceCodes)

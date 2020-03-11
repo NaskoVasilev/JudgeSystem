@@ -6,7 +6,7 @@ namespace JudgeSystem.Services
 {
     public interface IProcessRunner
     {
-        Task<ProcessResult> Run(string arguments, string workingDirectory);
+        Task<ProcessResult> Run(string arguments, string workingDirectory, int timeout = ProcessRunner.DefaultTimeout);
 
         string PrependChangeDirectoryCommand(string command, string directoryPath);
     }
