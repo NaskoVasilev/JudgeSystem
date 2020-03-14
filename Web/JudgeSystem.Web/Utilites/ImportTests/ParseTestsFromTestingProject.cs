@@ -15,8 +15,9 @@ namespace JudgeSystem.Web.Utilites.ImportTests
 {
     public class ParseTestsFromTestingProject : ParseTestsStrategy
     {
-        public const string AvilableTestsMessage = "The following Tests are available";
+        public const string AvilableTestsMessage = "The following Tests are available:";
         public const int UnnecessaryLines = 5;
+        public const int ListTestsCommandTimeOut = 3000;
 
         public override IEnumerable<ProblemTestInputModel> Parse(IServiceProvider serviceProvider, IFormFile file, ICollection<string> errorMessages)
         {
@@ -36,7 +37,7 @@ namespace JudgeSystem.Web.Utilites.ImportTests
 
                 //run command: dotnet test --list-tests
                 string command = processRunner.PrependChangeDirectoryCommand(ProcessRunner.DotnetListTestsCommand, projectDirectory);
-                processResult = processRunner.Run(command, projectDirectory).GetAwaiter().GetResult();
+                processResult = processRunner.Run(command, projectDirectory, ListTestsCommandTimeOut).GetAwaiter().GetResult();
             }
             catch (Exception)
             {
@@ -47,14 +48,18 @@ namespace JudgeSystem.Web.Utilites.ImportTests
                 fileSystem.DeleteDirectory(projectDirectory);
             }
 
-
             if (!processResult.Output.Contains(AvilableTestsMessage))
             {
                 errorMessages.Add(processResult.Output.Replace(projectDirectory, string.Empty));
                 yield break;
             }
 
-            IEnumerable<string> testNames = processResult.Output.Trim().Split(Environment.NewLine).Skip(UnnecessaryLines);
+            IEnumerable<string> testNames = processResult.Output.Trim()
+                .Split(AvilableTestsMessage)
+                .Last()
+                .Trim()
+                .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
             foreach (string testName in testNames)
             {
                 yield return new ProblemTestInputModel
