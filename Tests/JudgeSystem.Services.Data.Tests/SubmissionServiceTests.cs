@@ -367,15 +367,15 @@ namespace JudgeSystem.Services.Data.Tests
             IExecutorFactory executorFactory = CreateExecutorFactory(programmingLanguage, executor);
 
             var submissionService = new SubmissionService(
-                submissionRepository, 
-                null, 
+                submissionRepository,
+                null,
                 problemServiceMock.Object,
-                testServiceMock.Object, 
-                executedTestServiceMock.Object, 
-                utilityServiceMock.Object, 
+                testServiceMock.Object,
+                executedTestServiceMock.Object,
+                utilityServiceMock.Object,
                 fileSystemMock.Object,
-                compilerFactory, 
-                executorFactory, 
+                compilerFactory,
+                executorFactory,
                 checkerMock.Object,
                 null);
 
@@ -416,6 +416,55 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Empty(context.Submissions.Where(x => x.ProblemId == submission.ProblemId));
         }
 
+        [Fact]
+        public async Task GetProblemSubmissions_WithValidArguments_ShouldReturnOtherUsersSubmissionCode()
+        {
+            //Arrange
+            string userId = "userId";
+            int problemId = 1;
+            string code = "using System; namespace Test { //code comes here }";
+            List<Submission> submissions = ProblemSubmissions(userId, problemId, code);
+            SubmissionService submissionService = await CreateSubmissionService(submissions);
+
+            //Act
+            IEnumerable<string> submissionCodes = submissionService.GetProblemSubmissions(problemId, userId);
+            //Assert
+            Assert.Single(submissionCodes);
+            Assert.Equal(code, submissionCodes.First());
+        }
+
+        private static List<Submission> ProblemSubmissions(string userId, int problemId, string code) => 
+            new List<Submission>
+            {
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = userId,
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = problemId
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = "other",
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = 2
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = "other1",
+                    ProblemId = problemId
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes(code),
+                    UserId = "other",
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = problemId
+                },
+            };
+
         private async Task AddSubmission(Submission submission)
         {
             await context.Submissions.AddAsync(submission);
@@ -433,15 +482,15 @@ namespace JudgeSystem.Services.Data.Tests
             var testServiceMock = new Mock<ITestService>();
 
             var submissionService = new SubmissionService(
-                submissionRepository, 
-                null, 
+                submissionRepository,
+                null,
                 problemServiceMock.Object,
-                testServiceMock.Object, 
-                executedTestServiceMock.Object, 
+                testServiceMock.Object,
+                executedTestServiceMock.Object,
                 utilityServiceMock.Object,
                 fileSystemMock.Object,
-                compilerFactory, 
-                executorFactory, 
+                compilerFactory,
+                executorFactory,
                 checkerMock.Object,
                 null);
             return submissionService;

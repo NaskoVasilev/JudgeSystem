@@ -30,6 +30,7 @@ namespace JudgeSystem.Web.Controllers
         private readonly IProblemService problemService;
         private readonly IUtilityService utilityService;
         private readonly IContestService contestService;
+        private readonly ICodeCompareer codeCompareer;
         private readonly IDistributedCache cache;
 
         public SubmissionController(
@@ -38,6 +39,7 @@ namespace JudgeSystem.Web.Controllers
             IProblemService problemService,
             IUtilityService utilityService,
             IContestService contestService,
+            ICodeCompareer codeCompareer,
             IDistributedCache cache)
         {
             this.userManager = userManager;
@@ -45,6 +47,7 @@ namespace JudgeSystem.Web.Controllers
             this.problemService = problemService;
             this.utilityService = utilityService;
             this.contestService = contestService;
+            this.codeCompareer = codeCompareer;
             this.cache = cache;
         }
 
@@ -135,6 +138,7 @@ namespace JudgeSystem.Web.Controllers
                     }
                 }
             }
+
 
             string userId = userManager.GetUserId(User);
             SubmissionDto submission = null;
