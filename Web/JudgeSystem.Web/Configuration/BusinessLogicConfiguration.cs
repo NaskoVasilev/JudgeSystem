@@ -41,6 +41,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IStringFormatter, StringFormatter>();
             services.AddTransient<IFileSystemService, FileSystemService>();
             services.AddTransient<IProcessRunner, ProcessRunner>();
+            services.AddTransient<ICodeCompareer, CodeCompareer>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();
