@@ -104,6 +104,7 @@ namespace JudgeSystem.Services.Data
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
             problem.TimeIntervalBetweenSubmissionInSeconds = model.TimeIntervalBetweenSubmissionInSeconds;
             problem.TestingStrategy = model.TestingStrategy;
+            problem.AllowedMinCodeDifferenceInPercentage = model.AllowedMinCodeDifferenceInPercentage;
 
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();

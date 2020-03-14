@@ -120,7 +120,7 @@ namespace JudgeSystem.Web.Controllers
 
             ProblemSubmissionDto problemSubmissionDto = await problemService.GetById<ProblemSubmissionDto>(model.ProblemId);
             int timeIntervalBetweenSubmissionInSeconds = problemSubmissionDto.TimeIntervalBetweenSubmissionInSeconds;
-            if(timeIntervalBetweenSubmissionInSeconds >= GlobalConstants.DefaultTimeIntervalBetweenSubmissionInSeconds)
+            if (timeIntervalBetweenSubmissionInSeconds >= GlobalConstants.DefaultTimeIntervalBetweenSubmissionInSeconds)
             {
                 string key = $"{User.Identity.Name}#{nameof(model.ProblemId)}:{model.ProblemId}";
                 string lastSubmissionDateTime = cache.GetString(key);
@@ -141,7 +141,7 @@ namespace JudgeSystem.Web.Controllers
 
             string userId = userManager.GetUserId(User);
             SubmissionDto submission = null;
-            if(problemSubmissionDto.TestingStrategy == TestingStrategy.RunAutomatedTests)
+            if (problemSubmissionDto.TestingStrategy == TestingStrategy.RunAutomatedTests)
             {
                 model.SubmissionContent = await model.File.ToArrayAsync();
                 submission = await submissionService.Create(model, userId);
@@ -150,11 +150,11 @@ namespace JudgeSystem.Web.Controllers
             else
             {
                 SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
-                if(problemSubmissionDto.SubmissionType == SubmissionType.PlainCode)
+                if (problemSubmissionDto.AllowedMinCodeDifferenceInPercentage > 0 && problemSubmissionDto.SubmissionType == SubmissionType.PlainCode)
                 {
                     IEnumerable<string> otherUsersSubmissions = submissionService.GetProblemSubmissions(model.ProblemId, userId);
                     double minDifference = codeCompareer.GetMinCodeDifference(model.Code, otherUsersSubmissions);
-                    if(minDifference <= GlobalConstants.AllowedCodeDifference)
+                    if (minDifference <= problemSubmissionDto.AllowedMinCodeDifferenceInPercentage)
                     {
                         return BadRequest(ErrorMessages.SimilarSubmission);
                     }
@@ -163,7 +163,7 @@ namespace JudgeSystem.Web.Controllers
                 submission = await submissionService.Create(model, userId);
                 await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes, model.ProgrammingLanguage);
             }
-            
+
             await submissionService.CalculateActualPoints(submission.Id);
 
             SubmissionResult submissionResult = submissionService.GetSubmissionResult(submission.Id);

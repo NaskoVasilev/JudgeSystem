@@ -56,6 +56,9 @@
         public const string ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName = "Time interval between submission in seconds";
         public const string ProblemCheckOutputStrategyDisplayName = "Compile, execute and check produced output";
         public const string ProblemRunAutomatedTestsStrategyDisplayName = "Run automated tests to check submission";
+        public const int ProblemAllowedMinCodeDifferenceInPercentageMinValue = 0;
+        public const int ProblemAllowedMinCodeDifferenceInPercentageMaxValue = 100;
+        public const string ProblemAllowedMinCodeDifferenceInPercentageDisplayName = "Allowed min code difference in %";
         #endregion
 
         #region Resource models consatnts
