@@ -71,5 +71,7 @@
         public const string InvalidIpAddress = "Please, provide valid IPv6 or IPv4";
 
         public const string DeniedAccessToContestByIp = "You are not allowed to send submissions for this contest from ip: {0}";
+
+        public const string SimilarSubmission = "Your code is very similar to another submission in the system";
     }
 }

@@ -88,6 +88,7 @@ namespace JudgeSystem.Common
         public const int DefaultMaxPoints = 100;
         public const int DefaultTimeIntervalBetweenSubmissionInSeconds = 5;
         public const string PassedTest = "Passed";
+        public const int AllowedCodeDifference = 10;
         #endregion
 
         #region Other numeric constants
