@@ -201,6 +201,12 @@ namespace JudgeSystem.Services.Data
             return problemName;
         }
 
+        public IEnumerable<string> GetProblemSubmissions(int problemId, string userId) => 
+            repository.All()
+                .Where(s => s.ProblemId == problemId && s.UserId != userId && s.CompilationErrors == null && s.ExecutedTests.Count > 0)
+                .Select(s => Encoding.UTF8.GetString(s.Code))
+                .ToList();
+
         public IEnumerable<SubmissionResult> GetUserSubmissionsByProblemIdAndPracticeId(int practiceId, int problemId, string userId, int page, int submissionsPerPage)
         {
             IQueryable<Submission> submissionsFromDb = repository.All()

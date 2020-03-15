@@ -39,5 +39,7 @@ namespace JudgeSystem.Services.Data
         Task DeleteSubmissionsByProblemId(int problemId);
 
         Task RunAutomatedTests(int id, ProgrammingLanguage programmingLanguage);
+
+        IEnumerable<string> GetProblemSubmissions(int problemId, string userId);
     }
 }

@@ -10,5 +10,9 @@ namespace JudgeSystem.Web.Dtos.Problem
         public byte[] AutomatedTestingProject { get; set; }
 
         public int TimeIntervalBetweenSubmissionInSeconds { get; set; }
+
+        public int AllowedMinCodeDifferenceInPercentage { get; set; }
+
+        public SubmissionType SubmissionType { get; set; }
     }
 }

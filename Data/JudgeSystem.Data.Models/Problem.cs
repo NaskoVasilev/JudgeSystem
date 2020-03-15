@@ -29,6 +29,8 @@ namespace JudgeSystem.Data.Models
 
         public int TimeIntervalBetweenSubmissionInSeconds { get; set; }
 
+        public int AllowedMinCodeDifferenceInPercentage { get; set; }
+
         public int LessonId { get; set; }
 		public Lesson Lesson { get; set; }
 

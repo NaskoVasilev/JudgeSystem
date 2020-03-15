@@ -35,6 +35,10 @@ namespace JudgeSystem.Web.InputModels.Problem
         [Display(Name = ProblemTimeIntervalBetweenSubmissionInSecondsDisplayName)]
         public int TimeIntervalBetweenSubmissionInSeconds { get; set; }
 
+        [Range(ProblemAllowedMinCodeDifferenceInPercentageMinValue, ProblemAllowedMinCodeDifferenceInPercentageMaxValue)]
+        [Display(Name = ProblemAllowedMinCodeDifferenceInPercentageDisplayName)]
+        public int AllowedMinCodeDifferenceInPercentage { get; set; }
+
         [Display(Name = ProblemSubmissionTypeDisplayName)]
         public SubmissionType SubmissionType { get; set; }
 
