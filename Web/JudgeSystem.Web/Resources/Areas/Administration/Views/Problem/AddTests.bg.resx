@@ -120,6 +120,9 @@
   <data name="Add tests to task" xml:space="preserve">
     <value>Добавяне на тестове към задачата</value>
   </data>
+  <data name="Import Format" xml:space="preserve">
+    <value>Формат</value>
+  </data>
   <data name="to download a template file" xml:space="preserve">
     <value>, за да изтеглиш шаблонен файл</value>
   </data>

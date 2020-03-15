@@ -27,10 +27,18 @@ namespace JudgeSystem.Data.Models
 
         public double AllowedMemoryInMegaBytes { get; set; }
 
+        public int TimeIntervalBetweenSubmissionInSeconds { get; set; }
+
+        public int AllowedMinCodeDifferenceInPercentage { get; set; }
+
         public int LessonId { get; set; }
 		public Lesson Lesson { get; set; }
 
         public SubmissionType SubmissionType { get; set; }
+
+        public TestingStrategy TestingStrategy { get; set; }
+
+        public byte[] AutomatedTestingProject { get; set; }
 
         public ICollection<Test> Tests { get; set; }
 

@@ -24,6 +24,7 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<ISchoolClassService, SchoolClassService>();
             services.AddTransient<IPracticeService, PracticeService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IAllowedIpAddressService, AllowedIpAddressService>();
 
             services.AddTransient<IEstimator, Estimator>();
             services.AddTransient<IPasswordHashService, PasswordHashService>();
@@ -36,6 +37,11 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IRouteBuilder, RouteBuilder>();
             services.AddTransient<IChecker, Checker>();
             services.AddTransient<IJsonUtiltyService, JsonUtiltyService>();
+            services.AddTransient<IExcelFileGenerator, ExcelFileGenerator>();
+            services.AddTransient<IStringFormatter, StringFormatter>();
+            services.AddTransient<IFileSystemService, FileSystemService>();
+            services.AddTransient<IProcessRunner, ProcessRunner>();
+            services.AddTransient<ICodeCompareer, CodeCompareer>();
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();

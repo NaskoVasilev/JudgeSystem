@@ -9,12 +9,13 @@ using JudgeSystem.Web.ViewModels.Problem;
 using JudgeSystem.Web.InputModels.Test;
 using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Web.Dtos.Problem;
-using JudgeSystem.Services;
 using JudgeSystem.Web.Utilites;
 using JudgeSystem.Web.Infrastructure.Extensions;
+using JudgeSystem.Web.Utilites.ImportTests;
+using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Common.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -24,23 +25,20 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         private readonly ITestService testService;
         private readonly ILessonService lessonService;
         private readonly ISubmissionService submissionService;
-        private readonly IHostingEnvironment env;
-        private readonly IJsonUtiltyService jsonUtiltyService;
+        private readonly IServiceProvider serviceProvider;
 
         public ProblemController(
             IProblemService problemService,
             ITestService testService,
             ILessonService lessonService,
             ISubmissionService submissionService,
-            IHostingEnvironment env,
-            IJsonUtiltyService jsonUtiltyService)
+            IServiceProvider serviceProvider)
         {
             this.problemService = problemService;
             this.testService = testService;
             this.lessonService = lessonService;
             this.submissionService = submissionService;
-            this.env = env;
-            this.jsonUtiltyService = jsonUtiltyService;
+            this.serviceProvider = serviceProvider;
         }
 
         public IActionResult Create() => View(new ProblemInputModel());
@@ -157,23 +155,17 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
-            if (string.IsNullOrEmpty(model.Tests.FileName) || !model.Tests.FileName.EndsWith(GlobalConstants.JsonFileExtension))
-            {
-                ModelState.AddModelError(nameof(ProblemAddTestsInputModel.Tests), ErrorMessages.FileExtensionMustBeJson);
-                return View(model);
-            }
+            var errorMessages = new List<string>();
+            ParseTestsStrategy parseTestsStrategy = new ParseTestsStartegyFactory().CreateStrategy(model.Strategy);
+            var tests = parseTestsStrategy.Parse(serviceProvider, model.Tests, errorMessages).ToList();
 
-            var messages = new List<string>();
-            using System.IO.Stream stream = model.Tests.OpenReadStream();
-            string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
-            List<ProblemTestInputModel> tests = jsonUtiltyService.ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, messages);
-
-            if (messages.Any())
+            if (errorMessages.Any())
             {
-                foreach (string errorMessage in messages)
+                foreach (string errorMessage in errorMessages)
                 {
                     ModelState.AddModelError(string.Empty, errorMessage);
                 }
+
                 return View(model);
             }
 
@@ -185,6 +177,12 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             }
 
             await testService.AddRange(tests, model.ProblemId);
+
+            if(model.Strategy == TestsImportStrategy.TestingProject)
+            {
+                byte[] testingProject = model.Tests.OpenReadStream().ToArray();
+                await problemService.AddAutomatedTestingProject(model.ProblemId, testingProject);
+            }
 
             return RedirectToAction(nameof(TestController.ProblemTests), nameof(TestController).ToControllerName(), new { model.ProblemId });
         }

@@ -61,6 +61,12 @@ namespace JudgeSystem.Services.Data
             return problemName;
         }
 
+        public int GetTimeIntevalBetweenSubmissionInSeconds(int problemId) => 
+            problemRepository.All()
+                .Where(p => p.Id == problemId)
+                .Select(p => p.TimeIntervalBetweenSubmissionInSeconds)
+                .First();
+
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
 			var problems = problemRepository.All()
@@ -96,9 +102,25 @@ namespace JudgeSystem.Services.Data
 			problem.SubmissionType = model.SubmissionType;
             problem.AllowedTimeInMilliseconds = model.AllowedTimeInMilliseconds;
             problem.AllowedMemoryInMegaBytes = model.AllowedMemoryInMegaBytes;
+            problem.TimeIntervalBetweenSubmissionInSeconds = model.TimeIntervalBetweenSubmissionInSeconds;
+            problem.TestingStrategy = model.TestingStrategy;
+            problem.AllowedMinCodeDifferenceInPercentage = model.AllowedMinCodeDifferenceInPercentage;
 
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();
 		}
+
+        public async Task AddAutomatedTestingProject(int id, byte[] testingProject)
+        {
+            Problem problem = await problemRepository.FindAsync(id);
+            problem.AutomatedTestingProject = testingProject;
+            await problemRepository.UpdateAsync(problem);
+        }
+
+        public async Task<byte[]> GetAutomatedTestingProject(int id) =>
+            await problemRepository.All()
+            .Where(p => p.Id == id)
+            .Select(p => p.AutomatedTestingProject)
+            .FirstOrDefaultAsync();
     }
 }

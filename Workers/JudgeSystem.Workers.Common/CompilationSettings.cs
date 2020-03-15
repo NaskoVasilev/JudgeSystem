@@ -1,8 +1,4 @@
-﻿using JudgeSystem.Common;
-using System;
-using System.Runtime.InteropServices;
-
-namespace JudgeSystem.Workers.Common
+﻿namespace JudgeSystem.Workers.Common
 {
     public static class CompilationSettings
     {
@@ -17,42 +13,6 @@ namespace JudgeSystem.Workers.Common
         public static string CppCompilerPath { get; set; }
 
         public static string JavaCompilerPath { get; set; }
-
-        private const string UnsupportedOSErrorMessage = "Unsupported OS. Commands cannot be run on currently used OS";
-
-        public static string ConsoleFile
-        {
-            get
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    return "cmd.exe";
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    return "/bin/bash";
-                }
-                else
-                {
-                    throw new ArgumentException(UnsupportedOSErrorMessage);
-                }
-            }
-        }
-
-        public static string ConsoleComamndPrefix
-        {
-            get
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    return "-c";
-                }
-                else
-                {
-                    return "/c";
-                }
-            }
-        }
 
         public const string SetCompilerPathCommand = " & set PATH=%PATH%;";
 

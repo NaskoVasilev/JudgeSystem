@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using JudgeSystem.Data.Common.Models;
 using JudgeSystem.Data.Models;
+using JudgeSystem.Data.Models.Enums;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,8 @@ namespace JudgeSystem.Data
         public DbSet<Practice> Practices { get; set; }
         public DbSet<UserPractice> UserPractices { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<AllowedIpAddress> AllowedIpAddresses { get; set; }
+        public DbSet<AllowedIpAddressContest> AllowedIpAddressContests { get; set; }
 
         public override int SaveChanges() => SaveChanges(true);
 
@@ -63,6 +66,16 @@ namespace JudgeSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<AllowedIpAddressContest>(entity =>
+            {
+                entity.HasKey(e => new { e.AllowedIpAddressId, e.ContestId });
+            });
+            builder.Entity<Problem>(problem =>
+            {
+                problem.Property(p => p.TestingStrategy)
+                .HasDefaultValue(TestingStrategy.CheckOutput);
+            });
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace JudgeSystem.Common
 {
@@ -25,6 +26,9 @@ namespace JudgeSystem.Common
         #endregion
 
         #region Folder names, mime types, formats, file names
+        public const string ExcelFileExtension = ".xlsx";
+        public const string CSharpProjectExtension = ".csproj";
+        public const string ZipFileExtension = ".zip";
         public const string OctetStreamMimeType = "application/octet-stream";
         public const string StandardDateFormat = "dd/MM/yyyy HH:mm:ss";
         public const string TemplatesFolder = "Templates";
@@ -82,10 +86,49 @@ namespace JudgeSystem.Common
         public const int MinAllowedTimeInMilliseconds = 50;
         public const int MaxAllowedTimeInMilliseconds = 50000;
         public const int DefaultMaxPoints = 100;
+        public const int DefaultTimeIntervalBetweenSubmissionInSeconds = 5;
+        public const string PassedTest = "Passed";
+        public const int AllowedCodeDifference = 10;
         #endregion
 
         #region Other numeric constants
         public const int RecommendedLessonsCachingMinutes = 60;
         #endregion
+
+        public static string ConsoleFile
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return "cmd.exe";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return "/bin/bash";
+                }
+                else
+                {
+                    throw new ArgumentException(UnsupportedOSErrorMessage);
+                }
+            }
+        }
+
+        public static string ConsoleComamndPrefix
+        {
+            get
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    return "-c";
+                }
+                else
+                {
+                    return "/c";
+                }
+            }
+        }
+
+        private const string UnsupportedOSErrorMessage = "Unsupported OS. Commands cannot be run on currently used OS";
     }
 }

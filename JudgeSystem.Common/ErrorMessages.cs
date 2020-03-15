@@ -56,7 +56,7 @@
 
         public const string UserNotFound = "User with provided credentials was not found!";
 
-        public const string FileExtensionMustBeJson = "Your file must be in json format. Its extension should be .json";
+        public const string InvalidFileExtension = "Your file must be in {0} format. Its extension should be {0}";
 
         public const string InvalidTest = "Test #{0} is invalid.";
 
@@ -65,5 +65,13 @@
         public const string NotConfirmedEmail = "Your email is not confirmed. Please confirm your email before login!";
 
         public const string ContestIsNotActive = "This contest is not active.";
+
+        public const string SendSubmissionToEarly = "Please, wait {0} seconds before send your submission!";
+
+        public const string InvalidIpAddress = "Please, provide valid IPv6 or IPv4";
+
+        public const string DeniedAccessToContestByIp = "You are not allowed to send submissions for this contest from ip: {0}";
+
+        public const string SimilarSubmission = "Your code is very similar to another submission in the system";
     }
 }

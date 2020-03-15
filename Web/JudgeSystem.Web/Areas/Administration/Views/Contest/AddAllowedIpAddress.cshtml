@@ -1,0 +1,36 @@
+﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IAllowedIpAddressService AllowedIpAddressService
+@model ContestAllowedIpAddressesInputModel
+
+@{
+    ViewData["Title"] = $"{Localizer["Add allowed ip address to contest"].Value} \"{Model.Name}\"";
+    IEnumerable<AllowedIpAddressViewModel> ipAddresses = AllowedIpAddressService.NotAddedIpAdresses(Model.Id);
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="IpAddressId">Ip address</label>
+                    <select asp-for="IpAddressId" class="form-control">
+                        @foreach (var ipAddress in ipAddresses)
+                        {
+                            <option value="@ipAddress.Id">@ipAddress.Value</option>
+                        }
+                    </select>
+                    <span asp-validation-for="IpAddressId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Name" hidden/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@SharedLocalizer["Add"]</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

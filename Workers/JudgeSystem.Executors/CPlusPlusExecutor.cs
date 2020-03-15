@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
+using JudgeSystem.Common;
 using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Executors
@@ -11,7 +12,7 @@ namespace JudgeSystem.Executors
         {
             string fileName = Path.GetFileName(filePath);
             string workingDirectory = Path.GetDirectoryName(filePath);
-            string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & {fileName}";
+            string arguments = $"{GlobalConstants.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & {fileName}";
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);
         }

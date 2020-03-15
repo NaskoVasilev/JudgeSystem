@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+using JudgeSystem.Common;
 using JudgeSystem.Workers.Common;
 
 namespace JudgeSystem.Compilers
@@ -12,7 +13,7 @@ namespace JudgeSystem.Compilers
             var info = new ProcessStartInfo
             {
                 Arguments = arguments,
-                FileName = CompilationSettings.ConsoleFile,
+                FileName = GlobalConstants.ConsoleFile,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 CreateNoWindow = true

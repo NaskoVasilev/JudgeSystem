@@ -1,15 +1,16 @@
 ﻿@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@inject IStringFormatter  StringFormatter
 @model ContestAllResultsViewModel
 
 @{
     ViewData["Title"] = Model.Name;
-    int[] problemIds = Model.Problems.Select(p => p.Id).ToArray();
-    string paginationUrl = $"/{GlobalConstants.AdministrationArea}/Contest/Results/{Model.Id}?{GlobalConstants.PageKey}=" + "{0}";
-    var paginationData = new PaginationData() { Url = paginationUrl, NumberOfPages = Model.NumberOfPages, CurrentPage = Model.CurrentPage };
 }
 
-<h2 class="text-center mb-4">@Localizer["Results for contest"] "@Model.Name"</h2>
-
+<h2 class="text-center mb-3">@Localizer["Results for contest"] "@Model.Name"</h2>
+<div class="d-flex justify-content-center mb-3">
+    <a class="btn btn-outline-dark font-weight-bold" asp-controller="Contest" asp-action="ExportResults" asp-route-id="@Model.Id">@SharedLocalizer["Export"]</a>
+</div>
 <table class="table table-striped w-100 table-responsive-sm table-bordered text-center mx-auto">
     <thead>
         <tr>
@@ -52,28 +53,22 @@
                         @contestResult.Student.FullName
                     }
                 </td>
-                @foreach (var problemId in problemIds)
+                @foreach (var problem in Model.Problems)
                 {
-                    int points = 0;
-                    int maxPoints = Model.Problems.First(x => x.Id == problemId).MaxPoints;
-                    if (contestResult.PointsByProblem.ContainsKey(problemId))
-                    {
-                        points = contestResult.PointsByProblem[problemId];
-                    }
-                    <td class="text-center w-auto">@points/@maxPoints</td>
+                    <td class="text-center w-auto">@StringFormatter.FormatPoints(contestResult.GetPoints(problem.Id), problem.MaxPoints)</td>
                 }
-                <td class="text-center">@contestResult.Total/@Model.Problems.Sum(x => x.MaxPoints)</td>
+                <td class="text-center">@StringFormatter.FormatPoints(contestResult.Total, Model.MaxPoints)</td>
             </tr>
         }
     </tbody>
 </table>
 
-<partial name="_ServerSidePaginationPartial" model="paginationData" />
+<partial name="_ServerSidePaginationPartial" model="Model.PaginationData" />
 
 @section Scripts{
     <script src="~/js/pagination.js"></script>
     <script>
-		let url = "@paginationUrl";
+		let url = "@Model.PaginationData.Url";
 		let numberOfPagesUrl = "/Contest/Results/@Model.Id/PagesCount";
 		InitializePaginationList(url, numberOfPagesUrl)
     </script>

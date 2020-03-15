@@ -91,7 +91,6 @@ namespace JudgeSystem.Services.Data.Tests
                 PracticeProblemViewModel actualProblem = actualPracticeResult.Problems[i];
                 Problem expectedProblem = expectedProblems[i];
 
-                Assert.Equal(actualPracticeResult.ProblemsIds[i], actualProblem.Id);
                 Assert.Equal(expectedProblem.Name, actualProblem.Name);
                 Assert.Equal(expectedProblem.Id, actualProblem.Id);
                 Assert.Equal(expectedProblem.MaxPoints, actualProblem.MaxPoints);

@@ -6,6 +6,7 @@ using System.Linq;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Workers.Common;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,16 +15,18 @@ namespace JudgeSystem.Web.Utilites
 {
     public static class Utility
     {
-        public static IEnumerable<SelectListItem> GetSelectListItems<T>()
+        public static IEnumerable<SelectListItem> GetSelectListItems<T>(bool useDisplayNameAttributes = false) where T : Enum
         {
-            var items = EnumExtensions.GetEnumValuesAsString<T>()
-                .Select(t => new SelectListItem
+            var values = EnumExtensions.GetEnumValuesAsString<T>().ToList();
+            var texts = EnumExtensions.GetEnumDisplayNames<T>().ToList();
+            for (int i = 0; i < values.Count; i++)
+            {
+                yield return new SelectListItem
                 {
-                    Value = t,
-                    Text = t
-                })
-                .ToList();
-            return items;
+                    Text = useDisplayNameAttributes ? texts[i] : values[i],
+                    Value = values[i]
+                };
+            }
         }
 
         public static IEnumerable<SelectListItem> GetFormatedSelectListItems<T>()

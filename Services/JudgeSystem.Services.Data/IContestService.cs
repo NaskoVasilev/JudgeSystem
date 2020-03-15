@@ -28,14 +28,20 @@ namespace JudgeSystem.Services.Data
 
 		int GetNumberOfPages();
 
-		ContestAllResultsViewModel GetContestReults(int contestId, int page);
+		ContestAllResultsViewModel GetContestReults(int contestId, int page, int entitiesPerPage);
 
-		int GetContestResultsPagesCount(int contestId);
+		int GetContestResultsPagesCount(int contestId, int entitiesPerPage);
 
         Task<int> GetLessonId(int contestId);
 
         Task<ContestSubmissionsViewModel> GetContestSubmissions(int contestId, string userId, int? problemId, int page, string baseUrl);
         
         bool IsActive(int contestId);
+        
+        Task AddAllowedIpAddress(ContestAllowedIpAddressesInputModel model, int id);
+        
+        Task RemoveAllowedIpAddress(int contestId, int ipAddressId);
+
+        bool IsRestricted(int contestId, string ip);
     }
 }

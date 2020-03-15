@@ -26,5 +26,11 @@ namespace JudgeSystem.Services.Data
 		Task<int> GetLessonId(int problemId);
 
         string GetProblemName(int id);
+
+        int GetTimeIntevalBetweenSubmissionInSeconds(int problemId);
+
+        Task AddAutomatedTestingProject(int id, byte[] testingProject);
+
+        Task<byte[]> GetAutomatedTestingProject(int id);
     }
 }

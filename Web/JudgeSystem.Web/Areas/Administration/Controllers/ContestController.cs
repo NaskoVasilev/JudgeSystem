@@ -19,13 +19,16 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
 		private readonly IContestService contestService;
 		private readonly ILessonService lessonService;
+        private readonly IAllowedIpAddressService allowedIpAddressService;
 
         public ContestController(
             IContestService contestService, 
-            ILessonService lessonService)
+            ILessonService lessonService,
+            IAllowedIpAddressService allowedIpAddressService)
 		{
 			this.contestService = contestService;
 			this.lessonService = lessonService;
+            this.allowedIpAddressService = allowedIpAddressService;
         }
 
         public IActionResult Create() => View();
@@ -106,11 +109,6 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-        [EndpointExceptionFilter]
-        [HttpGet("/Contest/Results/{contestId}/PagesCount")]
-        public int GetContestResultPagesCount(int contestId) => 
-            contestService.GetContestResultsPagesCount(contestId);
-
         public async Task<IActionResult> Submissions(string userId, int contestId, int? problemId, int page = DefaultPage )
         {
             string baseUrl = $"/{GlobalConstants.AdministrationArea}/Contest/{nameof(Submissions)}?contestId={contestId}&userId={userId}";
@@ -119,5 +117,31 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             return View(model);
         }
-	}
+
+        public IActionResult AllowedIpAddresses(int id, string name) => 
+            View(new ContestAllowedIpAddressesViewModel
+            {
+                Name = name,
+                Id = id,
+                AllowedIpAddresses = allowedIpAddressService.ContestAllowedIpAddresses(id)
+            });
+
+        public IActionResult AddAllowedIpAddress(ContestAllowedIpAddressesInputModel model) => 
+            View(model);
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAllowedIpAddress(ContestAllowedIpAddressesInputModel model, int id)
+        {
+            await contestService.AddAllowedIpAddress(model, id);
+            return RedirectToAction(nameof(AllowedIpAddresses), new { id, model.Name });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveAllowedIpAddress(int contestId, int ipAddressId)
+        {
+            await contestService.RemoveAllowedIpAddress(contestId, ipAddressId);
+            return Content(InfoMessages.RemoveAllowedIpAddress);
+        }
+    }
 }

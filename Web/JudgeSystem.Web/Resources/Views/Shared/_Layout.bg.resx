@@ -135,6 +135,9 @@
   <data name="All contests" xml:space="preserve">
     <value>Всички състезания</value>
   </data>
+  <data name="All ip addresses" xml:space="preserve">
+    <value>Всички ip адреси</value>
+  </data>
   <data name="All users" xml:space="preserve">
     <value>Потребители</value>
   </data>

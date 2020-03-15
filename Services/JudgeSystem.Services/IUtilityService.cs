@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
+using JudgeSystem.Web.Dtos.Common;
 using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Workers.Common;
 
@@ -13,7 +14,9 @@ namespace JudgeSystem.Services
     {
         Task<SubmissionCodeDto> ExtractSubmissionCode(string code, IFormFile submissionFile, ProgrammingLanguage programmingLanguage);
 
-        List<CodeFile> ExtractZipFile(Stream stream, List<string> allowedFilesExtensions);
+        List<CodeFile> ExtractZipFile(Stream stream, ISet<string> allowedFileExtensions);
+
+        IEnumerable<FileDto> ParseZip(Stream stream, ISet<string> allowedFilesExtensions = null);
 
         double ConvertBytesToMegaBytes(long bytes);
 
@@ -22,8 +25,6 @@ namespace JudgeSystem.Services
         int ConvertMegaBytesToBytes(double megabytes);
 
         void CreateLanguageSpecificFiles(ProgrammingLanguage programmingLanguage, IEnumerable<CodeFile> sourceCodes, string workingDirectory);
-
-        void DeleteDirectory(string workingDirectory);
 
         string GetJavaClassName(string sourceCode);
 

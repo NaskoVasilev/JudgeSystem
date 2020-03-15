@@ -346,6 +346,7 @@ namespace JudgeSystem.Services.Data.Tests
             };
             problemServiceMock.Setup(x => x.GetById<ProblemConstraintsDto>(submission.ProblemId)).Returns(Task.FromResult(problemConstraintsDto));
             var utilityServiceMock = new Mock<IUtilityService>();
+            var fileSystemMock = new Mock<IFileSystemService>();
             var executedTestServiceMock = new Mock<IExecutedTestService>();
             executedTestServiceMock.Setup(x => x.Create(It.IsAny<ExecutedTest>()));
 
@@ -359,13 +360,24 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 IsCorrect = isCorret
             };
+
             checkerMock.Setup(x => x.Check(executionResult, expectedOutput)).Returns(checkerResult);
 
             IExecutor executor = CreateExecutor(executionResult);
             IExecutorFactory executorFactory = CreateExecutorFactory(programmingLanguage, executor);
 
-            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
-                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+            var submissionService = new SubmissionService(
+                submissionRepository,
+                null,
+                problemServiceMock.Object,
+                testServiceMock.Object,
+                executedTestServiceMock.Object,
+                utilityServiceMock.Object,
+                fileSystemMock.Object,
+                compilerFactory,
+                executorFactory,
+                checkerMock.Object,
+                null);
 
             //Act
             await submissionService.ExecuteSubmission(submission.Id, codeFiles, programmingLanguage);
@@ -404,6 +416,55 @@ namespace JudgeSystem.Services.Data.Tests
             Assert.Empty(context.Submissions.Where(x => x.ProblemId == submission.ProblemId));
         }
 
+        [Fact]
+        public async Task GetProblemSubmissions_WithValidArguments_ShouldReturnOtherUsersSubmissionCode()
+        {
+            //Arrange
+            string userId = "userId";
+            int problemId = 1;
+            string code = "using System; namespace Test { //code comes here }";
+            List<Submission> submissions = ProblemSubmissions(userId, problemId, code);
+            SubmissionService submissionService = await CreateSubmissionService(submissions);
+
+            //Act
+            IEnumerable<string> submissionCodes = submissionService.GetProblemSubmissions(problemId, userId);
+            //Assert
+            Assert.Single(submissionCodes);
+            Assert.Equal(code, submissionCodes.First());
+        }
+
+        private static List<Submission> ProblemSubmissions(string userId, int problemId, string code) => 
+            new List<Submission>
+            {
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = userId,
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = problemId
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = "other",
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = 2
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes("uisng System"),
+                    UserId = "other1",
+                    ProblemId = problemId
+                },
+                new Submission
+                {
+                    Code = Encoding.UTF8.GetBytes(code),
+                    UserId = "other",
+                    ExecutedTests = new List<ExecutedTest>() { new ExecutedTest() },
+                    ProblemId = problemId
+                },
+            };
+
         private async Task AddSubmission(Submission submission)
         {
             await context.Submissions.AddAsync(submission);
@@ -415,12 +476,23 @@ namespace JudgeSystem.Services.Data.Tests
             var submissionRepository = new EfDeletableEntityRepository<Submission>(context);
             var problemServiceMock = new Mock<IProblemService>();
             var utilityServiceMock = new Mock<IUtilityService>();
+            var fileSystemMock = new Mock<IFileSystemService>();
             var executedTestServiceMock = new Mock<IExecutedTestService>();
             var checkerMock = new Mock<IChecker>();
             var testServiceMock = new Mock<ITestService>();
 
-            var submissionService = new SubmissionService(submissionRepository, null, problemServiceMock.Object,
-                testServiceMock.Object, executedTestServiceMock.Object, utilityServiceMock.Object, compilerFactory, executorFactory, checkerMock.Object);
+            var submissionService = new SubmissionService(
+                submissionRepository,
+                null,
+                problemServiceMock.Object,
+                testServiceMock.Object,
+                executedTestServiceMock.Object,
+                utilityServiceMock.Object,
+                fileSystemMock.Object,
+                compilerFactory,
+                executorFactory,
+                checkerMock.Object,
+                null);
             return submissionService;
         }
 
@@ -458,7 +530,7 @@ namespace JudgeSystem.Services.Data.Tests
             await context.Submissions.AddRangeAsync(testData);
             await context.SaveChangesAsync();
             IDeletableEntityRepository<Submission> repository = new EfDeletableEntityRepository<Submission>(context);
-            var service = new SubmissionService(repository, estimator, null, null, null, null, null, null, null);
+            var service = new SubmissionService(repository, estimator, null, null, null, null, null, null, null, null, null);
             return service;
         }
 
@@ -466,7 +538,7 @@ namespace JudgeSystem.Services.Data.Tests
         {
             var reposotiryMock = new Mock<IDeletableEntityRepository<Submission>>();
             reposotiryMock.Setup(x => x.All()).Returns(testData);
-            return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null, null, null, null);
+            return new SubmissionService(reposotiryMock.Object, estimator, null, null, null, null, null, null, null, null, null);
         }
 
         private Submission GetSubmission()

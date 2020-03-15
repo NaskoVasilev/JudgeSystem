@@ -25,6 +25,7 @@ namespace JudgeSystem.Services.Data
 
 		private readonly IDeletableEntityRepository<Contest> repository;
 		private readonly IRepository<UserContest> userContestRepository;
+        private readonly IRepository<AllowedIpAddressContest> allowedIpAddressContestRepository;
         private readonly ILessonService lessonService;
         private readonly IProblemService problemService;
         private readonly ISubmissionService submissionService;
@@ -33,6 +34,7 @@ namespace JudgeSystem.Services.Data
         public ContestService(
             IDeletableEntityRepository<Contest> repository,
 			IRepository<UserContest> userContestRepository,
+            IRepository<AllowedIpAddressContest> allowedIpAddressContestRepository,
             ILessonService lessonService,
             IProblemService problemService,
             ISubmissionService submissionService,
@@ -40,6 +42,7 @@ namespace JudgeSystem.Services.Data
 		{
 			this.repository = repository;
 			this.userContestRepository = userContestRepository;
+            this.allowedIpAddressContestRepository = allowedIpAddressContestRepository;
             this.lessonService = lessonService;
             this.problemService = problemService;
             this.submissionService = submissionService;
@@ -133,7 +136,7 @@ namespace JudgeSystem.Services.Data
 			return (int)Math.Ceiling((double)numberOfContests / GlobalConstants.ContestsPerPage);
 		}
 
-		public ContestAllResultsViewModel GetContestReults(int contestId, int page)
+		public ContestAllResultsViewModel GetContestReults(int contestId, int page, int entitiesPerPage)
 		{
             ContestAllResultsViewModel model = repository.All()
 				.Where(c => c.Id == contestId)
@@ -172,20 +175,18 @@ namespace JudgeSystem.Services.Data
                     .ThenBy(cr => cr.Student.ClassNumber)
                     .ThenBy(cr => cr.Student.ClassType)
 					.ThenBy(cr => cr.Student.NumberInCalss)
-					.Skip((page - 1) * ResultsPerPage)
-					.Take(ResultsPerPage)
+					.Skip((page - 1) * entitiesPerPage)
+					.Take(entitiesPerPage)
 					.ToList(),
 				})
 				.FirstOrDefault();
 
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(model, nameof(Contest));
-            model.NumberOfPages = GetContestResultsPagesCount(contestId);
-            model.CurrentPage = page;
 
 			return model;
 		}
 
-		public int GetContestResultsPagesCount(int contestId)
+		public int GetContestResultsPagesCount(int contestId, int entitiesPerPage)
         {
             ThrowEntityNotFoundExceptionIfContestDoesNotExist(contestId);
 
@@ -197,7 +198,7 @@ namespace JudgeSystem.Services.Data
                 .Where(uc => uc.User.StudentId != null)
                 .Count();
 
-            return paginationService.CalculatePagesCount(count, ResultsPerPage);
+            return paginationService.CalculatePagesCount(count, entitiesPerPage);
         }
 
         public async Task<int> GetLessonId(int contestId)
@@ -245,6 +246,8 @@ namespace JudgeSystem.Services.Data
             return model;
         }
 
+        public bool IsActive(int contestId) => repository.All().Any(x => x.Id == contestId && x.IsActive);
+        
         private void ThrowEntityNotFoundExceptionIfContestDoesNotExist(int contestId)
         {
             if (!repository.All().Any(x => x.Id == contestId))
@@ -253,6 +256,25 @@ namespace JudgeSystem.Services.Data
             }
         }
 
-        public bool IsActive(int contestId) => repository.All().Any(x => x.Id == contestId && x.IsActive);
+        public Task AddAllowedIpAddress(ContestAllowedIpAddressesInputModel model, int id) => 
+            allowedIpAddressContestRepository.AddAsync(new AllowedIpAddressContest
+            {
+                AllowedIpAddressId = model.IpAddressId,
+                ContestId = id
+            });
+
+        public async Task RemoveAllowedIpAddress(int contestId, int ipAddressId)
+        {
+            AllowedIpAddressContest entry = allowedIpAddressContestRepository.All()
+                .FirstOrDefault(x => x.AllowedIpAddressId == ipAddressId && x.ContestId == contestId);
+            await allowedIpAddressContestRepository.DeleteAsync(entry);
+        }
+
+        public bool IsRestricted(int contestId, string ip) => 
+            repository.All()
+                .Include(c => c.AllowedIpAddresses)
+                .ThenInclude(a => a.AllowedIpAddress)
+                .Where(c => c.Id == contestId && c.AllowedIpAddresses.Any())
+                .Any(c => !c.AllowedIpAddresses.Any(a => a.AllowedIpAddress.Value == ip));
     }
 }

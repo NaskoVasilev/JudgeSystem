@@ -19,6 +19,43 @@ namespace JudgeSystem.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("JudgeSystem.Data.Models.AllowedIpAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Value")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("AllowedIpAddresses");
+                });
+
+            modelBuilder.Entity("JudgeSystem.Data.Models.AllowedIpAddressContest", b =>
+                {
+                    b.Property<int>("AllowedIpAddressId");
+
+                    b.Property<int>("ContestId");
+
+                    b.HasKey("AllowedIpAddressId", "ContestId");
+
+                    b.HasIndex("ContestId");
+
+                    b.ToTable("AllowedIpAddressContests");
+                });
+
             modelBuilder.Entity("JudgeSystem.Data.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -317,7 +354,11 @@ namespace JudgeSystem.Data.Migrations
 
                     b.Property<double>("AllowedMemoryInMegaBytes");
 
+                    b.Property<int>("AllowedMinCodeDifferenceInPercentage");
+
                     b.Property<int>("AllowedTimeInMilliseconds");
+
+                    b.Property<byte[]>("AutomatedTestingProject");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -338,6 +379,12 @@ namespace JudgeSystem.Data.Migrations
                         .HasMaxLength(30);
 
                     b.Property<int>("SubmissionType");
+
+                    b.Property<int>("TestingStrategy")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("TimeIntervalBetweenSubmissionInSeconds");
 
                     b.HasKey("Id");
 
@@ -610,6 +657,19 @@ namespace JudgeSystem.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("JudgeSystem.Data.Models.AllowedIpAddressContest", b =>
+                {
+                    b.HasOne("JudgeSystem.Data.Models.AllowedIpAddress", "AllowedIpAddress")
+                        .WithMany("Contests")
+                        .HasForeignKey("AllowedIpAddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("JudgeSystem.Data.Models.Contest", "Contest")
+                        .WithMany("AllowedIpAddresses")
+                        .HasForeignKey("ContestId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("JudgeSystem.Data.Models.ApplicationUser", b =>

@@ -462,22 +462,5 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 }
             }));
         }
-
-        [Fact]
-        public void GetContestResultPagesCount_WithValidContestId_ShoudReturnPagesCount()
-        {
-            Contest contest = ContestTestData.GetEntity();
-            contest.UserContests = UserContestTestData.GenerateUserContests().ToList();
-
-            MyController<ContestController>
-            .Instance()
-            .WithData(contest)
-            .Calling(c => c.GetContestResultPagesCount(contest.Id))
-            .ShouldHave()
-            .ActionAttributes(attributes => attributes.ContainingAttributeOfType<EndpointExceptionFilter>())
-            .AndAlso()
-            .ShouldReturn()
-            .Result(3);
-        }
     }
 }
