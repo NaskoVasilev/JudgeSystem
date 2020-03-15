@@ -20,6 +20,10 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://www.youtube.com/watch?v=GqCLoFPXkPs&feature=youtu.be) video you can watch how administrators can create lesson, add problem and resource to it, add tests to the problem and finally create contest for this lesson.
 * In [this](https://www.youtube.com/watch?v=pQtEAqjQcIg&feature=youtu.be) video you can watch how users can submit solutions.
 * In [this](https://www.youtube.com/watch?v=DA2GwSgnLx4&feature=youtu.be) video you can watch how administrators can review users' results and submission.
+* In [this](https://youtu.be/PUJqR24i65E) video you can watch how to test web project in the system. For example, ASP.NET Core web application.
+* In [this](https://youtu.be/2HQStWCF4D0) video you can watch how to create problem which to be tested with automated tests(Unit tests, Integration tests).
+* In [this](https://youtu.be/9V-F4xVxpoc) video you can watch how to add multiple tests for specific problem. How to download tests directly from systems like [INFOS](http://www.math.bas.bg/infos/) and import them in the system.
+
 
 ## Awards
 * Финален проект за курса: ASP.NET Core MVC - June 2019 в SoftUni - оценка: 6.00 и проекта беше част от петте най-добри приложения в курса.
