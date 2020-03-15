@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Linq;
 
 using JudgeSystem.Data.Models.Enums;
@@ -14,6 +15,7 @@ using JudgeSystem.Web.ViewModels.Submission;
 using JudgeSystem.Workers.Common;
 using JudgeSystem.Web.ViewModels.ExecutedTest;
 
+using Microsoft.AspNetCore.Http;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
@@ -262,6 +264,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             MyController<SubmissionController>
             .Instance()
             .WithUser()
+            .WithHttpContext(CreateDefaultHttpContextWithRemoteIpAddress(TestConstnts.DefaultIpAddress))
             .WithData(problem, contest, test)
             .Calling(c => c.Create(input))
             .ShouldHave()
@@ -301,6 +304,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             MyController<SubmissionController>
             .Instance()
             .WithUser()
+            .WithHttpContext(CreateDefaultHttpContextWithRemoteIpAddress(TestConstnts.DefaultIpAddress))
             .WithData(problem, contest, test)
             .Calling(c => c.Create(input))
             .ShouldHave()
@@ -319,6 +323,13 @@ namespace JudgeSystem.Web.Tests.Controllers
                     Assert.False(model.IsCompiledSuccessfully);
                     Assert.Empty(model.ExecutedTests);
                 }));
+        }
+
+        private HttpContext CreateDefaultHttpContextWithRemoteIpAddress(string ipAddress)
+        {
+            var httpContext = new DefaultHttpContext();
+            httpContext.Connection.RemoteIpAddress = IPAddress.Parse(ipAddress);
+            return httpContext;
         }
 
         private static SubmissionInputModel BuildSubmissionInputModel(Problem problem) => new SubmissionInputModel()

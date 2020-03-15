@@ -9,5 +9,7 @@
         public const string StringLong10Symbols = "Tensymbols";
 
         public const string OtherUserId = "Other_User_Id";
+
+        public const string DefaultIpAddress = "216.3.128.12";
     }
 }

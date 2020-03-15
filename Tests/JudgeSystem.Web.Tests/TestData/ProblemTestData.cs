@@ -16,7 +16,8 @@ namespace JudgeSystem.Web.Tests.TestData
             Lesson = LessonTestData.GetEntity(),
             MaxPoints = 100,
             SubmissionType = SubmissionType.PlainCode,
-            TimeIntervalBetweenSubmissionInSeconds = 20
+            TimeIntervalBetweenSubmissionInSeconds = 20,
+            AllowedMinCodeDifferenceInPercentage = 0
         };
 
         internal static IEnumerable<Problem> GetEntities()

@@ -6,18 +6,13 @@ using System.Text;
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services;
-using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Areas.Administration.Controllers;
 using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Web.InputModels.Test;
-using JudgeSystem.Web.Tests.Mocks;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Problem;
 
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Internal;
-
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
@@ -205,7 +200,9 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 IsExtraTask = true,
                 MaxPoints = 50,
                 AllowedMemoryInMegaBytes = 10,
-                AllowedTimeInMilliseconds = 150
+                AllowedTimeInMilliseconds = 150,
+                AllowedMinCodeDifferenceInPercentage = 0,
+                TimeIntervalBetweenSubmissionInSeconds = 10
             };
             MyController<ProblemController>
             .Instance()
@@ -226,6 +223,8 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     Assert.Equal(inputModel.AllowedMemoryInMegaBytes, editedProblem.AllowedMemoryInMegaBytes);
                     Assert.Equal(inputModel.MaxPoints, editedProblem.MaxPoints);
                     Assert.Equal(inputModel.IsExtraTask, editedProblem.IsExtraTask);
+                    Assert.Equal(inputModel.AllowedMinCodeDifferenceInPercentage, editedProblem.AllowedMinCodeDifferenceInPercentage);
+                    Assert.Equal(inputModel.TimeIntervalBetweenSubmissionInSeconds, editedProblem.TimeIntervalBetweenSubmissionInSeconds);
                 }))
             .AndAlso()
             .ShouldReturn()
