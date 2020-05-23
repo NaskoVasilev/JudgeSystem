@@ -8,19 +8,19 @@ be used in schools in informatics lessons in order to improve the eduation and a
 
 ## Description
 Applicaiton can evaluate user's programming code automatically.
-Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
-able to solve more problems and check their solutions faster. I beleive that using this application more students will become
+Aims of this platform are to be used in schools. It can make the work of our teachers more easier and also students will be
+able to solve more problems and check their solutions faster. I beleive that using this application, more students will become
 passionate about programming and may become successfull developers one day.
 
 ## Documentation
-You can find the documentation by navigation to the following path: Documentation/JudgeSystem - Documentation.docx.
+You can find the documentation by navigating to the following path: Documentation/JudgeSystem - Documentation.docx.
 Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://youtu.be/SEKTWCcHH-k) video you can watch how I presnet my JudgeSystem.
 * In [this](https://www.youtube.com/embed/FbM2rhNMFVs) video you can watch how users can work in the system.
 * In [this](https://www.youtube.com/watch?v=JjZ8iy4g0K0) video you can watch how administrators can work in the system.
 * In [this](https://www.youtube.com/watch?v=GqCLoFPXkPs&feature=youtu.be) video you can watch how administrators can create lesson, add problem and resource to it, add tests to the problem and finally create contest for this lesson.
 * In [this](https://www.youtube.com/watch?v=pQtEAqjQcIg&feature=youtu.be) video you can watch how users can submit solutions.
-* In [this](https://www.youtube.com/watch?v=DA2GwSgnLx4&feature=youtu.be) video you can watch how administrators can review users' results and submission.
+* In [this](https://www.youtube.com/watch?v=DA2GwSgnLx4&feature=youtu.be) video you can watch how administrators can review users' results and submissions.
 * In [this](https://youtu.be/PUJqR24i65E) video you can watch how to test web project in the system. For example, ASP.NET Core web application.
 * In [this](https://youtu.be/2HQStWCF4D0) video you can watch how to create problem which to be tested with automated tests(Unit tests, Integration tests).
 * In [this](https://youtu.be/9V-F4xVxpoc) video you can watch how to add multiple tests for specific problem. How to download tests directly from systems like [INFOS](http://www.math.bas.bg/infos/) and import them in the system.
@@ -51,7 +51,7 @@ Follow these steps to set up your development environmet:
   If you do not want to create storage account in azure ```open StartUp.cs and commnent method ConfigureAzureBlobStorage```.
   You just will not be able to upload files.
   5. If you want to submit java code, install [JDK](https://www.microsoft.com/net/download/dotnet-core/2.2)
-  6. Open JudgeSystem.sln file right click on JudgeSystem.Web -> Add -> New Item. In the search bar search for `app settings` and then add ```App Settings File```. Replce its content with the following one and then replcae each value which starts with ```your```.
+  6. Open JudgeSystem.sln file, right click on JudgeSystem.Web -> Add -> New Item. In the search bar search for `app settings` and then add ```App Settings File```. Replce its content with the following one and then replcae each value which starts with ```your```.
      ```
      {
         "ConnectionStrings": {
