@@ -1,6 +1,6 @@
 # Judge System
 An open-source judge system for evaluating programmming code and managing problems, lectures, exams and competitions. Is is developed to
-be used in schools in informatics lessons in order to improve the eduation and automate some parts of teachers' work.
+be used in schools in informatics lessons in order to improve the education and automate some parts of teachers' work.
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=master)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=master)
 
