@@ -1,5 +1,5 @@
 # Judge System
-An open-source judge system for evaluating programmming code and managing problems, lectures, exams and competitions. Is is developed to
+An open-source judge system for evaluating programmming code and managing problems, lectures, exams and competitions. It is developed to
 be used in schools in informatics lessons in order to improve the education and automate some parts of teachers' work.
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=master)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=master)
@@ -31,6 +31,7 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * НТИТ - Национален есенен турнир по информационни технологии „Джон Атанасов“ – първо място в направление „Интернет приложения“ 🏆
 * Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне 🏅
 * Двадесетата ученическа секция, 49.Пролетна конференция на СМБ – медал за отлично представяне 🏅
+* Лауреат на Националната олимпиада по информационни технологии
 
 Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Awards) to see certificates, medals and awards from the contests above.
 
