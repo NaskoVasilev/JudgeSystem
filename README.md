@@ -6,6 +6,15 @@ be used in schools in informatics lessons in order to improve the education and 
 
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=2&branchName=develop)
 
+## Awards
+* Final project for the "ASP.NET Core MVC - June 2019" course in SoftUni, completed with excellent grade and the project was part of the five best applications in the course
+* NTIT - National Autumn Tournament in Information Technology "John Atanasoff" - first place in "Web Applications" / НТИТ - Национален есенен турнир по информационни технологии „Джон Атанасов“ – първо място в направление „Интернет приложения“ 🏆
+* The twentieth student conference of HSSIMI - gold medal and excellent performance / Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне 🏅
+* The twentieth Student Section, 49th SMB Spring Conference - Medal for Excellent Performance / Двадесетата ученическа секция, 49.Пролетна конференция на СМБ – медал за отлично представяне 🏅
+* Laureate of the National Olympiad in Information Technology / Лауреат на Националната олимпиада по информационни технологии
+
+Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Awards) to see certificates, medals and awards from the contests above.
+
 ## Description
 Applicaiton can evaluate user's programming code automatically.
 Aims of this platform are to be used in schools. It can make the work of our teachers more easier and also students will be
@@ -24,16 +33,6 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://youtu.be/PUJqR24i65E) video you can watch how to test web project in the system. For example, ASP.NET Core web application.
 * In [this](https://youtu.be/2HQStWCF4D0) video you can watch how to create problem which to be tested with automated tests(Unit tests, Integration tests).
 * In [this](https://youtu.be/9V-F4xVxpoc) video you can watch how to add multiple tests for specific problem. How to download tests directly from systems like [INFOS](http://www.math.bas.bg/infos/) and import them in the system.
-
-
-## Awards
-* Финален проект за курса: ASP.NET Core MVC - June 2019 в SoftUni - оценка: 6.00 и проекта беше част от петте най-добри приложения в курса.
-* НТИТ - Национален есенен турнир по информационни технологии „Джон Атанасов“ – първо място в направление „Интернет приложения“ 🏆
-* Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне 🏅
-* Двадесетата ученическа секция, 49.Пролетна конференция на СМБ – медал за отлично представяне 🏅
-* Лауреат на Националната олимпиада по информационни технологии
-
-Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Awards) to see certificates, medals and awards from the contests above.
 
 ## Getting Started
 ### Prerequisites
