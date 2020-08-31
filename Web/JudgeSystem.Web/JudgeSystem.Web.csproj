@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <AllowUntrustedCertificate>True</AllowUntrustedCertificate>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-JudgeSystem-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -13,17 +12,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="10.0.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.8.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.ML" Version="0.14.0" />
-    <PackageReference Include="Microsoft.ML.Recommender" Version="0.14.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.5.1" />
+    <PackageReference Include="Microsoft.ML.Recommender" Version="0.17.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <!--<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />-->
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.14.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
   </ItemGroup>
 
   <ItemGroup>

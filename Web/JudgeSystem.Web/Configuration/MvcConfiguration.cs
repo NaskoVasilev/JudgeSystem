@@ -1,6 +1,4 @@
 ﻿using JudgeSystem.Web.Filters;
-
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JudgeSystem.Web.Configuration
@@ -18,10 +16,8 @@ namespace JudgeSystem.Web.Configuration
                 })
                 .AddViewLocalization()
                 .AddMvcLocalization()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {
-                    options.AllowAreas = true;
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });

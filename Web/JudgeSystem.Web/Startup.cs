@@ -2,11 +2,11 @@
 
 using JudgeSystem.Common;
 using JudgeSystem.Data;
-using JudgeSystem.Data.Seeding;
 using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Configuration;
 using JudgeSystem.Web.Dtos.Course;
 using JudgeSystem.Web.Dtos.ML;
+using JudgeSystem.Web.Infrastructure.Extensions;
 using JudgeSystem.Web.InputModels.Course;
 using JudgeSystem.Web.ViewModels;
 
@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ML;
 
 namespace JudgeSystem.Web
@@ -44,30 +45,24 @@ namespace JudgeSystem.Web
                 .ConfigureCookies()
                 .ConfigureSettings(configuration)
                 .AddEmailSendingService(configuration)
+                .AddApplicationInsightsTelemetry()
                 .ConfigureAzureBlobStorage(configuration)
                 .AddRepositories()
                 .AddBusinessLogicServices();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             LocalizationConfiguration.SetDefaultCulture();
 
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
 
-            using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
-            {
-                ApplicationDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                dbContext.Database.Migrate();
-                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
-            }
+            app.UseSeeder();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -78,14 +73,16 @@ namespace JudgeSystem.Web
             app.UseHttpsRedirection();
             app.UserLocalization();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSession();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(routes =>
             {
-                routes.MapRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
