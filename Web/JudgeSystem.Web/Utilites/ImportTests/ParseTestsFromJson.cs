@@ -23,7 +23,7 @@ namespace JudgeSystem.Web.Utilites.ImportTests
                 return Enumerable.Empty<ProblemTestInputModel>();
             }
 
-            IHostingEnvironment env = serviceProvider.GetRequiredService<IHostingEnvironment>();
+            IWebHostEnvironment env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
             IJsonUtiltyService jsonUtiltyService = serviceProvider.GetRequiredService<IJsonUtiltyService>();
 
             using Stream stream = file.OpenReadStream();

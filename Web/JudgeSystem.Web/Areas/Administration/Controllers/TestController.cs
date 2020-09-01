@@ -15,9 +15,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	{
 		private readonly ITestService testService;
 		private readonly IProblemService problemService;
-        private readonly IHostingEnvironment env;
+        private readonly IWebHostEnvironment env;
 
-        public TestController(ITestService testService, IProblemService problemService,  IHostingEnvironment env)
+        public TestController(ITestService testService, IProblemService problemService, IWebHostEnvironment env)
 		{
 			this.testService = testService;
 			this.problemService = problemService;

@@ -2,7 +2,6 @@
 using System.IO;
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Moq;
 
 namespace JudgeSystem.Web.Tests.Mocks
@@ -11,12 +10,12 @@ namespace JudgeSystem.Web.Tests.Mocks
     {
         private static readonly string WebRootPath = Path.Combine(Environment.CurrentDirectory, "../../../../../Web/JudgeSystem.Web/wwwroot");
 
-        public static IHostingEnvironment CreateInstance()
+        public static IWebHostEnvironment CreateInstance()
             => CreateInstance(WebRootPath);
 
-        public static IHostingEnvironment CreateInstance(string webRootPath)
+        public static IWebHostEnvironment CreateInstance(string webRootPath)
         {
-            var hostingEnvironmentMock = new Mock<IHostingEnvironment>();
+            var hostingEnvironmentMock = new Mock<IWebHostEnvironment>();
             hostingEnvironmentMock.Setup(h => h.WebRootPath).Returns(webRootPath);
 
             return hostingEnvironmentMock.Object;

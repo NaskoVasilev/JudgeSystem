@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using JudgeSystem.Data;
+using JudgeSystem.Data.Seeding;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Web.Infrastructure.Extensions
 {

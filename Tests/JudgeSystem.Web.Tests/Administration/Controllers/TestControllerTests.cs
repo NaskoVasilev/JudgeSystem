@@ -178,7 +178,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         [Fact]
         public void DownloadTemplate_ShoudReadTemplateFileAndReturnFileResult()
         {
-            IHostingEnvironment env = HostingEnvironmentMock.CreateInstance();
+            IWebHostEnvironment env = HostingEnvironmentMock.CreateInstance();
             string filePath = env.WebRootPath + GlobalConstants.AddTestsTemplsteFilePath;
             byte[] bytes = File.ReadAllBytes(filePath);
 

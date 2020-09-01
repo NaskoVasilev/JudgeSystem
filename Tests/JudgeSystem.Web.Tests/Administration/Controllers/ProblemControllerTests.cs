@@ -6,18 +6,13 @@ using System.Text;
 using JudgeSystem.Common;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
-using JudgeSystem.Services;
-using JudgeSystem.Services.Data;
 using JudgeSystem.Web.Areas.Administration.Controllers;
 using JudgeSystem.Web.InputModels.Problem;
 using JudgeSystem.Web.InputModels.Test;
-using JudgeSystem.Web.Tests.Mocks;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Problem;
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Internal;
-
+using Microsoft.AspNetCore.Http;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
