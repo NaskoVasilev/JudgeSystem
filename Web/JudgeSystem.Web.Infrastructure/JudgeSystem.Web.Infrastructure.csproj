@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Data\JudgeSystem.Data.Common\JudgeSystem.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\JudgeSystem.Data.Models\JudgeSystem.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\JudgeSystem.Data\JudgeSystem.Data.csproj" />

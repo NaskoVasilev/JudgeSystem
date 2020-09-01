@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.7" />
     <PackageReference Include="Microsoft.Extensions.ML" Version="1.5.1" />
     <PackageReference Include="Microsoft.ML.Recommender" Version="0.17.1" />
