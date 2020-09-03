@@ -2,7 +2,6 @@
 using JudgeSystem.Data.Models;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JudgeSystem.Web.Configuration
@@ -26,7 +25,7 @@ namespace JudgeSystem.Web.Configuration
                .AddUserStore<ApplicationUserStore>()
                .AddRoleStore<ApplicationRoleStore>()
                .AddDefaultTokenProviders()
-               .AddDefaultUI(UIFramework.Bootstrap4);
+               .AddDefaultUI();
 
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();

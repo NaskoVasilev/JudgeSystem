@@ -12,7 +12,6 @@ using JudgeSystem.Web.Dtos.Submission;
 using JudgeSystem.Workers.Common;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Xunit;
 
 namespace JudgeSystem.Services.Tests

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 namespace JudgeSystem.Services.Mapping
@@ -18,7 +17,7 @@ namespace JudgeSystem.Services.Mapping
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return source.ProjectTo(membersToExpand);
+            return source.ProjectTo(AutoMapperConfig.MapperInstance.ConfigurationProvider, membersToExpand);
         }
 
         public static IQueryable<TDestination> To<TDestination>(
@@ -30,9 +29,9 @@ namespace JudgeSystem.Services.Mapping
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return source.ProjectTo<TDestination>(parameters);
+            return source.ProjectTo<TDestination>(AutoMapperConfig.MapperInstance.ConfigurationProvider, parameters);
         }
 
-        public static Destination To<Destination>(this object source) => Mapper.Map<Destination>(source);
+        public static Destination To<Destination>(this object source) => AutoMapperConfig.MapperInstance.Map<Destination>(source);
     }
 }

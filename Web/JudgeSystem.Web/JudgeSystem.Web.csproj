@@ -13,8 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.7" />
     <PackageReference Include="Microsoft.Extensions.ML" Version="1.5.1" />
     <PackageReference Include="Microsoft.ML.Recommender" Version="0.17.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
@@ -31,7 +32,6 @@
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Messaging\JudgeSystem.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services\JudgeSystem.Services.csproj" />
-    <ProjectReference Include="..\..\Workers\JudgeSystem.Compilers\JudgeSystem.Compilers.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Executors\JudgeSystem.Executors.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Web.Dtos\JudgeSystem.Web.Dtos.csproj" />
