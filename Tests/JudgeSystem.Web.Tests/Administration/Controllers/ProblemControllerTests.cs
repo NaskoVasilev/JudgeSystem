@@ -256,7 +256,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .ActionAttributes(attributes => attributes
                 .RestrictingForHttpMethod(HttpMethod.Post)
                 .ValidatingAntiForgeryToken()
-                .ChangingActionNameTo(nameof(ProblemController.Delete)));
+                .SpecifyingActionName(nameof(ProblemController.Delete)));
 
         [Fact]
         public void DeletePost_WithProblemWithTheSameIdInTheDb_ShouldDeleteTheProblemAndAllSubmissionsAndReturnRedirectResult()

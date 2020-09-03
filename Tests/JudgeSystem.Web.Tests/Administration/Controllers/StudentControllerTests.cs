@@ -412,7 +412,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .ActionAttributes(attributes => attributes
                 .RestrictingForHttpMethod(HttpMethod.Post)
                 .ValidatingAntiForgeryToken()
-                .ChangingActionNameTo(nameof(StudentController.Delete)));
+                .SpecifyingActionName(nameof(StudentController.Delete)));
         }
 
         [Fact]

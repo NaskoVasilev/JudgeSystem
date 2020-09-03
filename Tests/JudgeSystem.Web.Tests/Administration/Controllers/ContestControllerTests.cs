@@ -328,7 +328,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .ActionAttributes(attributes => attributes
                 .RestrictingForHttpMethod(HttpMethod.Post)
                 .ValidatingAntiForgeryToken()
-                .ChangingActionNameTo(nameof(ContestController.Delete)));
+                .SpecifyingActionName(nameof(ContestController.Delete)));
 
         [Fact]
         public void DeletePost_WithContestInTheDbAndValidContestId_ShouldDeleteTheContestAndReturnRedirectResult()

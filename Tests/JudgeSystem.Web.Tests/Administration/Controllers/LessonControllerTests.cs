@@ -197,7 +197,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
             .ActionAttributes(attributes => attributes
                 .RestrictingForHttpMethod(HttpMethod.Post)
                 .ValidatingAntiForgeryToken()
-                .ChangingActionNameTo(nameof(LessonController.Delete)));
+                .SpecifyingActionName(nameof(LessonController.Delete)));
 
         [Fact]
         public void DeleteConfirm_WithLessonWithTheSameIdInTheDb_ShouldDeleteTheLessonAndReturnRedirectResult()
