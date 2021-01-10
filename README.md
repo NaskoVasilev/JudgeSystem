@@ -4,8 +4,7 @@
 [![Build Status](https://dev.azure.com/nasko01vasilev/JudgeSystem/_apis/build/status/JudgeSystem-Windows-CI?branchName=develop)](https://dev.azure.com/nasko01vasilev/JudgeSystem/_build/latest?definitionId=3&branchName=develop)
 
 ## Description
-This is a judge system, similar to SoftUni judge but a bit more simple.
-It can evaluate user's programming code automatically.
+This is a judge system which can evaluate user's programming code automatically.
 Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
 able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
