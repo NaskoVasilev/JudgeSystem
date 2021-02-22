@@ -34,6 +34,20 @@ Or if you prefer watching to reading. You can watch videos about the system.
 * In [this](https://youtu.be/2HQStWCF4D0) video you can watch how to create problem which to be tested with automated tests(Unit tests, Integration tests).
 * In [this](https://youtu.be/9V-F4xVxpoc) video you can watch how to add multiple tests for specific problem. How to download tests directly from systems like [INFOS](http://www.math.bas.bg/infos/) and import them in the system.
 
+## Next steps
+* Develop platfrom which ease integration of the Judge System in the schools (JudgeSystemManager)
+* The new platform should have the following features:
+  1. Develop learning content and allow the users to collaborate with each other while developing learning content - GIT methodology should be used, the same techniques which we use while developing and managing code, should be used for learning content. Focus should be on collaboration and resources sharing.
+  2. Schools can apply for new instances of the Judge System. They should choose their desired url address and choose which courses to be added in their instance.
+  3. Schools shpuld be able to make request about scaling their instances.
+  4. When school's application is approved a new instance of the Judge System should be automatically deployed and the selected courses should be added to the newly deployed instance.
+* This system is currently in development
+* The Judge System should be extended and new functionalities should be added.
+* The flow of adding students in the system should be changed
+* The JudgeSystem should communicate with the JudgeSystemManager
+* Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Next steps) to read the next steps about improving Computer science edication.
+* Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Next steps) to more read about JudgeSystemManager.
+
 ## Getting Started
 ### Prerequisites
 You will need the following tools:
