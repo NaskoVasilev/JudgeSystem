@@ -41,7 +41,7 @@ Or if you prefer watching to reading. You can watch videos about the system.
   2. Schools can apply for new instances of the Judge System. They should choose their desired url address and choose which courses to be added in their instance.
   3. Schools should be able to make request about scaling their instances.
   4. When school's application is approved a new instance of the Judge System should be automatically deployed and the selected courses should be added to the newly deployed instance.
-* This system is currently in development
+* This system is currently in development and [here](https://docs.google.com/document/d/1G24t4EkmvyPWh6PDwboVBiFMOtRVRO5UWBi7hGEdnuU/edit?usp=sharing) you can see the requirements.
 * The Judge System should be extended and new functionalities should be added.
 * The flow of adding students in the system should be changed
 * The JudgeSystem should communicate with the JudgeSystemManager
