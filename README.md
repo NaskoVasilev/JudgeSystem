@@ -12,6 +12,7 @@ be used in schools in informatics lessons in order to improve the education and 
 * The twentieth student conference of HSSIMI - gold medal and excellent performance / Двадесетата ученическа конференция (УК’20) на УчИМИ – златен медал и отлично преставяне 🏅
 * The twentieth Student Section, 49th SMB Spring Conference - Medal for Excellent Performance / Двадесетата ученическа секция, 49.Пролетна конференция на СМБ – медал за отлично представяне 🏅
 * Laureate of the National Olympiad in Information Technology / Лауреат на Националната олимпиада по информационни технологии
+* Nominated by [BAIT](https://bait-awards.bg/) in category "Youth award" in 2020 / Номиниран от [БАИТ](https://bait-awards.bg/) в категория "Младежка награда" за 2020 г.
 
 Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Awards) to see certificates, medals and awards from the contests above.
 
