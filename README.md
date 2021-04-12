@@ -58,7 +58,7 @@ You will need the following tools:
 * [.NET Core SDK 2.2](https://www.microsoft.com/net/download/dotnet-core/2.2)
 
 ### Setup
-Follow these steps to set up your development environmet:
+Follow these steps to set up your development environment:
 
   1. Clone the repository
   2. Create your own [Send Grid](https://sendgrid.com/) account or use existing one. Go to Settings/Api Keys and create new Api Key and then copy ApiKey Name and API Key ID.
