@@ -17,9 +17,9 @@ be used in schools in informatics lessons in order to improve the education and 
 Click [here](https://github.com/NaskoVasilev/JudgeSystem/tree/master/Documentation/Awards) to see certificates, medals and awards from the contests above.
 
 ## Description
-Applicaiton can evaluate user's programming code automatically.
-Aims of this platform are to be used in schools. It can make the work of our teachers more easier and also students will be
-able to solve more problems and check their solutions faster. I beleive that using this application, more students will become
+This is a judge system which can evaluate user's programming code automatically.
+Aims of this platform are to be used in school. It can make work of our teachers more easier and also students will be
+able to solve more problems and check their solutions faster. I beleive that using this application more students will become
 passionate about programming and may become successfull developers one day.
 
 ## Documentation
