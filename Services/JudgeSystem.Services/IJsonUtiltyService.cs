@@ -5,6 +5,6 @@ namespace JudgeSystem.Services
 {
     public interface IJsonUtiltyService
     {
-        public T ParseJsonFormStreamUsingJSchema<T>(Stream stream, string schemaFilePath, ICollection<string> messages);
+        T ParseJsonFormStreamUsingJSchema<T>(Stream stream, string schemaFilePath, ICollection<string> messages);
     }
 }

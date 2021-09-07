@@ -18,6 +18,6 @@ namespace JudgeSystem.Services.Data
 
         IEnumerable<UserViewModel> All();
 
-        public bool IsExistingUserWithNotConfirmedEmail(string username);
+        bool IsExistingUserWithNotConfirmedEmail(string username);
     }
 }
