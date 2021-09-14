@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using JudgeSystem.Data.Common.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JudgeSystem.Data.Models
 {
-	public class Test
+	public class Test : IOrderable
 	{
 		public Test()
 		{
@@ -13,7 +14,9 @@ namespace JudgeSystem.Data.Models
 
 		public int Id { get; set; }
 
-		public Problem Problem { get; set; }
+        public int OrderBy { get; set; }
+
+        public Problem Problem { get; set; }
 		public int ProblemId { get; set; }
 
 		public string InputData { get; set; }
