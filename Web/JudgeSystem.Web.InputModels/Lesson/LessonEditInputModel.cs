@@ -17,5 +17,8 @@ namespace JudgeSystem.Web.InputModels.Lesson
 		public LessonType Type { get; set; }
 
 		public bool IsLocked { get; set; }
-	}
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
+    }
 }
