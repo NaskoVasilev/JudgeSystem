@@ -152,6 +152,7 @@ namespace JudgeSystem.Services.Data
             Lesson lesson = await repository.FindAsync(model.Id);
             lesson.Name = model.Name;
             lesson.Type = model.Type;
+            lesson.OrderBy = model.OrderBy;
 
             await repository.UpdateAsync(lesson);
             return lesson.To<LessonDto>();

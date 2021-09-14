@@ -75,6 +75,7 @@ namespace JudgeSystem.Services.Data
             test.IsTrialTest = model.IsTrialTest;
             test.InputData = model.InputData;
             test.OutputData = model.OutputData.Trim();
+            test.OrderBy = model.OrderBy;
             await repository.UpdateAsync(test);
 		}
     }

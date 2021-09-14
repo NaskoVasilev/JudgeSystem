@@ -54,6 +54,7 @@ namespace JudgeSystem.Services.Data
 		{
             Course course = await repository.FindAsync(model.Id);
             course.Name = model.Name;
+            course.OrderBy = model.OrderBy;
 
             await repository.UpdateAsync(course);
 		}

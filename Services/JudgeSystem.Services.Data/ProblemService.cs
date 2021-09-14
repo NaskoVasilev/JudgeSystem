@@ -113,6 +113,7 @@ namespace JudgeSystem.Services.Data
             problem.TimeIntervalBetweenSubmissionInSeconds = model.TimeIntervalBetweenSubmissionInSeconds;
             problem.TestingStrategy = model.TestingStrategy;
             problem.AllowedMinCodeDifferenceInPercentage = model.AllowedMinCodeDifferenceInPercentage;
+            problem.OrderBy = model.OrderBy;
 
             await problemRepository.UpdateAsync(problem);
             return problem.To<ProblemDto>();
