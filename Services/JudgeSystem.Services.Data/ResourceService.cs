@@ -46,6 +46,7 @@ namespace JudgeSystem.Services.Data
         {
             var resources = repository.All()
                 .Where(r => r.LessonId == lessonId)
+                .OrderBy(r => r.OrderBy)
                 .To<ResourceViewModel>()
                 .ToList();
             return resources;

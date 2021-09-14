@@ -26,13 +26,26 @@ namespace JudgeSystem.Services.Data
 			await repository.AddAsync(course);
 		}
 
-        public IEnumerable<CourseViewModel> All() => repository.All().To<CourseViewModel>().ToList();
+        public IEnumerable<CourseViewModel> All() => repository
+            .All()
+            .OrderBy(x => x.OrderBy)
+            .To<CourseViewModel>()
+            .ToList();
 
-        public string GetName(int courseId) => repository.All().FirstOrDefault(r => r.Id == courseId)?.Name;
+        public string GetName(int courseId) => repository
+            .All()
+            .Where(x => x.Id == courseId)
+            .Select(x => x.Name)
+            .FirstOrDefault();
 
         public TDestination GetById<TDestination>(int courseId)
 		{
-            TDestination course = repository.All().Where(x => x.Id == courseId).To<TDestination>().FirstOrDefault();
+            TDestination course = repository
+                .All()
+                .Where(x => x.Id == courseId)
+                .To<TDestination>()
+                .FirstOrDefault();
+
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(course, nameof(Course));
             return course;
         }

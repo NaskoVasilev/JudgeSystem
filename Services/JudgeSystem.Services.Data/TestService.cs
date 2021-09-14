@@ -63,6 +63,7 @@ namespace JudgeSystem.Services.Data
 			var tests = repository.All()
                 .Where(t => t.ProblemId == problemId)
                 .OrderByDescending(t => t.IsTrialTest)
+                .ThenBy(t => t.OrderBy)
                 .To<T>()
 				.ToList();
             return tests;

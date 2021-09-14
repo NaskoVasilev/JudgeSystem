@@ -41,7 +41,12 @@ namespace JudgeSystem.Services.Data
 
 		public async Task<TDestination> GetById<TDestination>(int id)
 		{    
-            TDestination problem = await problemRepository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            TDestination problem = await problemRepository
+                .All()
+                .Where(x => x.Id == id)
+                .To<TDestination>()
+                .FirstOrDefaultAsync();
+            
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(problem, nameof(Problem));
             return problem;
         }
@@ -69,8 +74,10 @@ namespace JudgeSystem.Services.Data
 
         public IEnumerable<LessonProblemViewModel> LessonProblems(int lessonId)
 		{
-			var problems = problemRepository.All()
+			var problems = problemRepository
+                .All()
 				.Where(p => p.LessonId == lessonId)
+                .OrderBy(p => p.OrderBy)
 				.To<LessonProblemViewModel>()
 				.ToList();
             return problems;
@@ -86,6 +93,7 @@ namespace JudgeSystem.Services.Data
 			keyword = keyword.ToLower();
 			var results = problemRepository.All()
 				.Where(p => p.Name.ToLower().Contains(keyword))
+                .OrderBy(p => p.OrderBy)
 				.To<SearchProblemViewModel>()
 				.ToList();
 
