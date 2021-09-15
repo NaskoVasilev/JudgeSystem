@@ -39,6 +39,7 @@ namespace JudgeSystem.Services.Data
 
             return repository.All()
                 .Where(l => l.Type == type && l.CourseId == courseId)
+                .OrderBy(x => x.OrderBy)
                 .To<LessonLinkViewModel>()
                 .ToList();
         }
@@ -64,7 +65,12 @@ namespace JudgeSystem.Services.Data
 
         public async Task<TDestination> GetById<TDestination>(int id)
         {
-            TDestination lesson = await repository.All().Where(x => x.Id == id).To<TDestination>().FirstOrDefaultAsync();
+            TDestination lesson = await repository
+                .All()
+                .Where(x => x.Id == id)
+                .To<TDestination>()
+                .FirstOrDefaultAsync();
+            
             Validator.ThrowEntityNotFoundExceptionIfEntityIsNull(lesson, nameof(Lesson));
             return lesson;
         }
@@ -73,6 +79,7 @@ namespace JudgeSystem.Services.Data
         {
             var lessons = repository.All()
                 .Where(l => l.CourseId == courseId && l.Type == lesosnType)
+                .OrderBy(x => x.OrderBy)
                 .To<ContestLessonDto>()
                 .ToList();
 
@@ -119,7 +126,9 @@ namespace JudgeSystem.Services.Data
 
             keyword = keyword.ToLower();
             var results = repository.All()
-                .Where(l => l.Name.ToLower().Contains(keyword))
+                .Where(l => l.Name.ToLower()
+                .Contains(keyword))
+                .OrderBy(x => x.Name)
                 .To<SearchLessonViewModel>()
                 .ToList();
 
@@ -143,6 +152,7 @@ namespace JudgeSystem.Services.Data
             Lesson lesson = await repository.FindAsync(model.Id);
             lesson.Name = model.Name;
             lesson.Type = model.Type;
+            lesson.OrderBy = model.OrderBy;
 
             await repository.UpdateAsync(lesson);
             return lesson.To<LessonDto>();

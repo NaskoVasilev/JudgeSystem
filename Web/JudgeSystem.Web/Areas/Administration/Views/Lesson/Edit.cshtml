@@ -17,9 +17,14 @@
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="OrderBy"></label>
+                    <input asp-for="OrderBy" class="form-control" />
+                    <span asp-validation-for="OrderBy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="Type"></label>
                     <select class="form-control" asp-for="Type">
-                        <partial name="Partials/LessonTypeOptions" model="Model?.Type.ToString()"/>
+                        <partial name="Partials/LessonTypeOptions" model="Model?.Type.ToString()" />
                     </select>
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>

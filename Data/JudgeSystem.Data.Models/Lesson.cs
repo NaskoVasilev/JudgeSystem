@@ -8,7 +8,7 @@ using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Data.Models
 {
-	public class Lesson : BaseDeletableModel<int>
+	public class Lesson : BaseDeletableModel<int>, IOrderable
 	{
 		public Lesson()
 		{
@@ -21,7 +21,9 @@ namespace JudgeSystem.Data.Models
         [MaxLength(ModelConstants.LessonNameMaxLength)]
 		public string Name { get; set; }
 
-		public int CourseId { get; set; }
+        public int OrderBy { get; set; }
+
+        public int CourseId { get; set; }
 		public Course Course { get; set; }
 
 		public string LessonPassword { get; set; }

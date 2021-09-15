@@ -21,6 +21,9 @@ namespace JudgeSystem.Web.InputModels.Problem
         [StringLength(ProblemNameMaxLength, MinimumLength = ProblemNameMinLength)]
         public string Name { get; set; }
 
+        [Range(OrderByMinValue, OrderByMaxValue)]
+        public int OrderBy { get; set; }
+
         [Display(Name = ProblemIsExtraTaskDisplayName)]
         public bool IsExtraTask { get; set; }
 

@@ -7,7 +7,7 @@ using JudgeSystem.Data.Models.Enums;
 
 namespace JudgeSystem.Data.Models
 {
-    public class Problem : BaseDeletableModel<int>
+    public class Problem : BaseDeletableModel<int>, IOrderable
     {
 		public Problem()
 		{
@@ -19,7 +19,9 @@ namespace JudgeSystem.Data.Models
 		[MaxLength(ModelConstants.ProblemNameMaxLength)]
 		public string Name { get; set; }
 
-		public bool IsExtraTask { get; set; }
+        public int OrderBy { get; set; }
+
+        public bool IsExtraTask { get; set; }
 
 		public int MaxPoints { get; set; }
 

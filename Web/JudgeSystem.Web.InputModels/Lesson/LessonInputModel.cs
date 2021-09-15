@@ -21,5 +21,9 @@ namespace JudgeSystem.Web.InputModels.Lesson
 
 		[Required]
 		public LessonType Type { get; set; }
-	}
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
+
+    }
 }

@@ -2,6 +2,11 @@
 {
     public static class ModelConstants
     {
+        #region Common
+        public const double OrderByMinValue = 0;
+        public const double OrderByMaxValue = int.MaxValue;
+        #endregion
+
         #region User models constants
         public const int UserFirstNameMaxLength = 30;
         public const int UserFirstNameMinLength = 2;

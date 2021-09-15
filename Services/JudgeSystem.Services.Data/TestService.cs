@@ -63,6 +63,7 @@ namespace JudgeSystem.Services.Data
 			var tests = repository.All()
                 .Where(t => t.ProblemId == problemId)
                 .OrderByDescending(t => t.IsTrialTest)
+                .ThenBy(t => t.OrderBy)
                 .To<T>()
 				.ToList();
             return tests;
@@ -74,6 +75,7 @@ namespace JudgeSystem.Services.Data
             test.IsTrialTest = model.IsTrialTest;
             test.InputData = model.InputData;
             test.OutputData = model.OutputData.Trim();
+            test.OrderBy = model.OrderBy;
             await repository.UpdateAsync(test);
 		}
     }
