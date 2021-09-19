@@ -6,11 +6,13 @@ namespace JudgeSystem.Common.Extensions
     {
         public static byte[] ToArray(this Stream stream)
         {
-            using var memoryStream = new MemoryStream();
-            using (stream)
+            using (var memoryStream = new MemoryStream())
             {
-                stream.CopyTo(memoryStream);
-                return memoryStream.ToArray();
+                using (stream)
+                {
+                    stream.CopyTo(memoryStream);
+                    return memoryStream.ToArray();
+                }
             }
         }
     }

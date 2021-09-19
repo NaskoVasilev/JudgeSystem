@@ -30,6 +30,7 @@ namespace JudgeSystem.Services.Data
                 Name = model.Name,
                 FilePath = filePath,
                 LessonId = model.LessonId,
+                OrderBy = model.OrderBy,
             };
 
             await repository.AddAsync(resource);
@@ -46,6 +47,7 @@ namespace JudgeSystem.Services.Data
         {
             var resources = repository.All()
                 .Where(r => r.LessonId == lessonId)
+                .OrderBy(r => r.OrderBy)
                 .To<ResourceViewModel>()
                 .ToList();
             return resources;
@@ -67,6 +69,7 @@ namespace JudgeSystem.Services.Data
             }
 
             resource.Name = model.Name;
+            resource.OrderBy = model.OrderBy;
             await repository.UpdateAsync(resource);
         }
     }

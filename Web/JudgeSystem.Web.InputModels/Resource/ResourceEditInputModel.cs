@@ -18,5 +18,8 @@ namespace JudgeSystem.Web.InputModels.Resource
 
         [IgnoreMap]
 		public IFormFile File { get; set; }
-	}
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
+    }
 }

@@ -26,30 +26,32 @@ namespace JudgeSystem.Services
         public async Task<ProcessResult> Run(string arguments, string woringDirectory, int timeout = DefaultTimeout)
         {
 
-            using var process = new Process();
-            var info = new ProcessStartInfo
+            using (var process = new Process())
             {
-                Arguments = $"{GlobalConstants.ConsoleComamndPrefix} {arguments}",
-                FileName = GlobalConstants.ConsoleFile,
-                WorkingDirectory = woringDirectory,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-            };
+                var info = new ProcessStartInfo
+                {
+                    Arguments = $"{GlobalConstants.ConsoleComamndPrefix} {arguments}",
+                    FileName = GlobalConstants.ConsoleFile,
+                    WorkingDirectory = woringDirectory,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                };
 
-            process.StartInfo = info;
-            process.Start();
-            string output = await process.StandardOutput.ReadToEndAsync();
-            string error = await process.StandardError.ReadToEndAsync();
-            
-            bool exited = process.WaitForExit(timeout);
-            if (!exited)
-            {
-                process.KillTree();
+                process.StartInfo = info;
+                process.Start();
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
+
+                bool exited = process.WaitForExit(timeout);
+                if (!exited)
+                {
+                    process.KillTree();
+                }
+
+                return new ProcessResult(output, error);
             }
-
-            return new ProcessResult(output, error);
         }
 
         public string PrependChangeDirectoryCommand(string command, string directoryPath) =>

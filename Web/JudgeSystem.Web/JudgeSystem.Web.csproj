@@ -10,6 +10,8 @@
 
   <PropertyGroup>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,9 +21,11 @@
     <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.ML" Version="0.14.0" />
     <PackageReference Include="Microsoft.ML.Recommender" Version="0.14.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Razor" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
-    <!--<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />-->
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0" />
   </ItemGroup>

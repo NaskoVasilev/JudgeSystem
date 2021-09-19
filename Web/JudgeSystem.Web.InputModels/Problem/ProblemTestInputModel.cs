@@ -16,5 +16,8 @@ namespace JudgeSystem.Web.InputModels.Problem
 
         [Required]
         public bool IsTrialTest { get; set; }
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
     }
 }

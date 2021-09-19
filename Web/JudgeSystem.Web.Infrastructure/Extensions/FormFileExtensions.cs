@@ -9,9 +9,11 @@ namespace JudgeSystem.Web.Infrastructure.Extensions
     {
         public static async Task<byte[]> ToArrayAsync(this IFormFile file)
         {
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
     }
 }

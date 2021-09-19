@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+    judge-system:
+        build:
+          context: .
+          dockerfile: Web\JudgeSystem.Web/Dockerfile
+        image: judge-system-image:latest
+        ports:
+          - "80:80"
+        container_name: judge-system-instance
+        restart: on-failure
