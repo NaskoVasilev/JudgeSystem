@@ -5,19 +5,12 @@
 	getLessons(value, lessonType);
 });
 
-$('#lessonType').change((e) => {
-	let lessonType = $(e.target).children("option:selected").val();
-	let courseId = $('#course').children("option:selected").val();
-	deleteAllFindLessons();
-	getLessons(courseId, lessonType);
-});
-
 $('#lessonId').change((e) => {
 	$($('#add-contest')[0]).removeAttr('disabled');
 });
 
 function getLessons(courseId, lessonType) {
-    $.get(`/Administration/Contest/GetLessons?courseId=${courseId}&lessonType=${lessonType}`)
+    $.get(`/Administration/Contest/GetLessons?courseId=${courseId}`)
         .done(lessons => {
             let lessonsSelectList = $('#lessonId');
             lessonsSelectList.disabled = false;

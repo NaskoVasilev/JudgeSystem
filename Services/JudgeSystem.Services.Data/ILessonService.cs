@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
+using JudgeSystem.Services.Mapping;
 using JudgeSystem.Web.Dtos.Lesson;
 using JudgeSystem.Web.InputModels.Lesson;
 using JudgeSystem.Web.ViewModels.Lesson;
@@ -11,6 +13,9 @@ namespace JudgeSystem.Services.Data
 {
 	public interface ILessonService
 	{
+        IEnumerable<T> GetByCourseId<T>(int courseId)
+            where T : IMapFrom<Lesson>;
+
 		IEnumerable<LessonLinkViewModel> CourseLessonsByType(string lessonType, int courseId);
 
 		Task<LessonDto> Create(LessonInputModel model);

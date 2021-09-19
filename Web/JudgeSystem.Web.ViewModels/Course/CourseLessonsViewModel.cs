@@ -11,7 +11,5 @@ namespace JudgeSystem.Web.ViewModels.Course
         public IEnumerable<LessonLinkViewModel> Lessons { get; set; }
 
         public string Name { get; set; }
-
-        public string LessonType { get; set; }
     }
 }
