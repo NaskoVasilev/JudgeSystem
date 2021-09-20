@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JudgeSystem.Data.Models;
-using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Web.Controllers;
 using JudgeSystem.Web.Tests.TestData;
 using JudgeSystem.Web.ViewModels.Course;
@@ -58,29 +57,25 @@ namespace JudgeSystem.Web.Tests.Controllers
             }));
         }
 
-        [Theory]
-        [InlineData("Exam")]
-        [InlineData("Homework")]
-        [InlineData("Exercise")]
-        [InlineData("WrongType")]
-        public void Lessons_WithValidArguments_ShouldReturnViewWithCorrectData(string lessonTypeAsString)
+        [Fact]
+        public void Lessons_WithValidArguments_ShouldReturnViewWithCorrectData()
         {
             Course course = CourseTestData.GetEntity();
             IEnumerable<Lesson> lessons = LessonTestData.GenerateLessons();
-            var expectedLessons = lessons.Where(x => x.Type.ToString() == lessonTypeAsString && x.CourseId == course.Id).ToList();
+            var expectedLessons = lessons.Where(x => x.CourseId == course.Id).ToList();
 
             MyController<CourseController>
             .Instance()
             .WithData(data => data
                 .WithSet<Lesson>(set => set.AddRange(lessons))
                 .WithSet<Course>(set => set.Add(course)))
-            .Calling(c => c.Lessons(course.Id, lessonTypeAsString))
+            .Calling(c => c.Lessons(course.Id))
             .ShouldReturn()
             .View(result => result
             .WithModelOfType<CourseLessonsViewModel>()
             .Passing(model =>
             {
-                Assert.Equal($"{course.Name} - {lessonTypeAsString}", model.Name);
+                Assert.Equal(course.Name, model.Name);
 
                 var actualLessons = model.Lessons.ToList();
                 Assert.Equal(expectedLessons.Count, actualLessons.Count);
@@ -126,7 +121,7 @@ namespace JudgeSystem.Web.Tests.Controllers
             MyController<CourseController>
             .Instance()
             .WithData(lesson)
-            .Calling(c => c.Lessons(lesson.Course.Id, lesson.Type.ToString()))
+            .Calling(c => c.Lessons(lesson.Course.Id))
             .ShouldReturn()
             .View(result => result
             .WithModelOfType<CourseLessonsViewModel>()
