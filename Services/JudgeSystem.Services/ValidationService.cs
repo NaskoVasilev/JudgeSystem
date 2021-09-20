@@ -13,5 +13,11 @@ namespace JudgeSystem.Services
             string fileExtension = Path.GetExtension(fileName);
             return allowedExtensions.Contains(fileExtension);
         }
+
+        public bool IsValidFileExtension(string fileName, params string[] extensions)
+        {
+            string fileExtension = Path.GetExtension(fileName);
+            return extensions.Contains(fileExtension);
+        }
     }
 }
