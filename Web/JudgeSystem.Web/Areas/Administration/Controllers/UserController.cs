@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Mvc;
+
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.InputModels.User;
 using JudgeSystem.Web.ViewModels.User;
-using Microsoft.AspNetCore.Mvc;
+using JudgeSystem.Common.Extensions;
+using JudgeSystem.Services.Models.Users;
+using JudgeSystem.Common;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -41,9 +46,19 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Import(ImportUsersInputModel model)
         {
-            if (!validationService.IsValidFileExtension(model.File.FileName))
+            if (!validationService.IsValidFileExtension(model.File.FileName, GlobalConstants.JsonFileExtension))
             {
                 ModelState.AddModelError(nameof(ImportUsersInputModel.File), "You should upload a valid JSON file!");
+            }
+
+            using(Stream stream = model.File.OpenReadStream())
+            {
+                string json = await stream.ReadToEndAsync();
+                IEnumerable<UserImportServiceModel> users = json.FromJson<IEnumerable<UserImportServiceModel>>();
+
+                await userService.ImportAsync(users);
+                
+                return RedirectToAction(nameof(All));
             }
         }
     }

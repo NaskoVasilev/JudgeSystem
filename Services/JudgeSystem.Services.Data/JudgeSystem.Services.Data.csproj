@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\Workers\JudgeSystem.Executors\JudgeSystem.Executors.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
     <ProjectReference Include="..\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
+    <ProjectReference Include="..\JudgeSystem.Services.Models\JudgeSystem.Services.Models.csproj" />
     <ProjectReference Include="..\JudgeSystem.Services\JudgeSystem.Services.csproj" />
   </ItemGroup>
 
