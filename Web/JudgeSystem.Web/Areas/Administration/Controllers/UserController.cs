@@ -14,6 +14,7 @@ using JudgeSystem.Common;
 using JudgeSystem.Services.Validations.Contracts;
 using JudgeSystem.Common.Models;
 using JudgeSystem.Web.Infrastructure.Extensions;
+using System.Linq;
 
 namespace JudgeSystem.Web.Areas.Administration.Controllers
 {
@@ -66,7 +67,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             using (Stream stream = model.File.OpenReadStream())
             {
                 string json = await stream.ReadToEndAsync();
-                IEnumerable<UserImportServiceModel> users = json.FromJson<IEnumerable<UserImportServiceModel>>();
+                IList<UserImportServiceModel> users = json.FromJson<IList<UserImportServiceModel>>();
 
                 Result validationResult = userValidationService.ValidateUsersForImport(users);
 
@@ -78,7 +79,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
                 await userService.ImportAsync(users);
 
-                return RedirectToAction(nameof(All));
+                string infoMessage = $"{users.Count} users was successfully imported!";
+                return ShowInfo(infoMessage, nameof(All));
             }
         }
     }

@@ -120,6 +120,9 @@
   <data name="Add administrator" xml:space="preserve">
     <value>Добави администратор</value>
   </data>
+  <data name="Import users" xml:space="preserve">
+    <value>Импортирай потребители</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Вход</value>
   </data>
