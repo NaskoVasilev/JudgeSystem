@@ -26,11 +26,13 @@ namespace JudgeSystem.Web.Utilites.ImportTests
             IHostingEnvironment env = serviceProvider.GetRequiredService<IHostingEnvironment>();
             IJsonUtiltyService jsonUtiltyService = serviceProvider.GetRequiredService<IJsonUtiltyService>();
 
-            using Stream stream = file.OpenReadStream();
-            string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
-            return jsonUtiltyService
-                .ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages) 
-                ?? Enumerable.Empty<ProblemTestInputModel>();
+            using (Stream stream = file.OpenReadStream())
+            {
+                string schemaFilePath = env.WebRootPath + GlobalConstants.AddTestsInputJsonFileSchema;
+                return jsonUtiltyService
+                    .ParseJsonFormStreamUsingJSchema<List<ProblemTestInputModel>>(stream, schemaFilePath, errorMessages)
+                    ?? Enumerable.Empty<ProblemTestInputModel>();
+            }
         }
     }
 }

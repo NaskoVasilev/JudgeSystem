@@ -26,15 +26,19 @@ namespace JudgeSystem.Services
 
         public async Task CreateFile(Stream stream, string filePath)
         {
-            using FileStream fileStream = File.Create(filePath);
-            await stream.CopyToAsync(fileStream);
-            await fileStream.FlushAsync();
+            using (FileStream fileStream = File.Create(filePath))
+            {
+                await stream.CopyToAsync(fileStream);
+                await fileStream.FlushAsync();
+            }
         }
 
         public async Task CreateFile(byte[] fileData, string filePath)
         {
-            using var memoryStream = new MemoryStream(fileData);
-            await CreateFile(memoryStream, filePath);
+            using (var memoryStream = new MemoryStream(fileData))
+            {
+                await CreateFile(memoryStream, filePath);
+            }
         }
 
         public void DeleteDirectory(string workingDirectory)
@@ -65,20 +69,24 @@ namespace JudgeSystem.Services
                 return;
             }
 
-            using FileStream stream = File.Open(filePath, FileMode.Open);
-            using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
-            foreach (ZipArchiveEntry file in zip.Entries)
+            using (FileStream stream = File.Open(filePath, FileMode.Open))
             {
-                string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectory, file.FullName));
-
-                // Assuming Empty for Directory
-                if (file.Name == "")
+                using (var zip = new ZipArchive(stream, ZipArchiveMode.Read))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
-                    continue;
-                }
+                    foreach (ZipArchiveEntry file in zip.Entries)
+                    {
+                        string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectory, file.FullName));
 
-                file.ExtractToFile(completeFileName, true);
+                        // Assuming Empty for Directory
+                        if (file.Name == "")
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                            continue;
+                        }
+
+                        file.ExtractToFile(completeFileName, true);
+                    }
+                }
             }
         }
     }

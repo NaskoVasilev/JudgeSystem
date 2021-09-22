@@ -30,5 +30,8 @@ namespace JudgeSystem.Web.InputModels.Test
         public int LessonId { get; set; }
 
         public string ProblemName { get; set; }
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
     }
 }

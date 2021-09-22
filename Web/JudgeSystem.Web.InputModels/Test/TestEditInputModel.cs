@@ -24,5 +24,8 @@ namespace JudgeSystem.Web.InputModels.Test
         public string ProblemName { get; set; }
 
         public int ProblemId { get; set; }
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
     }
 }

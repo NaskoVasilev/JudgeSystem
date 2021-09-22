@@ -12,5 +12,8 @@ namespace JudgeSystem.Web.InputModels.Course
 		[Required]
 		[StringLength(ModelConstants.CourseNameMaxLength, MinimumLength = ModelConstants.CourseNameMinLength)]
 		public string Name { get; set; }
-	}
+
+        [Range(ModelConstants.OrderByMinValue, ModelConstants.OrderByMaxValue)]
+        public int OrderBy { get; set; }
+    }
 }

@@ -20,7 +20,7 @@ namespace JudgeSystem.Services.Data
 
         IEnumerable<UserViewModel> All();
 
-        public bool IsExistingUserWithNotConfirmedEmail(string username);
+        bool IsExistingUserWithNotConfirmedEmail(string username);
 
         Task ImportAsync(IEnumerable<UserImportServiceModel> users);
     }

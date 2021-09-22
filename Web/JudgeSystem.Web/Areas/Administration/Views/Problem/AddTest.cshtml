@@ -23,6 +23,12 @@
                     <span asp-validation-for="OutputData" class="text-danger"></span>
                 </div>
 
+                <div class="form-group">
+                    <label asp-for="OrderBy"></label>
+                    <input asp-for="OrderBy" class="form-control" />
+                    <span asp-validation-for="OrderBy" class="text-danger"></span>
+                </div>
+
                 <div class="custom-control custom-checkbox mb-3">
                     <input type="checkbox" asp-for="IsTrialTest" class="custom-control-input" id="defaultUnchecked">
                     <label class="custom-control-label" for="defaultUnchecked">Trial test</label>

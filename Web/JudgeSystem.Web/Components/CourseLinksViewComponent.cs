@@ -21,9 +21,9 @@ namespace JudgeSystem.Web.Components
 		{
             var model = new AllCoursesViewModel
             {
-                LessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>(),
                 Courses = courseService.All()
             };
+
 			return View(model);
 		}
 	}

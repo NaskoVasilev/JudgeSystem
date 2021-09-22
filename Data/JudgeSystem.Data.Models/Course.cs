@@ -17,6 +17,8 @@ namespace JudgeSystem.Data.Models
 		[MaxLength(ModelConstants.CourseNameMaxLength)]
 		public string Name { get; set; }
 
-		public ICollection<Lesson> Lessons { get; set; }
+        public int OrderBy { get; set; }
+
+        public ICollection<Lesson> Lessons { get; set; }
 	}
 }

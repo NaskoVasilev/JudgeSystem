@@ -14,6 +14,12 @@
                 <div class="form-group">
                     <label asp-for="Name"></label>
                     <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OrderBy"></label>
+                    <input asp-for="OrderBy" class="form-control" />
+                    <span asp-validation-for="OrderBy" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <div class="file-upload-wrapper my-4" data-text="@SharedLocalizer["Select your file!"]">
