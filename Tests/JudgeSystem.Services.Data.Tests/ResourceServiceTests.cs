@@ -25,14 +25,14 @@ namespace JudgeSystem.Services.Data.Tests
             {
                 LessonId = 15,
                 Name = "Test resource",
-                Id = 1
+                OrderBy = 10,
             };
             string filePath = "mdsaldk654K_judgeSystemDocumentation";
 
             await service.CreateResource(resource, filePath);
 
             Assert.Contains(context.Resources, x => x.Name == resource.Name &&
-            x.LessonId == resource.LessonId && x.Id == resource.Id && x.FilePath == filePath);
+            x.LessonId == resource.LessonId);
         }
 
         [Fact]

@@ -165,7 +165,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 }))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(a => a.Lessons(course.Id, inputModel.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(a => a.Lessons(course.Id)));
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 }))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id, lesson.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id)));
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     .WithValue(ErrorMessages.LockedLesson)))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id, lesson.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id)));
         }
 
         [Fact]
@@ -320,7 +320,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     .WithValue(string.Format(InfoMessages.AddLessonPasswordSuccessfully, lesson.Name))))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id, lesson.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id)));
         }
 
         [Fact]
@@ -430,7 +430,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     .WithValue(string.Format(InfoMessages.ChangeLessonPasswordSuccessfully, lesson.Name))))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id, lesson.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id)));
         }
 
         [Fact]
@@ -534,7 +534,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     .WithValue(string.Format(InfoMessages.LessonPasswordRemoved, lesson.Name))))
             .AndAlso()
             .ShouldReturn()
-            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id, lesson.Type.ToString())));
+            .Redirect(result => result.To<Web.Controllers.CourseController>(c => c.Lessons(course.Id)));
         }
     }
 }

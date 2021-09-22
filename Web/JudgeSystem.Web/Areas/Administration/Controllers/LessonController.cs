@@ -58,7 +58,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 
             LessonDto lesson = await lessonService.Update(model);
 
-            return RedirectToAction("Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+            return RedirectToAction("Lessons", "Course", new { lesson.CourseId });
         }
 
         public IActionResult AddPassword() => View();
@@ -78,11 +78,11 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             {
                 await lessonService.SetPassword(model.Id, model.LessonPassword);
                 string infoMessage = string.Format(InfoMessages.AddLessonPasswordSuccessfully, lesson.Name);
-                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lesson.CourseId });
             }
             catch (BadRequestException ex)
             {
-                return ShowError(ex.Message, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowError(ex.Message, "Lessons", "Course", new { lesson.CourseId });
             }
         }
 
@@ -101,7 +101,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             {
                 LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, model.NewPassword);
                 string infoMessage = string.Format(InfoMessages.ChangeLessonPasswordSuccessfully, lesson.Name);
-                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lesson.CourseId });
             }
             catch (BadRequestException ex)
             {
@@ -122,7 +122,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
         public async Task<IActionResult> DeleteConfirm(int id)
         {
             LessonDto lesson = await lessonService.Delete(id);
-            return Redirect($"/Course/Lessons?courseId={lesson.CourseId}&lessonType={lesson.Type}");
+            return Redirect($"/Course/Lessons?courseId={lesson.CourseId}");
         }
 
         public IActionResult RemovePassword() => View();
@@ -140,7 +140,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
             {
                 LessonDto lesson = await lessonService.UpdatePassword(model.Id, model.OldPassword, null);
                 string infoMessage = string.Format(InfoMessages.LessonPasswordRemoved, lesson.Name);
-                return ShowInfo(infoMessage, "Lessons", "Course", new { lessonType = lesson.Type, lesson.CourseId });
+                return ShowInfo(infoMessage, "Lessons", "Course", new { lesson.CourseId });
             }
             catch (BadRequestException ex)
             {

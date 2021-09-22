@@ -2,7 +2,7 @@
 
 using JudgeSystem.Services.Data;
 using JudgeSystem.Web.ViewModels.Course;
-
+using JudgeSystem.Web.ViewModels.Lesson;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JudgeSystem.Web.Controllers
@@ -30,14 +30,13 @@ namespace JudgeSystem.Web.Controllers
 			return View(courses);
 		}
 
-		public IActionResult Lessons(int courseId, string lessonType)
+		public IActionResult Lessons(int courseId)
 		{
             var model = new CourseLessonsViewModel
             {
-                Lessons = lessonService.CourseLessonsByType(lessonType, courseId),
-                Name = $"{courseService.GetName(courseId)} - {lessonType}",
-                CourseId = courseId,
-                LessonType = lessonType
+                Lessons = lessonService.GetByCourseId<LessonLinkViewModel>(courseId),
+                Name = courseService.GetName(courseId),
+                CourseId = courseId
             };
 
 			return View(model);

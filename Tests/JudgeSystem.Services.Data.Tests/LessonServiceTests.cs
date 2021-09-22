@@ -228,11 +228,10 @@ namespace JudgeSystem.Services.Data.Tests
         }
 
         [Theory]
-        [InlineData("C#", "c# WEb API, c# web - asp.NET CoRe")]
-        [InlineData("web", "c# WEb API, c# web - asp.NET CoRe")]
+        [InlineData("C#", "c# web - asp.NET CoRe, c# WEb API")]
+        [InlineData("web", "c# web - asp.NET CoRe, c# WEb API")]
         [InlineData("test", "test1, test2, test3, test4, test5")]
         [InlineData("webasp", "")]
-        [InlineData("asp", "c# web - asp.NET CoRe")]
         [InlineData("es", "test1, test2, test3, test4, test5")]
         [InlineData("csharp", "")]
         [InlineData("1", "test1")]

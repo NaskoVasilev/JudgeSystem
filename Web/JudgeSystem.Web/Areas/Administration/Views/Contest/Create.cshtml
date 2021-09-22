@@ -4,7 +4,6 @@
 
 @{
     ViewData["Title"] = Localizer["Contest Create"];
-    string defaultLessonType = LessonType.Exercise.ToString();
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -29,12 +28,7 @@
                     <span asp-validation-for="EndTime" class="text-danger"></span>
                 </div>
                 <vc:courses-select-list></vc:courses-select-list>
-                <div class="form-group">
-                    <label>Lesson Type</label>
-                    <select id="lessonType" class="form-control">
-                        <partial name="Partials/LessonTypeOptions" model="defaultLessonType" />
-                    </select>
-                </div>
+                
                 <div class="form-group">
                     <label>Lesson</label>
                     <select id="lessonId" asp-for="LessonId" class="form-control">
