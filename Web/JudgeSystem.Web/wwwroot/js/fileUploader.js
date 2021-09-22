@@ -8,5 +8,4 @@
 
     $(this).parent(".file-upload-wrapper").attr("data-text", fileNames);
     let value = this.files;
-    console.log(value);
 });

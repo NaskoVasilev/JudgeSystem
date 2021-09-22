@@ -2,13 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
+using JudgeSystem.Common.Helpers;
 using JudgeSystem.Data.Common.Repositories;
 using JudgeSystem.Data.Models;
 using JudgeSystem.Data.Models.Enums;
 using JudgeSystem.Services.Mapping;
+using JudgeSystem.Services.Models.Users;
 using JudgeSystem.Web.ViewModels.User;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace JudgeSystem.Services.Data
 {
@@ -141,5 +143,18 @@ namespace JudgeSystem.Services.Data
 
         public bool IsExistingUserWithNotConfirmedEmail(string username) => 
             repository.All().Any(x => x.UserName == username && !x.EmailConfirmed);
+
+        public async Task ImportAsync(IEnumerable<UserImportServiceModel> users)
+        {
+            IEnumerable<ApplicationUser> entities = users.Select(u => new ApplicationUser
+            {
+                Email = u.Email,
+                EmailConfirmed = true,
+                UserName = UserHelper.GetUsernameFromEmail(u.Email),
+                IsFromActiveDirectory = true,
+            });
+
+            await repository.AddRangeAsync(entities);
+        }
     }
 }

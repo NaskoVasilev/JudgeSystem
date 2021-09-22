@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.InputModels\JudgeSystem.Web.InputModels.csproj" />
     <ProjectReference Include="..\..\Web\JudgeSystem.Web.ViewModels\JudgeSystem.Web.ViewModels.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Workers.Common\JudgeSystem.Workers.Common.csproj" />
+    <ProjectReference Include="..\JudgeSystem.Services.Models\JudgeSystem.Services.Models.csproj" />
   </ItemGroup>
 
 </Project>

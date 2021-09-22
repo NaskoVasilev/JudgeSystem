@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace JudgeSystem.Common.Extensions
 {
@@ -13,6 +14,14 @@ namespace JudgeSystem.Common.Extensions
                     stream.CopyTo(memoryStream);
                     return memoryStream.ToArray();
                 }
+            }
+        }
+
+        public static async Task<string> ReadToEndAsync(this Stream stream) 
+        {
+            using (var streamReader = new StreamReader(stream))
+            {
+                return await streamReader.ReadToEndAsync();
             }
         }
     }

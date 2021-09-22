@@ -18,6 +18,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="AddAdministrator">@Localizer["Add administrator"]</a>
                     <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="Settings" asp-action="RemoveAdministrator">@Localizer["Remove administrator"]</a>
+                    <a class="dropdown-item" asp-area="@GlobalConstants.AdministrationArea" asp-controller="User" asp-action="Import">@Localizer["Import users"]</a>
                 </div>
             </li>
         }

@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20200304204204_AllowedIpAddressEntity.Designer.cs" />
     <Compile Remove="Migrations\20200304204459_AllowedIpAddressEntity.cs" />
     <Compile Remove="Migrations\20200304204459_AllowedIpAddressEntity.Designer.cs" />
+    <Compile Remove="Migrations\20210922080156_UserTableNamesValidationAndAddedColumn.cs" />
+    <Compile Remove="Migrations\20210922080156_UserTableNamesValidationAndAddedColumn.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
