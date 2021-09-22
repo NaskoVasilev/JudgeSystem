@@ -32,7 +32,7 @@ namespace JudgeSystem.Services.Data.Tests
             await service.CreateResource(resource, filePath);
 
             Assert.Contains(context.Resources, x => x.Name == resource.Name &&
-            x.LessonId == resource.LessonId && x.Id == 1);
+            x.LessonId == resource.LessonId);
         }
 
         [Fact]
