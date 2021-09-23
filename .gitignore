@@ -338,4 +338,7 @@ ASALocalRun/
 
 !**/wwwroot/Compilers/**
 
+!**/Web/JudgeSystem.Web/Logs/**
+
 /Web/JudgeSystem.Web/appsettings.Stage.json
+/Web/JudgeSystem.Web/appsettings.Development.json
