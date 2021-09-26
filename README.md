@@ -111,7 +111,8 @@ Follow these steps to set up your development environment:
        ```
 
   7. Open package manager console, choose as Defaut project: JudgeSystem.Data and run the following command: ```update-database```
-  8. Press Ctrl + F5
+  8. Run the following command to set up the SQL server distributed cache: ```dotnet sql-cache create "Server=.;Database=JudgeSystem;Trusted_Connection=True;MultipleActiveResultSets=true" dbo Cache```
+  9. Press Ctrl + F5
 
 ## Technologies
 * .NET Core 2.2
