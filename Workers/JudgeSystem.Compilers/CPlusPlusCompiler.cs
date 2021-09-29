@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Runtime.InteropServices;
 using JudgeSystem.Common;
 using JudgeSystem.Workers.Common;
 
@@ -9,16 +9,24 @@ namespace JudgeSystem.Compilers
     {
         public CompileResult Compile(string fileName, string workingDirectory, IEnumerable<string> sources = null)
         {
-            //command: /c cd C://CompiledSolutions & set PATH=%PATH%;C:\\MinGW\\bin; & g++ Task.cpp -o Task.exe"
-            string outputFile = $"{fileName}{CompilationSettings.ExeFileExtension}";
-            string outputFilePath = workingDirectory + outputFile;
-            string sourceFile = $"{fileName}{GlobalConstants.CppFileExtension}";
-            string arguments = $"{GlobalConstants.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & g++ {sourceFile} -o {outputFile}";
-            //string arguments = $"{CompilationSettings.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & cl /EHsc {sourceFile}";
+            // g++ ccdtzur2.dad.cpp -o test
+            // ./ test
+            //command: /c cd C://CompiledSolutions & set PATH=%PATH%;C:\\MinGW\\bin; & g++ Task.cpp -o Task.exe
+            string outputFile = $"{workingDirectory}{fileName}";
+            string sourceFile = $"{workingDirectory}{fileName}{GlobalConstants.CppFileExtension}";
+            string arguments = $"{sourceFile} -o {outputFile}";
+            string processFileName = "g++";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                outputFile += CompilationSettings.ExeFileExtension;
+                arguments = $"{GlobalConstants.ConsoleComamndPrefix}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & {arguments}";
+                processFileName = GlobalConstants.ConsoleFile;
+            }
 
             var compiler = new Compiler();
-            CompileResult result = compiler.Compile(arguments);
-            result.OutputFilePath = outputFilePath;
+            CompileResult result = compiler.Compile(arguments, processFileName);
+            result.OutputFilePath = outputFile;
             return result;
         }
     }

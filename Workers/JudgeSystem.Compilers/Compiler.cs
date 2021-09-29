@@ -7,13 +7,13 @@ namespace JudgeSystem.Compilers
 {
     internal class Compiler
     {
-        public CompileResult Compile(string arguments)
+        public CompileResult Compile(string arguments, string processFileName)
         {
             var process = new Process();
             var info = new ProcessStartInfo
             {
                 Arguments = arguments,
-                FileName = GlobalConstants.ConsoleFile,
+                FileName = processFileName,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 CreateNoWindow = true

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,8 +22,16 @@ namespace JudgeSystem.Executors
 
             using (var process = new Process())
             {
-                process.StartInfo.FileName = GlobalConstants.ConsoleFile;
-                process.StartInfo.Arguments = arguments;
+                if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    process.StartInfo.FileName = arguments;
+                }
+                else
+                {
+                    process.StartInfo.FileName = GlobalConstants.ConsoleFile;
+                    process.StartInfo.Arguments = arguments;
+                }
+
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
@@ -65,11 +74,14 @@ namespace JudgeSystem.Executors
                 {
                     try
                     {
-                        await process.StandardInput.WriteLineAsync(input);
-                        await process.StandardInput.FlushAsync();
-                        process.StandardInput.Close();
+                        using (process.StandardInput)
+                        {
+                            await process.StandardInput.WriteLineAsync(input);
+                            await process.StandardInput.FlushAsync();
+                            // process.StandardInput.Close();
+                        }
                     }
-                    catch (IOException)
+                    catch (IOException ex)
                     {
                         error = ReadingDataFromConsoleIsRequired;
                     }
@@ -94,9 +106,10 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output.Trim();
                 executionResult.ExitCode = process.ExitCode;
-                executionResult.TimeWorked = process.ExitTime - process.StartTime;
-                executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
-                executionResult.UserProcessorTime = process.UserProcessorTime;
+                // executionResult.TimeWorked = process.ExitTime - process.StartTime;
+                executionResult.TimeWorked = TimeSpan.Zero;
+                executionResult.PrivilegedProcessorTime = TimeSpan.Zero;
+                executionResult.UserProcessorTime = TimeSpan.Zero;
 
                 //We need to check first if there is runtime error because it is with more priority
                 if (!string.IsNullOrEmpty(executionResult.Error))

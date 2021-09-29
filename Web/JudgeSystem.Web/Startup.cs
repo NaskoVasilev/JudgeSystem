@@ -49,9 +49,10 @@ namespace JudgeSystem.Web
                 .AddBusinessLogicServices();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration)
         {
             LocalizationConfiguration.SetDefaultCulture();
+            CompilersConfiguration.CreateWorkingDirectoryIfNotExists();
 
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);
