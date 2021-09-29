@@ -49,7 +49,7 @@ namespace JudgeSystem.Web
                 .AddBusinessLogicServices();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             LocalizationConfiguration.SetDefaultCulture();
             CompilersConfiguration.CreateWorkingDirectoryIfNotExists();
