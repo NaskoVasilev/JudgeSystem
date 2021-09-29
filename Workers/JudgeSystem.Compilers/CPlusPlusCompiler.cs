@@ -20,7 +20,7 @@ namespace JudgeSystem.Compilers
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 outputFile += CompilationSettings.ExeFileExtension;
-                arguments = $"{GlobalConstants.ConsoleComamndPrefix}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & {arguments}";
+                arguments = $"{GlobalConstants.ConsoleComamndPrefix}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & g++ {arguments}";
                 processFileName = GlobalConstants.ConsoleFile;
             }
 

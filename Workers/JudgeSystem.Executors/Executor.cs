@@ -22,14 +22,14 @@ namespace JudgeSystem.Executors
 
             using (var process = new Process())
             {
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    process.StartInfo.FileName = arguments;
-                }
-                else
+                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     process.StartInfo.FileName = GlobalConstants.ConsoleFile;
                     process.StartInfo.Arguments = arguments;
+                }
+                else
+                {
+                    process.StartInfo.FileName = arguments;
                 }
 
                 process.StartInfo.RedirectStandardInput = true;
@@ -78,7 +78,6 @@ namespace JudgeSystem.Executors
                         {
                             await process.StandardInput.WriteLineAsync(input);
                             await process.StandardInput.FlushAsync();
-                            // process.StandardInput.Close();
                         }
                     }
                     catch (IOException ex)
@@ -106,10 +105,8 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output.Trim();
                 executionResult.ExitCode = process.ExitCode;
-                // executionResult.TimeWorked = process.ExitTime - process.StartTime;
-                executionResult.TimeWorked = TimeSpan.Zero;
-                executionResult.PrivilegedProcessorTime = TimeSpan.Zero;
-                executionResult.UserProcessorTime = TimeSpan.Zero;
+                executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
+                executionResult.UserProcessorTime = process.UserProcessorTime;
 
                 //We need to check first if there is runtime error because it is with more priority
                 if (!string.IsNullOrEmpty(executionResult.Error))
