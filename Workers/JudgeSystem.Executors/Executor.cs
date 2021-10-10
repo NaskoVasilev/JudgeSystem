@@ -38,6 +38,7 @@ namespace JudgeSystem.Executors
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;
 
+                var stopwatch = Stopwatch.StartNew();
                 process.Start();
 
                 var memoryTaskCancellationToken = new CancellationTokenSource();
@@ -87,6 +88,7 @@ namespace JudgeSystem.Executors
                 }
 
                 bool exited = process.WaitForExit(timeLimit);
+                long timeInMillisiconds = stopwatch.ElapsedMilliseconds;
 
                 if (!exited)
                 {
@@ -105,8 +107,7 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output.Trim();
                 executionResult.ExitCode = process.ExitCode;
-                executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
-                executionResult.UserProcessorTime = process.UserProcessorTime;
+                executionResult.TimeWorked = TimeSpan.FromMilliseconds(timeInMillisiconds);
 
                 //We need to check first if there is runtime error because it is with more priority
                 if (!string.IsNullOrEmpty(executionResult.Error))

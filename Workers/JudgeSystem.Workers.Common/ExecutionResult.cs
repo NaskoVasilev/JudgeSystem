@@ -25,7 +25,7 @@ namespace JudgeSystem.Workers.Common
 
 		public ProcessExecutionResultType Type { get; set; }
 
-        public TimeSpan TimeWorked => TotalProcessorTime;
+        public TimeSpan TimeWorked { get; set; }
 
 		public TimeSpan PrivilegedProcessorTime { get; set; }
 

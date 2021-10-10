@@ -444,7 +444,7 @@ namespace JudgeSystem.Services.Data
                     TestId = test.Id,
                     SubmissionId = submission.Id,
                     ExecutionResultType = executionResultType,
-                    TimeUsed = checkerResult.TimeWorked.TotalSeconds,
+                    TimeUsed = checkerResult.TimeWorked.TotalMilliseconds,
                     Output = checkerResult.Output,
                     Error = checkerResult.Error,
                     MemoryUsed = utilityService.ConvertBytesToMegaBytes(checkerResult.MemoryUsed),
