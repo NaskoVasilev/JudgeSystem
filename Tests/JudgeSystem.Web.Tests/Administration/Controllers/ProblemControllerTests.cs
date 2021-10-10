@@ -205,7 +205,9 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                 IsExtraTask = true,
                 MaxPoints = 50,
                 AllowedMemoryInMegaBytes = 10,
-                AllowedTimeInMilliseconds = 150
+                AllowedTimeInMilliseconds = 150,
+                OrderBy = 10,
+                TimeIntervalBetweenSubmissionInSeconds = 5,
             };
             MyController<ProblemController>
             .Instance()
@@ -226,6 +228,7 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
                     Assert.Equal(inputModel.AllowedMemoryInMegaBytes, editedProblem.AllowedMemoryInMegaBytes);
                     Assert.Equal(inputModel.MaxPoints, editedProblem.MaxPoints);
                     Assert.Equal(inputModel.IsExtraTask, editedProblem.IsExtraTask);
+                    Assert.Equal(inputModel.TimeIntervalBetweenSubmissionInSeconds, editedProblem.TimeIntervalBetweenSubmissionInSeconds);
                 }))
             .AndAlso()
             .ShouldReturn()

@@ -28,6 +28,8 @@
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +38,7 @@
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Data\JudgeSystem.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Mapping\JudgeSystem.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services.Messaging\JudgeSystem.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Services\JudgeSystem.Services.Models\JudgeSystem.Services.Models.csproj" />
     <ProjectReference Include="..\..\Services\JudgeSystem.Services\JudgeSystem.Services.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Compilers\JudgeSystem.Compilers.csproj" />
     <ProjectReference Include="..\..\Workers\JudgeSystem.Executors\JudgeSystem.Executors.csproj" />

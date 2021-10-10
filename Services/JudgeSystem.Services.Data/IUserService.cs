@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using JudgeSystem.Services.Models.Users;
 using JudgeSystem.Web.ViewModels.User;
 
 namespace JudgeSystem.Services.Data
@@ -19,5 +21,7 @@ namespace JudgeSystem.Services.Data
         IEnumerable<UserViewModel> All();
 
         bool IsExistingUserWithNotConfirmedEmail(string username);
+
+        Task ImportAsync(IEnumerable<UserImportServiceModel> users);
     }
 }

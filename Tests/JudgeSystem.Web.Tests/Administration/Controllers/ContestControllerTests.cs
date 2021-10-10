@@ -129,15 +129,13 @@ namespace JudgeSystem.Web.Tests.Administration.Controllers
         }
 
         [Theory]
-        [InlineData(1, LessonType.Exam, "2, 3")]
-        [InlineData(1, LessonType.Exercise, "1")]
-        [InlineData(2, LessonType.Exam, "")]
-        [InlineData(2, LessonType.Exercise, "4")]
-        public void GetLessons_WithValidCourseIdAndLessonType_ShouldReturnCorrectData(int courseId, LessonType lessonType, string expectedIds) =>
+        [InlineData(1, "1, 2, 3")]
+        [InlineData(3, "")]
+        public void GetLessons_WithValidCourseIdAndLessonType_ShouldReturnCorrectData(int courseId, string expectedIds) =>
             MyController<ContestController>
             .Instance()
             .WithData(LessonTestData.GetLessons())
-            .Calling(c => c.GetLessons(courseId, lessonType))
+            .Calling(c => c.GetLessons(courseId))
             .ShouldReturn()
             .Json(result => result
                 .WithModelOfType<IEnumerable<ContestLessonDto>>()

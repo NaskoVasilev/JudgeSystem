@@ -10,6 +10,8 @@
 *.sln.docstates
 
 appsettings.json
+appsettings.Development.json
+appsettings.*.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -336,4 +338,7 @@ ASALocalRun/
 
 !**/wwwroot/Compilers/**
 
+!**/Web/JudgeSystem.Web/Logs/**
+
 /Web/JudgeSystem.Web/appsettings.Stage.json
+/Web/JudgeSystem.Web/appsettings.Development.json

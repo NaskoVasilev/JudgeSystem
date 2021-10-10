@@ -58,6 +58,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JudgeSystem.Services.Models", "Services\JudgeSystem.Services.Models\JudgeSystem.Services.Models.csproj", "{31D4793E-34A4-415F-88B3-A9819E39586D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +146,10 @@ Global
 		{88F0A1B6-1B49-441D-9AB4-A4BD54B08E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88F0A1B6-1B49-441D-9AB4-A4BD54B08E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88F0A1B6-1B49-441D-9AB4-A4BD54B08E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D4793E-34A4-415F-88B3-A9819E39586D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D4793E-34A4-415F-88B3-A9819E39586D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D4793E-34A4-415F-88B3-A9819E39586D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D4793E-34A4-415F-88B3-A9819E39586D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +174,7 @@ Global
 		{519877CE-AE70-4EC2-9565-E4FA168FF740} = {E389DEB6-5F90-444B-A054-12A10D39C76F}
 		{E301CC7B-07D0-4C9C-8216-F2C0F58CFF28} = {E389DEB6-5F90-444B-A054-12A10D39C76F}
 		{88F0A1B6-1B49-441D-9AB4-A4BD54B08E5C} = {7A731632-6714-44E2-A9E4-069EBA9E666C}
+		{31D4793E-34A4-415F-88B3-A9819E39586D} = {516E002B-9E6E-4456-B7F6-EAA353966DE6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {384484BE-4680-4529-9CC2-AD37BA4D12D1}

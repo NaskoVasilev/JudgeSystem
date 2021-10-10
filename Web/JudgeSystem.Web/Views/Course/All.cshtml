@@ -4,40 +4,23 @@
 
 @{
     this.ViewData["Title"] = Localizer["All courses"];
-    IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
     string test = SharedLocalizer["Edit"];
 }
 
 <h2 class="text-center">@Localizer["All courses"]</h2>
-<hr class="bg-secondary" />
-<div class="row all-courses">
-    <table class="table table-borderless">
+<div class="row">
+    <table class="table table">
         <tbody>
             @foreach (var course in Model)
             {
                 <tr>
                     <td>
-                        <i class="fas fa-chevron-left rotate"></i>
-                        <a class="text-dark" tabindex="-1" asp-area="" asp-controller="Course"
-                           asp-action="Details" asp-route-id="@course.Id">
+                        <a asp-area=""
+                           asp-controller="Course"
+                           asp-action="Lessons"
+                           asp-route-courseId="@course.Id">
                             @course.Name
                         </a>
-
-                        <ul class="list-group hidden-element borderless">
-                            @foreach (var lessonType in lessonTypes)
-                            {
-                                <li class="list-group-item">
-                                    <a class="dropdown-item"
-                                       asp-area=""
-                                       asp-controller="Course"
-                                       asp-action="Lessons"
-                                       asp-route-courseId="@course.Id"
-                                       asp-route-lessonType="@lessonType">
-                                        @($"{course.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
-                                    </a>
-                                </li>
-                            }
-                        </ul>
                     </td>
                     @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {

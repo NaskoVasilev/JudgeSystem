@@ -10,7 +10,8 @@ namespace JudgeSystem.Workers.Common
 			Error = string.Empty;
 			ExitCode = 0;
 			Type = ProcessExecutionResultType.Success;
-			TimeWorked = default;
+            PrivilegedProcessorTime = default;
+            UserProcessorTime = default;
 			MemoryUsed = 0;
 		}
 
@@ -24,7 +25,7 @@ namespace JudgeSystem.Workers.Common
 
 		public ProcessExecutionResultType Type { get; set; }
 
-		public TimeSpan TimeWorked { get; set; }
+        public TimeSpan TimeWorked { get; set; }
 
 		public TimeSpan PrivilegedProcessorTime { get; set; }
 

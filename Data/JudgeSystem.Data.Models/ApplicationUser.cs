@@ -22,20 +22,20 @@ namespace JudgeSystem.Data.Models
         }
 
 		[MaxLength(ModelConstants.UserFirstNameMaxLength)]
-		[Required]
         [ProtectedPersonalData]
         public string Name { get; set; }
 
 		[MaxLength(ModelConstants.UserSurnameMaxLength)]
-		[Required]
         [ProtectedPersonalData]
         public string Surname { get; set; }
 
 		public string StudentId { get; set; }
 		public Student Student { get; set; }
 
-		// Audit info
-		public DateTime CreatedOn { get; set; }
+        public bool IsFromActiveDirectory { get; set; }
+
+        // Audit info
+        public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
 

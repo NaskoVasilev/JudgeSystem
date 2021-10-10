@@ -5,24 +5,14 @@
 
 @foreach (var course in Model.Courses)
 {
-    <li class="dropdown-submenu" id="course-@course.Id">
-        <a class="dropdown-item" tabindex="-1" asp-area="" asp-controller="Course"
-           asp-action="Details" asp-route-id="@course.Id">@course.Name</a>
-        <ul class="dropdown-menu">
-            @foreach (var lessonType in Model.LessonTypes)
-            {
-                <li class="dropdown-item">
-                    <a class="dropdown-item"
-                       asp-area=""
-                       asp-controller="Course"
-                       asp-action="Lessons"
-                       asp-route-courseId="@course.Id"
-                       asp-route-lessonType="@lessonType">
-                        @($"{course.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
-                    </a>
-                </li>
-            }
-        </ul>
+    <li id="course-@course.Id">
+        <a class="dropdown-item"
+           asp-area=""
+           asp-controller="Course"
+           asp-action="Lessons"
+           asp-route-courseId="@course.Id">
+            @course.Name
+        </a>
     </li>
 }
 

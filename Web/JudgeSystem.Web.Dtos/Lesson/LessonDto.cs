@@ -11,8 +11,6 @@ namespace JudgeSystem.Web.Dtos.Lesson
 
         public int CourseId { get; set; }
 
-        public LessonType Type { get; set; }
-
         public string LessonPassword { get; set; }
     }
 }

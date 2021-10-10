@@ -2,10 +2,6 @@
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @model IEnumerable<CourseViewModel>
 
-@{
-    IEnumerable<string> lessonTypes = EnumExtensions.GetEnumValuesAsString<LessonType>();
-}
-
 <h2 class="text-center text-secondary">@Localizer["Courses tree"]</h2>
 <hr class="bg-secondary" />
 <div class="row all-courses">
@@ -22,19 +18,15 @@
                         </a>
 
                         <ul class="list-group hidden-element borderless">
-                            @foreach (var lessonType in lessonTypes)
-                            {
-                                <li class="list-group-item">
-                                    <a class="dropdown-item"
-                                       asp-area=""
-                                       asp-controller="Course"
-                                       asp-action="Lessons"
-                                       asp-route-courseId="@course.Id"
-                                       asp-route-lessonType="@lessonType">
-                                        @($"{course.Name} - {SharedLocalizer[lessonType]}{Localizer["s"].Value}")
-                                    </a>
-                                </li>
-                            }
+                            <li class="list-group-item">
+                                <a class="dropdown-item"
+                                    asp-area=""
+                                    asp-controller="Course"
+                                    asp-action="Lessons"
+                                    asp-route-courseId="@course.Id">
+                                    @course.Name
+                                </a>
+                            </li>
                         </ul>
                     </td>
                 </tr>

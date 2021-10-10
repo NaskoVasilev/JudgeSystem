@@ -111,6 +111,8 @@ namespace JudgeSystem.Data.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsFromActiveDirectory");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -118,8 +120,7 @@ namespace JudgeSystem.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(100);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -138,8 +139,7 @@ namespace JudgeSystem.Data.Migrations
                     b.Property<string>("StudentId");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(100);
 
                     b.Property<bool>("TwoFactorEnabled");
 

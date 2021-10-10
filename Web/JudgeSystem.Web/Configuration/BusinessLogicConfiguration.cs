@@ -2,6 +2,8 @@
 using JudgeSystem.Executors;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Services.Validations;
+using JudgeSystem.Services.Validations.Contracts;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,6 +47,9 @@ namespace JudgeSystem.Web.Configuration
 
             services.AddTransient<ICompilerFactory, CompilerFactory>();
             services.AddTransient<IExecutorFactory, ExecutorFactory>();
+
+            services.AddTransient<IUserValidationService, UserValidationService>();
+            services.AddTransient<IEmailValidationService, EmailValidationService>();
 
             return services;
         }

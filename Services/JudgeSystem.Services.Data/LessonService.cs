@@ -63,6 +63,14 @@ namespace JudgeSystem.Services.Data
             return lesson.To<LessonDto>();
         }
 
+        public IEnumerable<T> GetByCourseId<T>(int courseId)
+            where T : IMapFrom<Lesson> =>
+            repository
+            .All()
+            .Where(l => l.CourseId == courseId)
+            .To<T>()
+            .ToList();
+
         public async Task<TDestination> GetById<TDestination>(int id)
         {
             TDestination lesson = await repository

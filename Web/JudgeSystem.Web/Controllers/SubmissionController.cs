@@ -111,7 +111,7 @@ namespace JudgeSystem.Web.Controllers
             }
             if (model.ContestId.HasValue)
             {
-                string ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
                 if (contestService.IsRestricted(model.ContestId.Value, ip))
                 {
                     return BadRequest(string.Format(ErrorMessages.DeniedAccessToContestByIp, ip));

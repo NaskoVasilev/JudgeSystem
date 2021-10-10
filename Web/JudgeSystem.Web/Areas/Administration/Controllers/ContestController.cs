@@ -48,9 +48,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		}
 
         [EndpointExceptionFilter]
-		public IActionResult GetLessons(int courseId, LessonType lessonType)
+		public IActionResult GetLessons(int courseId)
 		{
-            IEnumerable<ContestLessonDto> lessons = lessonService.GetCourseLesosns(courseId, lessonType);
+            IEnumerable<ContestLessonDto> lessons = lessonService.GetByCourseId<ContestLessonDto>(courseId);
 			return Json(lessons);
 		}
 
