@@ -9,7 +9,7 @@
 			ExitCode = executionResult.ExitCode;
 			MemoryUsed = executionResult.MemoryUsed;
 			PrivilegedProcessorTime = executionResult.PrivilegedProcessorTime;
-			TimeWorked = executionResult.TimeWorked;
+            TimeWorked = executionResult.TimeWorked;
 			Type = executionResult.Type;
 			UserProcessorTime = executionResult.UserProcessorTime;
 		}

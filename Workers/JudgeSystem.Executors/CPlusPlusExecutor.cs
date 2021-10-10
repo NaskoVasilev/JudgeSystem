@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using JudgeSystem.Common;
@@ -10,9 +11,12 @@ namespace JudgeSystem.Executors
     {
         public Task<ExecutionResult> Execute(string filePath, string input, int timeLimit, int memoryLimit)
         {
-            string fileName = Path.GetFileName(filePath);
-            string workingDirectory = Path.GetDirectoryName(filePath);
-            string arguments = $"{GlobalConstants.ConsoleComamndPrefix} cd {workingDirectory}{CompilationSettings.SetCPlusPlusCompilerPathCommand} & {fileName}";
+            string arguments = filePath;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                arguments = $"{GlobalConstants.ConsoleComamndPrefix} {CompilationSettings.SetCPlusPlusCompilerPathCommand} & {arguments}";
+            }
+
             var executor = new Executor();
             return executor.Execute(arguments, input, timeLimit, memoryLimit);
         }

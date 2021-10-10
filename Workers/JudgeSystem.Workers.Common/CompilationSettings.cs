@@ -14,7 +14,7 @@
 
         public static string JavaCompilerPath { get; set; }
 
-        public const string SetCompilerPathCommand = " & set PATH=%PATH%;";
+        public const string SetCompilerPathCommand = "set PATH=%PATH%;";
 
         public static string SetCPlusPlusCompilerPathCommand => GetCompilerPathCommand(CppCompilerPath);
 
@@ -26,6 +26,7 @@
             {
                 return $"{SetCompilerPathCommand}{compilerPath};";
             }
+
             return "";
         }
     }

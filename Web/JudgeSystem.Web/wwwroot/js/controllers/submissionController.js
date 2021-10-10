@@ -216,7 +216,7 @@ function generateTr(submission) {
 	let pointsTd = $('<td class="pt-4"></td>');
 	let executionInfo = $('<td></td>');
 	executionInfo.append(`<span class="d-block">Memory: ${submission.totalMemoryUsed.toFixed(3)} MB</span>`);
-	executionInfo.append(`<span class="d-block">Time: ${submission.totalTimeUsed.toFixed(3)} s</span>`);
+	executionInfo.append(`<span class="d-block">Time: ${submission.totalTimeUsed.toFixed(3)} ms</span>`);
 	let submissionDateTd = $(`<td class="pt-4">${submission.submissionDate}</td>`);
 	let detailsBtn = $(`<a href="/Submission/Details?id=${submission.id}" class="btn btn-success" target="_blank">Details</a>`);
 	if (!submission.isCompiledSuccessfully) {

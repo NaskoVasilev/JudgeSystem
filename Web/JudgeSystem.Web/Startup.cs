@@ -52,6 +52,7 @@ namespace JudgeSystem.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             LocalizationConfiguration.SetDefaultCulture();
+            CompilersConfiguration.CreateWorkingDirectoryIfNotExists();
 
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(CourseInputModel).GetTypeInfo().Assembly, typeof(ContestCourseDto).GetTypeInfo().Assembly);

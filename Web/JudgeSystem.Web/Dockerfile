@@ -46,4 +46,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+RUN apt update
+RUN apt -y install g++
+
 ENTRYPOINT ["dotnet", "JudgeSystem.Web.dll"]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,14 +22,23 @@ namespace JudgeSystem.Executors
 
             using (var process = new Process())
             {
-                process.StartInfo.FileName = GlobalConstants.ConsoleFile;
-                process.StartInfo.Arguments = arguments;
+                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    process.StartInfo.FileName = GlobalConstants.ConsoleFile;
+                    process.StartInfo.Arguments = arguments;
+                }
+                else
+                {
+                    process.StartInfo.FileName = arguments;
+                }
+
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;
 
+                var stopwatch = Stopwatch.StartNew();
                 process.Start();
 
                 var memoryTaskCancellationToken = new CancellationTokenSource();
@@ -65,17 +75,20 @@ namespace JudgeSystem.Executors
                 {
                     try
                     {
-                        await process.StandardInput.WriteLineAsync(input);
-                        await process.StandardInput.FlushAsync();
-                        process.StandardInput.Close();
+                        using (process.StandardInput)
+                        {
+                            await process.StandardInput.WriteLineAsync(input);
+                            await process.StandardInput.FlushAsync();
+                        }
                     }
-                    catch (IOException)
+                    catch (IOException ex)
                     {
                         error = ReadingDataFromConsoleIsRequired;
                     }
                 }
 
                 bool exited = process.WaitForExit(timeLimit);
+                long timeInMillisiconds = stopwatch.ElapsedMilliseconds;
 
                 if (!exited)
                 {
@@ -94,9 +107,7 @@ namespace JudgeSystem.Executors
                 executionResult.Error = error;
                 executionResult.Output = output.Trim();
                 executionResult.ExitCode = process.ExitCode;
-                executionResult.TimeWorked = process.ExitTime - process.StartTime;
-                executionResult.PrivilegedProcessorTime = process.PrivilegedProcessorTime;
-                executionResult.UserProcessorTime = process.UserProcessorTime;
+                executionResult.TimeWorked = TimeSpan.FromMilliseconds(timeInMillisiconds);
 
                 //We need to check first if there is runtime error because it is with more priority
                 if (!string.IsNullOrEmpty(executionResult.Error))
