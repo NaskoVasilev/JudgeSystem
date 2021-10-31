@@ -43,24 +43,31 @@ namespace JudgeSystem.Web.Utilites
 
         public static IEnumerable<SelectListItem> GetSelectListOfProgrammingLangugages()
         {
+            var programmingLangiagesItems = new List<SelectListItem>();
             foreach (object programmingLanguageObject in Enum.GetValues(typeof(ProgrammingLanguage)))
             {
                 var programmingLanguage = (ProgrammingLanguage)programmingLanguageObject;
                 var item = new SelectListItem() { Value = programmingLanguage.ToString() };
                 switch (programmingLanguage)
                 {
-                    case ProgrammingLanguage.CSharp:
-                        item.Text = "C# code";
-                        break;
-                    case ProgrammingLanguage.Java:
-                        item.Text = "Java code";
-                        break;
+                    // Disable c# and java as programming languages for now, because we are using only c++ currently
+                    //case ProgrammingLanguage.CSharp:
+                    //    item.Text = "C# code";
+                    //    break;
+                    //case ProgrammingLanguage.Java:
+                    //    item.Text = "Java code";
+                    //    break;
                     case ProgrammingLanguage.CPlusPlus:
                         item.Text = "C++ code";
                         break;
                 }
 
-                yield return item;
+                if(!string.IsNullOrEmpty(item.Text))
+                {
+                    programmingLangiagesItems.Add(item);
+                }
+
+                return programmingLangiagesItems;
             }
         }
 

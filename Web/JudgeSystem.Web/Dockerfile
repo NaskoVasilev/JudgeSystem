@@ -51,8 +51,8 @@ RUN apt -y install g++
 
 RUN apt install -y firejail
 
-FROM rockylinux/rockylinux
-RUN /sbin/adduser sandbox
-USER sandbox
+#FROM rockylinux/rockylinux
+#RUN /sbin/adduser sandbox
+#USER sandbox
 
 ENTRYPOINT ["dotnet", "JudgeSystem.Web.dll"]
