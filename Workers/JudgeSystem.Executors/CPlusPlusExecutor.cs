@@ -11,7 +11,9 @@ namespace JudgeSystem.Executors
     {
         public Task<ExecutionResult> Execute(string filePath, string input, int timeLimit, int memoryLimit)
         {
-            string arguments = filePath;
+            // command to execute program in sanbox environment
+            // firejail --seccomp --private --private-bin=bash,fork,exec --rlimit-nproc=500 --timeout=0:0:2 --quiet ./a.sh
+            string arguments = $"--seccomp --private --private-bin=bash,fork,exec --rlimit-nproc=500 --timeout=0:0:2 --quiet {filePath}";
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 arguments = $"{GlobalConstants.ConsoleComamndPrefix} {CompilationSettings.SetCPlusPlusCompilerPathCommand} & {arguments}";
