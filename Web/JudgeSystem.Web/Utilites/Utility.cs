@@ -67,8 +67,9 @@ namespace JudgeSystem.Web.Utilites
                     programmingLangiagesItems.Add(item);
                 }
 
-                return programmingLangiagesItems;
             }
+
+            return programmingLangiagesItems;
         }
 
         public static string GetLessonName(string lessonBaseName, LessonType lessonType)
