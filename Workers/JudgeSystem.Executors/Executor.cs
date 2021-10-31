@@ -29,7 +29,9 @@ namespace JudgeSystem.Executors
                 }
                 else
                 {
-                    process.StartInfo.FileName = arguments;
+                    // Execute the process on linux in sandox environment using firejail
+                    process.StartInfo.FileName = "firejail";
+                    process.StartInfo.Arguments = arguments;
                 }
 
                 process.StartInfo.RedirectStandardInput = true;
