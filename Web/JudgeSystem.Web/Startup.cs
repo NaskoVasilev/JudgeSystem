@@ -46,7 +46,8 @@ namespace JudgeSystem.Web
                 .AddEmailSendingService(configuration)
                 .ConfigureAzureBlobStorage(configuration)
                 .AddRepositories()
-                .AddBusinessLogicServices();
+                .AddBusinessLogicServices()
+                .AddHttpClients();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
