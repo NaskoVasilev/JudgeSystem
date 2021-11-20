@@ -12,10 +12,26 @@ namespace JudgeSystem.Web.Configuration
         public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(x => configuration.GetSection(AppSettingsSections.AdminSection).Get<AdminSettings>());
+            services.AddSettings<WorkerApiSettings>(nameof(WorkerApiSettings), configuration);
 
             PopulateCompilationSettings(configuration);
 
             return services;
+        }
+
+        public static T AddSettings<T>(this IServiceCollection services, string sectionName, IConfiguration configuration)
+           where T : class
+        {
+            T settings = configuration
+               .GetSection(sectionName)
+               .Get<T>();
+
+            if (settings != null)
+            {
+                services.AddSingleton(settings);
+            }
+
+            return settings;
         }
 
         private static void PopulateCompilationSettings(IConfiguration configuration)
