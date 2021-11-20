@@ -44,6 +44,16 @@ namespace JudgeSystem.Common
         public static string[] AllowedFileExtensoins = new string[] { ".ppt", ".pptx", ".doc", ".docx", ".xls", ".cs", ".zip", ".json", ".xml", ".mp4", ".avi", ".txt", ".html", ".pdf" };
         #endregion
 
+        public static class HttpHeaders
+        {
+            public const string Accept = "Accept";
+        }
+
+        public static class MimeTypes
+        {
+            public const string ApplicationJson = "application/json";
+        }
+
         #region Student and class related constants
         public const int MinClassNumber = 8;
         public const int MaxClassNumber = 12;

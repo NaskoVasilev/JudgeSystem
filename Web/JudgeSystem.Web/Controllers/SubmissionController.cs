@@ -150,15 +150,6 @@ namespace JudgeSystem.Web.Controllers
             else
             {
                 SubmissionCodeDto submissionCode = await utilityService.ExtractSubmissionCode(model.Code, model.File, model.ProgrammingLanguage);
-                if (problemSubmissionDto.AllowedMinCodeDifferenceInPercentage > 0 && problemSubmissionDto.SubmissionType == SubmissionType.PlainCode)
-                {
-                    IEnumerable<string> otherUsersSubmissions = submissionService.GetProblemSubmissions(model.ProblemId, userId);
-                    double minDifference = codeCompareer.GetMinCodeDifference(model.Code, otherUsersSubmissions);
-                    if (minDifference <= problemSubmissionDto.AllowedMinCodeDifferenceInPercentage)
-                    {
-                        return BadRequest(ErrorMessages.SimilarSubmission);
-                    }
-                }
                 model.SubmissionContent = submissionCode.Content;
                 submission = await submissionService.Create(model, userId);
                 await submissionService.ExecuteSubmission(submission.Id, submissionCode.SourceCodes, model.ProgrammingLanguage);

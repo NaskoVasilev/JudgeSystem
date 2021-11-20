@@ -2,6 +2,7 @@
 using JudgeSystem.Executors;
 using JudgeSystem.Services;
 using JudgeSystem.Services.Data;
+using JudgeSystem.Services.External;
 using JudgeSystem.Services.Validations;
 using JudgeSystem.Services.Validations.Contracts;
 
@@ -50,6 +51,8 @@ namespace JudgeSystem.Web.Configuration
 
             services.AddTransient<IUserValidationService, UserValidationService>();
             services.AddTransient<IEmailValidationService, EmailValidationService>();
+
+            services.AddTransient<IWorkerApiService, WorkerApiService>();
 
             return services;
         }

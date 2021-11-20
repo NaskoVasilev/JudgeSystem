@@ -86,7 +86,8 @@ namespace JudgeSystem.Services.Data
                 ProblemId = model.ProblemId,
                 UserId = userId,
                 ContestId = model.ContestId,
-                PracticeId = model.PracticeId
+                PracticeId = model.PracticeId,
+                IsProcessed = false,
             };
 
             await repository.AddAsync(submission);
@@ -342,6 +343,11 @@ namespace JudgeSystem.Services.Data
             {
                 fileSystem.DeleteDirectory(projectDirectory);
             }
+        }
+
+        public async Task EnqueueSubmission(int id, int problemId, string code)
+        {
+            var inputs = testService.GetTestsByProblemIdOrderedByIsTrialDescending<TestDto>(problemId);
         }
 
         private async Task SetCompilationErrors(Submission submission, string projectDirectory, ProcessResult processResult)
