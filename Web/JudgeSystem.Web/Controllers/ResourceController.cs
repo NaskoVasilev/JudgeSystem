@@ -15,14 +15,14 @@ namespace JudgeSystem.Web.Controllers
 	public class ResourceController : BaseController
 	{
 		private readonly IResourceService resourceService;
-        private readonly IAzureStorageService azureStorageService;
+        private readonly IFileStorageService fileStorageService;
 
         public ResourceController(
             IResourceService resourceService,
-            IAzureStorageService azureStorageService)
+            IFileStorageService fileStorageService)
 		{
 			this.resourceService = resourceService;
-            this.azureStorageService = azureStorageService;
+            this.fileStorageService = fileStorageService;
         }
 
 		public async Task<IActionResult> Download(int id)
@@ -32,7 +32,7 @@ namespace JudgeSystem.Web.Controllers
 
             using(var stream = new MemoryStream())
             {
-                await azureStorageService.Download(resource.FilePath, stream);
+                await fileStorageService.Download(resource.FilePath, stream);
 		    	return File(stream.ToArray(), mimeType, resource.Name + Path.GetExtension(resource.FilePath)); 
             }
 		}
