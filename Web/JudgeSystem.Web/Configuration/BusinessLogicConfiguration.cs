@@ -32,7 +32,6 @@ namespace JudgeSystem.Web.Configuration
             services.AddTransient<IPasswordHashService, PasswordHashService>();
             services.AddTransient<IPaginationService, PaginationService>();
             services.AddTransient<ILessonsRecommendationService, LessonsRecommendationService>();
-            services.AddTransient<IAzureStorageService, AzureStorageService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IStudentProfileService, StudentProfileService>();
             services.AddTransient<IUtilityService, UtilityService>();

@@ -17,18 +17,18 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 	{
 		private readonly IResourceService resourceService;
         private readonly ILessonService lessonService;
-        private readonly IAzureStorageService azureStorageService;
+        private readonly IFileStorageService fileStorageService;
         private readonly IValidationService validationService;
 
         public ResourceController(
             IResourceService resourceService, 
             ILessonService lessonService,
-            IAzureStorageService azureStorageService,
+            IFileStorageService azureStorageService,
             IValidationService validationService)
 		{
 			this.resourceService = resourceService;
             this.lessonService = lessonService;
-            this.azureStorageService = azureStorageService;
+            this.fileStorageService = azureStorageService;
             this.validationService = validationService;
         }
 
@@ -38,6 +38,9 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(ResourceInputModel model)
 		{
+            // 1 create the resource in the db -> get the ID
+            // 2. Upload file
+
 			if (!ModelState.IsValid)
 			{
 				return View(model);
@@ -49,9 +52,10 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
                 return View(model);
             }
 
+            string folderName = "BaseFolder/{resource.CourseId}";
             using(System.IO.Stream stream = model.File.OpenReadStream())
             {
-                string filePath = await azureStorageService.Upload(stream, model.File.FileName, model.Name);
+                string filePath = await fileStorageService.Upload(stream, model.File.FileName, folderName);
                 await resourceService.CreateResource(model, filePath);
             }
 
@@ -92,8 +96,8 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 			{
                 using(System.IO.Stream stream = model.File.OpenReadStream())
                 {
-                    string filePath = await azureStorageService.Upload(stream, model.File.FileName, resource.Name);
-                    await azureStorageService.Delete(resource.FilePath);
+                    string filePath = await fileStorageService.Upload(stream, model.File.FileName, resource.Name);
+                    await fileStorageService.Delete(resource.FilePath);
                     await resourceService.Update(model, filePath);
                 }
 			}
@@ -111,7 +115,7 @@ namespace JudgeSystem.Web.Areas.Administration.Controllers
 		public async Task<IActionResult> Delete(int id)
 		{
             ResourceDto resource = await resourceService.Delete(id);
-            await azureStorageService.Delete(resource.FilePath);
+            await fileStorageService.Delete(resource.FilePath);
 
 			return Content(string.Format(InfoMessages.SuccessfullyDeletedMessage, resource.Name));
 		}

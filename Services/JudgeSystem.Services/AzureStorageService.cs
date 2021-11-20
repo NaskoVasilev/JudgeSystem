@@ -5,7 +5,7 @@ using Microsoft.Azure.Storage.Blob;
 
 namespace JudgeSystem.Services
 {
-    public class AzureStorageService : IAzureStorageService
+    public class AzureStorageService : IFileStorageService
     {
         private readonly CloudBlobContainer cloudBlobContainer;
 
@@ -14,7 +14,7 @@ namespace JudgeSystem.Services
             this.cloudBlobContainer = cloudBlobContainer;
         }
 
-        public async Task<string> Upload(Stream stream, string fileName, string containerName)
+        public async Task<string> Upload(Stream stream, string fileName, string folderName)
         {
             string filePath = $"{Path.GetRandomFileName()}_{fileName}";
 

@@ -44,7 +44,7 @@ namespace JudgeSystem.Web
                 .ConfigureCookies()
                 .ConfigureSettings(configuration)
                 .AddEmailSendingService(configuration)
-                .ConfigureAzureBlobStorage(configuration)
+                .ConfigureFileProvider(configuration)
                 .AddRepositories()
                 .AddBusinessLogicServices();
         }

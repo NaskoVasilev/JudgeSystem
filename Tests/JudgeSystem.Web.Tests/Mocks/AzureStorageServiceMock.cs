@@ -5,7 +5,7 @@ using JudgeSystem.Services;
 
 namespace JudgeSystem.Web.Tests.Mocks
 {
-    public class AzureStorageServiceMock : IAzureStorageService
+    public class AzureStorageServiceMock : IFileStorageService
     {
         public static string FilePath;
 
